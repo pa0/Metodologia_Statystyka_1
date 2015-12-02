@@ -1,9 +1,9 @@
 # Introduction to Nonparametric Statistics
 
-## Offical Course Description
+## Description
 Nonparametric analogs of the one- and two-sample t-tests and analysis of variance; the sign test, median test, Wilcoxon's tests, and the Kruskal-Wallis and Friedman tests, tests of independence. Nonparametric regression and nonparametric density estimation, modern nonparametric techniques, nonparametric confidence interval estimates.
 
-## Outline
+## Syllabus
 
 ### Part I: Classics
 
@@ -17,6 +17,13 @@ Nonparametric analogs of the one- and two-sample t-tests and analysis of varianc
 * Smoothing (Chapter 14 in [HWC])
 * Bayesian Nonparametrics (Chapter 16 in [HWC])
 
-## Books
+## Textbooks
 * [KK] Kloke and McKean, Nonparametric Statistical Methods Using R, 2015
 * [HWC] Hollander, Wolfe, And Chicken, Nonparametric Statistical Methods (3rd Edition), 2013
+
+## Course assistant and office hours
+TBD
+
+## Grading (tentative)
+* Homework assignments: 50%
+* Final exam or final project (to be decided): 50%
