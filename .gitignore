@@ -1,0 +1,14 @@
+
+*.log
+
+*.aux
+
+*.nav
+
+*.out
+
+*.snm
+
+Lecture1/Slides.synctex.gz
+
+*.toc
