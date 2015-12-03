@@ -15,18 +15,18 @@ Seven point plan:
 6. Feedback
 7. Promotion of Self-Directed Learning
 
-### Learning Climate
+### Learning Climate (1)
 
 * Watched video of a medical class (with a patient in class)
 * Motivate why we have to learn certain things
 * Tell personal stories/experiences (e.g. when I was a first year medical student, I didn't know why we had to learn this neuroscience stuff)
 
-### Control of Session
-### Communication of Goals
+### Control of Session (2)
+### Communication of Goals (3)
 
 ## Day 2 (Dec. 4, 2015)
 
-### Promotion of Understanding & Retention
-### Evaluation
-### Feedback
-### Promotion of Self-Directed Learning
+### Promotion of Understanding & Retention (4)
+### Evaluation (5)
+### Feedback (6)
+### Promotion of Self-Directed Learning (7)
