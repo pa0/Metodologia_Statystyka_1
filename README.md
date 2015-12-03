@@ -1,4 +1,4 @@
-# Introduction to Nonparametric Statistics
+# Introduction to nonparametric statistics
 
 ## Description
 Nonparametric analogs of the one- and two-sample t-tests and analysis of variance; the sign test, median test, Wilcoxon's tests, and the Kruskal-Wallis and Friedman tests, tests of independence. Nonparametric regression and nonparametric density estimation, modern nonparametric techniques, nonparametric confidence interval estimates.
@@ -16,10 +16,10 @@ Nonparametric analogs of the one- and two-sample t-tests and analysis of varianc
 ## Textbooks
 * [KK] Kloke and McKean, Nonparametric Statistical Methods Using R, 2015
 * [HWC] Hollander, Wolfe, and Chicken, Nonparametric Statistical Methods (3rd Edition), 2013
-* [G] Permutation, Parametric and Bootstrap Tests of Hypotheses (3rd Edition), 2005
+* [G] Good, Permutation, Parametric and Bootstrap Tests of Hypotheses (3rd Edition), 2005
 * [ET] Efron and Tibshirani, An Introduction to the Bootstrap, 1994
 
-## Journal Articles
+## Journal articles
 * [DE] Diaconis and Efron, Computer Intensive Methods in Statistics, 1983
 * [NH] Nichols and Holmes, Nonparametric Permutation Tests For Functional Neuroimaging: A Primer with Examples, 2001
 
