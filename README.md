@@ -4,12 +4,13 @@
 Nonparametric analogs of the one- and two-sample t-tests and analysis of variance; the sign test, median test, Wilcoxon's tests, and the Kruskal-Wallis and Friedman tests, tests of independence. Nonparametric regression and nonparametric density estimation, modern nonparametric techniques, nonparametric confidence interval estimates.
 
 ## Syllabus
-* Basics (Chapter 2 in [KK])
+* Review of Basics (Chapter 2 in [KK])
+* One-Sample Problems (Chapter 2 in [KK])
 * Two-Sample Problems (Chapter 3 in [KK])
 * Regression (Chapter 4 in [KK])
 * ANOVA and ANCOVA (Chapter 5 in [KK])
-* Permutation Tests and Bootstrap (Selected Chapters in [G] and [ET])
 * Density Estimation (Chapter 12 in [HWC])
+* Permutation Tests and Bootstrap (Selected Chapters in [G] and [ET])
 * Smoothing (Chapter 14 in [HWC])
 * Bayesian Nonparametrics (Chapter 16 in [HWC])
 
