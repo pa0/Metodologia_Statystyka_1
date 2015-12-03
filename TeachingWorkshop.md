@@ -6,6 +6,7 @@
 * Usually hard to say why: They care about the topic or they care about you?
 
 7 point plan:
+
 1. Learning Climate
 2. Control of Session
 3. Communication of Goals
