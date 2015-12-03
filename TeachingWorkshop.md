@@ -5,7 +5,7 @@
 * Who was a good teacher in your life? 
 * Usually hard to say why: They care about the topic or they care about you?
 
-7 point plan:
+Seven point plan:
 
 1. Learning Climate
 2. Control of Session
