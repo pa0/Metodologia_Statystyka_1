@@ -25,7 +25,7 @@ Nonparametric analogs of the one- and two-sample t-tests and analysis of varianc
 * **MQJH**: Müller, Quintana, Jara, and Hanson (2015). Bayesian Nonparametric Data Analysis.
 
 ### Optional
-* **HWC**: Hollander and Wolfe (2013). and Chicken, Nonparametric Statistical Methods (3rd Edition).
+* **HWC**: Hollander and Wolfe, and Chicken (2013). Nonparametric Statistical Methods (3rd Edition).
 * **ET**: Efron and Tibshirani (1994). An Introduction to the Bootstrap.
 * **G**: Good (2005). Permutation, Parametric, and Bootstrap Tests of Hypotheses (3rd Edition).
 
