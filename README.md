@@ -14,7 +14,7 @@ Nonparametric analogs of the one- and two-sample t-tests and analysis of varianc
 * Permutation Tests and Bootstrap (Selected Chapters in **G** and **ET**)
 
 ### Bayesian
-* Density Estimation (Chapter 2 and 3 in **MQJH**)
+* Density Estimation (Chapters 2 and 3 in **MQJH**)
 * Regression (Chapter 4 in **MQJH**)
 * Clustering and Feature Allocation (Chapter 8 **MQJH**)
 
