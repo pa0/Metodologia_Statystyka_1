@@ -11,6 +11,7 @@ Nonparametric analogs of the one- and two-sample t-tests and analysis of varianc
 * Regression (Chapter 4 in **KK**)
 * ANOVA and ANCOVA (Chapter 5 in **KK**)
 * Permutation Tests and Bootstrap (Selected Chapters in **G** and **ET**)
+
 ### Bayesian
 * Density Estimation (Chapter 2 and 3 in **HWC**)
 * Regression (Chapter 4 in **HWC**)
