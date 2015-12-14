@@ -22,7 +22,7 @@ Nonparametric analogs of the one- and two-sample t-tests and analysis of varianc
 
 ### Required
 * **KK**: Kloke and McKean (2015). Nonparametric Statistical Methods Using R.
-* **MQJH**: Müller, Quintana, Jara, Hanson (2015). Bayesian Nonparametric Data Analysis.
+* **MQJH**: Müller, Quintana, Jara, and Hanson (2015). Bayesian Nonparametric Data Analysis.
 
 ### Optional
 * **HWC**: Hollander and Wolfe (2013). and Chicken, Nonparametric Statistical Methods (3rd Edition).
