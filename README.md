@@ -30,6 +30,8 @@ Nonparametric analogs of the one- and two-sample t-tests and analysis of varianc
 * **G**: Good (2005). Permutation, Parametric, and Bootstrap Tests of Hypotheses (3rd Edition).
 
 ## Journal articles
+* **ENK**: Eklund, Nichols, and Knutsson (2015). Can Parametric Statistical Methods Be Trusted for fMRI Based Group Studies?.
+* **SMN**: Silver, Montana, and Nichols (2011). False positives in neuroimaging genetics using voxel-based morphometry data.
 * **DE**: Diaconis and Efron (1983). Computer Intensive Methods in Statistics.
 * **NH**: Nichols and Holmes (2001). Nonparametric Permutation Tests For Functional Neuroimaging: A Primer with Examples.
 * **HSS**: Hagler Jr., Saygin, and Sereno (2006). Smoothing and cluster thresholding for cortical surface-based group analysis of fMRI data.
