@@ -39,6 +39,9 @@ Nonparametric analogs of the one- and two-sample t-tests and analysis of varianc
 * **SMN**: Silver, Montana, and Nichols (2011). False positives in neuroimaging genetics using voxel-based morphometry data.
 * **ENK**: Eklund, Nichols, and Knutsson (2015). Can Parametric Statistical Methods Be Trusted for fMRI Based Group Studies?
 
+## Suggested Links
+* TryR provides an adequate initiation to R (http://tryr.codeschool.com/)
+
 ## Course Assistant and Office Hours
 TBD
 
