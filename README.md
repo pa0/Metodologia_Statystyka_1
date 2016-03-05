@@ -47,7 +47,7 @@ TBD
 * Homework assignments: 40%
 * Two bigger projects (midterm and final): 60%
 
-### Midterm Project Content:
+### Midterm project content:
 The first part of the project should be about 5 pages long (without counting the bibliography).
 
 1. A simple and clear exposition of the question you are addressing.
@@ -55,7 +55,7 @@ The first part of the project should be about 5 pages long (without counting the
 3. A proposed solution to the problem using either the bootstrap or another resampling procedure, with comparative merits of the bootstrap as proposed to other methods.
 4. A flow chart of the various tasks to be undertaken, programming, testing the program on simulated data, testing the program on real data are all reasonable steps.
 
-### Final Project Contents:
+### Final project contents:
 1. A theoretical part: explanation of the method studied, its properties.
 2. A computational part: an algorithm for implementing the method in matlab or S-plus, this should also be emailed to the TAs so it can be tested. Make sure your code is readable, so we can eventually do a little trouble shooting if necessary.
 3. A data-analysis part: actual data are to be submitted to the method studied, or tables should show comparisons, or theoretical results should be outlined.
