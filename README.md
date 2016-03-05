@@ -3,11 +3,7 @@
 ## Description
 Nonparametric analogs of the one- and two-sample t-tests and analysis of variance; the sign test, median test, Wilcoxon's tests, and the Kruskal-Wallis and Friedman tests, tests of independence. Nonparametric regression and nonparametric density estimation, modern nonparametric techniques, nonparametric confidence interval estimates.
 
-## Schedule and Location
-
-
-
-## Syllabus (Tentative)
+## Syllabus (tentative)
 
 ### Motivation
 * Taking advantage of the computer (**DE**)
@@ -37,21 +33,21 @@ Nonparametric analogs of the one- and two-sample t-tests and analysis of varianc
 * **HWC**: Hollander and Wolfe, and Chicken (2013). Nonparametric Statistical Methods (3rd Edition).
 * **L**: Lehmann (2006). Nonparametrics Statistical Methods Based on Ranks.
 
-## Journal Articles
+## Journal articles
 * **DE**: Diaconis and Efron (1983). Computer Intensive Methods in Statistics.
 * **NH**: Nichols and Holmes (2001). Nonparametric Permutation Tests For Functional Neuroimaging: A Primer with Examples.
 * **SMN**: Silver, Montana, and Nichols (2011). False positives in neuroimaging genetics using voxel-based morphometry data.
 * **ENK**: Eklund, Nichols, and Knutsson (2015). Can Parametric Statistical Methods Be Trusted for fMRI Based Group Studies?
 
-## Course Assistant and Office Hours
+## Course assistant and office hours
 TBD
 
-## Grading (Tentative)
+## Grading (tentative)
 
 * Homework assignments: 40%
 * Two bigger projects (midterm and final): 60%
 
-### Midterm Project Content:
+### Midterm project content:
 The first part of the project should be about 5 pages long (without counting the bibliography).
 
 1. A simple and clear exposition of the question you are addressing.
@@ -59,7 +55,7 @@ The first part of the project should be about 5 pages long (without counting the
 3. A proposed solution to the problem using either the bootstrap or another resampling procedure, with comparative merits of the bootstrap as proposed to other methods.
 4. A flow chart of the various tasks to be undertaken, programming, testing the program on simulated data, testing the program on real data are all reasonable steps.
 
-### Final Project Contents:
+### Final project contents:
 1. A theoretical part: explanation of the method studied, its properties.
 2. A computational part: an algorithm for implementing the method in matlab or S-plus, this should also be emailed to the TAs so it can be tested. Make sure your code is readable, so we can eventually do a little trouble shooting if necessary.
 3. A data-analysis part: actual data are to be submitted to the method studied, or tables should show comparisons, or theoretical results should be outlined.
@@ -68,7 +64,7 @@ Analysis of a data set with your algorithm: Perform a statistical analysis of so
 
 Computer output should be incorporated in the usual way, i.e. put tables in the text or at the end but do not hand in a pile of unedited computer output. Tables and figures should be numbered and captioned. No uncommented output will be considered. The quality of presentation will come into account for the final grade. (Incorporation of good quality graphics, careful text-processing, no superfluous output). You should put the text of your computer programs in an appendix.
 
-### An example project from my own research:
+### Example Project:
 In neuroimaing, we are usually interested in comparing group of participants that have a certain disorder or disease with a control group to find difference in their brain anatomy and function. Voxelwise two sample tests with appropriate multiple comarison corrections are thus very common. Perform such an analysis on data provided by my collaborators in the medical school using ideas from nonparameterics statistics. What is already done in pratice? What kind of reserach questions are still open.
 
 ## Slides
