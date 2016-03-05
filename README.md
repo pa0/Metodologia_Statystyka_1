@@ -31,6 +31,7 @@ Nonparametric analogs of the one- and two-sample t-tests and analysis of varianc
 * **MQJH**: Müller, Quintana, Jara, and Hanson (2015). Bayesian Nonparametric Data Analysis.
 * **ET**: Efron and Tibshirani (1994). An Introduction to the Bootstrap.
 * **HWC**: Hollander and Wolfe, and Chicken (2013). Nonparametric Statistical Methods (3rd Edition).
+* **L**: Lehmann (2006). Nonparametrics Statistical Methods Based on Ranks.
 
 ## Journal articles
 * **DE**: Diaconis and Efron (1983). Computer Intensive Methods in Statistics.
