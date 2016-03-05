@@ -49,12 +49,14 @@ TBD
 ### Midterm Project Content:
 
 The first part of the project should be about 5 pages long (without counting the bibliography).
+
 1. A simple and clear exposition of the question you are addressing.
 2. A situation of the problem in the wider context of contemporary statistics, with a review of available methods for such data and a few words on their advantages and disadvantages.
 3. A proposed solution to the problem using either the bootstrap or another resampling procedure, with comparative merits of the bootstrap as proposed to other methods.
 4. A flow chart of the various tasks to be undertaken, programming, testing the program on simulated data, testing the program on real data are all reasonable steps.
 
 ### Final Project Contents:
+
 1. A theoretical part: explanation of the method studied, its properties.
 2. A computational part: an algorithm for implementing the method in matlab or S-plus, this should also be emailed to the TAs so it can be tested. Make sure your code is readable, so we can eventually do a little trouble shooting if necessary.
 3. A data-analysis part: actual data are to be submitted to the method studied, or tables should show comparisons, or theoretical results should be outlined.
