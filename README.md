@@ -45,7 +45,7 @@ Nonparametric analogs of the one- and two-sample t-tests and analysis of varianc
 ## Course Assistant and Office Hours
 TBD
 
-## Grading (tentative)
+## Grading (Tentative)
 
 * Homework assignments: 40%
 * Two bigger projects (midterm and final): 60%
