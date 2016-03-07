@@ -1,8 +1,12 @@
-Slides
+Day 1: Logistics and Introduction
 ========================================================
-author: 
-date: 
+author: Christof Seiler
+date: March 28, 2016
 autosize: true
+
+```{r global_options, include=FALSE}
+knitr::opts_chunk$set(fig.retina=4, fig.path='Figs/')
+```
 
 First Slide
 ========================================================
@@ -23,6 +27,6 @@ summary(cars)
 Slide With Plot
 ========================================================
 
-```{r, echo=FALSE, dpi=300}
+```{r, echo=FALSE}
 plot(cars)
 ```

@@ -1,8 +1,10 @@
-Slides
+Day 1: Logistics and Introduction
 ========================================================
-author: 
-date: 
+author: Christof Seiler
+date: March 28, 2016
 autosize: true
+
+
 
 First Slide
 ========================================================
@@ -34,4 +36,4 @@ summary(cars)
 Slide With Plot
 ========================================================
 
-![plot of chunk unnamed-chunk-2](Slides-figure/unnamed-chunk-2-1.png)
+<img src="Figs/unnamed-chunk-2-1.png" title="plot of chunk unnamed-chunk-2" alt="plot of chunk unnamed-chunk-2" width="504" />
