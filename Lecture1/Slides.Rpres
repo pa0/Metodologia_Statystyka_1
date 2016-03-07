@@ -23,6 +23,6 @@ summary(cars)
 Slide With Plot
 ========================================================
 
-```{r, echo=FALSE}
+```{r, echo=FALSE, dpi=300}
 plot(cars)
 ```
