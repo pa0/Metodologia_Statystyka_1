@@ -71,7 +71,10 @@ Computer output should be incorporated in the usual way, i.e. put tables in the 
 In neuroimaing, we are usually interested in comparing group of participants that have a certain disorder or disease with a control group to find difference in their brain anatomy and function. Voxelwise two sample tests with appropriate multiple comarison corrections are thus very common. Perform such an analysis on data provided by my collaborators in the medical school using ideas from nonparameterics statistics. What is already done in pratice? What kind of reserach questions are still open.
 
 ## Slides
-Lecture 1: [Review of Basics](Lecture1/Slides.pdf)
+Lecture 1: 
+* [pdf](Lecture1/Slides.pdf)
+* [html](Lecture1/Slides.html)
+* [md](Lecture1/Slides.md)
 
 ## Homework
 TBD
