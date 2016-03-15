@@ -47,7 +47,7 @@ draw.bootstrap.sample = function() {
 }
 
 nrep = 10000
-theta.boot = replicate(10000,draw.bootstrap.sample())
+theta.boot = replicate(nrep,draw.bootstrap.sample())
 hist(theta.boot,breaks=100)
 
 # sampel estimate
