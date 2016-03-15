@@ -1,39 +1,77 @@
-Day 1: Logistics and Introduction
+Stats 205: Introduction to Nonparametric Statistics
 ========================================================
-author: Christof Seiler
+author: Instructor: Christof Seiler
 date: March 28, 2016
 autosize: true
 
 
 
-First Slide
+Day 1: Logistics and Introduction
 ========================================================
 
-For more details on authoring R presentations please visit <https://support.rstudio.com/hc/en-us/articles/200486468>.
+- What is it about?
+- Goals
+- Textbooks
+- Grading
+- Neuroimaging example
 
-- Bullet 1
-- Bullet 2
-- Bullet 3
-
-Slide With Code
+What is it about?
 ========================================================
 
+- Rank-based methods
 
-```r
-summary(cars)
-```
-
-```
-     speed           dist       
- Min.   : 4.0   Min.   :  2.00  
- 1st Qu.:12.0   1st Qu.: 26.00  
- Median :15.0   Median : 36.00  
- Mean   :15.4   Mean   : 42.98  
- 3rd Qu.:19.0   3rd Qu.: 56.00  
- Max.   :25.0   Max.   :120.00  
-```
-
-Slide With Plot
+Goals
 ========================================================
 
-<img src="Figs/unnamed-chunk-2-1.png" title="plot of chunk unnamed-chunk-2" alt="plot of chunk unnamed-chunk-2" width="504" />
+- Get an overview of classical and modern methods
+- Learn how to implement and use existing R packages
+- Be aware and understand underlying assumptions
+- Apply to modern data anlaysis problems that you care about
+
+Textbooks
+========================================================
+
+- Our main textbook with lots of partical computation in R (free online):
+
+Kloke and McKean (2015). Nonparametric Statistical Methods Using R.
+
+- Bayesian view (free online):
+
+Müller, Quintana, Jara, and Hanson (2015). Bayesian Nonparametric Data Analysis
+
+- Moder tools like the bootstrap:
+
+Efron and Tibshirani (1994). An Introduction to the Bootstrap
+
+- Very comprehensive (free online):
+
+Hollander and Wolfe, and Chicken (2013). Nonparametric Statistical Methods (3rd Edition).
+
+- In depth mathematical account on rank-based methods:
+
+Lehmann (2006). Nonparametrics Statistical Methods Based on Ranks.
+
+Grading: Homeworks and Projects
+========================================================
+
+- Bi-weekly homework assigments (40%), mostly R exercices
+- Project (60%)
+
+Write a paper on applying nonparametric statistics to your field of interest or studying some theoretical aspects that your care about.
+
+- Midterm project (30%): 
+
+Project proposal and outline of planned tasks (5 pages).
+
+- Final project (30%): 
+
+  1. A theoretical part: explanation of the method studied, its properties.
+  2. A computational part: an algorithm for implementing the method in matlab or S-plus, this should also be emailed to the TAs so it can be tested. Make sure your code is readable, so we can eventually do a little trouble shooting if necessary.
+  * A data-analysis part: actual data are to be submitted to the method studied, or tables should show comparisons, or theoretical results should be outlined.
+
+- Details will be posted on the course website: https://christofseiler.github.io/stats205/
+
+Neuroimaging example
+========================================================
+
+<img src="Figs/unnamed-chunk-1-1.png" title="plot of chunk unnamed-chunk-1" alt="plot of chunk unnamed-chunk-1" width="504" />
