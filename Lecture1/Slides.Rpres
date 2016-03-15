@@ -11,6 +11,7 @@ knitr::opts_chunk$set(fig.retina=4, fig.path='Figs/')
 Day 1: Logistics and Introduction
 ========================================================
 
+
 - What is it about?
 - Goals
 - Textbooks
