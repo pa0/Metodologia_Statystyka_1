@@ -98,7 +98,7 @@ You can find everything on our course website: \linebreak
 \frametitle{Goals}
 
 \begin{itemize}
-\item Get an overview of classical and modern methods
+\item Get an overview of classical, Bayesian, and modern methods
 \item Learn how to implement methods yourself and use existing R packages
 \item Be aware and understand underlying assumptions
 \item Apply to modern data analysis problems that you care about
@@ -118,11 +118,11 @@ M\"uller, Quintana, Jara, and Hanson (2015). Bayesian Nonparametric Data Analysi
 In-depth coverage of the bootstrap: \newline
 Efron and Tibshirani (1994). An Introduction to the Bootstrap  \newline
 
-Very comprehensive (free online): \newline
-Hollander and Wolfe, and Chicken (2013). Nonparametric Statistical Methods (3rd Edition). \newline
-
 In-depth mathematical account on rank-based methods: \newline
 Lehmann (2006). Nonparametrics Statistical Methods Based on Ranks \newline
+
+Very comprehensive covering most of the material of the previous books (free online): \newline
+Hollander and Wolfe, and Chicken (2013). Nonparametric Statistical Methods \newline
 
 \end{frame}
 
@@ -148,14 +148,65 @@ The project will be split in two parts:
 \begin{itemize}
 \item A theoretical part: Explanation of the method studied and its properties
 \item A computational part: Preferably in R
-\item A data-analysis part: Plots, $p$-values, and interpretations
+\item A data-analysis part: Plots and interpretations
 \end{itemize}
 \end{enumerate}
 
 \end{frame}
 
 \begin{frame}
-\frametitle{History}
+\frametitle{Early History}
+
+\begin{itemize}
+\item Beginning of nonparametric statistics (Hotelling and Pabst 1936)
+\item Wilcoxon (1945) introduced the two-sample rank sum test for equal sample sizes, and Mann and Whitney (1947) generalize it
+\item Pitman (1948), Hodges and Lehmann (1956), and Chernoff and Savage (1958) showed desirable efficiency properties
+\item Jackknife, introduced by Quenouille (1949) as a bias-reduction technique and extended by Tukey (1958, 1962) to provide approximate significance tests and confidence intervals
+\item Hodges and Lehmann (1963) showed how to derive estimators from rank tests and established that these estimators have desirable properties
+\item Cox (1972) model and methods for survival analysis
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Bayesian History}
+
+\begin{itemize}
+\item Ferguson (1973) introduced nonparametric Bayesian methods
+\item Susarla and van Ryzin (1976) derived nonparametric Bayesian estimators of survival curves
+\item Dykstra and Laud (1981) developed a Bayesian nonparametric approach to reliability
+\item Hjort (1990b) proposed nonparametric Bayesian estimators to model the cumulative hazard
+\item In the late 1980s and the 1990s, there was a surge of activity in Bayesian methods due to the Markov chain Monte Carlo (MCMC) methods, e.g. Gelfand and Smith (1990), Gamerman (1991), West (1992), Smith and Roberts (1993), and Arjas and Gasbarra (1994)
+\item Key algorithms for developing and implementing modern Bayesian methods include the Metropolis-Hastings-Green algorithm (see Metropolis et al. (1953), Hastings (1970), and Green (1995)) and the Tanner-Wong (1987) data augmentation algorithm
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Modern History}
+
+\begin{itemize}
+\item Efron's (1979) bootstrap makes use of increasing computational resources to provide standard errors and confidence intervals where  difficult, if not impossible, to use a parametric approach \newline
+
+Some examples in the 2000's:
+\item Robust analysis of linear models (McKean, 2004)
+%\item Comparing variances and other dispersion measures (Boos and Brownie, 2004)
+%\item Use of sign statistics in one-way layouts (Elmore, Hettmansperger, and Xuan, 2004)
+\item Density estimation (Sheather, 2004)
+%\item Multivariate nonparametric tests (Oja and Randles, 2004)
+%\item Quantile-quantile (QQ) plots (Marden, 2004)
+%\item Survival analysis (Akritas, 2004)
+%\item Spatial statistics (Chang, 2004)
+%\item Ranked set sampling (Wolfe, 2004) 
+%\item Reliability (Hollander and Pe\~na, 2004)
+\item Data modeling via quantile methods (Parzen, 2004)
+\item Kernel smoothers (Schucany, 2004)
+\item Permutation-based inference (Ernst, 2004) 
+%\item Data depth tests for location and scale differences for multivariate distributions (Li and Liu, 2004)
+\item Multivariate signed rank tests in time series problems (Hallin and Paindaveine, 2004)
+%\item Rank-based analyses of crossover studies (Putt and Chinchilli, 2004)
+\item Nonparametric statistics on manifolds (Patrangenaru and Ellingson 2015)
+\end{itemize}
 
 \end{frame}
 
