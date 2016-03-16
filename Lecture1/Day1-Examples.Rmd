@@ -7,13 +7,90 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+## Rank-Based Example
+
+### Question
+
+Does sending kids to school improve social awareness over home schooling?
+
+### Experiment
+
+Eight pairs of identical twins who are of nursery school age. For each pair, one is randomly selected to attend nursery school while the other remains at home. At the end of the study period, all 16 children are given the same social awareness test.
+
+```{r}
+school = c(82,69,73,43,58,56,76,65)
+home = c(63,42,74,37,51,43,80,62)
+```
+
+### Statistic
+
+For each pair, the response of interest is the difference in the twins’ scores, (Twin at School − Twin at Home).
+
+```{r}
+response = school - home
+response
+```
+
+### Computations
+
+Is this due to chance? We use signed-rank Wilcoxon procedure to find out.
+The usual statistics is the sum of the ranks of positive items:
+
+```{r}
+wplus = sum((response>0)*rank(response))
+```
+
+or equivalently:
+
+```{r}
+n = length(response)
+w = sum(sign(response)*rank(response))
+wplus = 0.5*w + n*(n+1)/4
+```
+
+and the Cumulative Distribution Function (CDF) of $W+$ looks like:
+
+```{r}
+x = seq(0, n*(n+1)/2, length = 1000)
+plot(x,psignrank(x, n = n),type="l",main = paste0("psignrank(x, n = ", n, ")"))
+abline(v=wplus,col = "red",lwd = 2)
+abline(h=psignrank(wplus-1, n = n),col = "blue",lwd = 2)
+```
+
+then the p-value is $P_{H_0}(W^+ \ge w^+) = 1 - F_{W^+}(w^+ - 1; n)$:
+
+```{r}
+pvalue = 1-psignrank(wplus-1, n = n)
+pvalue
+```
+
+or with simulations
+
+```{r}
+nrep = 10000
+samples = rsignrank(nn = nrep, n = n)
+hist(samples,breaks = 100)
+abline(v=wplus,col = "red",lwd = 2)
+empirical.pvalue = sum(samples > wplus)/nrep
+empirical.pvalue
+```
+
+or simple use R base implementation:
+
+```{r}
+wilcox.test(response,alternative="greater",conf.int=TRUE)
+```
+
 ## Bootstrap Example
 
-Question: Does small dose of aspirin prevent heart attacks in healthy middle-aged man?
+### Question
 
-A randomized double-blind study was designed to collect data. The subjects were randomly assigned to the aspririn and placebo groups. Doctors and subjects didn't know whether they treated or received aspirin or placebo substance.
+Does small dose of aspirin prevent heart attacks in healthy middle-aged man?
 
-Data:
+### Experiment
+
+A randomized double-blind study was designed to collect data. The subjects were randomly assigned to the aspirin and placebo groups. Doctors and subjects didn't know whether they treated or received aspirin or placebo substance.
+
 ```{r}
 labels = c("nattacks","nsubjects")
 aspirin = c(104,11037)
@@ -23,7 +100,10 @@ rownames(data) = labels
 data
 ```
 
+### Statistic
+
 Ratio of the rates:
+
 ```{r}
 rate = function(v) v[1]/v[2]
 theta.hat = rate(data$aspirin)/rate(data$placebo)
@@ -32,8 +112,11 @@ theta.hat
 
 This means that in this sample aspirin-takers only have 55% as many heart attacks as placebo-takers.
 
-Is this due to chance? Or can this results be reprodcued in other similar experiments? 
+### Computations
+
+Is this due to chance? Or can this results be reproduced in other similar experiments? 
 Let's use the bootstrap method to find out:
+
 ```{r}
 population.one = c( rep(1,data["nattacks","aspirin"]), rep(0,data["nsubjects","aspirin"]-data["nattacks","aspirin"]) )
 population.two = c( rep(1,data["nattacks","placebo"]), rep(0,data["nsubjects","placebo"]-data["nattacks","placebo"]) )
@@ -59,4 +142,6 @@ confidence.upper = sort(theta.boot)[nrep*.975]
 abline(v=c(confidence.lower,confidence.upper),col = "green",lwd = 2)
 ```
 
-So we can conclude that aspirin was found to be signiticantly beneficial for preventing heart attacks.
+### Conclusion
+
+We can conclude that aspirin was found to be significantly beneficial for preventing heart attacks.
