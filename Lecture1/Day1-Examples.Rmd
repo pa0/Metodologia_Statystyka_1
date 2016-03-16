@@ -56,29 +56,30 @@ Luckily, the probability mass function for our test statistics is known (under t
 
 ```{r}
 x = seq(0,n*(n+1)/2,1)
-plot(x,dsignrank(x, n = n),type = "s",main = paste0("psignrank(x, n = ", n, ")"))
-abline(v=wplus,col = "red",lwd = 2)
+barplot(dsignrank(x,n),names.arg = x,main = paste0("dsignrank(x, n = ", n, ")"))
+abline(v=wplus,col = "red",lwd = 4)
 ```
 
 and using the cumulative distribution function $F_{W^+}(w^+-1,n)$ of our test statistics:
 
 ```{r}
+barplot(psignrank(x,n),names.arg = x,main = paste0("psignrank(x, n = ", n, ")"))
 plot(x,psignrank(x, n = n),type = "s",main = paste0("psignrank(x, n = ", n, ")"))
-abline(v=wplus,col = "red",lwd = 2)
-abline(h=psignrank(wplus-1, n = n),col = "blue",lwd = 2)
+abline(v=wplus,col = "red",lwd = 4)
+abline(h=psignrank(wplus,n),col = "blue",lwd = 4)
 ```
 
 we can find the $p$-value using $P_{H_0}(W^+ \ge w^+) = 1 - F_{W^+}(w^+ - 1,n)$:
 
 ```{r}
-pvalue = 1-psignrank(wplus-1, n = n)
+pvalue = 1-psignrank(wplus-1,n,lower.tail = TRUE)
 pvalue
 ```
 
 There is also an R base implementation of this test:
 
 ```{r}
-wilcox.test(response,alternative="greater",conf.int=TRUE)
+wilcox.test(response,alternative="greater")
 ```
 
 ### Conclusion
@@ -122,8 +123,10 @@ Is this due to chance? Or can this results be reproduced in other similar experi
 Let's use the bootstrap method to find out:
 
 ```{r}
-population.one = c( rep(1,data["nattacks","aspirin"]), rep(0,data["nsubjects","aspirin"]-data["nattacks","aspirin"]) )
-population.two = c( rep(1,data["nattacks","placebo"]), rep(0,data["nsubjects","placebo"]-data["nattacks","placebo"]) )
+population.one = c( rep(1,data["nattacks","aspirin"]), 
+                    rep(0,data["nsubjects","aspirin"]-data["nattacks","aspirin"]) )
+population.two = c( rep(1,data["nattacks","placebo"]), 
+                    rep(0,data["nsubjects","placebo"]-data["nattacks","placebo"]) )
 
 draw.bootstrap.sample = function() {
   boot.pop.one = sample(population.one,replace = TRUE)
@@ -132,18 +135,22 @@ draw.bootstrap.sample = function() {
   rate.two = sum(boot.pop.two)/length(boot.pop.two)
   return(rate.one/rate.two)
 }
+```
 
+and now simulate:
+
+```{r}
 nrep = 10000
 theta.boot = replicate(nrep,draw.bootstrap.sample())
 hist(theta.boot,breaks=100)
 
-# sampel estimate
-abline(v=theta.hat,col = "red",lwd = 2)
+# sample estimate
+abline(v=theta.hat,col = "red",lwd = 4)
 
 # bootstrap confidence interval
 confidence.lower = sort(theta.boot)[nrep*.025]
 confidence.upper = sort(theta.boot)[nrep*.975]
-abline(v=c(confidence.lower,confidence.upper),col = "green",lwd = 2)
+abline(v=c(confidence.lower,confidence.upper),col = "blue",lwd = 4)
 ```
 
 ### Conclusion
