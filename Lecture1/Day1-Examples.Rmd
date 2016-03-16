@@ -7,7 +7,7 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## Rank-Based Example
+## Rank-Based Method
 
 ### Question
 
@@ -31,13 +31,12 @@ response = school - home
 response
 ```
 
-### Computations
-
-Is this due to chance? We use signed-rank Wilcoxon procedure to find out.
-The usual statistics is the sum of the ranks of positive items:
+We use signed-rank Wilcoxon procedure to find out.
+The usual statistic is the sum of the ranks of positive items:
 
 ```{r}
 wplus = sum((response>0)*rank(response))
+wplus
 ```
 
 or equivalently:
@@ -46,42 +45,47 @@ or equivalently:
 n = length(response)
 w = sum(sign(response)*rank(response))
 wplus = 0.5*w + n*(n+1)/4
+wplus
 ```
 
-and the Cumulative Distribution Function (CDF) of $W+$ looks like:
+### Computations
+
+Is this due to chance?
+
+Luckily, the probability mass function for our test statistics is known (under the null hypothesis of equal median):
 
 ```{r}
-x = seq(0, n*(n+1)/2, length = 1000)
-plot(x,psignrank(x, n = n),type="l",main = paste0("psignrank(x, n = ", n, ")"))
+x = seq(0,n*(n+1)/2,1)
+plot(x,dsignrank(x, n = n),type = "s",main = paste0("psignrank(x, n = ", n, ")"))
+abline(v=wplus,col = "red",lwd = 2)
+```
+
+and using the cumulative distribution function $F_{W^+}(w^+-1,n)$ of our test statistics:
+
+```{r}
+plot(x,psignrank(x, n = n),type = "s",main = paste0("psignrank(x, n = ", n, ")"))
 abline(v=wplus,col = "red",lwd = 2)
 abline(h=psignrank(wplus-1, n = n),col = "blue",lwd = 2)
 ```
 
-then the p-value is $P_{H_0}(W^+ \ge w^+) = 1 - F_{W^+}(w^+ - 1; n)$:
+we can find the $p$-value using $P_{H_0}(W^+ \ge w^+) = 1 - F_{W^+}(w^+ - 1,n)$:
 
 ```{r}
 pvalue = 1-psignrank(wplus-1, n = n)
 pvalue
 ```
 
-or with simulations
-
-```{r}
-nrep = 10000
-samples = rsignrank(nn = nrep, n = n)
-hist(samples,breaks = 100)
-abline(v=wplus,col = "red",lwd = 2)
-empirical.pvalue = sum(samples > wplus)/nrep
-empirical.pvalue
-```
-
-or simple use R base implementation:
+There is also an R base implementation of this test:
 
 ```{r}
 wilcox.test(response,alternative="greater",conf.int=TRUE)
 ```
 
-## Bootstrap Example
+### Conclusion
+
+We can reject the null hypthesis at significance level $\alpha = 0.05$ in favor of the alternative that sending kids to school improves their social awareness.
+
+## Bootstrap
 
 ### Question
 
