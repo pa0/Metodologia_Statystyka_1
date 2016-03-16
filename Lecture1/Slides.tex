@@ -1,48 +1,8 @@
 \documentclass[10pt]{beamer}
 
-\usepackage{graphicx,amsmath,amssymb,tikz,psfrag}
-\usepackage{hyperref}
-
+\input ../pack.tex
 \input ../defs.tex
-
-%% formatting
-
-\mode<presentation>
-{
-\usetheme{default}
-}
-\setbeamertemplate{navigation symbols}{}
-\usecolortheme[rgb={0.13,0.28,0.59}]{structure}
-\setbeamertemplate{itemize subitem}{--}
-\setbeamertemplate{frametitle} {
-	\begin{center}
-	  {\large\bf \insertframetitle}
-	\end{center}
-}
-
-\newcommand\footlineon{
-  \setbeamertemplate{footline} {
-    \begin{beamercolorbox}[ht=2.5ex,dp=1.125ex,leftskip=.8cm,rightskip=.6cm]{structure}
-      \footnotesize %\insertsection
-      \hfill
-      {\insertframenumber}
-    \end{beamercolorbox}
-    \vskip 0.45cm
-  }
-}
-\footlineon
-
-\AtBeginSection[] 
-{ 
-	\begin{frame}<beamer> 
-		\frametitle{Outline} 
-		\tableofcontents[currentsection,currentsubsection] 
-	\end{frame} 
-} 
-
-\setbeamercolor{alerted text}{fg=blue} 
-
-%% begin presentation
+\input ../form.tex
 
 \title{\large \bfseries Stats 205: \\ Introduction to Nonparametric Statistics \linebreak \linebreak \linebreak
 Day 1: \\ Logistics and Introduction}
@@ -280,7 +240,7 @@ More explanations in Page 46, Comment 5 in Hollander, Wolfe, and Chicken.
 
 \begin{itemize}
 \item Show R markdown session
-\item We can compute confidence intervals of an estimate using computer simulations.
+\item We can computed confidence intervals of an estimate using computer simulations
 \end{itemize}
 
 \end{frame}
@@ -288,9 +248,8 @@ More explanations in Page 46, Comment 5 in Hollander, Wolfe, and Chicken.
 \begin{frame}
 \frametitle{Next Lecture}
 
-In the next few lectures, we will focus on
+In the next lecture, we will focus on
 \begin{itemize}
-\item more rank-based methods and 
 \item different types of computer simulations (e.g. Monte Carlo, enumerations, permutations, Markov chain Monte Carlo)
 \end{itemize}
 
