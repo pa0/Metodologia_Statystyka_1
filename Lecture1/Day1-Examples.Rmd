@@ -56,14 +56,14 @@ Luckily, the probability mass function for our test statistics is known (under t
 
 ```{r}
 x = seq(0,n*(n+1)/2,1)
-barplot(dsignrank(x,n),names.arg = x,main = paste0("dsignrank(x, n = ", n, ")"))
-abline(v=wplus,col = "red",lwd = 4)
+colors = rep("white",length(x))
+colors[wplus] = "red"
+barplot(dsignrank(x,n),names.arg = x,main = paste0("dsignrank(x, n = ", n, ")"),col = colors)
 ```
 
 and using the cumulative distribution function $F_{W^+}(w^+-1,n)$ of our test statistics:
 
 ```{r}
-barplot(psignrank(x,n),names.arg = x,main = paste0("psignrank(x, n = ", n, ")"))
 plot(x,psignrank(x, n = n),type = "s",main = paste0("psignrank(x, n = ", n, ")"))
 abline(v=wplus,col = "red",lwd = 4)
 abline(h=psignrank(wplus,n),col = "blue",lwd = 4)
@@ -76,11 +76,12 @@ pvalue = 1-psignrank(wplus-1,n,lower.tail = TRUE)
 pvalue
 ```
 
-There is also an R base implementation of this test:
+<!-- Not the same, why? -->
+<!-- There is also an R base implementation of this test: -->
 
-```{r}
-wilcox.test(response,alternative="greater")
-```
+<!-- ```{r} -->
+<!-- wilcox.test(response,alternative="greater") -->
+<!-- ``` -->
 
 ### Conclusion
 
