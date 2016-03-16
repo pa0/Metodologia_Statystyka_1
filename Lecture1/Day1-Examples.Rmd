@@ -1,5 +1,5 @@
 ---
-title: "Day 1: Examples"
+title: 'Day 1: Examples'
 output: html_document
 ---
 
@@ -52,7 +52,7 @@ wplus
 
 Is this due to chance?
 
-Luckily, the probability mass function for our test statistics is known (under the null hypothesis of equal median):
+Luckily, the probability mass function for our test statistic is known (under the null hypothesis of equal median):
 
 ```{r}
 x = seq(0,n*(n+1)/2,1)
@@ -61,7 +61,7 @@ colors[x >= wplus] = "red"
 barplot(dsignrank(x,n),names.arg = x,main = paste0("dsignrank(x, n = ", n, ")"),col = colors)
 ```
 
-and using the cumulative distribution function $F_{W^+}(w^+-1,n)$ of our test statistics:
+and using the cumulative distribution function $F_{W^+}(w^+-1,n)$ of our test statistic:
 
 ```{r}
 plot(x,psignrank(x, n = n),type = "s",main = paste0("psignrank(x, n = ", n, ")"))

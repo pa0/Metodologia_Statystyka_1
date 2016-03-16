@@ -211,26 +211,88 @@ Some examples from special issue of Statistical Science (Randles, Hettmansperger
 \end{frame}
 
 \begin{frame}
-\frametitle{Some Examples}
+\frametitle{Rank-Based Method Example}
 
-Rank-Based Method Example
+$X_1,X_2,\dots,X_n$ denotes random sample following the model
+\[ X_i = \theta + e_i, \]
+random errors are independently and identically distributed with a continuous probability density function $f(t)$ symmetric around $0$.
 
-\begin{itemize}
-\item Show R markdown session
-\item Blackboard Derivation of the Distribution of $W^+$ under $H_0$: \linebreak
-Comment 5 on P. 46 in Hollander, Myles, and Wolfe \linebreak
-\end{itemize}
-
-Bootstrap Example
+We test hypothesis:
+\[ H_0: \theta = 0 \text{ versus } H_A: \theta > 0 \]
 
 \begin{itemize}
 \item Show R markdown session
+%\item Blackboard Derivation of the Distribution of $W^+$ under $H_0$: \linebreak Comment 5 on P. 46 in Hollander, Myles, and Wolfe \linebreak
+\item The null distribution of the test statistic did not depend on $f(t)$
 \end{itemize}
 
 \end{frame}
 
 \begin{frame}
-\frametitle{Summary and Next Class}
+\frametitle{Distribution of Test Statistic under $H_0$}
+
+$B$ denotes number of positive $Z$'s \newline
+$r_1 < \dots < r_B$ denotes ordered ranks of absolute values of $Z$'s \newline
+
+\centering
+\renewcommand{\arraystretch}{1.5}
+\small
+\begin{tabular}{c|l|c|c}
+B & $(r_1,r_2,\dots,r_B)$ & Probability under $H_0$ & $T^+ = \sum_{i=1}^B r_i$\\
+\hline
+0	&	&	$\frac{1}{8}$	&	0 \\
+1	&	$r_1 = 1$		&	$\frac{1}{8}$	&	1 \\
+1	&	$r_2 = 2$		&	$\frac{1}{8}$	&	2 \\
+1	&	$r_3 = 3$		&	$\frac{1}{8}$	&	3 \\
+2	&	$r_1 = 1,r_2 = 2$		&	$\frac{1}{8}$	&	3 \\
+2	&	$r_1 = 1,r_2 = 3$		&	$\frac{1}{8}$	&	4 \\
+2	&	$r_1 = 2,r_2 = 3$		&	$\frac{1}{8}$	&	5 \\
+3	&	$r_1 = 1,r_2 = 2,r_3 = 3$		&	$\frac{1}{8}$	&	6 \\
+\end{tabular}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Distribution of Test Statistic under $H_0$}
+
+\centering
+\renewcommand{\arraystretch}{1.5}
+\small
+\begin{tabular}{c|c}
+Possible value of $T^+$ & Probability under $H_0$ \\
+\hline
+0	&	$\frac{1}{8}$ \\
+1	&	$\frac{1}{8}$ \\
+2	&	$\frac{1}{8}$ \\
+3	&	$\frac{2}{8}$ \\
+4	&	$\frac{1}{8}$ \\
+5	&	$\frac{1}{8}$ \\
+6	&	$\frac{1}{8}$ \\
+\end{tabular}
+
+\vspace{1cm}
+More explanations in Page 46, Comment 5 in Hollander, Wolfe, and Chicken.
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Bootstrap Example}
+
+\begin{itemize}
+\item Show R markdown session
+\item We can compute confidence intervals of an estimate using computer simulations.
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Next Lecture}
+
+In the next few lectures, we will focus on
+\begin{itemize}
+\item more rank-based methods and 
+\item different types of computer simulations (e.g. Monte Carlo, enumerations, permutations, Markov chain Monte Carlo)
+\end{itemize}
 
 \end{frame}
 
