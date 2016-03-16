@@ -7,7 +7,7 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## Rank-Based Method
+## Signed-Rank Wilcoxon Test
 
 ### Question
 
