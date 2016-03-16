@@ -35,7 +35,7 @@ We use signed-rank Wilcoxon procedure to find out.
 The usual statistic is the sum of the ranks of positive items:
 
 ```{r}
-wplus = sum((response>0)*rank(response))
+wplus = sum((response>0)*rank(abs(response)))
 wplus
 ```
 
@@ -43,7 +43,7 @@ or equivalently:
 
 ```{r}
 n = length(response)
-w = sum(sign(response)*rank(response))
+w = sum(sign(response)*rank(abs(response)))
 wplus = 0.5*w + n*(n+1)/4
 wplus
 ```
@@ -57,7 +57,7 @@ Luckily, the probability mass function for our test statistics is known (under t
 ```{r}
 x = seq(0,n*(n+1)/2,1)
 colors = rep("white",length(x))
-colors[wplus] = "red"
+colors[x >= wplus] = "red"
 barplot(dsignrank(x,n),names.arg = x,main = paste0("dsignrank(x, n = ", n, ")"),col = colors)
 ```
 
@@ -76,12 +76,11 @@ pvalue = 1-psignrank(wplus-1,n,lower.tail = TRUE)
 pvalue
 ```
 
-<!-- Not the same, why? -->
-<!-- There is also an R base implementation of this test: -->
+There is also an R base implementation of this test:
 
-<!-- ```{r} -->
-<!-- wilcox.test(response,alternative="greater") -->
-<!-- ``` -->
+```{r}
+wilcox.test(response,alternative="greater")
+```
 
 ### Conclusion
 
