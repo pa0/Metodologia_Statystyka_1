@@ -1,0 +1,37 @@
+---
+title: "Enumerations"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Law School Data
+
+Correlation coefficient for the law school data from the boostrap package.
+
+```{r}
+library(ggplot2)
+library(bootstrap)
+
+data(law)
+law
+```
+
+We plot it using ggplot2. If you don't know this package yet, take a look, it's very powerful to visualize all kinds of things.
+
+```{r}
+law2 = data.frame(Observation = 1:dim(law)[1],law)
+ggplot(law2, aes(x = LSAT, y = GPA)) + 
+  geom_text(aes(label = Observation),hjust = 0,vjust = 0)
+```
+
+## Complete Enumeration
+
+Take a close look and you will see the corner around 0.9. This corner doens't who up when using Monte Carlo simulations. If you take out observation 1 this corner disappears.
+
+## Complete Enumeration using Gray Codes
+
+## Monte Caro Simulations
+

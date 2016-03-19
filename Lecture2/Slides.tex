@@ -35,9 +35,15 @@ Again, we did not make any assumption about the distribution the noise that corr
 \begin{frame}
 \frametitle{Today}
 
-We will take a closer look at the computational tools that are needed to for both examples. In both example, we need to somehow describe all possible options that a parameter can take and then compare this distribution of outcomes to the observed outcome to judge how probable it is to observe it. \newline
+We will take a closer look at the computational tools that are needed to for both examples. In both example, we needed to somehow 
+\begin{itemize}
+\item describe all possible values that a parameter can take, 
+\item compare this distribution to the observed value, and 
+\item judge how probable it is to observe it. 
+\end{itemize}
 
-Most of the time it is not possible to enumerate all possible options, so we need ways to approximate it. Some ways are:
+\vspace{0.3cm}
+Most of the time it is not possible to enumerate all possible values, so we need ways to approximate it. Some ways are:
 \begin{itemize}
 \item Monte Carlo
 \item Markov chain Monte Carlo
@@ -81,6 +87,88 @@ So from $0,1$, we get two lists
 \[ 10, 11 \]
 and concatenate
 \[  00, 01, 11, 10 \]
+repeat...
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Gray Codes}
+
+We can also just add one successor at the time. 
+As we saw before, a computer scientist would encode integer an $m = \sum \epsilon_i 2^i$
+using the binary sequence 
+\[ \dots \, \epsilon_3 \, \epsilon_2 \, \epsilon_1 \, \epsilon_0 \]
+
+This can be mapped to gray codes 
+\[ \dots \, e_3 \, e_2 \, e_1 \, e_0 \]
+using $e_i = \epsilon_i + \epsilon_{i+1} \, (\bmod 2) \text{ for } (i = 0,1,2,\dots)$ \newline
+
+Example: 
+When $n = 4$ the integer $6$ in binary code is $0110$ and using the mapping 
+\[ e_0 = 0 + 1 = 1, e_1 = 1 + 1 = 0, e_2 = 1 + 0 = 1, e_3 = 0 + 0 = 0 \]
+we get the corresponding gray code $0101$
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Gray Codes for the Bootstrap}
+
+We observe data $\mathcal{X}_n = \{ x_1, x_2, \dots, x_n \}$ in some space $\mathcal{X}$ \newline
+
+The data are drawn identically and independently from a unknown distribution $F$ \newline
+
+The bootstrap supposes that the empirical distribution $F_n$ is a good description of the unknown distribution $F$ \newline
+
+This way one can draw as many samples from $F_n$ to compute sample variability of all kinds of estimators, e.g. the sample mean \newline
+
+This is done via choosing $n$ samples with replacement (you can pick the same sample multiple times)
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Gray Codes for the Bootstrap}
+
+There are $n^n$ different bootstrap samples but some of them have the same subset: 
+\begin{align}
+\mathcal{X}_n^1 & = \{ x_1^1, x_2^1, \dots, x_n^1 \} \\
+\mathcal{X}_n^{n^n} & = \{ x_1^{n^n}, x_2^{n^n}, \dots, x_n^{n^n} \}
+\end{align}
+
+We group the same bootstrap sample and assign a weight $k_i$ describing the number of times it occurs, so $k_1 + \dots + k_n = n$ \newline
+
+Denote the space of compositions of $n$ into at most $n$ parts as
+\[ 
+\mathcal{C}_n = \{ \boldsymbol{k} = (k_1,\dots,k_n), k_1+\dots+k_n=n, k_i \ge 0, k_i \text{ integer} \}
+\]
+and the size of this space is $|\mathcal{C}_n| = \binom{2n-1 }{n-1}$ \newline
+
+A uniform distribution on $\mathcal{X}_n^n$ induces a multinomial distribution on $\mathcal{C}_n$ with probability mass function $m_n(k)$
+ 
+\end{frame}
+
+\begin{frame}
+\frametitle{Gray Codes for the Bootstrap}
+
+To form an exhaustive bootstrap distribution of statistic $T(\mathcal{X}_n)$, \newline
+we need to compute  
+\begin{itemize}
+\item $|\mathcal{C}_n| = \binom{2n-1 }{n-1}$ statistics and 
+\item associated weights $m_n(k)$
+\end{itemize}
+
+\vspace{0.3cm}
+The shift from $\mathcal{X}_n^n$ to $\mathcal{C}_n$ gives substantial savings \newline
+
+For an example with $n = 15$, the number of enumerations reduce from $15^{15} \approx 4.38 \times 10^{17}$ to $\binom{29}{14} \approx 7.7 \times 10^7$ \newline
+
+Next, we will see how efficient updating using Gray Codes avoids multiplying such large numbers by factors of $n$ \newline
+
+\alert{R markdown session:} But before, we look at an example about the correlation between GPA and LSAT for a sample of American law schools
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Gray Codes for the Bootstrap}
 
 \end{frame}
 
