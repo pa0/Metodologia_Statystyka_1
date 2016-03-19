@@ -4,8 +4,9 @@
 \input ../defs.tex
 \input ../form.tex
 
+
 \title{\large \bfseries Stats 205: \\ Introduction to Nonparametric Statistics \linebreak \linebreak \linebreak
-Lecture 2: \\ Computational Tools}
+Lecture 2: \\ Enumerations}
 
 \author{Instructor: Christof Seiler}
 
@@ -19,13 +20,67 @@ Lecture 2: \\ Computational Tools}
 }
 
 \begin{frame}
+\frametitle{Last Lecture}
+
+In our last lecture, we saw two examples of nonparametric statistics in action. \newline
+
+With a ranked-based method, we tested whether social awareness is improved when sending kids to school versus home schooling.
+We assumed that the error was independent and identically distributed (iid) and symmetric around $0$ but made no futher shape assumptions. \newline
+
+In a second example, we saw how to calculate a confidence interval around an estimate using the bootstrap procedure. We used this to evaluate whether aspirin helps reduce the risk of heart attacks in middle-aged men. 
+Again, we did not make any assumption about the distribution the noise that corrupted the underlying parameter. 
+
+\end{frame}
+
+\begin{frame}
 \frametitle{Today}
 
+We will take a closer look at the computational tools that are needed to for both examples. In both example, we need to somehow describe all possible options that a parameter can take and then compare this distribution of outcomes to the observed outcome to judge how probable it is to observe it. \newline
+
+Most of the time it is not possible to enumerate all possible options, so we need ways to approximate it. Some ways are:
 \begin{itemize}
 \item Monte Carlo
-\item Permutations
 \item Markov chain Monte Carlo
 \end{itemize}
+
+\vspace{0.3cm}
+Today, to get a feeling for this, we focus on a special case where we can actually enumerate all options using Gray Codes.
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Gray Codes}
+
+Gray codes are ordered lists of binary $n$-tuples. \newline
+
+They are ordered so that success values only differ in a single space.
+
+For instance, for $n = 3$, the list of is:
+\[ 000, 001, 011, 010, 110, 111, 101, 100 \]
+
+Notice, a computer scientist might intuitively want to write this:
+\[ 000, 001, \cancel{010}, 011, \cancel{100}, 101, \cancel{110}, 111 \]
+This is wrong. \newline
+
+A better than trying to reorder the wrong elements, we can define recursive algorithm to generate a valid list.
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Gray Codes}
+
+\begin{itemize}
+\item Start with list for $n = 1$, which is just $0$ and $1$ 
+\item Get two list by putting a zero before each entry and a one before each entry in $L_n$ 
+\item To get $L_{n+1}$ concatenate the two list by first followed by second in reversed order 
+\end{itemize}
+
+\vspace{0.3cm}
+So from $0,1$, we get two lists
+\[ 00, 01 \]
+\[ 10, 11 \]
+and concatenate
+\[  00, 01, 11, 10 \]
 
 \end{frame}
 

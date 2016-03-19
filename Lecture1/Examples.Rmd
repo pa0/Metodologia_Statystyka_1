@@ -90,7 +90,7 @@ We can reject the null hypthesis at significance level $\alpha = 0.05$ in favor 
 
 ### Question
 
-Does small dose of aspirin prevent heart attacks in healthy middle-aged man?
+Does small dose of aspirin prevent heart attacks in healthy middle-aged men?
 
 ### Experiment
 
