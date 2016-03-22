@@ -1,0 +1,34 @@
+---
+title: "Homework 1"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Enumerations
+
+Remove observation 1 from the law data and recompute histograms. 
+
+```{r}
+library(ggplot2)
+library(bootstrap)
+data(law)
+law2 = data.frame(Observation = 1:dim(law)[1],law)
+ggplot(law2, aes(x = LSAT, y = GPA)) + 
+  geom_text(aes(label = Observation),hjust = 0,vjust = 0)
+```
+
+Do all the plotting in a R markdown file. Compare the histograms generated using Monte Carlo simulation and complete enumerations. To speedup computations, consider using one of Stanford's computing clusters, or implement the Gray code for compositions (for details of the implementation have a look at [Diaconis and Holmes 1994](http://statweb.stanford.edu/~cgates/PERSI/papers/graycodes.pdf)). 
+
+Anwser the following questions:
+
+1. Did anything change in the histograms compared to the one we had in class? 
+2. How much speedup can you get? Show either experimentally or theoretically.
+
+## Deadline
+
+This homework is due on Wednesday, April 6th at 10:00 pm.
+
+You are encouraged to work through this homework with your peers. But write your own code and explain the results in your own words.

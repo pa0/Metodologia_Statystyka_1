@@ -45,8 +45,10 @@ draw.bootstrap.sample = function() {
 }
 nrep = 10000
 thetastar = replicate(nrep,draw.bootstrap.sample())
-hist(thetastar,breaks=100)
-abline(v = theta.hat,col = "red",lwd = 4)
+thetastar2 = data.frame(cor=thetastar)
+ggplot(thetastar2, aes(cor)) + 
+  geom_histogram(binwidth = 0.01) +
+  geom_vline(xintercept = theta.hat,colour = "red",size = 1.5)
 ```
 
 Or use the boostrap library:
@@ -55,8 +57,10 @@ Or use the boostrap library:
 n = 15
 theta = function(x,xdata){ cor(xdata[x,1],xdata[x,2]) }
 results = bootstrap(1:n,nrep,theta,law)
-hist(results$thetastar,breaks=100)
-abline(v = theta.hat,col = "red",lwd = 4)
+thetastar2 = data.frame(cor=results$thetastar)
+ggplot(thetastar2, aes(cor)) + 
+  geom_histogram(binwidth = 0.01) +
+  geom_vline(xintercept = theta.hat,colour = "red",size = 1.5)
 ```
 
 ## Complete Enumeration for Bootstrap
@@ -79,22 +83,31 @@ nCompositionsTheory = choose(2*n-1,n-1)
 assert_that(nCompositions == nCompositionsTheory)
 ```
 
-Inefficient enumeration because we are actually not using the gray code algorihtm for enumerations. We can use the library parallel to speedup computations. On a laptop with 4 cores this takes about 4 hours to compute.
+Inefficient enumeration because we are actually not using the gray code algorihtm for enumerations. We can use the library parallel to speedup computations. On a laptop with 4 cores this takes about 5 hours to compute.
 
 ```{r}
-library(parallel)
-ptm = proc.time()
-enumData = mclapply(1:nCompositions, function(i) {
-  ind = allCompositions[,i]
-  law.list = lapply(1:n,function(j) matrix(rep(law[j,],ind[j]),ncol = 2 ,byrow = TRUE))
-  newLaw = do.call(rbind, law.list)
-  c(cor(unlist(newLaw[,1]),unlist(newLaw[,2])),dmultinom(ind,prob = rep(1,n)))
-  },
-  mc.cores = 4
-  )
-proc.time() - ptm
-enumData = t(simplify2array(enumData))
-colnames(enumData) = c("cor","weight")
+if(!file.exists("enumData.Rdata")) {
+  print("")
+  library(parallel)
+  ptm = proc.time()
+  enumData = mclapply(1:nCompositions, function(i) {
+    ind = allCompositions[,i]
+    law.list = lapply(1:n,function(j) matrix(rep(law[j,],ind[j]),ncol = 2 ,byrow = TRUE))
+    newLaw = do.call(rbind, law.list)
+    c(cor(unlist(newLaw[,1]),unlist(newLaw[,2])),dmultinom(ind,prob = rep(1,n)))
+    },
+    mc.cores = 4
+    )
+  proc.time() - ptm
+  enumData = t(simplify2array(enumData))
+  colnames(enumData) = c("cor","weight")
+  save(enumData,file = "enumData.Rdata")  
+} else {
+  load("enumData.Rdata")
+}
 head(enumData)
-save(enumData,file = "enumData.Rdata")
+enumDataFrame = data.frame(enumData)
+ggplot(enumDataFrame, aes(cor, weight = weight)) + 
+  geom_histogram(bins = 1000) +
+  geom_vline(xintercept = theta.hat,colour = "red",size = 1.5)
 ```
