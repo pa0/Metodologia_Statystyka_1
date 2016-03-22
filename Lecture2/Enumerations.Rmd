@@ -3,10 +3,6 @@ title: "Enumerations"
 output: html_document
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
-
 ## Law School Data
 
 Correlation coefficient for the law school data from the boostrap package.
