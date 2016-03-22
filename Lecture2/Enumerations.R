@@ -2,4 +2,4 @@
 
 library(knitr)
 library(rmarkdown)
-rmarkdown::render("Enumerations.Rmd")
+knit2html("Enumerations.Rmd")
