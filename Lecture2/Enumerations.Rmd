@@ -14,7 +14,6 @@ Correlation coefficient for the law school data from the boostrap package.
 ```{r}
 library(ggplot2)
 library(bootstrap)
-
 data(law)
 law
 ```
@@ -27,11 +26,75 @@ ggplot(law2, aes(x = LSAT, y = GPA)) +
   geom_text(aes(label = Observation),hjust = 0,vjust = 0)
 ```
 
-## Complete Enumeration
-
-Take a close look and you will see the corner around 0.9. This corner doens't who up when using Monte Carlo simulations. If you take out observation 1 this corner disappears.
-
-## Complete Enumeration using Gray Codes
-
 ## Monte Caro Simulations
 
+Sample correlation coefficient:
+
+```{r}
+theta.hat = cor(law$LSAT,law$GPA)
+theta.hat
+```
+
+How accurate is this estiamte. Let's look at the boostraop samples:
+
+```{r}
+draw.bootstrap.sample = function() {
+  n = dim(law)[1]
+  ind = sample(n,replace = TRUE)
+  return(cor(law[ind,]$LSAT,law[ind,]$GPA))
+}
+nrep = 10000
+thetastar = replicate(nrep,draw.bootstrap.sample())
+hist(thetastar,breaks=100)
+abline(v = theta.hat,col = "red",lwd = 4)
+```
+
+Or use the boostrap library:
+
+```{r}
+n = 15
+theta = function(x,xdata){ cor(xdata[x,1],xdata[x,2]) }
+results = bootstrap(1:n,nrep,theta,law)
+hist(results$thetastar,breaks=100)
+abline(v = theta.hat,col = "red",lwd = 4)
+```
+
+## Complete Enumeration for Bootstrap
+
+Take a close look and you will see the corner around 0.9. This corner doens't show up when using Monte Carlo simulations. If you take out observation 1 this corner disappears.
+
+```{r}
+library(partitions)
+n = 15
+allCompositions = compositions(n,n)
+nCompositions = dim(allCompositions)[2]
+nCompositions
+```
+
+Check if we get the same nunber as in theory.
+
+```{r}
+library(assertthat)
+nCompositionsTheory = choose(2*n-1,n-1)
+assert_that(nCompositions == nCompositionsTheory)
+```
+
+Inefficient enumeration because we are actually not using the gray code algorihtm for enumerations. We can use the library parallel to speedup computations. On a laptop with 4 cores this takes about 4 hours to compute.
+
+```{r}
+library(parallel)
+ptm = proc.time()
+enumData = mclapply(1:10000, function(i) {
+  ind = allCompositions[,i]
+  law.list = lapply(1:n,function(j) matrix(rep(law[j,],ind[j]),ncol = 2 ,byrow = TRUE))
+  newLaw = do.call(rbind, law.list)
+  c(cor(unlist(newLaw[,1]),unlist(newLaw[,2])),dmultinom(ind,prob = rep(1,n)))
+  },
+  mc.cores = 4
+  )
+proc.time() - ptm
+enumData = t(simplify2array(enumData))
+colnames(enumData) = c("cor","weight")
+head(enumData)
+save(enumData,file = "enumData.Rdata")
+```
