@@ -84,7 +84,7 @@ Inefficient enumeration because we are actually not using the gray code algoriht
 ```{r}
 library(parallel)
 ptm = proc.time()
-enumData = mclapply(1:10000, function(i) {
+enumData = mclapply(1:nCompositions, function(i) {
   ind = allCompositions[,i]
   law.list = lapply(1:n,function(j) matrix(rep(law[j,],ind[j]),ncol = 2 ,byrow = TRUE))
   newLaw = do.call(rbind, law.list)
