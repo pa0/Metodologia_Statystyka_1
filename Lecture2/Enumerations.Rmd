@@ -43,7 +43,7 @@ draw.bootstrap.sample = function() {
   ind = sample(n,replace = TRUE)
   return(cor(law[ind,]$LSAT,law[ind,]$GPA))
 }
-nrep = 10000
+nrep = 40000
 thetastar = replicate(nrep,draw.bootstrap.sample())
 thetastar2 = data.frame(cor=thetastar)
 ggplot(thetastar2, aes(cor)) + 
@@ -105,9 +105,8 @@ if(!file.exists("enumData.Rdata")) {
 } else {
   load("enumData.Rdata")
 }
-head(enumData)
 enumDataFrame = data.frame(enumData)
 ggplot(enumDataFrame, aes(cor, weight = weight)) + 
-  geom_histogram(bins = 1000) +
+  geom_histogram(binwidth = 0.003) +
   geom_vline(xintercept = theta.hat,colour = "red",size = 1.5)
 ```
