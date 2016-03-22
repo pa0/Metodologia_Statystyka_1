@@ -1,5 +1,3 @@
-<!-- rmarkdown v1 -->
-
 ---
 title: "Enumerations"
 output: html_document
