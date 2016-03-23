@@ -85,7 +85,7 @@ assert_that(nCompositions == nCompositionsTheory)
 
 Inefficient enumeration because we are actually not using the gray code algorihtm for enumerations. We can use the library parallel to speedup computations. On a laptop with 4 cores this takes about 5 hours to compute.
 
-```{r}
+```{r fig.width = 12}
 if(!file.exists("enumData.Rdata")) {
   print("")
   library(parallel)
