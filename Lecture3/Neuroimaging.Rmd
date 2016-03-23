@@ -1,9 +1,8 @@
+<!-- rmarkdown v1 -->
 ---
 title: "Neuroimaging Example"
 output: html_document
 ---
-
-<!-- rmarkdown v1 -->
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
