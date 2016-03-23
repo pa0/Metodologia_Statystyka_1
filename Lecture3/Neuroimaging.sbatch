@@ -22,4 +22,7 @@
 # now run normal batch commands
 
 module load R/3.2.0
-Rscript -e "library(knitr); knit2html('Neuroimaging.Rmd')"
+
+echo "<!-- rmarkdown v1 -->" > NeuroimagingV1.Rmd
+cat Neuroimaging.Rmd >> NeuroimagingV1.Rmd
+Rscript -e "library(knitr); knit2html('NeuroimagingV1.Rmd')"
