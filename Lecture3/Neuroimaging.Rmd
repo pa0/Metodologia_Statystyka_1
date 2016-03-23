@@ -33,8 +33,7 @@ fileNames = list.files(pattern = "_anat_thickness.nii.gz")
 nBrains = length(fileNames)
 
 img = ReadImage(fileNames[1])
-imgArr = as.array(img)
-orthographic(imgArr)
+orthographic(as.array(img))
 
 brainList = lapply(1:nBrains, function(i) c(as.array(ReadImage(fileNames[i]))))
 brainMatrix = do.call(rbind, brainList)
@@ -45,7 +44,9 @@ Then, we compute the image mask. In this example, the mask is defined as the vox
 ```{r}
 minThickness = apply(brainMatrix, 2, min)
 mask = minThickness > 0
-WriteImage(makeImage(mask,img),"mask.nii.gz")
+maskImg = makeImage(mask,img)
+WriteImage(maskImg,"mask.nii.gz")
+orthographic(as.array(maskImg))
 ```
 
 Split the data in two groups: autistic (1) and healthy participants (2).
@@ -65,9 +66,33 @@ Peform voxelwise nonparametric test Wilcoxon two-sample rank test.
 ```{r}
 uncorrectedPValues = sapply(1:dim(ThicknessAutistic)[2], 
                             function(i) wilcox.test(ThicknessAutistic[,i],ThicknessHealthy[,i],alternative = "two.sided")$p.value)
-uncorrectedPValuesVec = rep(0,length(mask))
+uncorrectedPValuesVec = rep(1,length(mask))
 uncorrectedPValuesVec[mask==1] = uncorrectedPValues
-WriteImage(makeImage(uncorrectedPValuesVec,img),"uncorrectedPValueImage.nii.gz")
+uncorrectedPValuesImg = makeImage(uncorrectedPValuesVec,img)
+WriteImage(uncorrectedPValuesImg,"uncorrectedPValueImage.nii.gz")
+orthographic(as.array(uncorrectedPValuesImg))
+
+# significance levels
+primary = 0.001
+primary
+alpha = 0.05
+alpha
+
+# maximum cluster size
+thresholdedImg = BinaryThreshold(uncorrectedPValuesImg,
+                                 lowerThreshold=0,
+                                 upperThreshold=primary,
+                                 insideValue=1,outsideValue=0)
+thresholdedSegmentedImg = RelabelComponent(ConnectedComponent(thresholdedImg))
+thresholdedSegmentedArr = as.array(thresholdedSegmentedImg)
+obsvComps = data.frame(Count=table(thresholdedSegmentedArr[thresholdedSegmentedArr > 0]))
+head(obsvComps)
+orthographic(as.array(thresholdedImg))
+
+labels = c(1,seq(0,length(obsvComps$Count.Var1),10))
+ggplot(obsvComps, aes(x = Count.Var1, y = Count.Freq)) + 
+  geom_bar(stat="identity") +
+  scale_x_discrete(breaks=labels, labels=as.character(labels))
 ```
 
 The problem is that we performed many statistical tests and if we declare all the voxels at the usual significance level as significant, we will report many random results as significant. We can use another nonparametric approach called permutations to handle this. This will be treated in the next lecture.
@@ -77,5 +102,67 @@ The problem is that we performed many statistical tests and if we declare all th
 This method is describe [here](http://www.fil.ion.ucl.ac.uk/spm/doc/papers/NicholsHolmes.pdf).
 
 ```{r}
-# TODO: write code to compute cluster size null distribution
+library(foreach)
+library(doMC)
+
+cores = 1
+registerDoMC(cores)
+set.seed(seed)
+
+nperm = 10
+ThicknessCombinded = brainMatrix[,mask==1]
+
+ptm = proc.time()
+sink("log-permutations.txt")
+maxValues = foreach(i = 1:nperm,.combine=rbind) %dopar% {
+  print(paste0("GroupAssignments no. ",i))
+  GroupAssignments = sample(copiedFilesGroup)
+  ThicknessGroupA = ThicknessCombinded[GroupAssignments==1,]
+  ThicknessGroupB = ThicknessCombinded[GroupAssignments==2,]
+  uncorrectedPValues = sapply(1:dim(ThicknessGroupA)[2], 
+                              function(i) wilcox.test(ThicknessGroupA[,i],ThicknessGroupB[,i],alternative = "two.sided")$p.value)
+  # maximum cluster size
+  uncorrectedPValuesVec = rep(1,length(mask))
+  uncorrectedPValuesVec[mask==1] = uncorrectedPValues
+  uncorrectedPValuesImg = makeImage(uncorrectedPValuesVec,img)
+  thresholdedImg = BinaryThreshold(uncorrectedPValuesImg,
+                                             lowerThreshold=0,
+                                             upperThreshold=primary,
+                                             insideValue=1,outsideValue=0)
+  thresholdedSegmentedImg = RelabelComponent(ConnectedComponent(thresholdedImg))
+  thresholdedSegmentedArr = as.array(thresholdedSegmentedImg)
+  permComps = data.frame(Count=table(thresholdedSegmentedArr[thresholdedSegmentedArr > 0]))
+  max(permComps$Count.Freq)
+}
+maxCluster = simplify2array(maxValues)
+save(maxCluster,file = paste0("maxCluster.seed",seed,".Rdata"))
+sink()
+unlink("log.txt")
+proc.time() - ptm
+```
+
+Plotting the null distribution of maximum cluster sizes.
+
+```{r}
+# significance level
+alphaLargestInd = floor(alpha*nperm)+1
+alphaLargest = sort(maxCluster,decreasing = TRUE)[alphaLargestInd]
+
+labels = c(1,seq(0,length(obsvComps$Count.Var1),10))
+ggplot(obsvComps, aes(x = Count.Var1, y = Count.Freq)) + 
+  geom_bar(stat="identity") +
+  scale_x_discrete(breaks=labels, labels=as.character(labels)) +
+  geom_hline(yintercept = alphaLargest,colour = "red",size = 1)
+```
+
+All cluster below the right horizontal line in the above plot are declared as significant. Now we can go back to the image and color all significant voxel clusters.
+
+```{r}
+clusterAlphaLargest = sum(obsvComps$Count.Freq > alphaLargest)
+
+# only keep significant clusters
+thresholdedSegmentedArrSignificant = thresholdedSegmentedArr
+thresholdedSegmentedArrSignificant[(1:2 %in% thresholdedSegmentedArr)] = 0
+
+WriteImage(makeImage(thresholdedSegmentedArrSignificant,img),"significant.clusters.nii.gz")
 ```
