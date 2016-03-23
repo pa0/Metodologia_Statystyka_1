@@ -23,6 +23,6 @@
 
 module load R/3.2.0
 
-echo "<!-- rmarkdown v1 -->" > NeuroimagingV1.Rmd
+echo '<!-- rmarkdown v1 -->' > NeuroimagingV1.Rmd
 cat Neuroimaging.Rmd >> NeuroimagingV1.Rmd
 Rscript -e "library(knitr); knit2html('NeuroimagingV1.Rmd')"
