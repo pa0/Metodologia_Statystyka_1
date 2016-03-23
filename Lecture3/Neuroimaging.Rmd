@@ -64,6 +64,8 @@ ThicknessHealthy = brainMatrix[copiedFilesGroup==2,mask==1]
 Peform voxelwise nonparametric test Wilcoxon two-sample rank test.
 
 ```{r}
+library(ggplot2)
+
 uncorrectedPValues = sapply(1:dim(ThicknessAutistic)[2], 
                             function(i) wilcox.test(ThicknessAutistic[,i],ThicknessHealthy[,i],alternative = "two.sided")$p.value)
 uncorrectedPValuesVec = rep(1,length(mask))
@@ -105,11 +107,12 @@ This method is describe [here](http://www.fil.ion.ucl.ac.uk/spm/doc/papers/Nicho
 library(foreach)
 library(doMC)
 
-cores = 4
+cores = 16
 registerDoMC(cores)
+seed = 1234
 set.seed(seed)
 
-nperm = 40
+nperm = 160
 ThicknessCombinded = brainMatrix[,mask==1]
 
 ptm = proc.time()
@@ -144,9 +147,13 @@ proc.time() - ptm
 Plotting the null distribution of maximum cluster sizes.
 
 ```{r}
-# significance level
 alphaLargestInd = ceiling(alpha*nperm)
 alphaLargest = sort(maxCluster,decreasing = TRUE)[alphaLargestInd]
+
+maxCluster2 = data.frame(maxCluster=maxCluster)
+ggplot(maxCluster2, aes(maxCluster)) + 
+  geom_histogram(binwidth = 5) +
+  geom_vline(xintercept = alphaLargest,colour = "red",size = 1.5)
 
 labels = c(1,seq(0,length(obsvComps$Count.Var1),10))
 ggplot(obsvComps, aes(x = Count.Var1, y = Count.Freq)) + 

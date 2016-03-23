@@ -1,0 +1,64 @@
+---
+title: "R and R Markdown Basics"
+author: "Christof Seiler, STATS 205"
+date: "Spring, 2016"
+output: ioslides_presentation
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## For This Course
+
+This class will require a lot of code and running computer simulations. 
+All my examples and homeworks will be written in R. Choosing R for your homework solutions is highly recommended.
+
+- R is an interpreted programming language, which means you will not have to compile your code. 
+- R is very interactive, which means that you can play around with vectors and matrices, plot results.
+- To keep track of your progress and to be able to construction your analysis steps, we will use R markdown. 
+- R markdown is a format to make web reports that you can share with your collaborators.
+
+## Vectors
+
+Make a vector:
+
+```{r}
+x = c(11,218,123,36,1001)
+y = rep(1,5)
+z = seq(1,5,by=1)
+x + y
+z + 10
+```
+
+## Operations on Vectors
+
+Some operations:
+
+```{r}
+sum(y)
+c(mean(z),sd(z))
+length(z)
+```
+
+## Coin Tossing
+
+And most importantly there is a lot of functions for statistics. 
+
+Like tossing a coin three times:
+
+```{r}
+set.seed(1)
+coin = c('H','T')
+samples = sample(coin,100,replace = TRUE)
+```
+
+Should come about half of the times head:
+
+```{r}
+sum(samples == 'H')
+```
+
+## Data Frames and Matrices
+
+
