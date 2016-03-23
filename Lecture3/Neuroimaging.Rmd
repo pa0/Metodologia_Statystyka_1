@@ -54,8 +54,8 @@ Split the data in two groups: autistic (1) and healthy participants (2).
 ParticipantAndImageInformation <- read.csv("Phenotypic_V1_0b_preprocessed1.csv", header=TRUE)
 copiedFilesInd = ParticipantAndImageInformation$FILE_ID %in% substr(fileNames,1,16)
 copiedFilesGroup = ParticipantAndImageInformation$DX_GROUP[copiedFilesInd]
-ThicknessAutistic = brainMatrix[copiedFilesGroup==1,]
-ThicknessHealthy = brainMatrix[copiedFilesGroup==2,]
+ThicknessAutistic = brainMatrix[copiedFilesGroup==1,mask==1]
+ThicknessHealthy = brainMatrix[copiedFilesGroup==2,mask==1]
 ```
 
 ## Part 1: Two Sample Problem
@@ -63,9 +63,11 @@ ThicknessHealthy = brainMatrix[copiedFilesGroup==2,]
 Peform voxelwise nonparametric test Wilcoxon two-sample rank test.
 
 ```{r}
-uncorrectedPValueImage = sapply(1:dim(ThicknessAutistic)[2], 
+uncorrectedPValues = sapply(1:dim(ThicknessAutistic)[2], 
                             function(i) wilcox.test(ThicknessAutistic[,i],ThicknessHealthy[,i],alternative = "two.sided")$p.value)
-WriteImage(makeImage(mask,img),"uncorrectedPValueImage.nii.gz")
+uncorrectedPValuesVec = rep(0,length(mask))
+uncorrectedPValuesVec[mask==1] = uncorrectedPValues
+WriteImage(makeImage(uncorrectedPValuesVec,img),"uncorrectedPValueImage.nii.gz")
 ```
 
 The problem is that we performed many statistical tests and if we declare all the voxels at the usual significance level as significant, we will report many random results as significant. We can use another nonparametric approach called permutations to handle this. This will be treated in the next lecture.
