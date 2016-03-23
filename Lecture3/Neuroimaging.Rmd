@@ -105,11 +105,11 @@ This method is describe [here](http://www.fil.ion.ucl.ac.uk/spm/doc/papers/Nicho
 library(foreach)
 library(doMC)
 
-cores = 1
+cores = 4
 registerDoMC(cores)
 set.seed(seed)
 
-nperm = 10
+nperm = 100
 ThicknessCombinded = brainMatrix[,mask==1]
 
 ptm = proc.time()
@@ -145,7 +145,7 @@ Plotting the null distribution of maximum cluster sizes.
 
 ```{r}
 # significance level
-alphaLargestInd = floor(alpha*nperm)+1
+alphaLargestInd = ceiling(alpha*nperm)
 alphaLargest = sort(maxCluster,decreasing = TRUE)[alphaLargestInd]
 
 labels = c(1,seq(0,length(obsvComps$Count.Var1),10))
@@ -158,11 +158,11 @@ ggplot(obsvComps, aes(x = Count.Var1, y = Count.Freq)) +
 All cluster below the right horizontal line in the above plot are declared as significant. Now we can go back to the image and color all significant voxel clusters.
 
 ```{r}
-clusterAlphaLargest = sum(obsvComps$Count.Freq > alphaLargest)
+significantClusters = sum(obsvComps$Count.Freq >= alphaLargest)
 
 # only keep significant clusters
 thresholdedSegmentedArrSignificant = thresholdedSegmentedArr
-thresholdedSegmentedArrSignificant[(1:2 %in% thresholdedSegmentedArr)] = 0
+thresholdedSegmentedArrSignificant[significantClusters < thresholdedSegmentedArr] = 0
 
 WriteImage(makeImage(thresholdedSegmentedArrSignificant,img),"significant.clusters.nii.gz")
 ```
