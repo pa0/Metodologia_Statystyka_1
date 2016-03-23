@@ -1,0 +1,79 @@
+---
+title: "Neuroimaging Example"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Autism Brain Imaging Data
+
+We are going to look at a modern application where we encouter two sample problems very frequently. In neuroscience, we often compare two populations, such as people who are autistic and healthy controls, in the hope of finding morphological, connectivity, and functional difference between the two groups that could inform new therapies and cures.
+
+Our running example will directly work on preprocessed neuroimaging data from the Autism Brain Imaging Data Exchange (ABIDE). 
+The data is openly avaialbe on the ABIDE website [here](http://preprocessed-connectomes-project.org/abide/)).
+
+ABIDE is a collaboration of 16 international imaging sites that have aggregated and are openly sharing neuroimaging data from 539 individuals suffering from ASD and 573 typical controls. For now will only use a subset of their data to speedup our analysis and foucs on 40 paricipants.
+
+First, we load all images and store them in a big matrix.
+
+```{r}
+
+library(SimpleITK)
+library(oro.nifti)
+makeImage = function(vecImg, refImg) {
+  arrImg = array(vecImg, dim = refImg$GetSize())
+  newImg = as.image(arr = arrImg,spacing = refImg$GetSpacing(),origin = refImg$GetOrigin())
+  newImg$CopyInformation(refImg)
+  return(newImg)
+}
+
+fileNames = list.files(pattern = "_anat_thickness.nii.gz")
+nBrains = length(fileNames)
+
+img = ReadImage(fileNames[1])
+imgArr = as.array(img)
+orthographic(imgArr)
+
+brainList = lapply(1:nBrains, function(i) c(as.array(ReadImage(fileNames[i]))))
+brainMatrix = do.call(rbind, brainList)
+```
+
+Then, we compute the image mask. In this example, the mask is defined as the voxel positions that are bigger than zero for all participants.
+
+```{r}
+minThickness = apply(brainMatrix, 2, min)
+mask = minThickness > 0
+WriteImage(makeImage(mask,img),"mask.nii.gz")
+```
+
+Split the data in two groups: autistic (1) and healthy participants (2).
+
+```{r}
+ParticipantAndImageInformation <- read.csv("Phenotypic_V1_0b_preprocessed1.csv", header=TRUE)
+copiedFilesInd = ParticipantAndImageInformation$FILE_ID %in% substr(fileNames,1,16)
+copiedFilesGroup = ParticipantAndImageInformation$DX_GROUP[copiedFilesInd]
+ThicknessAutistic = brainMatrix[copiedFilesGroup==1,]
+ThicknessHealthy = brainMatrix[copiedFilesGroup==2,]
+```
+
+## Part 1: Two Sample Problem
+
+Peform voxelwise nonparametric test Wilcoxon two-sample rank test.
+
+```{r}
+uncorrectedPValueImage = sapply(1:dim(ThicknessAutistic)[2], 
+                            function(i) wilcox.test(ThicknessAutistic[,i],ThicknessHealthy[,i],alternative = "two.sided")$p.value)
+WriteImage(makeImage(mask,img),"uncorrectedPValueImage.nii.gz")
+```
+
+The problem is that we performed many statistical tests and if we declare all the voxels at the usual significance level as significant, we will report many random results as significant. We can use another nonparametric approach called permutations to handle this. This will be treated in the next lecture.
+
+## Part 2: Permutations
+
+This method is describe [here](http://www.fil.ion.ucl.ac.uk/spm/doc/papers/NicholsHolmes.pdf).
+
+```{r}
+# TODO: write code to compute cluster size null distribution
+```

@@ -6,7 +6,7 @@
 
 
 \title{\large \bfseries Stats 205: \\ Introduction to Nonparametric Statistics \linebreak \linebreak \linebreak
-Lecture 2: \\ Random Samples and Enumerations}
+Lecture 2: \\ Simulations and Enumerations}
 
 \author{Instructor: Christof Seiler}
 
@@ -28,7 +28,7 @@ With a ranked-based method, we tested whether social awareness is improved when 
 We assumed that the error was independent and identically distributed (iid) and symmetric around $0$ but made no futher shape assumptions. \newline
 
 In a second example, we saw how to calculate a confidence interval around an estimate using the bootstrap procedure. We used this to evaluate whether aspirin helps reduce the risk of heart attacks in middle-aged men. 
-Again, we did not make any assumption about the distribution the noise that corrupted the underlying parameter. 
+Again, we did not make any assumption about the distribution of the noise that corrupted the underlying parameter. 
 
 \end{frame}
 
@@ -37,7 +37,7 @@ Again, we did not make any assumption about the distribution the noise that corr
 
 We will take a closer look at the computational tools that are needed to for both examples. In both example, we needed to somehow 
 \begin{itemize}
-\item describe all possible values that a parameter can take, 
+\item describe all possible values that a statistic can take, 
 \item compare this distribution to the observed value, and 
 \item judge how probable it is to observe it. 
 \end{itemize}
@@ -49,84 +49,32 @@ Most of the time it is not possible to enumerate all possible values, so we need
 \item Markov chain Monte Carlo
 \end{itemize}
 
-\vspace{0.3cm}
-Today, to get a feeling for this, we focus on a special case where we can actually enumerate all options using Gray Codes.
-
 \end{frame}
 
 \begin{frame}
-\frametitle{Gray Codes}
+\frametitle{The Bootstrap}
 
-Gray codes are ordered lists of binary $n$-tuples. \newline
-
-They are ordered so that success values only differ in a single space.
-
-For instance, for $n = 3$, the list of is:
-\[ 000, 001, 011, 010, 110, 111, 101, 100 \]
-
-Notice, a computer scientist might intuitively want to write this:
-\[ 000, 001, \cancel{010}, 011, \cancel{100}, 101, \cancel{110}, 111 \]
-This is wrong. \newline
-
-A better than trying to reorder the wrong elements, we can define recursive algorithm to generate a valid list.
-
-\end{frame}
-
-\begin{frame}
-\frametitle{Gray Codes}
-
+Important definition: 
 \begin{itemize}
-\item Start with list for $n = 1$, which is just $0$ and $1$ 
-\item Get two list by putting a zero before each entry and a one before each entry in $L_n$ 
-\item To get $L_{n+1}$ concatenate the two list by first followed by second in reversed order 
+\item a \textit{statistic} is a function of the data
+\item a \textit{parameter} is a function of the probability distribution 
 \end{itemize}
 
 \vspace{0.3cm}
-So from $0,1$, we get two lists
-\[ 00, 01 \]
-\[ 10, 11 \]
-and concatenate
-\[  00, 01, 11, 10 \]
-repeat...
-
-\end{frame}
-
-\begin{frame}
-\frametitle{Gray Codes}
-
-We can also just add one successor at the time. 
-As we saw before, a computer scientist would encode integer an $m = \sum \epsilon_i 2^i$
-using the binary sequence 
-\[ \dots \, \epsilon_3 \, \epsilon_2 \, \epsilon_1 \, \epsilon_0 \]
-
-This can be mapped to gray codes 
-\[ \dots \, e_3 \, e_2 \, e_1 \, e_0 \]
-using $e_i = \epsilon_i + \epsilon_{i+1} \, (\bmod 2) \text{ for } (i = 0,1,2,\dots)$ \newline
-
-Example: 
-When $n = 4$ the integer $6$ in binary code is $0110$ and using the mapping 
-\[ e_0 = 0 + 1 = 1, e_1 = 1 + 1 = 0, e_2 = 1 + 0 = 1, e_3 = 0 + 0 = 0 \]
-we get the corresponding gray code $0101$
-
-\end{frame}
-
-\begin{frame}
-\frametitle{Gray Codes for the Bootstrap}
-
 We observe data $\mathcal{X}_n = \{ x_1, x_2, \dots, x_n \}$ in some space $\mathcal{X}$ \newline
 
 The data are drawn identically and independently from a unknown distribution $F$ \newline
 
 The bootstrap supposes that the empirical distribution $F_n$ is a good description of the unknown distribution $F$ \newline
 
-This way one can draw as many samples from $F_n$ to compute sample variability of all kinds of estimators, e.g. the sample mean \newline
-
-This is done via choosing $n$ samples with replacement (you can pick the same sample multiple times)
+This way one can draw as many samples from $F_n$ to compute sample variability of all kinds of \textit{statistics} $T(x_1, x_2, \dots, x_n)$, e.g. the sample mean, sample median
 
 \end{frame}
 
 \begin{frame}
-\frametitle{Gray Codes for the Bootstrap}
+\frametitle{The Bootstrap}
+
+This is done via choosing $n$ samples with replacement (you can pick the same sample multiple times) \newline
 
 There are $n^n$ different bootstrap samples but some of them have the same subset: 
 \begin{align}
@@ -147,7 +95,7 @@ A uniform distribution on $\mathcal{X}_n^n$ induces a multinomial distribution o
 \end{frame}
 
 \begin{frame}
-\frametitle{Gray Codes for the Bootstrap}
+\frametitle{The Bootstrap}
 
 To form an exhaustive bootstrap distribution of statistic $T(\mathcal{X}_n)$, \newline
 we need to compute  
@@ -161,8 +109,6 @@ The shift from $\mathcal{X}_n^n$ to $\mathcal{C}_n$ gives substantial savings \n
 
 For an example with $n = 15$, the number of enumerations reduce from $15^{15} \approx 4.38 \times 10^{17}$ to $\binom{29}{14} \approx 7.7 \times 10^7$ \newline
 
-Next, we will see how efficient updating using Gray Codes avoids multiplying such large numbers by factors of $n$ \newline
-
 \alert{R markdown session:} Correlations between GPA and LSAT for a sample of American law schools
 
 \end{frame}
@@ -170,9 +116,7 @@ Next, we will see how efficient updating using Gray Codes avoids multiplying suc
 \begin{frame}
 \frametitle{Exploring the Tails of a Bootstrap Distribution}
 
-Using Markov chain Monte Carlo to inject a small amount of randomness (something between Monte Carlo and complete enumerations)
-
-
+Using Markov chain Monte Carlo to inject a small amount of randomness (something between Monte Carlo and complete enumerations) \newline
 
 \end{frame}
 
@@ -183,6 +127,64 @@ In the next lecture, we will focus on
 \begin{itemize}
 \item using a nonparametric two sample test to quantify significance of gray matter brain differences in autistic compared to healthy controls
 \end{itemize}
+
+\end{frame}
+
+% bonus material
+
+\begin{frame}
+\frametitle{Speedup for Enumerations using Gray Codes}
+
+Gray codes are ordered lists of binary $n$-tuples. \newline
+
+They are ordered so that success values only differ in a single space.
+
+For instance, for $n = 3$, the list of is:
+\[ 000, 001, 011, 010, 110, 111, 101, 100 \]
+
+Notice, a computer scientist might intuitively want to write this:
+\[ 000, 001, \cancel{010}, 011, \cancel{100}, 101, \cancel{110}, 111 \]
+This is wrong. \newline
+
+A better than trying to reorder the wrong elements, we can define recursive algorithm to generate a valid list.
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Speedup for Enumerations using Gray Codes}
+
+\begin{itemize}
+\item Start with list for $n = 1$, which is just $0$ and $1$ 
+\item Get two list by putting a zero before each entry and a one before each entry in $L_n$ 
+\item To get $L_{n+1}$ concatenate the two list by first followed by second in reversed order 
+\end{itemize}
+
+\vspace{0.3cm}
+So from $0,1$, we get two lists
+\[ 00, 01 \]
+\[ 10, 11 \]
+and concatenate
+\[  00, 01, 11, 10 \]
+repeat...
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Speedup for Enumerations using Gray Codes}
+
+We can also just add one successor at the time. 
+As we saw before, a computer scientist would encode integer an $m = \sum \epsilon_i 2^i$
+using the binary sequence 
+\[ \dots \, \epsilon_3 \, \epsilon_2 \, \epsilon_1 \, \epsilon_0 \]
+
+This can be mapped to gray codes 
+\[ \dots \, e_3 \, e_2 \, e_1 \, e_0 \]
+using $e_i = \epsilon_i + \epsilon_{i+1} \, (\bmod 2) \text{ for } (i = 0,1,2,\dots)$ \newline
+
+Example: 
+When $n = 4$ the integer $6$ in binary code is $0110$ and using the mapping 
+\[ e_0 = 0 + 1 = 1, e_1 = 1 + 1 = 0, e_2 = 1 + 0 = 1, e_3 = 0 + 0 = 0 \]
+we get the corresponding gray code $0101$
 
 \end{frame}
 
