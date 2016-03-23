@@ -2,7 +2,7 @@
 #
 #################
 # set a job name
-#SBATCH --job-name=enumerations
+#SBATCH --job-name=Neuroimaging
 #################
 # time you think you need; default is one hour
 #in minutes in this case
