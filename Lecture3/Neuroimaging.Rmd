@@ -109,7 +109,7 @@ cores = 4
 registerDoMC(cores)
 set.seed(seed)
 
-nperm = 100
+nperm = 40
 ThicknessCombinded = brainMatrix[,mask==1]
 
 ptm = proc.time()
