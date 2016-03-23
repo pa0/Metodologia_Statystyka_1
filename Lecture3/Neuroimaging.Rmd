@@ -20,7 +20,6 @@ ABIDE is a collaboration of 16 international imaging sites that have aggregated 
 First, we load all images and store them in a big matrix.
 
 ```{r}
-
 library(SimpleITK)
 library(oro.nifti)
 makeImage = function(vecImg, refImg) {
