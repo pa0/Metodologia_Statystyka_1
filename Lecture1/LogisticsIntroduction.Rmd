@@ -173,3 +173,7 @@ We can computed confidence intervals of an estimate using computer simulations
 ## What's Next
 
 Closer look at the boostrap and Monte Carlo simulations.
+
+## Homeworks
+
+Will be posted on the course website today.
