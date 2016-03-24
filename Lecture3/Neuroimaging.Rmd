@@ -74,7 +74,7 @@ WriteImage(uncorrectedPValuesImg,"uncorrectedPValueImage.nii.gz")
 orthographic(as.array(uncorrectedPValuesImg))
 
 # significance levels
-primary = 0.01
+primary = 0.001
 primary
 alpha = 0.05
 alpha

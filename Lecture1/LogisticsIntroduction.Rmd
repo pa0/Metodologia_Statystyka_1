@@ -55,3 +55,18 @@ ggplot(ng, aes(x=Year, y=Frequency, colour=Phrase)) + geom_line()
 * Be aware and understand underlying assumptions
 * Apply to modern data analysis problems that you care about
 
+## Learning Goals
+
+1. Know how to use R to run Monte Carlo simulations
+2. Know underlying assumptions of nonparameterics methods
+3. Two sample permutations test
+4. Use Bootstrap for uncertainty quantification
+
+## Textbooks
+
+Our main textbook with lots of practical computations in R (free online): 
+
+Kloke and McKean (2015). Nonparametric Statistical Methods Using R
+
+
+
