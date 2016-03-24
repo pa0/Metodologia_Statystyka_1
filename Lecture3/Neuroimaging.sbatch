@@ -16,7 +16,7 @@
 #SBATCH --nodes=1
 #################
 # memory per node; default is 24GB per CPU for bigmem nodes
-#SBATCH --mem=64000
+#SBATCH --mem=384000
 #SBATCH --tasks-per-node=16
 #################
 # now run normal batch commands

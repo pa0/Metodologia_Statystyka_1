@@ -1,8 +1,8 @@
 ---
 title: "R and R Markdown Basics"
-author: "Christof Seiler, STATS 205"
-date: "Spring, 2016"
-output: ioslides_presentation
+author: "Christof Seiler"
+date: "Stanford University, Spring 2016, STATS 205"
+output: beamer_presentation
 ---
 
 ```{r setup, include=FALSE}
@@ -59,6 +59,58 @@ Should come about half of the times head:
 sum(samples == 'H')
 ```
 
-## Data Frames and Matrices
+## Matrices
 
+We can combine vectors of the same type into matrices.
 
+```{r}
+X = cbind(x,y,z)
+X
+```
+
+## Data Frames
+
+Data frames are used to combind variables of different types in one object.
+
+```{r}
+subjects = c('Jim','Jack','Joe','Mary','Jean')
+sex = c('M','M','M','F','F')
+score = c(85,90,75,100,70)
+D2 = data.frame(subjects,sex,score)
+D2
+```
+
+## Generating Random Data
+
+R provides a wide variaty of distributions that we can sample from. All the ones we know from intro stats courses. For instance the normal distribution:
+
+```{r}
+z = rnorm(100)
+mean(z)
+sd(z)
+```
+
+## Basic Plotting
+
+Plotting the sample from last slide.
+
+```{r}
+hist(z,breaks=20)
+```
+
+## Loading Packages
+
+The ggplot2 package is very popular to make more sophisticated plots.
+
+```{r}
+library(ggplot2)
+library(Lock5Data)
+data(SleepStudy)
+```
+
+## Fancy Plotting
+
+```{r eval=FALSE,echo=TRUE}
+ggplot(SleepStudy, aes(x=Drinks,y=GPA)) + geom_point(position=position_jitter(w=0.1,h=0)) +
+  geom_smooth() + xlab('number of alcoholic drinks per week')
+```
