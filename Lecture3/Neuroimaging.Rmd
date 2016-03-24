@@ -74,7 +74,7 @@ WriteImage(uncorrectedPValuesImg,"uncorrectedPValueImage.nii.gz")
 orthographic(as.array(uncorrectedPValuesImg))
 
 # significance levels
-primary = 0.001
+primary = 0.01
 primary
 alpha = 0.05
 alpha
@@ -111,7 +111,7 @@ registerDoMC(cores)
 seed = 1234
 set.seed(seed)
 
-nperm = 320
+nperm = 1000
 ThicknessCombinded = brainMatrix[,mask==1]
 
 ptm = proc.time()

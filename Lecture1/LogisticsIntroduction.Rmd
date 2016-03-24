@@ -3,7 +3,6 @@ title: "Logistics and Introduction"
 author: "Christof Seiler"
 date: "Stanford University, Spring 2016, STATS 205"
 output: ioslides_presentation
-css: ../style.css
 ---
 
 ```{r setup, include=FALSE}
@@ -30,6 +29,29 @@ Check on Google Ngram Viewer.
 ```{r warning = FALSE,echo = FALSE}
 library(ggplot2)
 library(ngramr)
-ng  <- ngram(c("nonparametrics statistics"), year_start = 1950)
+ng = ngram(c("Nonparametric Statistics"), year_start = 1950)
 ggplot(ng, aes(x=Year, y=Frequency, colour=Phrase)) + geom_line()
 ```
+
+## Stats 205
+
+* You can find everything on our course website: http://christofseiler.github.io/stats205/
+* Homeworks every 8 days (send solutions to TA's)
+* Office hours (check room availability): Wednesday 2:45 -- 3:45
+* TA Office hours (write them an email): 2 x 1.5 hours
+
+## Why?
+
+1. Few assumptions about underlying populations from which data is obtained, e.g. populations don't need to follow a normal distribution
+2. Often easier to understand and apply than parametric tests
+3. Slightly less efficient than parametric test when parametric assumptions hold, but if assumptions don't hold then wildly more efficient
+4. Jackknife and bootstrap can be used in many practical situations where theory is intractable
+5. Bayesian methods are available so prior information can be incorporated
+
+## Goals
+
+* Get an overview of classical, Bayesian, and modern methods
+* Learn how to implement methods yourself and use existing R packages
+* Be aware and understand underlying assumptions
+* Apply to modern data analysis problems that you care about
+
