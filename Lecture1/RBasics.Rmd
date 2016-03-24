@@ -2,8 +2,10 @@
 title: "R and R Markdown Basics"
 author: "Christof Seiler"
 date: "Stanford University, Spring 2016, STATS 205"
-output: ioslides_presentation
-css: ../style.css
+output: 
+  ioslides_presentation: 
+    smaller: yes
+    transition: faster
 ---
 
 ```{r setup, include=FALSE}

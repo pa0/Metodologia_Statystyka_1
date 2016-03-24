@@ -87,7 +87,6 @@ Inefficient enumeration because we are actually not using the gray code algoriht
 
 ```{r fig.width = 12}
 if(!file.exists("enumData.Rdata")) {
-  print("")
   library(parallel)
   ptm = proc.time()
   enumData = mclapply(1:nCompositions, function(i) {

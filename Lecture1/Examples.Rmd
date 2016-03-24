@@ -7,7 +7,7 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## Signed-Rank Wilcoxon Test
+## <a id="signed_rank_wilcoxon"></a>Signed-Rank Wilcoxon Test
 
 ### Question
 
@@ -86,7 +86,7 @@ wilcox.test(response,alternative="greater")
 
 We can reject the null hypthesis at significance level $\alpha = 0.05$ in favor of the alternative that sending kids to school improves their social awareness.
 
-## Bootstrap
+## <a id="bootstrap"></a>Bootstrap
 
 ### Question
 

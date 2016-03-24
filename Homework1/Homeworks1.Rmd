@@ -29,6 +29,8 @@ Anwser the following questions:
 
 ## Deadline
 
-This homework is due on Wednesday, April 6th at 10:00 pm.
+Please email your solutions in the form of a Rmd file to Nan Bi and Lexi Guan.
 
-You are encouraged to work through this homework with your peers. But write your own code and explain the results in your own words.
+This homework is due on Wednesday, April 12th at 1:30 pm.
+
+You are encouraged to work through this homework with your peers. But write your own code and explain the results in your own words. 

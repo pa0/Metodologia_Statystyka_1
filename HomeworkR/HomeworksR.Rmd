@@ -1,0 +1,51 @@
+---
+title: "Homework R"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Preparation
+
+1. Install RStudio: <http://www.rstudio.com>
+2. If you are not familiar with R work thorugh this short online course: <http://tryr.codeschool.com/>
+3. If you are not familiar with R markdown go throug this website: <http://rmarkdown.rstudio.com/>
+
+The following exercise are taken from our textbook [(Stanford library link)](https://searchworks.stanford.edu/view/10718635).
+
+## Exercises
+
+### Exercise 1
+
+Use the commands ``seq`` and ``rep`` create the following lists.
+
+1. Even numbers less than 20
+2. Odd numbers between 101 and 203
+3. ``1 3 1 3 1 3 1 3``
+4. ``1 1 1 1 3 3 3 3``
+
+### Exercise 2
+
+Calculate the mean and variance of the following. 
+
+1. First 100 integers.
+2. Random sample of 50 normal random variates with mean 30 and standard deviation 5.
+
+### Exercise 3
+
+Simulate the sampling distribution of the mean of 10 tosses of a fair die.
+
+### Exercise 4
+
+Use the commands ``dnorm``, ``seq``, and lines to create a plot of the pdf of a normal distribution with $\mu = 50$ and 
+$\sigma^2 = 10$.
+
+## Deadline
+
+Please email your solutions in the form of a Rmd file to Nan Bi and Lexi Guan.
+
+This homework is due on Wednesday, April 4th before class at 1:30 pm.
+
+You are encouraged to work through this homework with your peers. But write your own code and explain the results in your own words. 
