@@ -90,7 +90,7 @@ obsvComps = data.frame(Count=table(thresholdedSegmentedArr[thresholdedSegmentedA
 head(obsvComps)
 orthographic(as.array(thresholdedImg))
 
-labels = c(1,seq(0,length(obsvComps$Count.Var1),10))
+labels = floor(seq(1,length(obsvComps$Count.Var1),length.out=20))
 ggplot(obsvComps, aes(x = Count.Var1, y = Count.Freq)) + 
   geom_bar(stat="identity") +
   scale_x_discrete(breaks=labels, labels=as.character(labels))
@@ -114,32 +114,37 @@ set.seed(seed)
 nperm = 1000
 ThicknessCombinded = brainMatrix[,mask==1]
 
-ptm = proc.time()
-sink("log-permutations.txt")
-maxValues = foreach(i = 1:nperm,.combine=rbind) %dopar% {
-  print(paste0("GroupAssignments no. ",i))
-  GroupAssignments = sample(copiedFilesGroup)
-  ThicknessGroupA = ThicknessCombinded[GroupAssignments==1,]
-  ThicknessGroupB = ThicknessCombinded[GroupAssignments==2,]
-  uncorrectedPValues = sapply(1:dim(ThicknessGroupA)[2], 
-                              function(i) wilcox.test(ThicknessGroupA[,i],ThicknessGroupB[,i],alternative = "two.sided")$p.value)
-  # maximum cluster size
-  uncorrectedPValuesVec = rep(1,length(mask))
-  uncorrectedPValuesVec[mask==1] = uncorrectedPValues
-  uncorrectedPValuesImg = makeImage(uncorrectedPValuesVec,img)
-  thresholdedImg = BinaryThreshold(uncorrectedPValuesImg,
-                                             lowerThreshold=0,
-                                             upperThreshold=primary,
-                                             insideValue=1,outsideValue=0)
-  thresholdedSegmentedImg = RelabelComponent(ConnectedComponent(thresholdedImg))
-  thresholdedSegmentedArr = as.array(thresholdedSegmentedImg)
-  permComps = data.frame(Count=table(thresholdedSegmentedArr[thresholdedSegmentedArr > 0]))
-  max(permComps$Count.Freq)
+maxClusterFileName = paste0("maxCluster.seed",seed,".Rdata")
+if(!file.exists(maxClusterFileName)) {
+  ptm = proc.time()
+  sink("log-permutations.txt")
+  maxValues = foreach(i = 1:nperm,.combine=rbind) %dopar% {
+    print(paste0("GroupAssignments no. ",i))
+    GroupAssignments = sample(copiedFilesGroup)
+    ThicknessGroupA = ThicknessCombinded[GroupAssignments==1,]
+    ThicknessGroupB = ThicknessCombinded[GroupAssignments==2,]
+    uncorrectedPValues = sapply(1:dim(ThicknessGroupA)[2], 
+                                function(i) wilcox.test(ThicknessGroupA[,i],ThicknessGroupB[,i],alternative = "two.sided")$p.value)
+    # maximum cluster size
+    uncorrectedPValuesVec = rep(1,length(mask))
+    uncorrectedPValuesVec[mask==1] = uncorrectedPValues
+    uncorrectedPValuesImg = makeImage(uncorrectedPValuesVec,img)
+    thresholdedImg = BinaryThreshold(uncorrectedPValuesImg,
+                                               lowerThreshold=0,
+                                               upperThreshold=primary,
+                                               insideValue=1,outsideValue=0)
+    thresholdedSegmentedImg = RelabelComponent(ConnectedComponent(thresholdedImg))
+    thresholdedSegmentedArr = as.array(thresholdedSegmentedImg)
+    permComps = data.frame(Count=table(thresholdedSegmentedArr[thresholdedSegmentedArr > 0]))
+    max(permComps$Count.Freq)
+  }
+  maxCluster = simplify2array(maxValues)
+  save(maxCluster,file = maxClusterFileName)
+  sink()
+  proc.time() - ptm
+} else {
+  load(maxClusterFileName)
 }
-maxCluster = simplify2array(maxValues)
-save(maxCluster,file = paste0("maxCluster.seed",seed,".Rdata"))
-sink()
-proc.time() - ptm
 ```
 
 Plotting the null distribution of maximum cluster sizes.
@@ -151,9 +156,9 @@ alphaLargest = sort(maxCluster,decreasing = TRUE)[alphaLargestInd]
 maxCluster2 = data.frame(maxCluster=maxCluster)
 ggplot(maxCluster2, aes(maxCluster)) + 
   geom_histogram(binwidth = 5) +
-  geom_vline(xintercept = alphaLargest,colour = "red",size = 1.5)
+  geom_vline(xintercept = alphaLargest,colour = "red",size = 1)
 
-labels = c(1,seq(0,length(obsvComps$Count.Var1),10))
+labels = floor(seq(1,length(obsvComps$Count.Var1),length.out=20))
 ggplot(obsvComps, aes(x = Count.Var1, y = Count.Freq)) + 
   geom_bar(stat="identity") +
   scale_x_discrete(breaks=labels, labels=as.character(labels)) +
@@ -163,11 +168,12 @@ ggplot(obsvComps, aes(x = Count.Var1, y = Count.Freq)) +
 All cluster below the right horizontal line in the above plot are declared as significant. Now we can go back to the image and color all significant voxel clusters.
 
 ```{r}
-significantClusters = sum(obsvComps$Count.Freq >= alphaLargest)
+nSignificantClusters = sum(obsvComps$Count.Freq >= alphaLargest)
+nSignificantClusters
 
 # only keep significant clusters
 thresholdedSegmentedArrSignificant = thresholdedSegmentedArr
-thresholdedSegmentedArrSignificant[significantClusters < thresholdedSegmentedArr] = 0
+thresholdedSegmentedArrSignificant[nSignificantClusters < thresholdedSegmentedArr] = 0
 
 WriteImage(makeImage(thresholdedSegmentedArrSignificant,img),"significant.clusters.nii.gz")
 ```
