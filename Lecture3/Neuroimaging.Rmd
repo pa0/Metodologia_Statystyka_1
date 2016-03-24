@@ -111,7 +111,7 @@ registerDoMC(cores)
 seed = 1234
 set.seed(seed)
 
-nperm = 160
+nperm = 320
 ThicknessCombinded = brainMatrix[,mask==1]
 
 ptm = proc.time()
@@ -139,7 +139,6 @@ maxValues = foreach(i = 1:nperm,.combine=rbind) %dopar% {
 maxCluster = simplify2array(maxValues)
 save(maxCluster,file = paste0("maxCluster.seed",seed,".Rdata"))
 sink()
-unlink("log.txt")
 proc.time() - ptm
 ```
 

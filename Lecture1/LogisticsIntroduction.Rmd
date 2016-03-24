@@ -1,0 +1,35 @@
+---
+title: "Logistics and Introduction"
+author: "Christof Seiler"
+date: "Stanford University, Spring 2016, STATS 205"
+output: ioslides_presentation
+css: ../style.css
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Modern Statistics
+
+To quote Andrew Gelman [(source)](http://arxiv.org/pdf/1001.2968.pdf):
+
+```
+          "If you wanted to do foundational research 
+          in statistics in the mid-twentieth century, 
+          you had to be bit of a mathematician, 
+          ... if you want to do statistical research 
+          at the turn of the twenty-first century, 
+          you have to be a computer programmer."
+```
+
+## History of Nonparametric Statistics
+
+Check on Google Ngram Viewer.
+
+```{r warning = FALSE,echo = FALSE}
+library(ggplot2)
+library(ngramr)
+ng  <- ngram(c("nonparametrics statistics"), year_start = 1950)
+ggplot(ng, aes(x=Year, y=Frequency, colour=Phrase)) + geom_line()
+```
