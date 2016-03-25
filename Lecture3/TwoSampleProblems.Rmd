@@ -16,13 +16,36 @@ knitr::opts_chunk$set(echo = TRUE)
 ## Last Lecture
 
 * We revisited the bootstrap
-* We saw how to use Monte Carlo simulations 
-* We saw how to enumerate all possible outcomes
-* We saw examples of law school correlations between LSAT and GPS
+* We learned how to use Monte Carlo simulations 
+* We learned how to enumerate all possible outcomes
+* We saw an examples evaluating correlations between LSAT and GPS in law school
 
 ## Today
 
+We will learn how to treat two-sample problems using 
 
+* rank-based methods, 
+* permutation tests, 
+* and the boostrap
+
+# Autism Brain Imaging Data
+
+## Data
+
+Modern application where we encouter two sample problems very frequently. 
+
+### Neuroimaging
+
+* Compare two populations, such as people who are autistic and healthy controls
+* Find morphological, connectivity, and functional difference 
+* Inform new therapies and cures
+
+### Running Example for this Lecture
+
+Our running example will directly work on preprocessed neuroimaging data from the Autism Brain Imaging Data Exchange (ABIDE). 
+The data is openly avaialbe on the ABIDE website [here](http://preprocessed-connectomes-project.org/abide/)).
+
+ABIDE is a collaboration of 16 international imaging sites that have aggregated and are openly sharing neuroimaging data from 539 individuals suffering from ASD and 573 typical controls. For now will only use a subset of their data to speedup our analysis and foucs on 40 paricipants.
 
 # Overall Conclusion
 
@@ -34,7 +57,7 @@ TODO
 
 ## Next Lecture
 
-We will introduce permutation tests and see how it in action for a modern brain imaging application.
+We will learn about nonparametrics for regression.
 
 ## Homeworks
 
