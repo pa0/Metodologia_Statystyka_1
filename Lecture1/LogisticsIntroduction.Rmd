@@ -30,14 +30,14 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Goals
 
-Overview: 
+### Overview
 
 * Get an overview of classical, Bayesian, and modern methods
 * Learn how to implement methods yourself and use existing R packages
 * Be aware and understand underlying assumptions
 * Apply to modern data analysis problems that you care about
 
-Specific learning goals:
+### Specific learning goals
 
 1. Monte Carlo simulations for analytically intractable problems
 2. Rank-based methods for hypothesis testing and parameter estimation
@@ -147,11 +147,180 @@ Some examples from special issue of Statistical Science (Randles, Hettmansperger
 * In the late 1980s and the 1990s, there was a surge of activity in Bayesian methods due to the Markov chain Monte Carlo (MCMC) methods, e.g. Gelfand and Smith (1990), Gamerman (1991), West (1992), Smith and Roberts (1993), and Arjas and Gasbarra (1994)
 * Key algorithms for developing and implementing modern Bayesian methods include the Metropolis-Hastings-Green algorithm (see Metropolis et al. (1953), Hastings (1970), and Green (1995)) and the Tanner-Wong (1987) data augmentation algorithm
 
-## R and R Markdown Basics
+# R and R Markdown Basics
 
-[Start session](RBasics.html)
+## For This Course
 
-## Rank-Based Method Example
+During this course will write a lot of R code and run computer simulations.
+All my examples and homeworks will be written in R. 
+Choosing R for your homework solutions is highly recommended.
+
+What is R:
+
+- R is an interpreted programming language, which means you will not have to compile your code. 
+- R is very interactive, which means that you can play around with vectors and matrices, plot results.
+- To keep track of your progress and to be able to construction your analysis steps, we will use R markdown. 
+- R markdown is a format to make web reports that you can share with your collaborators.
+
+## Vectors
+
+Make a vector:
+
+```{r}
+x = c(11,218,123,36,1001)
+y = rep(1,5)
+z = seq(1,5,by=1)
+x + y
+z + 10
+```
+
+## Operations on Vectors
+
+Some operations:
+
+```{r}
+sum(y)
+c(mean(z),sd(z))
+length(z)
+```
+
+## Coin Tossing
+
+And most importantly there is a lot of functions for statistics. 
+
+Like tossing a coin three times:
+
+```{r}
+set.seed(1)
+coin = c('H','T')
+samples = sample(coin,100,replace = TRUE)
+```
+
+Should come about half of the times head:
+
+```{r}
+sum(samples == 'H')
+```
+
+## Matrices
+
+We can combine vectors of the same type into matrices.
+
+```{r}
+X = cbind(x,y,z)
+X
+```
+
+## Data Frames
+
+Data frames are used to combind variables of different types in one object.
+
+```{r}
+subjects = c('Jim','Jack','Joe','Mary','Jean')
+sex = c('M','M','M','F','F')
+score = c(85,90,75,100,70)
+D = data.frame(subjects,sex,score)
+D
+```
+
+## Generating Random Data
+
+R provides a wide variaty of distributions that we can sample from. All the ones we know from intro stats courses. For instance the normal distribution:
+
+```{r}
+z = rnorm(1000)
+mean(z)
+sd(z)
+```
+
+## Basic Plotting
+
+Plotting the sample from last slide.
+
+```{r}
+hist(z,breaks=30)
+```
+
+## Fancy Plotting
+
+The ggplot2 package is very popular to make more sophisticated plots.
+
+```{r}
+library(ggplot2)
+```
+
+You will have to learn the grammar of ggplot. There are many tutorials online. Here is one example [link](http://www.cookbook-r.com/Graphs/). 
+
+Let's see how it looks like in action on sleep study data.
+
+```{r}
+library(Lock5Data)
+data(SleepStudy)
+```
+
+## Fancy Plotting
+
+```{r eval=TRUE,echo=TRUE}
+ggplot(SleepStudy, aes(x=Drinks,y=GPA)) + 
+  geom_point(position=position_jitter(w=0.1,h=0)) +
+  geom_smooth() + xlab('number of alcoholic drinks per week')
+```
+
+## Repeated Tasks
+
+In addition to the usual ``for`` loops are R provides ``apply`` and ``tapply`` functions.
+
+```{r}
+X
+apply(X,1,mean)
+apply(X,2,mean)
+```
+
+## Repeated Tasks
+
+```{r}
+D
+tapply(D$score,D$sex,mean)
+```
+
+## User Defined Functions
+
+To define your own functions:
+
+```{r}
+mSummary = function(x) {
+  q1 = quantile(x,.25)
+  q3 = quantile(x,.75) 
+  list(med=median(x),iqr=q3-q1)
+}
+xsamp = 1:13
+mSummary(xsamp)
+```
+
+## Monte Carlo Simulations
+
+TODO
+
+## R Packages
+
+TODO
+
+# Rank-Based Method Example
+
+## Question
+
+Does sending kids to school improve social awareness over home schooling?
+
+## Experiment
+
+Eight pairs of identical twins who are of nursery school age. For each pair, one is randomly selected to attend nursery school while the other remains at home. At the end of the study period, all 16 children are given the same social awareness test.
+
+```{r}
+school = c(82,69,73,43,58,56,76,65)
+home = c(63,42,74,37,51,43,80,62)
+```
+
+## Model
 
 $X_1,X_2,\dots,X_n$ denotes random sample following the model
 $$ X_i = \theta + e_i, $$
@@ -162,13 +331,96 @@ $$ H_0: \theta = 0 \text{ versus } H_A: \theta > 0 $$
 
 The null distribution of the test statistic did not depend on $f(t)$
 
-[Start R markdown session](Examples.html#signed_rank_wilcoxon)
+## Statistic
 
-## Bootstrap Example
+For each pair, the response of interest is the difference in the twins’ scores, (Twin at School − Twin at Home).
 
-We can computed confidence intervals of an estimate using computer simulations
+```{r}
+school
+home
+response = school - home
+response
+```
 
-[Start R markdown session](Examples.html#bootstrap)
+## Statistic
+
+We use signed-rank Wilcoxon procedure to find out.
+The usual statistic is the sum of the ranks of positive items:
+
+```{r}
+wplus = sum((response>0)*rank(abs(response)))
+wplus
+```
+
+or equivalently:
+
+```{r}
+n = length(response)
+w = sum(sign(response)*rank(abs(response)))
+wplus = 0.5*w + n*(n+1)/4
+wplus
+```
+
+## Computations
+
+Is this due to chance?
+
+Luckily, the probability mass function for our test statistic is known (under the null hypothesis of equal median):
+
+```{r eval=FALSE}
+x = seq(0,n*(n+1)/2,1)
+colors = rep("white",length(x))
+colors[x >= wplus] = "red"
+barplot(dsignrank(x,n),
+        names.arg = x,
+        main = paste0("dsignrank(x, n = ", n, ")"),
+        col = colors)
+```
+
+## Computations
+
+```{r echo=FALSE}
+x = seq(0,n*(n+1)/2,1)
+colors = rep("white",length(x))
+colors[x >= wplus] = "red"
+barplot(dsignrank(x,n),names.arg = x,main = paste0("dsignrank(x, n = ", n, ")"),col = colors)
+```
+
+## Computations
+
+and using the cumulative distribution function $F_{W^+}(w^+-1,n)$ of our test statistic:
+
+```{r}
+plot(x,psignrank(x, n = n),type = "s",main = paste0("psignrank(x, n = ", n, ")"))
+abline(v=wplus,col = "red"); abline(h=psignrank(wplus,n),col = "blue")
+```
+
+## Computations
+
+we can find the $p$-value using $P_{H_0}(W^+ \ge w^+) = 1 - F_{W^+}(w^+ - 1,n)$:
+
+```{r}
+pvalue = 1-psignrank(wplus-1,n,lower.tail = TRUE)
+pvalue
+```
+
+There is also an R base implementation of this test:
+
+```{r}
+wilcox.test(response,alternative="greater")
+```
+
+## Conclusion
+
+We can reject the null hypthesis at significance level $\alpha = 0.05$ in favor of the alternative that sending kids to school improves their social awareness.
+
+# Bootstrap Example
+
+
+
+
+
+# Conclusions
 
 ## What's Next
 
@@ -176,4 +428,6 @@ Closer look at the boostrap and Monte Carlo simulations.
 
 ## Homeworks
 
-Will be posted on the course website today.
+Homework 1 will be posted on the course website today.
+
+Deadline: Wednesday, April 4th before class at 1:30 pm.
