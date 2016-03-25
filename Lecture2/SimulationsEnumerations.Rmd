@@ -223,7 +223,7 @@ ggplot(enumDataFrame, aes(cor, weight = weight)) +
   enumData = mclapply(1:nCompositions, function(i) { ... }, mc.cores = 4 )
 ```
 * On a laptop with 4 cores this takes about 5 hours to compute.
-* We can speed up by enumerating more smartly, changing only two coordinates at the time usign Gray codes.
+* We can speedup enumeration by changing only two coordinates at the time using Gray codes.
 
 # Speedup for Enumerations using Gray Codes
 
