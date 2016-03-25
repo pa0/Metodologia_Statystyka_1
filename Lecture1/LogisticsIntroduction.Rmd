@@ -6,6 +6,7 @@ output:
   ioslides_presentation: 
     smaller: yes
     transition: faster
+    incremental: false
 ---
 
 ```{r setup, include=FALSE}
@@ -15,7 +16,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ## Stats 205
 
 * You can find everything on our course website: http://christofseiler.github.io/stats205/
-* Homeworks every 8 days (send solutions to TA's)
+* Homework every 8 days (send solutions to TA's)
 * Finals will be a project
 * Instructor's office hours (TBD): Wednesday 2:45 - 3:45 in room ...
 * TA's Office hours (TBD): 2 x 1.5 hours in room ...
@@ -108,11 +109,11 @@ To quote Andrew Gelman [(source)](http://arxiv.org/pdf/1001.2968.pdf):
 
 Check on Google Ngram Viewer.
 
-```{r warning = FALSE,echo = FALSE}
+```{r warning = FALSE,echo = FALSE,eval = FALSE}
 library(ggplot2)
 library(ngramr)
-#ng = ngram(c("Nonparametric Statistics"), year_start = 1950)
-#ggplot(ng, aes(x=Year, y=Frequency, colour=Phrase)) + geom_line()
+ng = ngram(c("Nonparametric Statistics"), year_start = 1950)
+ggplot(ng, aes(x=Year, y=Frequency, colour=Phrase)) + geom_line()
 ```
 
 ## History 1930's to 1970's
@@ -213,7 +214,7 @@ X
 
 ## Data Frames
 
-Data frames are used to combind variables of different types in one object.
+Data frames are used to combine variables of different types in one object.
 
 ```{r}
 subjects = c('Jim','Jack','Joe','Mary','Jean')
@@ -225,7 +226,7 @@ D
 
 ## Generating Random Data
 
-R provides a wide variaty of distributions that we can sample from. All the ones we know from intro stats courses. For instance the normal distribution:
+R provides a wide variety of distributions that we can sample from. All the ones we know from intro stats courses. For instance the normal distribution:
 
 ```{r}
 z = rnorm(1000)
@@ -331,7 +332,7 @@ $$ H_0: \theta = 0 \text{ versus } H_A: \theta > 0 $$
 
 The null distribution of the test statistic did not depend on $f(t)$
 
-## Statistic
+## Ranks
 
 For each pair, the response of interest is the difference in the twins’ scores, (Twin at School − Twin at Home).
 
@@ -341,6 +342,20 @@ home
 response = school - home
 response
 ```
+
+## Ranks
+
+calculate ranks of absolute values:
+
+```{r}
+response
+abs(response)
+rank(abs(response))
+```
+
+## Distribution of Ranks
+
+TODO
 
 ## Statistic
 
@@ -412,17 +427,104 @@ wilcox.test(response,alternative="greater")
 
 ## Conclusion
 
-We can reject the null hypthesis at significance level $\alpha = 0.05$ in favor of the alternative that sending kids to school improves their social awareness.
+We can reject the null hypothesis at significance level $\alpha = 0.05$ in favor of the alternative that sending kids to school improves their social awareness.
 
 # Bootstrap Example
 
+## Question
 
+Does small dose of aspirin prevent heart attacks in healthy middle-aged men?
 
+## Experiment
 
+A randomized double-blind study was designed to collect data. The subjects were randomly assigned to the aspirin and placebo groups. Doctors and subjects didn't know whether they treated or received aspirin or placebo substance.
 
-# Conclusions
+```{r}
+labels = c("nattacks","nsubjects")
+aspirin = c(104,11037)
+placebo = c(189,11034)
+data = data.frame(aspirin,placebo)
+rownames(data) = labels
+data
+```
 
-## What's Next
+## Statistic
+
+Ratio of the rates:
+
+```{r}
+rate = function(v) v[1]/v[2]
+theta.hat = rate(data$aspirin)/rate(data$placebo)
+theta.hat
+```
+
+This means that in this sample aspirin-takers only have 55% as many heart attacks as placebo-takers.
+
+## Computations
+
+Is this due to chance? Or can this results be reproduced in other similar experiments? 
+Let's use the bootstrap method to find out:
+
+```{r}
+population.one = c( rep(1,data["nattacks","aspirin"]), 
+                    rep(0,data["nsubjects","aspirin"]-data["nattacks","aspirin"]) )
+population.two = c( rep(1,data["nattacks","placebo"]), 
+                    rep(0,data["nsubjects","placebo"]-data["nattacks","placebo"]) )
+
+draw.bootstrap.sample = function() {
+  boot.pop.one = sample(population.one,replace = TRUE)
+  boot.pop.two = sample(population.two,replace = TRUE)
+  rate.one = sum(boot.pop.one)/length(boot.pop.one)
+  rate.two = sum(boot.pop.two)/length(boot.pop.two)
+  return(rate.one/rate.two)
+}
+```
+
+## Computations
+
+and now simulate:
+
+```{r eval = FALSE}
+nrep = 10000
+theta.boot = replicate(nrep,draw.bootstrap.sample())
+hist(theta.boot,breaks=100)
+
+# sample estimate
+abline(v=theta.hat,col = "red",lwd = 4)
+
+# bootstrap confidence interval
+confidence.lower = sort(theta.boot)[nrep*.025]
+confidence.upper = sort(theta.boot)[nrep*.975]
+abline(v=c(confidence.lower,confidence.upper),col = "blue",lwd = 4)
+```
+
+## Computations
+
+```{r echo = FALSE}
+nrep = 10000
+theta.boot = replicate(nrep,draw.bootstrap.sample())
+hist(theta.boot,breaks=100)
+
+# sample estimate
+abline(v=theta.hat,col = "red",lwd = 4)
+
+# bootstrap confidence interval
+confidence.lower = sort(theta.boot)[nrep*.025]
+confidence.upper = sort(theta.boot)[nrep*.975]
+abline(v=c(confidence.lower,confidence.upper),col = "blue",lwd = 4)
+```
+
+## Conclusion
+
+We can conclude that aspirin was found to be significantly beneficial for preventing heart attacks.
+
+# Overal Conclusion
+
+## Summary
+
+TODO
+
+## Next Lecture
 
 Closer look at the boostrap and Monte Carlo simulations.
 
