@@ -1,0 +1,43 @@
+---
+title: "Two-Sample Problems"
+author: "Christof Seiler"
+date: "Stanford University, Spring 2016, STATS 205"
+output:
+  ioslides_presentation: 
+    smaller: yes
+    transition: faster
+    widescreen: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Last Lecture
+
+* We revisited the bootstrap
+* We saw how to use Monte Carlo simulations 
+* We saw how to enumerate all possible outcomes
+* We saw examples of law school correlations between LSAT and GPS
+
+## Today
+
+
+
+# Overall Conclusion
+
+## Summary
+
+TODO
+
+* ... 
+
+## Next Lecture
+
+We will introduce permutation tests and see how it in action for a modern brain imaging application.
+
+## Homeworks
+
+Homework 3 will be posted on the course website today.
+
+Deadline: Tuesday, April 20th before class at 1:30 pm.
