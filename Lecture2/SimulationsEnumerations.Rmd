@@ -1,0 +1,327 @@
+---
+title: "Simulations and Enumerations"
+author: "Christof Seiler"
+date: "Stanford University, Spring 2016, STATS 205"
+output:
+  ioslides_presentation:
+    incremental: no
+    smaller: yes
+    transition: faster
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Last Lecture
+
+In our last lecture, we saw two examples of nonparametric statistics in action. 
+
+With a ranked-based method, we tested whether social awareness is improved when sending kids to school versus home schooling.
+We assumed that the error was independent and identically distributed (iid) and symmetric around zero but made no futher shape assumptions.
+
+In a second example, we saw how to calculate a confidence interval around an estimate using the bootstrap procedure. We used this to evaluate whether aspirin helps reduce the risk of heart attacks in middle-aged men. 
+Again, we did not make any assumption about the distribution of the noise that corrupted the underlying parameter. 
+
+## Today
+
+We will take a closer look at the computational tools that are needed to for both examples. In both examples, we needed to somehow 
+
+* describe all possible values that a statistic can take, 
+* compare the observed value to this distribution, and 
+* evaluate how probable it is to observe it
+
+Most of the time it is not possible to enumerate all possible values, so we need ways to approximate it. Some ways are:
+
+* Monte Carlo
+* Markov chain Monte Carlo
+
+# The Bootstrap Revisited
+
+## Some Definitions
+
+Important definition: 
+
+* a *statistic* is a function of the data
+* a *parameter* is a function of the probability distribution
+
+We observe data $\mathcal{X}_n = \{ x_1, x_2, \dots, x_n \}$ in some space $\mathcal{X}$ 
+
+The data are drawn identically and independently from a unknown distribution $F$
+
+The bootstrap supposes that the empirical distribution $F_n$ is a good description of the unknown distribution $F$
+
+This way one can draw as many samples from $F_n$ to compute sample variability of all kinds of \textit{statistics} $T(x_1, x_2, \dots, x_n)$, e.g. the sample mean, sample median
+
+This is done via choosing $n$ samples with replacement (you can pick the same sample multiple times) 
+
+## Complete Enumerations
+
+There are $n^n$ different bootstrap samples but some of them have the same subset: 
+
+$$
+\begin{align}
+\mathcal{X}_n^1 & = \{ x_1^1, x_2^1, \dots, x_n^1 \} \\
+ & \vdots \\
+\mathcal{X}_n^{n^n} & = \{ x_1^{n^n}, x_2^{n^n}, \dots, x_n^{n^n} \}
+\end{align}
+$$
+
+We group the same bootstrap sample and assign a weight $k_i$ describing the number of times it occurs, so $k_1 + \dots + k_n = n$
+
+Denote the space of compositions of $n$ into at most $n$ parts as
+
+$$\mathcal{C}_n = \{ \boldsymbol{k} = (k_1,\dots,k_n), k_1+\dots+k_n=n, k_i \ge 0, k_i \text{ integer} \}$$
+
+and the size of this space is $|\mathcal{C}_n| = \binom{2n-1 }{n-1}$ 
+
+## Complete Enumerations
+
+A uniform distribution on $\mathcal{X}_n^n$ induces a multinomial distribution on $\mathcal{C}_n$ with probability mass function $m_n(k)$ 
+
+To form an exhaustive bootstrap distribution of statistic $T(\mathcal{X}_n)$, we need to compute  
+
+* $|\mathcal{C}_n| = \binom{2n-1 }{n-1}$ statistics and 
+* associated weights $m_n(k)$
+
+The shift from $\mathcal{X}_n^n$ to $\mathcal{C}_n$ gives substantial savings 
+
+For an example with $n = 15$, the number of enumerations reduce from 
+
+$$15^{15} \approx 4.38 \times 10^{17}$$ to $$\binom{29}{14} \approx 7.7 \times 10^7$$
+
+# Law Schools Example
+
+## Data
+
+Correlation coefficient for the law school data from the boostrap package.
+
+```{r}
+library(ggplot2)
+library(bootstrap)
+data(law)
+law
+```
+
+## Data
+
+```{r echo=FALSE}
+law2 = data.frame(Observation = 1:dim(law)[1],law)
+ggplot(law2, aes(x = LSAT, y = GPA)) + 
+  geom_text(aes(label = Observation),hjust = 0,vjust = 0)
+```
+
+## Monte Carlo Simulations
+
+Sample correlation coefficient:
+
+```{r}
+theta.hat = cor(law$LSAT,law$GPA)
+theta.hat
+```
+
+How accurate is this estiamte. Let's look at the boostraop samples:
+
+```{r eval=FALSE}
+draw.bootstrap.sample = function() {
+  n = dim(law)[1]
+  ind = sample(n,replace = TRUE)
+  return(cor(law[ind,]$LSAT,law[ind,]$GPA))
+}
+nrep = 40000
+thetastar = replicate(nrep,draw.bootstrap.sample())
+thetastar2 = data.frame(cor=thetastar)
+ggplot(thetastar2, aes(cor)) + 
+  geom_histogram(binwidth = 0.01) +
+  geom_vline(xintercept = theta.hat,colour = "red",size = 1.5)
+```
+
+## Monte Carlo Simulations
+
+```{r echo=FALSE}
+draw.bootstrap.sample = function() {
+  n = dim(law)[1]
+  ind = sample(n,replace = TRUE)
+  return(cor(law[ind,]$LSAT,law[ind,]$GPA))
+}
+nrep = 40000
+thetastar = replicate(nrep,draw.bootstrap.sample())
+thetastar2 = data.frame(cor=thetastar)
+ggplot(thetastar2, aes(cor)) + 
+  geom_histogram(binwidth = 0.01) +
+  geom_vline(xintercept = theta.hat,colour = "red",size = 1.5)
+```
+
+## Monte Carlo Simulations
+
+Or use the boostrap library:
+
+```{r eval=FALSE}
+n = 15
+theta = function(x,xdata){ cor(xdata[x,1],xdata[x,2]) }
+results = bootstrap(1:n,nrep,theta,law)
+thetastar2 = data.frame(cor=results$thetastar)
+ggplot(thetastar2, aes(cor)) + 
+  geom_histogram(binwidth = 0.01) +
+  geom_vline(xintercept = theta.hat,colour = "red",size = 1.5)
+```
+
+## Complete Enumeration for Bootstrap
+
+Take a close look and you will see the corner around 0.9. This corner doens't show up when using Monte Carlo simulations. If you take out observation 1 this corner disappears.
+
+```{r}
+library(partitions)
+n = 15
+allCompositions = compositions(n,n)
+nCompositions = dim(allCompositions)[2]
+nCompositions
+```
+
+Check if we get the same nunber as in theory.
+
+```{r}
+library(assertthat)
+nCompositionsTheory = choose(2*n-1,n-1)
+assert_that(nCompositions == nCompositionsTheory)
+```
+
+Now evaluate the correlation coefficient for each enumeration. 
+
+## Complete Enumeration for Bootstrap
+
+```{r echo=FALSE, warning=FALSE, eval=TRUE}
+if(!file.exists("enumData.Rdata")) {
+  library(parallel)
+  ptm = proc.time()
+  enumData = mclapply(1:nCompositions, function(i) {
+    ind = allCompositions[,i]
+    law.list = lapply(1:n,function(j) matrix(rep(law[j,],ind[j]),ncol = 2 ,byrow = TRUE))
+    newLaw = do.call(rbind, law.list)
+    c(cor(unlist(newLaw[,1]),unlist(newLaw[,2])),dmultinom(ind,prob = rep(1,n)))
+    },
+    mc.cores = 4
+    )
+  proc.time() - ptm
+  enumData = t(simplify2array(enumData))
+  colnames(enumData) = c("cor","weight")
+  save(enumData,file = "enumData.Rdata")  
+} else {
+  load("enumData.Rdata")
+}
+enumDataFrame = data.frame(enumData)
+ggplot(enumDataFrame, aes(cor, weight = weight)) + 
+  geom_histogram(binwidth = 0.003) +
+  geom_vline(xintercept = theta.hat,colour = "red",size = 1.5)
+```
+
+## Complete Enumeration for Bootstrap
+
+* Use the library parallel to speedup computations. 
+```{r eval=FALSE}
+  library(parallel)
+  enumData = mclapply(1:nCompositions, function(i) { ... }, mc.cores = 4 )
+```
+* On a laptop with 4 cores this takes about 5 hours to compute.
+* We can speed up by enumerating more smartly, changing only two coordinates at the time usign Gray codes.
+
+# Speedup for Enumerations using Gray Codes
+
+## Original Gray Code
+
+Gray codes are ordered lists of binary $n$-tuples. 
+
+They are ordered so that success values only differ in a single space.
+
+For instance, for $n = 3$, the list of is:
+
+`` 000, 001, 011, 010, 110, 111, 101, 100 ``
+
+Notice, a computer scientist might intuitively want to write this:
+
+`` 000, 001, 010, 011, 100, 101, 110, 111 ``
+
+This is wrong. 
+
+A better than trying to reorder the wrong elements, we can define recursive algorithm to generate a valid list.
+
+## Original Gray Code
+
+* Start with list for $n = 1$, which is just 0 and 1
+* Get two list by putting a zero before each entry and a one before each entry in $L_n$ 
+* To get $L_{n+1}$ concatenate the two list by first followed by second in reversed order 
+
+So from 0 and 1, we get two lists
+
+`` 00, 01 ``
+
+`` 10, 11 ``
+
+and concatenate
+
+`` 00, 01, 11, 10 ``
+
+repeat...
+
+## Original Gray Code
+
+We can also just add one successor at the time. 
+
+As we saw before, a computer scientist would encode integer an $m = \sum \epsilon_i 2^i$ using the binary sequence 
+$$ \dots \, \epsilon_3 \, \epsilon_2 \, \epsilon_1 \, \epsilon_0 $$
+
+This can be mapped to gray codes 
+$$ \dots \, e_3 \, e_2 \, e_1 \, e_0 $$
+using $e_i = \epsilon_i + \epsilon_{i+1} \, (\bmod 2) \text{ for } (i = 0,1,2,\dots)$ 
+
+### Example
+
+When $n = 4$, the integer 6 in binary code is ``0110`` and using the mapping 
+$$ e_0 = 0 + 1 = 1, e_1 = 1 + 1 = 0, e_2 = 1 + 0 = 1, e_3 = 0 + 0 = 0 $$
+we get the corresponding gray code ``0101``
+
+# Exploring the Tails of a Bootstrap Distribution
+
+## Introduction to MCMC
+
+Using Markov chain Monte Carlo to inject a small amount of randomness (something between Monte Carlo and complete enumerations)
+
+Deriving large deviations estimate such as $P( T \ge t)$ 
+
+TODO: Briefly introduce MCMC 
+
+## Constructing a Markov Chain
+
+We construct a Markov chain: 
+
+* picks $I$ between $1 \le I \le n$ uniformly, and
+* replace $x_I^*$ with new value from origin data $\{ x_1, x_2, \dots, x_n \}$
+* if new sample vector $\tilde{x}$ satisfies $T(\tilde{x}) \ge t$ then change is made 
+* otherwise the chain stays at new sample vector 
+
+Then to estimate $P( T \ge t)$:
+
+* Choose a grid $t_0 < t_1 < \dots < t_l < t$ with $t_0$ chosen in the middle of distribution of $T$ and $t_i$ chosen so that $P(T \ge t_{i+1} | T \ge t_i)$ is not too small 
+* Estimate $P( T \ge t_0 )$ by ordinary Monte Carlo 
+* Estimate $P( T \ge t_1 | T \ge t_0)$ by running the Markov chain on $\{ \tilde{x}: T(\tilde{x}^*) \ge t_0) \}$ and count what proportion of values satisfy the constrain $T \ge t_1$
+
+Continue and multiplying these estimates gives:
+$$ \widehat{P}(T \ge t) = \widehat{P}(T \ge t_0) \widehat{P}(T \ge t_1 | T \ge t_0) \cdots \widehat{P}(T \ge t | T \ge t_l) $$
+
+# Overall Conclusion
+
+## Summary
+
+TODO
+
+* Separate Monte Carlo simulation error from ... 
+
+## Next Lecture
+
+Closer look at the a nonparametric two sample test.
+
+## Homeworks
+
+Homework 2 will be posted on the course website today.
+
+Deadline: Tuesday, April 12th before class at 1:30 pm.

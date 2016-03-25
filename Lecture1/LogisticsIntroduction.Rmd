@@ -96,20 +96,15 @@ The project will be split in two parts:
 
 To quote Andrew Gelman [(source)](http://arxiv.org/pdf/1001.2968.pdf):
 
-```
-          "If you wanted to do foundational research 
-          in statistics in the mid-twentieth century, 
-          you had to be bit of a mathematician, 
-          ... if you want to do statistical research 
-          at the turn of the twenty-first century, 
-          you have to be a computer programmer."
-```
+``
+"If you wanted to do foundational research in statistics in the mid-twentieth century, you had to be bit of a mathematician, ... if you want to do statistical research at the turn of the twenty-first century, you have to be a computer programmer."
+``
 
 ## History of Nonparametric Statistics
 
 Check on Google Ngram Viewer.
 
-```{r warning = FALSE,echo = FALSE,eval = FALSE}
+```{r warning = FALSE,echo = FALSE,eval = TRUE}
 library(ggplot2)
 library(ngramr)
 ng = ngram(c("Nonparametric Statistics"), year_start = 1950)
@@ -300,11 +295,38 @@ mSummary(xsamp)
 
 ## Monte Carlo Simulations
 
-TODO
+Generate a matrix with 100 rows and 10 columns elements drawn from a normal distribution:
+```{r}
+X = matrix(rnorm(10*100),ncol=10)
+```
+
+Each row is a distinct sample of size 10. The sample mean of each sample is
+```{r}
+xbar = apply(X,1,mean)
+```
+
+and the variance of the sample means is 
+```{r}
+var(xbar)
+```
+compare to theoretical result due to the central limit theorem $\frac{\sigma^2}{n} = 0.1$
 
 ## R Packages
 
-TODO
+In addition to the base functionality, there are thousands of packages available. 
+This is the command for installing the pacakge ``ggplot2``:
+
+```{r eval=FALSE}
+install.packages("bootstrap")
+```
+
+once installed, you can use it in your code:
+
+```{r}
+library(bootstrap)
+data(law)
+head(law)
+```
 
 # Rank-Based Method Example
 
@@ -330,11 +352,11 @@ random errors are independently and identically distributed with a continuous pr
 We test hypothesis:
 $$ H_0: \theta = 0 \text{ versus } H_A: \theta > 0 $$
 
-The null distribution of the test statistic did not depend on $f(t)$
+The null distribution of the test statistic does not depend on $f(t)$
 
 ## Ranks
 
-For each pair, the response of interest is the difference in the twins’ scores, (Twin at School − Twin at Home).
+For each pair, the response of interest is the difference in the twins’ scores:
 
 ```{r}
 school
@@ -345,17 +367,13 @@ response
 
 ## Ranks
 
-calculate ranks of absolute values:
+Calculate ranks of absolute values:
 
 ```{r}
 response
 abs(response)
 rank(abs(response))
 ```
-
-## Distribution of Ranks
-
-TODO
 
 ## Statistic
 
@@ -376,13 +394,45 @@ wplus = 0.5*w + n*(n+1)/4
 wplus
 ```
 
+## Null Distribution of Test Statistics
+
+Is this due to chance? Luckily, the probability mass function for our test statistic is known.
+
+Let's look at an even simpler example of only three differences, with 8 possible outcomes:
+
+```{r message=FALSE}
+library(R.utils); data.frame(code=intToBin(0:7))
+```
+
+* Rank is position in the binary string
+* 0 is negative difference
+* 1 is positive difference
+
+## Null Distribution of Test Statistics
+
+Or through Monte Carlo simulations:
+
+```{r}
+n = 3; nsim = 10000
+X = matrix(rnorm(n*nsim),ncol=n)
+WplusSim = apply(X,1, function(x) { r = rank(abs(x)); sum(r * (x>0)) })
+table(WplusSim)/nsim
+```
+
+and compare with theoretical result:
+
+```{r echo=FALSE}
+prop = c(1/8,1/8,1/8,2/8,1/8,1/8,1/8)
+names(prop) = 0:6
+prop
+```
+
 ## Computations
 
-Is this due to chance?
-
-Luckily, the probability mass function for our test statistic is known (under the null hypothesis of equal median):
+Now back to our "more complicated" school example.
 
 ```{r eval=FALSE}
+n = length(response)
 x = seq(0,n*(n+1)/2,1)
 colors = rep("white",length(x))
 colors[x >= wplus] = "red"
@@ -395,6 +445,7 @@ barplot(dsignrank(x,n),
 ## Computations
 
 ```{r echo=FALSE}
+n = length(response)
 x = seq(0,n*(n+1)/2,1)
 colors = rep("white",length(x))
 colors[x >= wplus] = "red"
@@ -518,11 +569,13 @@ abline(v=c(confidence.lower,confidence.upper),col = "blue",lwd = 4)
 
 We can conclude that aspirin was found to be significantly beneficial for preventing heart attacks.
 
-# Overal Conclusion
+# Overall Conclusion
 
 ## Summary
 
-TODO
+* You learned some basics about R
+* You saw an example using the ranks of difference instead the acutal difference for hypothesis testing
+* You saw an example of estimating the uncertainty of a parameter using the bootstrap
 
 ## Next Lecture
 
@@ -532,4 +585,4 @@ Closer look at the boostrap and Monte Carlo simulations.
 
 Homework 1 will be posted on the course website today.
 
-Deadline: Wednesday, April 4th before class at 1:30 pm.
+Deadline: Monday, April 4th before class at 1:30 pm.
