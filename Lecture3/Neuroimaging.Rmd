@@ -165,7 +165,7 @@ ggplot(obsvComps, aes(x = Count.Var1, y = Count.Freq)) +
   geom_hline(yintercept = alphaLargest,colour = "red",size = 1)
 ```
 
-All cluster below the right horizontal line in the above plot are declared as significant. Now we can go back to the image and color all significant voxel clusters.
+All cluster above the right horizontal line in the above plot are declared as significant. Now we can go back to the image and color all significant voxel clusters.
 
 ```{r}
 nSignificantClusters = sum(obsvComps$Count.Freq >= alphaLargest)
