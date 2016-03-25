@@ -22,4 +22,7 @@
 # now run normal batch commands
 
 module load R/3.2.0
-Rscript Enumerations.R
+
+echo '<!-- rmarkdown v1 -->' > SimulationsEnumerationsV1.Rmd
+cat SimulationsEnumerations.Rmd >> SimulationsEnumerationsV1.Rmd
+Rscript -e "library(knitr); knit2html('SimulationsEnumerationsV1.Rmd')"
