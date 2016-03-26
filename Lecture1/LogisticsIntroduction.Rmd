@@ -331,6 +331,12 @@ data(law)
 head(law)
 ```
 
+## Homeworks with R Markdown
+
+```{r, out.width = 800, fig.retina = NULL, echo=FALSE}
+knitr::include_graphics("RMarkdownScreenshot.png")
+```
+
 # Rank-Based Method Example
 
 ## Question
