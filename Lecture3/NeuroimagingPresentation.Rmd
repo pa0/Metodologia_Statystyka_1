@@ -140,7 +140,7 @@ ggplot(obsvComps, aes(x = Count.Var1, y = Count.Freq)) +
 
 Need to account for multiple statistical hypothesis testing
 
-## Part 2: Null Distribution of Cluster Sizes
+## Part 2: Null Distribution of Max Cluster Sizes
 
 Using permutations. The red line is signifiance level $\alpha = 0.05$.
 

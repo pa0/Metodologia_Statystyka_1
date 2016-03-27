@@ -118,6 +118,8 @@ $$ X_1,\dots,X_n $$
 $$P_{X_1,\dots,X_n}(A) = P_{X_{\pi(1)},\dots,X_{\pi(n)}}(A)$$ 
 * then $X_1,\dots,X_n$ are called exchangable 
 
+## Assumptions
+
 ### In practise
 
 Are my observations exchangeable? 
