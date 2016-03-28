@@ -39,11 +39,11 @@ Simulate the sampling distribution of the mean of 10 tosses of a fair die.
 
 ### Exercise 4
 
-Approximate the power of a $t$-test of $H0: \mu = 0$ versus $H_A: \mu > 0$ when the true mean is $\mu = 0.5$. Assume a random sample of size $n = 25$ from a normal distribution with $\sigma = 1$. Assume $\alpha = 0.05$.
+Approximate the power of a $t$-test of $H_0: \mu = 0$ versus $H_A: \mu > 0$ when the true mean is $\mu = 0.5$. Assume a random sample of size $n = 25$ from a normal distribution with $\sigma = 1$. Assume $\alpha = 0.05$.
 
 ### Exercise 5
 
-Use the commands ``dnorm``, ``seq``, and lines to create a plot of the pdf of a normal distribution with $\mu = 50$ and 
+Use the commands ``dnorm``, ``seq``, and ``lines`` to create a plot of the pdf of a normal distribution with $\mu = 50$ and 
 $\sigma^2 = 10$.
 
 ## Deadline
