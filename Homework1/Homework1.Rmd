@@ -50,6 +50,6 @@ $\sigma^2 = 10$.
 
 Please email your solutions in the form of a Rmd file to Nan Bi and Lexi Guan.
 
-This homework is due on Wednesday, April 4th before class at 1:30 pm.
+This homework is due on Thursday, April 7th at 1:30 pm.
 
 You are encouraged to work through this homework with your peers. But write your own code and explain the results in your own words. 
