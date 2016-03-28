@@ -315,7 +315,7 @@ compare to theoretical result due to the central limit theorem $\frac{\sigma^2}{
 ## R Packages
 
 In addition to the base functionality, there are thousands of packages available. 
-This is the command for installing the pacakge ``bootstrap``:
+This is the command for installing the package ``bootstrap``:
 
 ```{r eval=FALSE}
 install.packages("bootstrap")
@@ -596,7 +596,7 @@ We can conclude that aspirin was found to be significantly beneficial for preven
 ## Summary
 
 * You learned some basics about R
-* You saw an example using the ranks of differences instead the acutal differences for hypothesis testing
+* You saw an example using the ranks of differences instead the actual differences for hypothesis testing
 * You saw an example of estimating the uncertainty of a parameter using the bootstrap
 
 ## Next Lecture
@@ -605,6 +605,6 @@ Closer look at the boostrap and Monte Carlo simulations.
 
 ## Homeworks
 
-Homework 1 will be posted on the course website today.
+Homework 1 will be posted soon on the course website.
 
-Deadline in 8 days.
+Deadline is 8 days after posting date.
