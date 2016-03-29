@@ -33,12 +33,18 @@ knitr::opts_chunk$set(echo = FALSE)
 * To every statistical test such as the sign test, we associate a *test statistic*
 * A test *statistic* is a function of the data
 * A *parameter* is a function of the probability distribution
-* For this sign test, the test statistic $S$ is the number positive signs
+* For this sign test, define the test statistic $S$ is the number positive signs
 * Evaluated on our data the observed test statistic is $10$
+* We compare the observed test statistic with the null distribution 
+* The null distribution is the distribution of the statistic given the null hypothesis is true
+
+## Sign Test
+
 * Under the null hypothesis $S$ is distributed according to a binomial distribution with success probability $1/2$
 * The binomial distribution is the number of success in a sequene of $n$ independent trials with success probability $p$
 * A two-sided $p$-value can be calculated
 * Two-sided: probability of landing in the tails on either side of null distribution  
+* One-sided: probability of landing on one side of null distribution
 
 ## Sign Test
 
@@ -57,31 +63,7 @@ barplot(dbinom(x,n,1/2),
         col = colors)
 ```
 
-## Signed-Rank Wilcoxon Test
-
-* The *power* of the sign test is low
-* Power: the probability of rejection the null when null is **true**
-* Compare to  
-the significance *level*: the probabilty of rejecting the null when null is **false**
-
-## Experiment
-
-Does sending kids to school improve social awareness over home schooling?
-
-Eight pairs of identical twins who are of nursery school age. 
-
-For each pair, one is randomly selected to attend nursery school while the other remains at home.  
-
-At the end of the study period, all 16 children are given the same social awareness test.
-
-```{r echo=TRUE}
-school = c(82,69,73,43,58,56,76,65)
-home = c(63,42,74,37,51,43,80,62)
-response = school - home 
-response
-```
-
-## Model
+## Location Model
 
 * $X_1,X_2,\dots,X_n$ denotes random sample following the model
 $$ X_i = \theta + e_i, $$
@@ -89,9 +71,54 @@ random errors are independently and identically distributed with a continuous pr
 
 * We test hypothesis:
 $$ H_0: \theta = 0 \text{ versus } H_A: \theta > 0 $$
-<!-- 
-The null distribution of the test statistic does not depend on $f(t)$ 
--->
+
+## Distribution-Free
+
+* The sign test has test statistic: 
+$$ S = \sum_{i_1}^n \operatorname{sign}(X_i) $$
+* Looking just at the positive observations: 
+$$ S^+ = \#_i \{ X_i > 0 \} $$
+* As mentioned before $S^+$ follows a binomical distribution with $n$ trials and success probability $1/2$
+* Thus it doesn't depend on the error distribution
+* This property is called **distribution-free**
+
+## Traditional $t$-Test
+
+* The $t$-test depends on the population pdf of $f(t)$ 
+* Thus it is not distribution free
+* The usual test statistic is 
+$$ t = \frac{\bar{X}}{s/\sqrt{n}} $$
+here $\bar{X}$ is the mean and $s$ is the standard deviation of the sample
+* Usually $s$ is not known and has to be estimated, then if the population is normal $t$ has a Student $t$-distribution with $n-1$ degress of freedom
+* And the $p$-value $P_{H_0}(t \ge t_0) = 1 - F_T(t_0,n-1)$
+
+## Sign-Rank Wilcoxon Test
+
+* In contrast to the $t$-test, the sign-rank Wilcoxon test usess only the ranks of the distance from $0$
+$$ W = \sum_{i>0} \operatorname{sign}(X_i) \operatorname{R} |X_i| $$
+* No closed-form, iterative algorithms, e.g. ``psignrank`` in R
+* The usual test statistics considers positive items only
+* TODO: why?
+
+## Signed-Rank Wilcoxon Test
+
+* Question: Does sending kids to school improve social awareness over home schooling?
+* Eight pairs of identical twins who are of nursery school age. 
+* For each pair, one is randomly selected to attend nursery school while the other remains at home.  
+* At the end of the study period, all 16 children are given the same social awareness test.
+
+## Statistic
+
+Calculate ranks of absolute values:
+
+```{r echo=TRUE}
+school = c(82,69,73,43,58,56,76,65); home = c(63,42,74,37,51,43,80,62)
+response = school - home
+response
+rank(abs(response))
+```
+
+The statistic is the sum of the ranks of positive items:
 
 ## Statistic
 
@@ -109,16 +136,13 @@ wplus = sum((response>0)*rank(abs(response)))
 wplus
 ```
 
-<!--
-or equivalently:
+## Null Distribution of Test Statistic
 
-```{r}
-n = length(response)
-w = sum(sign(response)*rank(abs(response)))
-wplus = 0.5*w + n*(n+1)/4
-wplus
-```
--->
+Is this due to chance?  
+
+The distribution of test statistic cannot be obtained in closed-form.
+
+Enumerate all 8 possible outcomes for sample size three:
 
 ## Null Distribution of Test Statistic
 
@@ -126,7 +150,7 @@ Is this due to chance?
 
 The distribution of test statistic cannot be obtained in closed-form.
 
-But for a simpler example of only three differences, we can enumerate all 8 possible outcomes:
+Enumerate all 8 possible outcomes for sample size three:
 
 ```{r message=FALSE}
 library(R.utils)
@@ -193,22 +217,18 @@ pvalue = 1-psignrank(wplus-1,n,lower.tail = TRUE)
 pvalue
 ```
 
-<!--
-There is also an R base implementation of this test:
-
-```{r echo = TRUE}
-wilcox.test(response,alternative="greater")
-```
--->
-
 ### Conclusion
 
 We can reject the null hypothesis at significance level $\alpha = 0.05$ in favor of the alternative that sending kids to school improves their social awareness.
 
-## Comparing to Traditional $t$-Test
-
-
-
 ## Estimation of Confidence Intervals
 
 
+
+## Difference Between $t$-Test and the Sign Test
+
+* The *power* of the sign test is low
+* Power: the probability of rejection the null when null is **true**
+* Compare to  
+the significance *level*: the probabilty of rejecting the null when null is **false**
+* The power of the Signed-Rank Wilcoxon test quite competitive
