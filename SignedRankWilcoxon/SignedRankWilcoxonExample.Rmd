@@ -1,5 +1,5 @@
 ---
-title: "Rank-Based Method and Bootstrap Example"
+title: "Signed-Rank Wilcoxon Example"
 author: "Christof Seiler"
 date: "Stanford University, Spring 2016, STATS 205"
 output: 
@@ -13,8 +13,6 @@ output:
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
-
-# Rank-Based Method Example
 
 ## Question
 

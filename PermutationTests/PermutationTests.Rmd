@@ -1,5 +1,5 @@
 ---
-title: "Two-Sample Problems"
+title: "Permutation Tests"
 author: "Christof Seiler"
 date: "Stanford University, Spring 2016, STATS 205"
 output:
@@ -15,21 +15,6 @@ output:
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
-
-## Last Lecture
-
-* We revisited the bootstrap
-* We learned how to use Monte Carlo simulations 
-* We learned how to enumerate all possible outcomes
-* We saw an examples evaluating correlations between LSAT and GPS in law school
-
-## Today
-
-We will learn how to treat two-sample problems using 
-
-* permutation tests, 
-* rank-based methods, and 
-* the boostrap
 
 ## Hypothesis Testing
 
@@ -187,33 +172,3 @@ ggplot(theta.hat.star2, aes(theta.hat.star)) +
   geom_histogram(binwidth = 2) +
   geom_vline(xintercept = theta.hat,colour = "red",size = 1.5)
 ```
-
-# Rank-Based Methods
-
-## Wilcoxon Test
-
-TODO
-
-# Example
-
-## Autism Brain Imaging Data
-
-[Start](NeuroimagingPresentation.html)
-
-# Overall Conclusion
-
-## Summary
-
-TODO
-
-* ... 
-
-## Next Lecture
-
-We will learn about nonparametrics for regression.
-
-## Homeworks
-
-Homework 3 will be posted on the course website today.
-
-Deadline: Tuesday, April 20th before class at 1:30 pm.
