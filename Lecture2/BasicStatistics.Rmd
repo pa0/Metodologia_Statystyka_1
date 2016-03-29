@@ -1,5 +1,5 @@
 ---
-title: "Basic Statistics"
+title: "Signed Test and Signed-Rank Wilcoxon"
 author: "Christof Seiler"
 date: "Stanford University, Spring 2016, STATS 205"
 output:
@@ -68,23 +68,16 @@ the significance *level*: the probabilty of rejecting the null when null is **fa
 
 Does sending kids to school improve social awareness over home schooling?
 
-Eight pairs of identical twins who are of nursery school age.  
+Eight pairs of identical twins who are of nursery school age. 
+
 For each pair, one is randomly selected to attend nursery school while the other remains at home.  
+
 At the end of the study period, all 16 children are given the same social awareness test.
 
-```{r}
+```{r echo=TRUE}
 school = c(82,69,73,43,58,56,76,65)
 home = c(63,42,74,37,51,43,80,62)
-```
-
-## Differences
-
-For each pair, the response of interest is the difference in the twins’ scores:
-
-```{r}
-school
-home
-response = school - home
+response = school - home 
 response
 ```
 
@@ -104,14 +97,12 @@ The null distribution of the test statistic does not depend on $f(t)$
 
 Calculate ranks of absolute values:
 
-```{r}
+```{r echo=TRUE}
 response
-abs(response)
 rank(abs(response))
 ```
 
-We use signed-rank Wilcoxon procedure to find out.  
-The usual statistic is the sum of the ranks of positive items:
+The statistic is the sum of the ranks of positive items:
 
 ```{r}
 wplus = sum((response>0)*rank(abs(response)))
@@ -132,8 +123,10 @@ wplus
 ## Null Distribution of Test Statistic
 
 Is this due to chance?  
-Luckily, the probability mass function for our test statistic is known.  
-To see this, let's look at an even simpler example of only three differences, with 8 possible outcomes:
+
+The distribution of test statistic cannot be obtained in closed-form.
+
+But for a simpler example of only three differences, we can enumerate all 8 possible outcomes:
 
 ```{r message=FALSE}
 library(R.utils)
@@ -141,14 +134,13 @@ sign = intToBin(0:7)
 sign = sapply(sign,function(i) c(substr(i,1,1),substr(i,2,2),substr(i,3,3)) )
 sign = t(matrix(as.integer(sign),nrow = 3))
 rank = t(matrix(rep(1:3,8),nrow = 3))
-data.frame(sign=sign,rank=rank)
+data.frame(sign=sign)
 ```
 
 ## Null Distribution of Test Statistic
 
-```{r}
-outcome = data.frame(sign=sign,rank=rank,mul=sign*rank,sum=apply(sign*rank,1,sum))
-outcome
+```{r echo = TRUE}
+outcome = data.frame(sign=sign,sum=apply(sign*rank,1,sum)); outcome
 table(outcome$sum)
 ```
 
@@ -156,7 +148,7 @@ table(outcome$sum)
 
 Or through Monte Carlo simulations:
 
-```{r}
+```{r echo = TRUE}
 n = 3; nsim = 10000
 X = matrix(rnorm(n*nsim),ncol=n)
 WplusSim = apply(X,1, function(x) { r = rank(abs(x)); sum(r * (x>0)) })
@@ -196,18 +188,27 @@ abline(v=wplus,col = "red"); abline(h=psignrank(wplus,n),col = "blue")
 
 we can find the $p$-value using $P_{H_0}(W^+ \ge w^+) = 1 - F_{W^+}(w^+ - 1,n)$:
 
-```{r}
+```{r echo=TRUE}
 pvalue = 1-psignrank(wplus-1,n,lower.tail = TRUE)
 pvalue
 ```
 
+<!--
 There is also an R base implementation of this test:
 
-```{r}
+```{r echo = TRUE}
 wilcox.test(response,alternative="greater")
 ```
+-->
 
 ### Conclusion
 
 We can reject the null hypothesis at significance level $\alpha = 0.05$ in favor of the alternative that sending kids to school improves their social awareness.
+
+## Comparing to Traditional $t$-Test
+
+
+
+## Estimation of Confidence Intervals
+
 

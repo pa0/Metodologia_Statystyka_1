@@ -104,20 +104,3 @@ abline(v=c(confidence.lower,confidence.upper),col = "blue",lwd = 4)
 
 We can conclude that aspirin was found to be significantly beneficial for preventing heart attacks.
 
-# Overall Conclusion
-
-## Summary
-
-* You learned some basics about R
-* You saw an example using the ranks of differences instead the actual differences for hypothesis testing
-* You saw an example of estimating the uncertainty of a parameter using the bootstrap
-
-## Next Lecture
-
-Closer look at the boostrap and Monte Carlo simulations.
-
-## Homeworks
-
-Homework 1 will be posted soon on the course website.
-
-Deadline is 8 days after posting date.
