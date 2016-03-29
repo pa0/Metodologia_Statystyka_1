@@ -310,7 +310,7 @@ and the variance of the sample means is
 ```{r}
 var(xbar)
 ```
-compare to theoretical result due to the central limit theorem $\frac{\sigma^2}{n} = 0.1$
+compare to theoretical result $\frac{\sigma^2}{n} = 0.1$
 
 ## R Packages
 
