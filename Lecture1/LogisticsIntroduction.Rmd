@@ -149,7 +149,7 @@ Some examples from special issue of Statistical Science (Randles, Hettmansperger
 ## For This Course
 
 During this course will write a lot of R code and run computer simulations.
-All my examples and homeworks will be written in R. 
+All my examples and homework will be written in R. 
 Choosing R for your homework solutions is highly recommended.
 
 What is R:
@@ -329,7 +329,7 @@ data(law)
 head(law)
 ```
 
-## Homeworks with R Markdown
+## Homework with R Markdown
 
 ```{r, out.width = 800, fig.retina = NULL, echo=FALSE}
 knitr::include_graphics("RMarkdownScreenshot.png")

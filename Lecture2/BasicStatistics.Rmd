@@ -1,0 +1,54 @@
+---
+title: "Basic Statistics"
+author: "Christof Seiler"
+date: "Stanford University, Spring 2016, STATS 205"
+output:
+  ioslides_presentation:
+    incremental: yes
+    smaller: no
+    transition: faster
+    widescreen: yes
+  beamer_presentation:
+    incremental: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+## Sign Test
+
+* Comparison of ice cream brands A and B
+* Blindfolded taster gives preference of one ice cream over the other
+* Experiment with 12 taster
+    + 10 tasters prefer brand A over brand B
+    + 1 taster prefers brand B over A
+    + 1 no preference
+* Pretty convincing evidence in favor of brand A
+* But how likely is such a result due to chance if the null hypothesis is true (no preference in brands)?
+* A *null hypothesis* a hypothesis associated with a contradiction to a theory one would like to prove
+
+## Sign Test
+
+* To every statistical test such as the sign test, we associate a *test statistic*
+* A test *statistic* is a function of the data
+* A *parameter* is a function of the probability distribution
+* For this sign test, the test statistic $S$ is the number positive signs
+* Evaluated on our data the observed test statistic is 10
+* Under the null hypothesis $S$ is distributed according to a binomial distribution
+* The binomial distribution is the number of success in a sequene of $n$ yes/no experiments with probability of success $p$
+
+## Sign Test
+
+A two-sidesd p-value for this problem can be calculated by evaluating the probability of obtaining having 10 success in 11 trials with success probability 1/2
+```{r echo=FALSE}
+2*dbinom(x=10,size=11,1/2)
+```
+
+```{r}
+
+```
+
+## Signed-Rank Wilcoxon Test
+
+
