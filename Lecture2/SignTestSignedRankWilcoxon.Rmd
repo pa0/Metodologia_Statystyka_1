@@ -37,9 +37,9 @@ $$ H_0: \theta = 0 \text{ versus } H_A: \theta > 0 $$
 $$ S = \sum_{i=1}^n \operatorname{sign}(X_i) $$
 with $\operatorname{sign}(t) = 
 \begin{cases}
--1 & \text{if } t < 1 \\
+-1 & \text{if } t < 0 \\
 0 & \text{if } t = 0 \\
-1 & \text{if } t > 1
+1 & \text{if } t > 0
 \end{cases}$
 
 ## Sign Test
