@@ -46,6 +46,22 @@ Approximate the power of a $t$-test of $H_0: \mu = 0$ versus $H_A: \mu > 0$ when
 Use the commands ``dnorm``, ``seq``, and ``lines`` to create a plot of the pdf of a normal distribution with $\mu = 50$ and 
 $\sigma^2 = 10$.
 
+### Exercise 6
+
+Write an R function which computes the sign analysis. For example, the following commands compute the statistic S+, assuming that the sample is in the vector x.
+```{r eval=FALSE}
+xt <- x[x!=0]
+nt <- length(xt)
+ind <- rep(0,nt) 
+ind[xt > 0] <-1
+splus <- sum(ind)
+```
+
+### Exercise 7
+
+Calculate the sign test for the nursery school example, Example 2.3.1. Show that the $p$-value for the one-sided sign test is $0.1445$.
+
+
 ## Deadline
 
 Please email your solutions in the form of a Rmd file to Nan Bi and Lexi Guan.

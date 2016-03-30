@@ -67,7 +67,7 @@ barplot(dbinom(x,n,1/2),
 
 * $X_1,X_2,\dots,X_n$ denotes random sample following the model
 $$ X_i = \theta + e_i, $$
-random errors are independently and identically distributed with a continuous probability density function $f(t)$ symmetric around $0$.
+random errors $e_i$ are independently and identically distributed with a continuous probability density function $f(t)$ symmetric around $0$.
 
 * We test hypothesis:
 $$ H_0: \theta = 0 \text{ versus } H_A: \theta > 0 $$
@@ -94,11 +94,12 @@ here $\bar{X}$ is the mean and $s$ is the standard deviation of the sample
 
 ## Sign-Rank Wilcoxon Test
 
-* In contrast to the $t$-test, the sign-rank Wilcoxon test usess only the ranks of the distance from $0$
-$$ W = \sum_{i>0} \operatorname{sign}(X_i) \operatorname{R} |X_i| $$
+* In contrast to the $t$-test, the sign-rank Wilcoxon test uses only the ranks of the distance from $0$
+$$ W = \sum_{i>0}^n \operatorname{sign}(X_i) \operatorname{R} |X_i| $$
 * No closed-form, iterative algorithms, e.g. ``psignrank`` in R
-* The usual test statistics considers positive items only
-* TODO: why?
+* Our test statistics considers positive items only
+$$ W^+ = \sum_{X_i > 0} \operatorname{R} |X_i| = \frac{1}{2} W + \frac{n(n+1)}{4} $$
+* The distribution is symmetric around $\frac{n(n+1)}{4}$
 
 ## Signed-Rank Wilcoxon Test
 
@@ -142,7 +143,7 @@ Is this due to chance?
 
 The distribution of test statistic cannot be obtained in closed-form.
 
-Enumerate all 8 possible outcomes for sample size three:
+Enumerate all possible outcomes for sample size three $n = 3$:
 
 ## Null Distribution of Test Statistic
 
@@ -150,7 +151,7 @@ Is this due to chance?
 
 The distribution of test statistic cannot be obtained in closed-form.
 
-Enumerate all 8 possible outcomes for sample size three:
+Enumerate all $2^n$ possible outcomes for sample size three $n = 3$:
 
 ```{r message=FALSE}
 library(R.utils)
@@ -189,7 +190,7 @@ prop
 
 ## Computations
 
-Now back to our "more complicated" school example.
+Now back to our school example.
 
 ```{r echo=FALSE}
 n = length(response)
@@ -219,16 +220,95 @@ pvalue
 
 ### Conclusion
 
+Significance *level*: the probabilty of rejecting the null when it is **true**
+
 We can reject the null hypothesis at significance level $\alpha = 0.05$ in favor of the alternative that sending kids to school improves their social awareness.
 
-## Estimation of Confidence Intervals
+## Estimation and Confidence Intervals
 
+* All three estimates (sign test, signed-rank Wilcoxon, and $t$-test) have an associated estimate and confidence interval for the location parameter $\theta$
+* Recall the model for our sample $X_1,X_2,\dots,X_n$ 
+$$ X_i = \theta_i + e_i $$
 
+* Some definitions:
+* *order statistics*: $X_{(1)}$ minimum sample and $X_{(n)}$ the largest
+* thus $X_{(1)} < X_{(2)} < \dots < X_{(n)}$
+* *quantiles*: equally spaced splitting points of continuous intervals with equal probabalities or sample
 
-## Difference Between $t$-Test and the Sign Test
+## Estimation and Confidence Intervals of Sign Test
 
-* The *power* of the sign test is low
-* Power: the probability of rejection the null when null is **true**
-* Compare to  
-the significance *level*: the probabilty of rejecting the null when null is **false**
-* The power of the Signed-Rank Wilcoxon test quite competitive
+Estimator is the median:
+$$ \hat{\theta} = \operatorname{median}\{ X_1,X_2,\dots,X_n \} $$
+
+Confidence interval $(1−\alpha)100\%$:
+$$ \left(X_{(c_1+1)},X_{(n−c_1)} \right), $$ 
+where $c_1$ is the $\frac{\alpha}{2}$ quantile of the binomial distribution
+
+## Estimation and Confidence Intervals of Sign-Rank Wilcoxon
+
+Hodges–Lehmann estimator:
+$$ \hat{\theta} = \operatorname{median}_{i\le j} \left\{ \frac{X_i+X_j}{2} \right\} $$
+
+$A{ij} = \frac{(X_i +X_j)}{2}, i \le j$ are called the Walsh averages 
+
+and used to form confidence interval $(1−\alpha)100\%$:
+$$ \left(A_{(c_2 +1)},A_{([n(n+1)/2]−c_2 )} \right), $$
+$c_2$ is the $\frac{\alpha}{2}$ quantile of the signed-rank Wilcoxon distribution
+
+## Some Comparisons
+
+* *Power* of statistical test:  
+the probability of rejection the null hypothesis when it is **false**
+* The power of thesign test can be low relative to $t$-test
+* The power of signed-rank Wilcoxon test is nearly that of the $t$-test for normal distributions and generally greater than that of the $t$-test for distributions with heavier tails than the normal distribution
+
+## Power Simulation $\theta = 0$
+
+```{r echo=TRUE}
+n = 30; df = 2; nsims = 10000; mu = 0; collwil = rep(0,nsims); collt = rep(0,nsims)
+for(i in 1:nsims) {
+  x = rt(n,df) + mu
+  wil = wilcox.test(x) 
+  collwil[i] = wil$p.value 
+  ttest = t.test(x) 
+  collt[i] = ttest$p.value
+}
+powwil = rep(0,nsims); powwil[collwil <= .05] = 1; powerwil = sum(powwil)/nsims
+powt = rep(0,nsims); powt[collt <= .05] = 1; powert = sum(powt)/nsims
+powerwil
+powert
+```
+
+## Power Simulation $\theta = 0.5$
+
+```{r echo=TRUE}
+n = 30; df = 2; nsims = 10000; mu = 0.5; collwil = rep(0,nsims); collt = rep(0,nsims)
+for(i in 1:nsims) {
+  x = rt(n,df) + mu
+  wil = wilcox.test(x) 
+  collwil[i] = wil$p.value 
+  ttest = t.test(x) 
+  collt[i] = ttest$p.value
+}
+powwil = rep(0,nsims); powwil[collwil <= .05] = 1; powerwil = sum(powwil)/nsims
+powt = rep(0,nsims); powt[collt <= .05] = 1; powert = sum(powt)/nsims
+powerwil
+powert
+```
+
+## Power Simulation $\theta = 1$
+
+```{r echo=TRUE}
+n = 30; df = 2; nsims = 10000; mu = 1; collwil = rep(0,nsims); collt = rep(0,nsims)
+for(i in 1:nsims) {
+  x = rt(n,df) + mu
+  wil = wilcox.test(x) 
+  collwil[i] = wil$p.value 
+  ttest = t.test(x) 
+  collt[i] = ttest$p.value
+}
+powwil = rep(0,nsims); powwil[collwil <= .05] = 1; powerwil = sum(powwil)/nsims
+powt = rep(0,nsims); powt[collt <= .05] = 1; powert = sum(powt)/nsims
+powerwil
+powert
+```
