@@ -48,7 +48,7 @@ $\sigma^2 = 10$.
 
 ### Exercise 6
 
-Write an R function which computes the sign analysis. For example, the following commands compute the statistic S+, assuming that the sample is in the vector x.
+Write an R function which computes the sign analysis. For example, the following commands compute the statistic $S^+$, assuming that the sample is in the vector $x$.
 ```{r eval=FALSE}
 xt <- x[x!=0]
 nt <- length(xt)
@@ -60,7 +60,6 @@ splus <- sum(ind)
 ### Exercise 7
 
 Calculate the sign test for the nursery school example, Example 2.3.1. Show that the $p$-value for the one-sided sign test is $0.1445$.
-
 
 ## Deadline
 
