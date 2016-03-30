@@ -1,5 +1,5 @@
 ---
-title: "Signed Test and Signed-Rank Wilcoxon"
+title: "Sign Test and Signed-Rank Wilcoxon"
 author: "Christof Seiler"
 date: "Stanford University, Spring 2016, STATS 205"
 output:
