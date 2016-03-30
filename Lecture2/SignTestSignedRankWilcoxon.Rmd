@@ -16,9 +16,51 @@ output:
 knitr::opts_chunk$set(echo = FALSE)
 ```
 
+## Location Model
+
+* $X_1,X_2,\dots,X_n$ denotes random sample following the model
+$$ X_i = \theta + e_i, $$
+random errors $e_i$ are independently and identically distributed with a continuous probability density function $f(t)$ symmetric around $0$.
+
+* Hypothesis testing:
+$$ H_0: \theta = 0 \text{ versus } H_A: \theta > 0 $$
+
+* A *null hypothesis* is associated with a **contradiction** to a theory one would like to prove
+* An *alternative hypothesis* is associated with the actual theory one would like to prove
+
 ## Sign Test
 
+* To every statistical test such as the sign test, we associate a *test statistic*
+* A test *statistic* is a function of the data
+
+* The sign test has test statistic: 
+$$ S = \sum_{i=1}^n \operatorname{sign}(X_i) $$
+with $\operatorname{sign}(t) = 
+\begin{cases}
+-1 & \text{if } t < 1 \\
+0 & \text{if } t = 0 \\
+1 & \text{if } t > 1
+\end{cases}$
+
+## Sign Test
+
+* Looking just at the positive observations: 
+$$ S^+ = \#_i \{ X_i > 0 \} $$
+* $0$ observations are ignored and sample size is reduced
+* If observing a $-1$ or $1$ for each $X_i$ is a coin flip then
+* $S^+$ follows a binomial distribution with $n$ trials and success probability $1/2$
+* This is the *null distribution* of the test statistic
+* It doesn't depend on the error distribution
+* This property is called *distribution-free*
+* Compare null distribution with observed test statistic
+
+## Sign Test Example
+
 * Comparison of ice cream brands A and B
+* Theory: Brand A is preferred over B
+* Null hypothsis: No difference between A and B
+* Alternative: A is preferred over B
+
 * Blindfolded taster gives preference of one ice cream over the other
 * Experiment with 12 taster
     + 10 tasters prefer brand A over brand B
@@ -26,31 +68,20 @@ knitr::opts_chunk$set(echo = FALSE)
     + 1 no preference
 * Pretty convincing evidence in favor of brand A
 * But how likely is such a result due to chance if the null hypothesis is true (no preference in brands)?
-* A *null hypothesis* a hypothesis associated with a contradiction to a theory one would like to prove
 
-## Sign Test
 
-* To every statistical test such as the sign test, we associate a *test statistic*
-* A test *statistic* is a function of the data
-* A *parameter* is a function of the probability distribution
-* For this sign test, define the test statistic $S$ is the number positive signs
-* Evaluated on our data the observed test statistic is $10$
-* We compare the observed test statistic with the null distribution 
-* The null distribution is the distribution of the statistic given the null hypothesis is true
+## Sign Test Example
 
-## Sign Test
+* For our sign test, the test statistic $S^+$ is the number positive signs
+* Evaluated on our data the observed test statistic is $s^+ = 10$
+* We compare the observed test statistic with the binomial distribution with $n = 11$ trials and success probabilty $1/2$
 
-* Under the null hypothesis $S$ is distributed according to a binomial distribution with success probability $1/2$
-* The binomial distribution is the number of success in a sequene of $n$ independent trials with success probability $p$
-* A two-sided $p$-value can be calculated
-* Two-sided: probability of landing in the tails on either side of null distribution  
-* One-sided: probability of landing on one side of null distribution
+## Sign Test Example
 
-## Sign Test
+The $p$-value is $P_{H_0}(S^+ \ge s^+) = 1 − F_B(s^+ − 1,n,\frac{1}{2})$
 
-Evaluate the probability of $10$ successes in $11$ trials with success probability $1/2$
 ```{r echo=FALSE}
-S = 10; n = 11; p = 1/2; 2*dbinom(x = 10,size = 11,prob = p)
+S = 10; n = 11; p = 1/2; pvalue = sum(dbinom(x = S:n,size = n,prob = p)); pvalue
 ```
 
 ```{r}
@@ -63,24 +94,11 @@ barplot(dbinom(x,n,1/2),
         col = colors)
 ```
 
-## Location Model
+## Sign Test Example
 
-* $X_1,X_2,\dots,X_n$ denotes random sample following the model
-$$ X_i = \theta + e_i, $$
-random errors $e_i$ are independently and identically distributed with a continuous probability density function $f(t)$ symmetric around $0$.
+Significance *level*: the probabilty of rejecting the null when it is **true**
 
-* We test hypothesis:
-$$ H_0: \theta = 0 \text{ versus } H_A: \theta > 0 $$
-
-## Distribution-Free
-
-* The sign test has test statistic: 
-$$ S = \sum_{i_1}^n \operatorname{sign}(X_i) $$
-* Looking just at the positive observations: 
-$$ S^+ = \#_i \{ X_i > 0 \} $$
-* As mentioned before $S^+$ follows a binomical distribution with $n$ trials and success probability $1/2$
-* Thus it doesn't depend on the error distribution
-* This property is called **distribution-free**
+We can reject the null hypothesis at significance level $\alpha = 0.05$ in favor of the alternative that Brand A is tastier than Brand B.
 
 ## Traditional $t$-Test
 
@@ -92,7 +110,7 @@ here $\bar{X}$ is the mean and $s$ is the standard deviation of the sample
 * Usually $s$ is not known and has to be estimated, then if the population is normal $t$ has a Student $t$-distribution with $n-1$ degress of freedom
 * And the $p$-value $P_{H_0}(t \ge t_0) = 1 - F_T(t_0,n-1)$
 
-## Sign-Rank Wilcoxon Test
+## Signed-Rank Wilcoxon Test
 
 * In contrast to the $t$-test, the sign-rank Wilcoxon test uses only the ranks of the distance from $0$
 $$ W = \sum_{i>0}^n \operatorname{sign}(X_i) \operatorname{R} |X_i| $$
@@ -103,14 +121,80 @@ $$ W^+ = \sum_{X_i > 0} \operatorname{R} |X_i| = \frac{1}{2} W + \frac{n(n+1)}{4
 
 ## Signed-Rank Wilcoxon Test
 
-* Question: Does sending kids to school improve social awareness over home schooling?
+The distribution of test statistic cannot be obtained in closed-form.
+
+Enumerate all possible outcomes for sample size three $n = 3$:
+
+## Signed-Rank Wilcoxon Test
+
+The distribution of test statistic cannot be obtained in closed-form.
+
+Enumerate all $2^n$ possible outcomes for sample size three $n = 3$:
+
+```{r message=FALSE}
+library(R.utils)
+sign = intToBin(0:7)
+sign = sapply(sign,function(i) c(substr(i,1,1),substr(i,2,2),substr(i,3,3)) )
+sign = t(matrix(as.integer(sign),nrow = 3))
+rank = t(matrix(rep(1:3,8),nrow = 3))
+outcome = data.frame(sign=sign,SumRankPlus=NaN)
+outcome
+```
+
+## Signed-Rank Wilcoxon Test
+
+```{r echo = TRUE}
+SumRankPlus = apply(sign*rank,1,sum)
+outcome$SumRankPlus[1] = SumRankPlus[1]; outcome
+```
+
+## Signed-Rank Wilcoxon Test
+
+```{r echo = TRUE}
+outcome$SumRankPlus[2] = SumRankPlus[2]
+outcome
+```
+
+## Signed-Rank Wilcoxon Test
+
+```{r echo = TRUE}
+outcome$SumRankPlus = SumRankPlus; outcome
+table(outcome$SumRankPlus)
+```
+
+## Signed-Rank Wilcoxon Test
+
+Or through Monte Carlo simulations:
+
+```{r echo = TRUE}
+n = 3; nsim = 10000
+X = matrix(rnorm(n*nsim),ncol=n)
+WplusSim = apply(X,1, function(x) { sum( rank(abs(x)) * (x>0) ) })
+table(WplusSim)/nsim
+```
+
+and compare with theoretical result:
+
+```{r echo=FALSE}
+prop = c(1/8,1/8,1/8,2/8,1/8,1/8,1/8)
+names(prop) = 0:6
+prop
+```
+
+## Signed-Rank Wilcoxon Test Example
+
+* Comparison of social awareness in kids going to school versus home schooling
+* Theory: Sending kids to school improves social awareness
+* Null hypothsis: No difference between kids going to school and staying at home
+* Alternative: Kids going to school have improved social awareness
+
 * Eight pairs of identical twins who are of nursery school age. 
 * For each pair, one is randomly selected to attend nursery school while the other remains at home.  
 * At the end of the study period, all 16 children are given the same social awareness test.
 
-## Statistic
+## Signed-Rank Wilcoxon Test Example
 
-Calculate ranks of absolute values:
+The statistic is the sum of the ranks of positive items:
 
 ```{r echo=TRUE}
 school = c(82,69,73,43,58,56,76,65); home = c(63,42,74,37,51,43,80,62)
@@ -119,9 +203,7 @@ response
 rank(abs(response))
 ```
 
-The statistic is the sum of the ranks of positive items:
-
-## Statistic
+## Signed-Rank Wilcoxon Test Example
 
 Calculate ranks of absolute values:
 
@@ -137,60 +219,7 @@ wplus = sum((response>0)*rank(abs(response)))
 wplus
 ```
 
-## Null Distribution of Test Statistic
-
-Is this due to chance?  
-
-The distribution of test statistic cannot be obtained in closed-form.
-
-Enumerate all possible outcomes for sample size three $n = 3$:
-
-## Null Distribution of Test Statistic
-
-Is this due to chance?  
-
-The distribution of test statistic cannot be obtained in closed-form.
-
-Enumerate all $2^n$ possible outcomes for sample size three $n = 3$:
-
-```{r message=FALSE}
-library(R.utils)
-sign = intToBin(0:7)
-sign = sapply(sign,function(i) c(substr(i,1,1),substr(i,2,2),substr(i,3,3)) )
-sign = t(matrix(as.integer(sign),nrow = 3))
-rank = t(matrix(rep(1:3,8),nrow = 3))
-data.frame(sign=sign)
-```
-
-## Null Distribution of Test Statistic
-
-```{r echo = TRUE}
-outcome = data.frame(sign=sign,sum=apply(sign*rank,1,sum)); outcome
-table(outcome$sum)
-```
-
-## Null Distribution of Test Statistic
-
-Or through Monte Carlo simulations:
-
-```{r echo = TRUE}
-n = 3; nsim = 10000
-X = matrix(rnorm(n*nsim),ncol=n)
-WplusSim = apply(X,1, function(x) { r = rank(abs(x)); sum(r * (x>0)) })
-table(WplusSim)/nsim
-```
-
-and compare with theoretical result:
-
-```{r echo=FALSE}
-prop = c(1/8,1/8,1/8,2/8,1/8,1/8,1/8)
-names(prop) = 0:6
-prop
-```
-
-## Computations
-
-Now back to our school example.
+## Signed-Rank Wilcoxon Test Example
 
 ```{r echo=FALSE}
 n = length(response)
@@ -200,7 +229,7 @@ colors[x >= wplus] = "red"
 barplot(dsignrank(x,n),names.arg = x,main = paste0("dsignrank(x, n = ", n, ")"),col = colors)
 ```
 
-## Computations
+## Signed-Rank Wilcoxon Test Example
 
 and using the cumulative distribution function $F_{W^+}(w^+-1,n)$ of our test statistic:
 
@@ -209,16 +238,16 @@ plot(x,psignrank(x, n = n),type = "s",main = paste0("psignrank(x, n = ", n, ")")
 abline(v=wplus,col = "red"); abline(h=psignrank(wplus,n),col = "blue")
 ```
 
-## Computations
+## Signed-Rank Wilcoxon Test Example
 
-we can find the $p$-value using $P_{H_0}(W^+ \ge w^+) = 1 - F_{W^+}(w^+ - 1,n)$:
+We can find the $p$-value using $P_{H_0}(W^+ \ge w^+) = 1 - F_{W^+}(w^+ - 1,n)$:
 
 ```{r echo=TRUE}
 pvalue = 1-psignrank(wplus-1,n,lower.tail = TRUE)
 pvalue
 ```
 
-### Conclusion
+## Signed-Rank Wilcoxon Test Example
 
 Significance *level*: the probabilty of rejecting the null when it is **true**
 
@@ -226,13 +255,13 @@ We can reject the null hypothesis at significance level $\alpha = 0.05$ in favor
 
 ## Estimation and Confidence Intervals
 
-* All three estimates (sign test, signed-rank Wilcoxon, and $t$-test) have an associated estimate and confidence interval for the location parameter $\theta$
+* All three tests (sign test, signed-rank Wilcoxon, and $t$-test) have an associated estimate and confidence interval for the location parameter $\theta$
 * Recall the model for our sample $X_1,X_2,\dots,X_n$ 
 $$ X_i = \theta_i + e_i $$
 
 * Some definitions:
-* *order statistics*: $X_{(1)}$ minimum sample and $X_{(n)}$ the largest
-* thus $X_{(1)} < X_{(2)} < \dots < X_{(n)}$
+* *order statistics*: $X_{(1)}$ minimum observation, $X_{(n)}$ largest observation
+* in increasing order $X_{(1)} < X_{(2)} < \dots < X_{(n)}$
 * *quantiles*: equally spaced splitting points of continuous intervals with equal probabalities or sample
 
 ## Estimation and Confidence Intervals of Sign Test
@@ -257,9 +286,9 @@ $c_2$ is the $\frac{\alpha}{2}$ quantile of the signed-rank Wilcoxon distributio
 
 ## Some Comparisons
 
-* *Power* of statistical test:  
+* *Power* of a statistical test:  
 the probability of rejection the null hypothesis when it is **false**
-* The power of thesign test can be low relative to $t$-test
+* The power of the sign test can be low relative to $t$-test
 * The power of signed-rank Wilcoxon test is nearly that of the $t$-test for normal distributions and generally greater than that of the $t$-test for distributions with heavier tails than the normal distribution
 
 ## Power Simulation $\theta = 0$
