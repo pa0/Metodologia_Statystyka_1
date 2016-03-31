@@ -278,11 +278,33 @@ where $c_1$ is the $\frac{\alpha}{2}$ quantile of the binomial distribution
 Hodges–Lehmann estimator:
 $$ \hat{\theta} = \operatorname{median}_{i\le j} \left\{ \frac{X_i+X_j}{2} \right\} $$
 
-$A{ij} = \frac{(X_i +X_j)}{2}, i \le j$ are called the Walsh averages 
+$A_{ij} = \frac{(X_i +X_j)}{2}, i \le j$ are called the Walsh averages 
 
 and used to form confidence interval $(1−\alpha)100\%$:
 $$ \left(A_{(c_2 +1)},A_{([n(n+1)/2]−c_2 )} \right), $$
 $c_2$ is the $\frac{\alpha}{2}$ quantile of the signed-rank Wilcoxon distribution
+
+## How Are Walsh Averages and Wilcoxon Related?
+
+* Sketch of proof of equality $W^+ = A^+$ by induction 
+    * Wilcoxon test statistic: $W^+ = \sum_{i>0} \operatorname{R} |X_i|$ and
+    * number of Walsh averages greater than $\theta$: $A^+ = \#\{ A_{ij} > \theta \}$  
+
+* *Base of the Induction:*
+    * **(A)** Assume $\theta$ is greater than all $X_1,X_2,\dots,X_n$  
+        * hence greater than all Walsh averages  
+        * hence $X_i - \theta$ are all negative
+    1. Under **(A)** all ranks are negative, hence $W^+ = 0$
+    2. Under **(A)** all of Walsh average are less than $\theta$, hence $A^+ = 0$
+
+## How Are Walsh Averages and Wilcoxon Related?
+
+* *Induction Steps:*
+    * Move $\theta$ to the left passing through $X_1,X_2,\dots,X_n$ one and two at the time and show that 
+    * $A^+$ changes value when moving past an Walsh average by the same amount
+    * $W^+$ changes value when 
+        * ranks of some $|X_i - \theta|$ change or
+        * sign of some rank change by the same amount
 
 ## Some Comparisons
 
@@ -341,3 +363,18 @@ powt = rep(0,nsims); powt[collt <= .05] = 1; powert = sum(powt)/nsims
 powerwil
 powert
 ```
+
+## Summary
+
+Assumptions on $f(t)$:
+
+* Sign Test: any continuous distribution
+* Signed-Rank Test: any symmetric continuous distribution
+* $t$-test: any normal distribution
+
+* The continuity assumption assures that ties are impossible: With probability one we have $X_i \ne X_j$ when $i \ne j$
+* The continuity assumption is only necessary for exact hypothesis tests not for estimates and confidence intervals
+
+Assumptions on $e_i,e_2,\dots,e_n$ and thus $X_1,X_2,\dots,X_n$:
+
+* independent and identically distributed
