@@ -114,23 +114,49 @@ $$ \boldsymbol{x}_n^* = (x_1^*,\dots,x_m^*,x_{m+1},\dots,x_n) $$
 * Consider the contamination to be as very large (close to $\infty$)
 * *Breaking point:* the smallest value $m$ so that $\hat{\theta}(\boldsymbol{x}_n^*)$ is meaningless
 * *Finite sample breakdown point:* The ratio $\frac{m}{n}$
-* *Breakdown point:* If it converges to a finite value
+* *Asymptotic breakdown point:* If it converges to a finite value as $n \to \infty$
 
 ## Breakdown Point of an Estimator
 
-* Examples:
-    * Sample mean: breakdown point is $0$
-    * Sample median: in the limit is $0.5$
-    * Hodges–Lehmann estimator: in the limit is $0.29$
+* Sample mean:  
+    * Finite sample BP: $\frac{1}{n}$
+    * Asymptotic BP: $0$
+* Sample median:
+    * Finite sample BP: $\operatorname{floor}\left( \frac{n − 1}{2} \right)$
+    * Asymptotic BP: $0.29$
+* Hodges–Lehmann estimator: 
+    * Finite sample BP: 
+    * Asymptotic BP: $0.29$
 
+## Breakdown Point of an Estimator
+
+The median of the Walsh averages, stays with the majority.
+
+$$
+\begin{align}
+\frac{m(m+1)}{2} & > \frac{n(n+1) - m(m+1)}{2} \\
+m(m+1) & > \frac{n(n+1)}{2}
+\end{align}
+$$
+
+## Breakdown Point of an Estimator
+
+* Obtaining finite sample BP is messy, asymptotic is easier:
+$$m(m+1) > \frac{n(n+1)}{2} \Leftrightarrow \frac{m(m+1)}{n(n+1)} > \frac{1}{2}$$
+* let
+$x = m/n$ and $x \approx (m+1)/(n+1)$
+* then
+$$x^2 > \frac{1}{2} \Leftrightarrow x > \frac{1}{\sqrt{2}}$$
+* convert from allowed fraction of bad observations to smallest possible fraction of meaninglessness:
+$$1-\frac{1}{\sqrt{2}} \approx 0.29$$
+* More details are [here](http://www.stat.umn.edu/geyer/5601/notes/break.pdf)
+
+## Breakdown Point of an Estimator
+
+* Instead of testing for normality to decide whether to use a $t$-test or the Wilcoxon test
+* It is easier to use the notion of robustness of an estimator and their associated procedures
+* There are too many ways that a distribution can deviate from normality
+* How much robustness do we need? Is $0.29$ enough or $0.5$ really necessary?
 * Sample median preferred over Hodges–Lehmann estimator? 
     * Based on breakdown point: yes
     * This however ignores estimator efficiency (we talk about this later)
-
-## Breakdown Point of an Estimator
-
-from http://www.stat.umn.edu/geyer/s06/5601/theo/break.pdf
-
-## Relation of Ranks to Permutations
-
-van der Vaart, Chapter 13

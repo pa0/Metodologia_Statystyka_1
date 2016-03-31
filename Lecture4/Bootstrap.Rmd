@@ -30,13 +30,17 @@ knitr::opts_chunk$set(echo = FALSE)
 
 ## Why It Works
 
-van der Vaart
+van der Vaart, Chapter 23
+
+[link to website](https://normaldeviate.wordpress.com/2013/01/19/bootstrapping-and-subsampling-part-i/)
 
 ## When It Fails
 
 Susan's trees
 
 and outliers (hint at enumeration example)
+
+[link to website](https://normaldeviate.wordpress.com/2013/01/19/bootstrapping-and-subsampling-part-i/)
 
 ## Complete Enumerations
 
