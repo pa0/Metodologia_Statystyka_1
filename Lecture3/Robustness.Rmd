@@ -84,12 +84,11 @@ ggplot(data = SensDataLong,
 * An estimator is *robust* if its influence function is bounded
 * The influence function for our estimators are (up to constant of proportionality and center)
     * Mean: $x$,
-    * Median: $\sign(x)$, and 
+    * Median: $\operatorname{sign}(x)$, and 
     * HL: $F(x) − 0.5$
 * Hence, mean is not robust, but median and HL are robust
 
 ## Influence Function Example
-
 
 ```{r fig.width=10}
 library(gridExtra)
@@ -110,7 +109,25 @@ grid.arrange(influencePlot, sensativityPlot, ncol=2)
 
 ## Breakdown Point of an Estimator
 
+* Suppose we contaminate $m$ samples with 
+$$ \boldsymbol{x}_n^* = (x_1^*,\dots,x_m^*,x_{m+1},\dots,x_n) $$
+* Consider the contamination to be as very large (close to $\infty$)
+* *Breaking point:* the smallest value $m$ so that $\hat{\theta}(\boldsymbol{x}_n^*)$ is meaningless
+* *Finite sample breakdown point:* The ratio $\frac{m}{n}$
+* *Breakdown point:* If it converges to a finite value
 
+## Breakdown Point of an Estimator
+
+* Examples:
+    * Sample mean: breakdown point is $0$
+    * Sample median: in the limit is $0.5$
+    * Hodges–Lehmann estimator: in the limit is $0.29$
+
+* Sample median preferred over Hodges–Lehmann estimator? 
+    * Based on breakdown point: yes
+    * This however ignores estimator efficiency (we talk about this later)
+
+## Breakdown Point of an Estimator
 
 from http://www.stat.umn.edu/geyer/s06/5601/theo/break.pdf
 
