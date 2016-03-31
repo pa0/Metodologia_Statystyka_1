@@ -10,21 +10,107 @@ output:
     widescreen: yes
   beamer_presentation:
     incremental: yes
+  slidy_presentation:
+    incremental: yes
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
 ```
 
-## Estimators
+## Robustness of Estimators
 
-Robustness properties of the three estimators the mean, the median, and the Hodges–Lehmann estimate.
+* Robustness properties of the three estimators the mean, the median, and the Hodges–Lehmann estimate.
+* Main measures of robustness:
+    * efficiency, 
+    * influence, 
+    * and breakdown
+* Today, we foucs on influence and breakdown
 
-## Robustness
+## Sensitivity Curve
 
-in blue book
+* The finite sample version is the sensitivity curve
+* The parameter $\theta$ is a function of the cdf $F$
+* The observations $x_1,x_2,\dots,x_n$ are drawn from $F$
+* Denote $\hat{\theta}$ as the estimator of $\theta$ in the sample
+* Measure change in estimator $\hat{\theta}_n$ when outlier $x$ is added to a sample $x_n$
+$$ x_n = ( x_1,x_2,\dots,x_n )^T $$
+$$ x_{n+1} = ( x_1,x_2,\dots,x_n,x )^T $$
+* The sensitivity curve of an estimator is
+$$ S(x,\hat{\theta}) = \frac{\hat{\theta}_{n+1} - \hat{\theta}_n}{1/(n+1)} $$
 
-## Some Theoretical Background
+## Sensitivity Curve Example
+
+```{r echo=FALSE,warning=FALSE,message=FALSE}
+library(ggplot2)
+library(reshape2)
+library(ICSNP)
+```
+
+```{r echo=TRUE}
+x_n = c(1.85,2.35,-3.85,-5.25,-0.15,2.15,0.15,-0.25,-0.55,2.65)
+mean(x_n)
+median(x_n)
+hl.loc(x_n)
+```
+
+## Sensitivity Curve Example
+
+* Mean is unbounded
+* Median and Hodges–Lehmann is bounded (estimators change slightly and changes soon become constant)
+
+```{r fig.width=10,fig.height=4}
+sensitivity = function(x,x_n,estimator) {
+  (estimator(c(x_n,x))-estimator(x_n)) / (1/(length(x_n)+1))
+}
+interval = -20:20
+SensData = data.frame(
+  interval=interval,
+  mean=sapply(interval,sensitivity,x_n,mean),
+  median=sapply(interval,sensitivity,x_n,median),
+  HL=sapply(interval,sensitivity,x_n,hl.loc)
+)
+SensDataLong <- melt(SensData, id = "interval")
+ggplot(data = SensDataLong,
+         aes(x = interval, y = value, colour = variable)) + 
+         geom_line()
+```
+
+## Influence Function
+
+* Sensitivity curve depends on sample $x_1,x_2,\dots,x_n$
+* Influence function depends on the population distribution $F$
+* It's *functional*: a function that takes another function as its argument
+* An estimator is *robust* if its influence function is bounded
+* The influence function for our estimators are (up to constant of proportionality and center)
+    * Mean: $x$,
+    * Median: $\sign(x)$, and 
+    * HL: $F(x) − 0.5$
+* Hence, mean is not robust, but median and HL are robust
+
+## Influence Function Example
+
+
+```{r fig.width=10}
+library(gridExtra)
+interval = seq(-3,3,0.1)
+InfluenceData = data.frame(
+  interval=interval,
+  mean=interval,
+  median=sign(interval),
+  HL=pnorm(interval)-0.5
+)
+InfluenceDataLong <- melt(InfluenceData, id = "interval")
+influencePlot = ggplot(data = InfluenceDataLong,
+                       aes(x = interval, y = value, colour = variable)) + geom_line() + ggtitle("Influence Function")
+sensativityPlot = ggplot(data = SensDataLong,
+                         aes(x = interval, y = value, colour = variable)) + geom_line() + ggtitle("Sensitivity Curve")
+grid.arrange(influencePlot, sensativityPlot, ncol=2)
+```
+
+## Breakdown Point of an Estimator
+
+
 
 from http://www.stat.umn.edu/geyer/s06/5601/theo/break.pdf
 

@@ -72,6 +72,10 @@ The shift from $\mathcal{X}_n^n$ to $\mathcal{C}_n$ gives substantial savings
 For an example with $n = 15$, the number of enumerations reduce from  
 $15^{15} \approx 4.38 \times 10^{17}$ to $\binom{29}{14} \approx 7.7 \times 10^7$
 
+## Geometry of the Bootstrap
+
+Efron & Tibshirani Chapter 20
+
 ## Law Schools Example
 
 ```{r echo = TRUE}

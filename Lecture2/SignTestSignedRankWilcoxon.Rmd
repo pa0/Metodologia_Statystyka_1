@@ -306,6 +306,8 @@ $c_2$ is the $\frac{\alpha}{2}$ quantile of the signed-rank Wilcoxon distributio
         * ranks of some $|X_i - \theta|$ change or
         * sign of some rank change by the same amount
 
+* The full proof is [here](http://www.stat.umn.edu/geyer/s06/5601/theo/wilcox.pdf)
+
 ## Some Comparisons
 
 * *Power* of a statistical test:  
