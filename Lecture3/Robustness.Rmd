@@ -1,0 +1,33 @@
+---
+title: "Robustness"
+author: "Christof Seiler"
+date: "Stanford University, Spring 2016, STATS 205"
+output:
+  ioslides_presentation:
+    incremental: yes
+    smaller: no
+    transition: faster
+    widescreen: yes
+  beamer_presentation:
+    incremental: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+## Estimators
+
+Robustness properties of the three estimators the mean, the median, and the Hodges–Lehmann estimate.
+
+## Robustness
+
+in blue book
+
+## Some Theoretical Background
+
+from http://www.stat.umn.edu/geyer/s06/5601/theo/break.pdf
+
+## Relation of Ranks to Permutations
+
+van der Vaart, Chapter 13

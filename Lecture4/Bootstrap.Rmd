@@ -1,0 +1,185 @@
+---
+title: "The Bootstrap"
+author: "Christof Seiler"
+date: "Stanford University, Spring 2016, STATS 205"
+output:
+  ioslides_presentation:
+    incremental: yes
+    smaller: no
+    transition: faster
+    widescreen: yes
+  beamer_presentation:
+    incremental: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+## Some Definitions
+
+* We observe data $\mathcal{X}_n = \{ x_1, x_2, \dots, x_n \}$ in some space $\mathcal{X}$ 
+
+* The data are drawn identically and independently from a unknown distribution $F$
+
+* The bootstrap supposes that the empirical distribution $F_n$ is a good description of the unknown distribution $F$
+
+* This way one can draw as many samples from $F_n$ to compute sample variability of all kinds of \textit{statistics} $T(x_1, x_2, \dots, x_n)$, e.g. the sample mean, sample median
+
+* This is done via choosing $n$ samples with replacement (you can pick the same sample multiple times) 
+
+## Why It Works
+
+van der Vaart
+
+## When It Fails
+
+Susan's trees
+
+and outliers (hint at enumeration example)
+
+## Complete Enumerations
+
+There are $n^n$ different bootstrap samples but some of them have the same subset: 
+
+$$
+\begin{align}
+\mathcal{X}_n^1 & = \{ x_1^1, x_2^1, \dots, x_n^1 \} \\
+ & \vdots \\
+\mathcal{X}_n^{n^n} & = \{ x_1^{n^n}, x_2^{n^n}, \dots, x_n^{n^n} \}
+\end{align}
+$$
+
+We group the same bootstrap sample and assign a weight $k_i$ describing the number of times it occurs, so $k_1 + \dots + k_n = n$
+
+Denote the space of compositions of $n$ into at most $n$ parts as
+
+$$\mathcal{C}_n = \{ \boldsymbol{k} = (k_1,\dots,k_n), k_1+\dots+k_n=n, k_i \ge 0, k_i \text{ integer} \}$$
+
+and the size of this space is $|\mathcal{C}_n| = \binom{2n-1 }{n-1}$ 
+
+## Complete Enumerations
+
+A uniform distribution on $\mathcal{X}_n^n$ induces a multinomial distribution on $\mathcal{C}_n$ with probability mass function $m_n(k)$ 
+
+To form an exhaustive bootstrap distribution of statistic $T(\mathcal{X}_n)$, we need to compute  
+
+* $|\mathcal{C}_n| = \binom{2n-1 }{n-1}$ statistics and 
+* associated weights $m_n(k)$
+
+The shift from $\mathcal{X}_n^n$ to $\mathcal{C}_n$ gives substantial savings 
+
+For an example with $n = 15$, the number of enumerations reduce from  
+$15^{15} \approx 4.38 \times 10^{17}$ to $\binom{29}{14} \approx 7.7 \times 10^7$
+
+## Law Schools Example
+
+```{r echo = TRUE}
+library(bootstrap); data(law); t(law)
+```
+
+## Law Schools Example
+
+```{r echo=FALSE}
+library(ggplot2)
+law2 = data.frame(Observation = 1:dim(law)[1],law)
+ggplot(law2, aes(x = LSAT, y = GPA)) + 
+  geom_text(aes(label = Observation),hjust = 0,vjust = 0)
+```
+
+## Law Schools Example
+
+Sample correlation coefficient:
+
+```{r}
+theta.hat = cor(law$LSAT,law$GPA)
+theta.hat
+```
+
+How accurate is this estiamte. Let's look at the boostraop samples:
+
+```{r eval=FALSE}
+draw.bootstrap.sample = function() {
+  n = dim(law)[1]
+  ind = sample(n,replace = TRUE)
+  return(cor(law[ind,]$LSAT,law[ind,]$GPA))
+}
+nrep = 40000
+thetastar = replicate(nrep,draw.bootstrap.sample())
+thetastar2 = data.frame(cor=thetastar)
+ggplot(thetastar2, aes(cor)) + 
+  geom_histogram(binwidth = 0.01) +
+  geom_vline(xintercept = theta.hat,colour = "red",size = 1.5)
+```
+
+## Law Schools Example
+
+```{r echo=FALSE}
+draw.bootstrap.sample = function() {
+  n = dim(law)[1]
+  ind = sample(n,replace = TRUE)
+  return(cor(law[ind,]$LSAT,law[ind,]$GPA))
+}
+nrep = 40000
+thetastar = replicate(nrep,draw.bootstrap.sample())
+thetastar2 = data.frame(cor=thetastar)
+ggplot(thetastar2, aes(cor)) + 
+  geom_histogram(binwidth = 0.01) +
+  geom_vline(xintercept = theta.hat,colour = "red",size = 1.5)
+```
+
+## Law Schools Example
+
+Take a close look and you will see the corner around 0.9. This corner doens't show up when using Monte Carlo simulations. If you take out observation 1 this corner disappears.
+
+```{r}
+library(partitions)
+n = 15; allCompositions = compositions(n,n)
+nCompositions = dim(allCompositions)[2]; nCompositions
+```
+
+Check if we get the same nunber as in theory.
+
+```{r}
+library(assertthat)
+nCompositionsTheory = choose(2*n-1,n-1); assert_that(nCompositions == nCompositionsTheory)
+```
+
+Now evaluate the correlation coefficient for each enumeration. 
+
+## Law Schools Example
+
+```{r echo=FALSE, warning=FALSE, eval=TRUE}
+if(!file.exists("enumData.Rdata")) {
+  library(parallel)
+  ptm = proc.time()
+  enumData = mclapply(1:nCompositions, function(i) {
+    ind = allCompositions[,i]
+    law.list = lapply(1:n,function(j) matrix(rep(law[j,],ind[j]),ncol = 2 ,byrow = TRUE))
+    newLaw = do.call(rbind, law.list)
+    c(cor(unlist(newLaw[,1]),unlist(newLaw[,2])),dmultinom(ind,prob = rep(1,n)))
+    },
+    mc.cores = 4
+    )
+  proc.time() - ptm
+  enumData = t(simplify2array(enumData))
+  colnames(enumData) = c("cor","weight")
+  save(enumData,file = "enumData.Rdata")  
+} else {
+  load("enumData.Rdata")
+}
+enumDataFrame = data.frame(enumData)
+ggplot(enumDataFrame, aes(cor, weight = weight)) + 
+  geom_histogram(binwidth = 0.003) +
+  geom_vline(xintercept = theta.hat,colour = "red",size = 1.5)
+```
+
+## Law Schools Example
+
+* Use the library parallel to speedup computations. 
+```{r eval=FALSE}
+  library(parallel)
+  enumData = mclapply(1:nCompositions, function(i) { ... }, mc.cores = 4 )
+```
+* On a laptop with 4 cores this takes about 5 hours to compute.
+* We can speedup enumeration by changing only two coordinates at the time using Gray codes.
