@@ -29,7 +29,7 @@ knitr::opts_chunk$set(echo = FALSE)
 
 ## Sensitivity Curve
 
-* The finite sample version is the sensitivity curve
+* Function of the observations
 * The parameter $\theta$ is a function of the cdf $F$
 * The observations $x_1,x_2,\dots,x_n$ are drawn from $F$
 * Denote $\hat{\theta}$ as the estimator of $\theta$ in the sample

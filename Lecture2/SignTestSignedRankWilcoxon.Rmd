@@ -286,9 +286,9 @@ $c_2$ is the $\frac{\alpha}{2}$ quantile of the signed-rank Wilcoxon distributio
 
 ## How Are Walsh Averages and Wilcoxon Related?
 
+* Wilcoxon test statistic: $W^+ = \sum_{i>0} \operatorname{R} |X_i|$
+* Number of Walsh averages greater than $\theta$: $A^+ = \#\{ A_{ij} > \theta \}$
 * Sketch of proof of equality $W^+ = A^+$ by induction 
-    * Wilcoxon test statistic: $W^+ = \sum_{i>0} \operatorname{R} |X_i|$ and
-    * number of Walsh averages greater than $\theta$: $A^+ = \#\{ A_{ij} > \theta \}$  
 
 * *Base of the Induction:*
     * **(A)** Assume $\theta$ is greater than all $X_1,X_2,\dots,X_n$  
