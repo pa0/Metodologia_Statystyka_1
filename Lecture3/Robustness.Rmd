@@ -25,19 +25,19 @@ knitr::opts_chunk$set(echo = FALSE)
     * efficiency, 
     * influence, 
     * and breakdown
-* Today, we foucs on influence and breakdown
+* Today, we focus on influence and breakdown
 
 ## Sensitivity Curve
 
 * Function of the observations
 * The parameter $\theta$ is a function of the cdf $F$
 * The observations $x_1,x_2,\dots,x_n$ are drawn from $F$
-* Denote $\hat{\theta}$ as the estimator of $\theta$ in the sample
-* Measure change in estimator $\hat{\theta}_n$ when outlier $x$ is added to a sample $x_n$
+* Denote $\widehat{\theta}$ as the estimator of $\theta$ in the sample
+* Measure change in estimator $\widehat{\theta}_n$ when outlier $x$ is added to a sample $x_n$
 $$ x_n = ( x_1,x_2,\dots,x_n )^T $$
 $$ x_{n+1} = ( x_1,x_2,\dots,x_n,x )^T $$
 * The sensitivity curve of an estimator is
-$$ S(x,\hat{\theta}) = \frac{\hat{\theta}_{n+1} - \hat{\theta}_n}{1/(n+1)} $$
+$$ S(x,\widehat{\theta}) = \frac{\widehat{\theta}_{n+1} - \widehat{\theta}_n}{1/(n+1)} $$
 
 ## Sensitivity Curve Example
 
@@ -80,7 +80,14 @@ ggplot(data = SensDataLong,
 
 * Sensitivity curve depends on sample $x_1,x_2,\dots,x_n$
 * Influence function depends on the population distribution $F$
-* It's *functional*: a function that takes another function as its argument
+* It's a *functional*: a function twidehat takes another function as its argument
+* Denote functional as $T(F)$, e.g. median $T(F) = F^{-1}(1/2)$
+* Then using Gateaux derivatives (directional derivatives for functionals)
+$$ L_F(x) = lim_{\epsilon\to 0} \frac{T((1-\epsilon)F + \epsilon \delta_x)-T(F)}{\epsilon} $$
+with the point mass $\delta_x$ corresponding to adding an outlier $x$
+
+## Influence Function
+
 * An estimator is *robust* if its influence function is bounded
 * The influence function for our estimators are (up to constant of proportionality and center)
     * Mean: $x$,
@@ -92,7 +99,7 @@ ggplot(data = SensDataLong,
 
 ```{r fig.width=10}
 library(gridExtra)
-interval = seq(-3,3,0.1)
+interval = seq(-3,3,0.01)
 InfluenceData = data.frame(
   interval=interval,
   mean=interval,
@@ -109,11 +116,11 @@ grid.arrange(influencePlot, sensativityPlot, ncol=2)
 
 ## Breakdown Point of an Estimator
 
-* Suppose we contaminate $m$ samples with 
-$$ \boldsymbol{x}_n^* = (x_1^*,\dots,x_m^*,x_{m+1},\dots,x_n) $$
+* Suppose we contaminate $n-m$ points in our sample
+$$ \boldsymbol{x}_n^* = (x_1,\dots,x_m,x_{m+1}^*,\dots,x_n^*) $$
 * Consider the contamination to be as very large (close to $\infty$)
-* *Breaking point:* the smallest value $m$ so that $\hat{\theta}(\boldsymbol{x}_n^*)$ is meaningless
-* *Finite sample breakdown point:* The ratio $\frac{m}{n}$
+* *Breaking point:* the smallest value $n-m$ so twidehat $\widehat{\theta}(\boldsymbol{x}_n^*)$ is meaningless
+* *Finite sample breakdown point:* The ratio $\frac{n-m}{n}$
 * *Asymptotic breakdown point:* If it converges to a finite value as $n \to \infty$
 
 ## Breakdown Point of an Estimator
@@ -123,9 +130,8 @@ $$ \boldsymbol{x}_n^* = (x_1^*,\dots,x_m^*,x_{m+1},\dots,x_n) $$
     * Asymptotic BP: $0$
 * Sample median:
     * Finite sample BP: $\operatorname{floor}\left( \frac{n − 1}{2} \right)$
-    * Asymptotic BP: $0.29$
+    * Asymptotic BP: $0.5$
 * Hodges–Lehmann estimator: 
-    * Finite sample BP: 
     * Asymptotic BP: $0.29$
 
 ## Breakdown Point of an Estimator
@@ -134,6 +140,7 @@ The median of the Walsh averages, stays with the majority.
 
 $$
 \begin{align}
+\# \text{good points} & > \# \text{bad points} \\
 \frac{m(m+1)}{2} & > \frac{n(n+1) - m(m+1)}{2} \\
 m(m+1) & > \frac{n(n+1)}{2}
 \end{align}
@@ -147,7 +154,7 @@ $$m(m+1) > \frac{n(n+1)}{2} \Leftrightarrow \frac{m(m+1)}{n(n+1)} > \frac{1}{2}$
 $x = m/n$ and $x \approx (m+1)/(n+1)$
 * then
 $$x^2 > \frac{1}{2} \Leftrightarrow x > \frac{1}{\sqrt{2}}$$
-* convert from allowed fraction of bad observations to smallest possible fraction of meaninglessness:
+* convert from fraction of good points to fraction of bad points:
 $$1-\frac{1}{\sqrt{2}} \approx 0.29$$
 * More details are [here](http://www.stat.umn.edu/geyer/5601/notes/break.pdf)
 
@@ -155,7 +162,7 @@ $$1-\frac{1}{\sqrt{2}} \approx 0.29$$
 
 * Instead of testing for normality to decide whether to use a $t$-test or the Wilcoxon test
 * It is easier to use the notion of robustness of an estimator and their associated procedures
-* There are too many ways that a distribution can deviate from normality
+* There are too many ways twidehat a distribution can deviate from normality
 * How much robustness do we need? Is $0.29$ enough or $0.5$ really necessary?
 * Sample median preferred over Hodges–Lehmann estimator? 
     * Based on breakdown point: yes

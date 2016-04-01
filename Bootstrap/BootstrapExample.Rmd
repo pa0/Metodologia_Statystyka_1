@@ -3,11 +3,15 @@ title: "Bootstrap Example"
 author: "Christof Seiler"
 date: "Stanford University, Spring 2016, STATS 205"
 output: 
-  ioslides_presentation: 
+  ioslides_presentation:
     incremental: yes
-    smaller: yes
+    smaller: no
     transition: faster
     widescreen: yes
+  beamer_presentation:
+    incremental: yes
+  slidy_presentation:
+    incremental: yes
 ---
 
 ```{r setup, include=FALSE}
