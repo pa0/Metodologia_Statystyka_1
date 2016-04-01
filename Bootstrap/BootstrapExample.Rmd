@@ -24,9 +24,9 @@ Does small dose of aspirin prevent heart attacks in healthy middle-aged men?
 
 ## Experiment
 
-A randomized double-blind study was designed to collect data.   
-The subjects were randomly assigned to the aspirin and placebo groups.   
-Doctors and subjects didn't know whether they treated or received aspirin or placebo substance.   
+* A randomized double-blind study was designed to collect data.   
+* The subjects were randomly assigned to the aspirin and placebo groups.   
+* Doctors and subjects didn't know whether they treated or received aspirin or placebo substance.   
 
 ```{r}
 labels = c("nattacks","nsubjects")
@@ -51,9 +51,9 @@ This means that in this sample aspirin-takers only have 55% as many heart attack
 
 ## Computations
 
-Is this due to chance?   
-Or can this results be reproduced in a repetition of the same experiments?   
-Let's use the bootstrap method to find out:
+* Is this due to chance?   
+* Or can this results be reproduced in a repetition of the same experiments?   
+* Let's use the bootstrap method to find out:
 
 ```{r}
 population.one = c( rep(1,data["nattacks","aspirin"]), 

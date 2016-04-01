@@ -80,7 +80,7 @@ ggplot(data = SensDataLong,
 
 * Sensitivity curve depends on sample $x_1,x_2,\dots,x_n$
 * Influence function depends on the population distribution $F$
-* It's a *functional*: a function twidehat takes another function as its argument
+* It's a *functional*: a function that takes another function as its argument
 * Denote functional as $T(F)$, e.g. median $T(F) = F^{-1}(1/2)$
 * Then using Gateaux derivatives (directional derivatives for functionals)
 $$ L_F(x) = lim_{\epsilon\to 0} \frac{T((1-\epsilon)F + \epsilon \delta_x)-T(F)}{\epsilon} $$
@@ -119,7 +119,7 @@ grid.arrange(influencePlot, sensativityPlot, ncol=2)
 * Suppose we contaminate $n-m$ points in our sample
 $$ \boldsymbol{x}_n^* = (x_1,\dots,x_m,x_{m+1}^*,\dots,x_n^*) $$
 * Consider the contamination to be as very large (close to $\infty$)
-* *Breaking point:* the smallest value $n-m$ so twidehat $\widehat{\theta}(\boldsymbol{x}_n^*)$ is meaningless
+* *Breaking point:* the smallest value $n-m$ so that $\widehat{\theta}(\boldsymbol{x}_n^*)$ is meaningless
 * *Finite sample breakdown point:* The ratio $\frac{n-m}{n}$
 * *Asymptotic breakdown point:* If it converges to a finite value as $n \to \infty$
 
@@ -150,11 +150,9 @@ $$
 
 * Obtaining finite sample BP is messy, asymptotic is easier:
 $$m(m+1) > \frac{n(n+1)}{2} \Leftrightarrow \frac{m(m+1)}{n(n+1)} > \frac{1}{2}$$
-* let
-$x = m/n$ and $x \approx (m+1)/(n+1)$
-* then
-$$x^2 > \frac{1}{2} \Leftrightarrow x > \frac{1}{\sqrt{2}}$$
-* convert from fraction of good points to fraction of bad points:
+* let $x = m/n$ and $x \approx (m+1)/(n+1)$
+* then $x^2 > \frac{1}{2} \Leftrightarrow x > \frac{1}{\sqrt{2}}$
+* convert to BP $\frac{1}{\#bad} = 1 - \frac{1}{\#good}$:
 $$1-\frac{1}{\sqrt{2}} \approx 0.29$$
 * More details are [here](http://www.stat.umn.edu/geyer/5601/notes/break.pdf)
 
@@ -162,7 +160,7 @@ $$1-\frac{1}{\sqrt{2}} \approx 0.29$$
 
 * Instead of testing for normality to decide whether to use a $t$-test or the Wilcoxon test
 * It is easier to use the notion of robustness of an estimator and their associated procedures
-* There are too many ways twidehat a distribution can deviate from normality
+* There are too many ways that a distribution can deviate from normality
 * How much robustness do we need? Is $0.29$ enough or $0.5$ really necessary?
 * Sample median preferred over Hodges–Lehmann estimator? 
     * Based on breakdown point: yes
