@@ -2,6 +2,7 @@
 title: "The Bootstrap"
 author: "Christof Seiler"
 date: "Stanford University, Spring 2016, STATS 205"
+#output: html_document
 output:
   ioslides_presentation:
     incremental: yes
@@ -14,19 +15,70 @@ output:
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
+fastMode = TRUE
 ```
 
-## Some Definitions
+## Background
+
+* Computer more powerful, resampling procedure more widespread
+* The bootstrap is a general tool to measure error in an estimate or significance in of a test hypothesis
+* Context for sampling distribution of a statistic
+* A bootstrap sample is a sample from the original sample taken (with replacement)
+* This works when the histogram of the sample is representative of the population
+* In other words, the histogram of the sample resembles the pdf of the random variable
+* Drawing sample from the histogram is then the same as drawing samples from the population
+* Thus yields an estimate of the sampling distribution of the statistic
+
+## Definitions
 
 * We observe data $\mathcal{X}_n = \{ x_1, x_2, \dots, x_n \}$ in some space $\mathcal{X}$ 
-
-* The data are drawn identically and independently from a unknown distribution $F$
-
+* The data are drawn independently and identically from a unknown distribution $F$
 * The bootstrap supposes that the empirical distribution $F_n$ is a good description of the unknown distribution $F$
-
 * This way one can draw as many samples from $F_n$ to compute sample variability of all kinds of \textit{statistics} $T(x_1, x_2, \dots, x_n)$, e.g. the sample mean, sample median
-
 * This is done via choosing $n$ samples with replacement (you can pick the same sample multiple times) 
+
+## Definitions
+
+* We have samples $x_1,x_2,\dots,x_n$ from  $F$
+* We want to compute functionals $T$ of $F$, e.g. 
+    * the mean: $T(F) = \int x \, dF(x) = \int x \, f(x) \, dx$
+    * the median: $T(F) = F^{-1}(1/2)$ 
+    * largest eigenvalue of the covariance matrix of $F$
+* Parameter of interest $\theta$ is functional of unkown distribution $F$
+* We observe the empirical distribution $F_n$
+$$ F_n(A) = \frac{1}{n} \sum_{i=1}^n I_A(x_i) $$
+* In other words, the distribution that puts mass $1/n$ at each $x_i$.
+
+## Definitions
+
+* Denote bootstrap sample from $F_n$ (sample with replacement) as 
+$$\boldsymbol{x}^* = \left[ x_1^*,x_2^*,\dots,x_n^* \right]^T$$
+* Estimate based on original observations $\widehat{\theta}^* = T(\boldsymbol{x}^*)$
+* Denote a collection of $B$ bootstrap samples as $\widehat{\theta}^*_1,\widehat{\theta}^*_2,\dots,\widehat{\theta}^*_B$
+
+## Percentile Confidence Intervals
+
+* Order bootstrap samples: $\widehat{\theta}^*_{(1)} \le \widehat{\theta}^*_{(2)} \le \dots \le \widehat{\theta}^*_{(B)}$
+* Let $m = \alpha/2 \times B$ then
+* we get the approximate $(1-\alpha) \times 100\%$ confidence interval 
+$$\left( \widehat{\theta}^*_{(m)},\widehat{\theta}^*_{(B-m)} \right)$$
+
+## Paired Problem
+
+* Consider the paired problem with $d_1,\dots,d_n$ are the differences
+* In the bootstrap sample $d_i$ and $-d_i$ each have probability $1/2$ of being selected
+* This forms an estimate of the null distribution of the test statistic $T$
+* Then
+$$\text{p-value } = \frac{\#\{T_i^*\ge T\}}{B}$$
+
+## One Sample Location Problem
+
+* Test the hypothesis:
+$$ H_0: \theta = \theta_0 \text{ versus } \theta > \theta_0 $$
+* We have to make sure that the null hypothesis is true, so we take our bootstrap samples from
+$$x_1-\widehat{\theta}+\theta_0,\dots,x_n-\widehat{\theta}+\theta_0$$
+* Then
+$$\text{p-value } = \frac{\#\{\widehat{\theta}_i^*\ge \widehat{\theta}\}}{B}$$
 
 ## Why It Works
 
@@ -44,8 +96,7 @@ and outliers (hint at enumeration example)
 
 ## Complete Enumerations
 
-There are $n^n$ different bootstrap samples but some of them have the same subset: 
-
+* There are $n^n$ different bootstrap samples but some of them have the same subset: 
 $$
 \begin{align}
 \mathcal{X}_n^1 & = \{ x_1^1, x_2^1, \dots, x_n^1 \} \\
@@ -54,26 +105,19 @@ $$
 \end{align}
 $$
 
-We group the same bootstrap sample and assign a weight $k_i$ describing the number of times it occurs, so $k_1 + \dots + k_n = n$
-
-Denote the space of compositions of $n$ into at most $n$ parts as
-
+* We group the same bootstrap sample and assign a weight $k_i$ describing the number of times it occurs, so $k_1 + \dots + k_n = n$
+* Denote the space of compositions of $n$ into at most $n$ parts as
 $$\mathcal{C}_n = \{ \boldsymbol{k} = (k_1,\dots,k_n), k_1+\dots+k_n=n, k_i \ge 0, k_i \text{ integer} \}$$
-
-and the size of this space is $|\mathcal{C}_n| = \binom{2n-1 }{n-1}$ 
+* and the size of this space is $|\mathcal{C}_n| = \binom{2n-1 }{n-1}$ 
 
 ## Complete Enumerations
 
-A uniform distribution on $\mathcal{X}_n^n$ induces a multinomial distribution on $\mathcal{C}_n$ with probability mass function $m_n(k)$ 
-
-To form an exhaustive bootstrap distribution of statistic $T(\mathcal{X}_n)$, we need to compute  
-
-* $|\mathcal{C}_n| = \binom{2n-1 }{n-1}$ statistics and 
-* associated weights $m_n(k)$
-
-The shift from $\mathcal{X}_n^n$ to $\mathcal{C}_n$ gives substantial savings 
-
-For an example with $n = 15$, the number of enumerations reduce from  
+* A uniform distribution on $\mathcal{X}_n^n$ induces a multinomial distribution on $\mathcal{C}_n$ with probability mass function $m_n(k)$ 
+* To form an exhaustive bootstrap distribution of statistic $T(\mathcal{X}_n)$, we need to compute  
+    * $|\mathcal{C}_n| = \binom{2n-1}{n-1}$ statistics and 
+    * associated weights $m_n(k)$
+* The shift from $\mathcal{X}_n^n$ to $\mathcal{C}_n$ gives substantial savings 
+* For an example with $n = 15$, the number of enumerations reduce from  
 $15^{15} \approx 4.38 \times 10^{17}$ to $\binom{29}{14} \approx 7.7 \times 10^7$
 
 ## Geometry of the Bootstrap
@@ -104,9 +148,9 @@ theta.hat = cor(law$LSAT,law$GPA)
 theta.hat
 ```
 
-How accurate is this estiamte. Let's look at the boostraop samples:
+How accurate is this estiamte. Let's look at the bootstrap samples:
 
-```{r eval=FALSE}
+```{r echo=TRUE}
 draw.bootstrap.sample = function() {
   n = dim(law)[1]
   ind = sample(n,replace = TRUE)
@@ -115,48 +159,38 @@ draw.bootstrap.sample = function() {
 nrep = 40000
 thetastar = replicate(nrep,draw.bootstrap.sample())
 thetastar2 = data.frame(cor=thetastar)
-ggplot(thetastar2, aes(cor)) + 
-  geom_histogram(binwidth = 0.01) +
-  geom_vline(xintercept = theta.hat,colour = "red",size = 1.5)
 ```
 
 ## Law Schools Example
-
-```{r echo=FALSE}
-draw.bootstrap.sample = function() {
-  n = dim(law)[1]
-  ind = sample(n,replace = TRUE)
-  return(cor(law[ind,]$LSAT,law[ind,]$GPA))
-}
-nrep = 40000
-thetastar = replicate(nrep,draw.bootstrap.sample())
-thetastar2 = data.frame(cor=thetastar)
-ggplot(thetastar2, aes(cor)) + 
-  geom_histogram(binwidth = 0.01) +
-  geom_vline(xintercept = theta.hat,colour = "red",size = 1.5)
-```
-
-## Law Schools Example
-
-Take a close look and you will see the corner around 0.9. This corner doens't show up when using Monte Carlo simulations. If you take out observation 1 this corner disappears.
 
 ```{r}
+ggplot(thetastar2, aes(cor)) + 
+  geom_histogram(binwidth = 0.01) +
+  geom_vline(xintercept = theta.hat,colour = "red",size = 1.5)
+```
+
+## Law Schools Example
+
+Look at all posible enumerations $\binom{2n-1}{n-1}$:
+
+```{r echo=TRUE}
 library(partitions)
-n = 15; allCompositions = compositions(n,n)
-nCompositions = dim(allCompositions)[2]; nCompositions
-```
-
-Check if we get the same nunber as in theory.
-
-```{r}
 library(assertthat)
-nCompositionsTheory = choose(2*n-1,n-1); assert_that(nCompositions == nCompositionsTheory)
+if(!file.exists("enumData.Rdata")) {
+  n = 15
+  allCompositions = compositions(n,n)
+  nCompositions = dim(allCompositions)[2]
+  nCompositions
+  # Check if we get the same value as in theory.
+  nCompositionsTheory = choose(2*n-1,n-1); 
+  if(!assert_that(nCompositions == nCompositionsTheory))
+    print("there is a problem with the number of compositions")
+}
 ```
+
+## Law Schools Example
 
 Now evaluate the correlation coefficient for each enumeration. 
-
-## Law Schools Example
-
 ```{r echo=FALSE, warning=FALSE, eval=TRUE}
 if(!file.exists("enumData.Rdata")) {
   library(parallel)
@@ -177,17 +211,22 @@ if(!file.exists("enumData.Rdata")) {
   load("enumData.Rdata")
 }
 enumDataFrame = data.frame(enumData)
-ggplot(enumDataFrame, aes(cor, weight = weight)) + 
-  geom_histogram(binwidth = 0.003) +
-  geom_vline(xintercept = theta.hat,colour = "red",size = 1.5)
+if(!fastMode) {
+  ggplot(enumDataFrame, aes(cor, weight = weight)) + 
+    geom_histogram(binwidth = 0.003) +
+    geom_vline(xintercept = theta.hat,colour = "red",size = 1.5)
+}
 ```
 
 ## Law Schools Example
 
-* Use the library parallel to speedup computations. 
-```{r eval=FALSE}
+Use the library parallel to speedup computations. 
+
+```{r eval=FALSE,echo=TRUE}
   library(parallel)
   enumData = mclapply(1:nCompositions, function(i) { ... }, mc.cores = 4 )
 ```
-* On a laptop with 4 cores this takes about 5 hours to compute.
-* We can speedup enumeration by changing only two coordinates at the time using Gray codes.
+
+On a laptop with 4 cores this takes about 5 hours to compute.  
+
+We can speedup enumeration by changing only two coordinates at the time using Gray codes.
