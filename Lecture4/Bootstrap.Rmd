@@ -56,6 +56,22 @@ $$\boldsymbol{x}^* = \left[ x_1^*,x_2^*,\dots,x_n^* \right]^T$$
 * Estimate based on original observations $\widehat{\theta}^* = T(\boldsymbol{x}^*)$
 * Denote a collection of $B$ bootstrap samples as $\widehat{\theta}^*_1,\widehat{\theta}^*_2,\dots,\widehat{\theta}^*_B$
 
+## Plug-in Principle and Bootstrap Standard Error
+
+Efron & Tibshirani 4-6
+
+## Bias Estimates and Jacknife
+
+Efron & Tibshirani 10-11
+
+## Bootstrap confidence intervals
+
+Efron & Tibshirani 12-14
+
+## Bootstrap Aymptotics
+
+van der Vaart 23
+
 ## Percentile Confidence Intervals
 
 * Order bootstrap samples: $\widehat{\theta}^*_{(1)} \le \widehat{\theta}^*_{(2)} \le \dots \le \widehat{\theta}^*_{(B)}$
