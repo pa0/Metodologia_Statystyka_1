@@ -82,13 +82,6 @@ $$x_1-\widehat{\theta}+\theta_0,\dots,x_n-\widehat{\theta}+\theta_0$$
 * Then
 $$\text{p-value } = \frac{\#\{\widehat{\theta}_i^*\ge \widehat{\theta}\}}{B}$$
 
-## When It Fails
-
-* Maximum order statistic of a random sample from a $U(0,\theta)$ distribution
-* $\theta$ is unkown and we want to estimate using the boostrap
-
-[link to stackexchange](!http://stats.stackexchange.com/questions/9664/what-are-examples-where-a-naive-bootstrap-fails)
-
 ## Two Sources of Errors
 
 * Sampling variability:   
