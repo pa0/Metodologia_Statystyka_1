@@ -18,6 +18,16 @@ knitr::opts_chunk$set(echo = FALSE)
 fastMode = TRUE
 ```
 
+## What Happened So Far
+
+* We have samples $x_1,x_2,\dots,x_n$ from distribution $F$
+* We want to compute functionals $\theta = T(F)$, e.g. 
+    * the mean: $T(F) = \int x \, dF(x) = \int x \, f(x) \, dx$
+    * the median: $T(F) = F^{-1}(1/2)$ 
+* Parameter of interest $\theta$ is functional of unkown $F$
+* We tested $\theta = \theta_0$ from a sample $\boldsymbol{x} = \{ x_1,x_2,\dots,x_n \}$ by comparing the observed statistic $T(\boldsymbol{x})$ to the null distribution of test statistic
+* We estimated $\theta$ and confidence intervals from a sample and quantified robustness to outliers
+
 ## Background
 
 * Computer more powerful, resampling procedure more widespread
@@ -29,7 +39,7 @@ fastMode = TRUE
 * Drawing sample from the histogram is then the same as drawing samples from the population
 * Thus yields an estimate of the sampling distribution of the statistic
 
-## Definitions
+## Plug-in Principle
 
 * We observe data $\mathcal{X}_n = \{ x_1, x_2, \dots, x_n \}$ in some space $\mathcal{X}$ 
 * The data are drawn independently and identically from a unknown distribution $F$
@@ -37,40 +47,15 @@ fastMode = TRUE
 * This way one can draw as many samples from $F_n$ to compute sample variability of all kinds of \textit{statistics} $T(x_1, x_2, \dots, x_n)$, e.g. the sample mean, sample median
 * This is done via choosing $n$ samples with replacement (you can pick the same sample multiple times) 
 
-## Definitions
+## Plug-in Principle
 
-* We have samples $x_1,x_2,\dots,x_n$ from  $F$
-* We want to compute functionals $T$ of $F$, e.g. 
-    * the mean: $T(F) = \int x \, dF(x) = \int x \, f(x) \, dx$
-    * the median: $T(F) = F^{-1}(1/2)$ 
-    * largest eigenvalue of the covariance matrix of $F$
-* Parameter of interest $\theta$ is functional of unkown distribution $F$
 * We observe the empirical distribution $F_n$
-$$ F_n(A) = \frac{1}{n} \sum_{i=1}^n I_A(x_i) $$
-* In other words, the distribution that puts mass $1/n$ at each $x_i$.
-
-## Definitions
-
+$$ F_n(t) = \frac{1}{n} \sum_{i=1}^n I(x_i \le t) $$
+* In other words, the distribution that puts mass $1/n$ at each $x_i$
 * Denote bootstrap sample from $F_n$ (sample with replacement) as 
 $$\boldsymbol{x}^* = \left[ x_1^*,x_2^*,\dots,x_n^* \right]^T$$
 * Estimate based on original observations $\widehat{\theta}^* = T(\boldsymbol{x}^*)$
 * Denote a collection of $B$ bootstrap samples as $\widehat{\theta}^*_1,\widehat{\theta}^*_2,\dots,\widehat{\theta}^*_B$
-
-## Plug-in Principle and Bootstrap Standard Error
-
-Efron & Tibshirani 4-6
-
-## Bias Estimates and Jacknife
-
-Efron & Tibshirani 10-11
-
-## Bootstrap confidence intervals
-
-Efron & Tibshirani 12-14
-
-## Bootstrap Aymptotics
-
-van der Vaart 23
 
 ## Percentile Confidence Intervals
 
@@ -96,19 +81,25 @@ $$x_1-\widehat{\theta}+\theta_0,\dots,x_n-\widehat{\theta}+\theta_0$$
 * Then
 $$\text{p-value } = \frac{\#\{\widehat{\theta}_i^*\ge \widehat{\theta}\}}{B}$$
 
-## Why It Works
+## Two Sources of Errors
 
-van der Vaart, Chapter 23
+* Sampling variability:   
+We only have a sample of size $n$ and not the entire population
+* Bootstrap resampling variability:   
+We only use $B$ bootstrap samples rather than an infinite number
 
-[link to website](https://normaldeviate.wordpress.com/2013/01/19/bootstrapping-and-subsampling-part-i/)
+----
+
+```{r, out.height = 600, fig.retina = NULL, echo=FALSE}
+knitr::include_graphics("BootstrapError.JPG")
+```
 
 ## When It Fails
 
-Susan's trees
+* Maximum order statistic of a random sample from a $U(0,\theta)$ distribution
+* $\theta$ is unkown and we want to estimate using the boostrap
 
-and outliers (hint at enumeration example)
-
-[link to website](https://normaldeviate.wordpress.com/2013/01/19/bootstrapping-and-subsampling-part-i/)
+[link to stackexchange](!http://stats.stackexchange.com/questions/9664/what-are-examples-where-a-naive-bootstrap-fails)
 
 ## Complete Enumerations
 
@@ -120,11 +111,18 @@ $$
 \mathcal{X}_n^{n^n} & = \{ x_1^{n^n}, x_2^{n^n}, \dots, x_n^{n^n} \}
 \end{align}
 $$
-
 * We group the same bootstrap sample and assign a weight $k_i$ describing the number of times it occurs, so $k_1 + \dots + k_n = n$
 * Denote the space of compositions of $n$ into at most $n$ parts as
 $$\mathcal{C}_n = \{ \boldsymbol{k} = (k_1,\dots,k_n), k_1+\dots+k_n=n, k_i \ge 0, k_i \text{ integer} \}$$
 * and the size of this space is $|\mathcal{C}_n| = \binom{2n-1 }{n-1}$ 
+
+## Complete Enumerations
+
+* Why $|\mathcal{C}_n| = \binom{2n-1 }{n-1}$? 
+* Place $n-1$ bars inbetween $n$ balls, example $n=3$, for example
+* ``` 0|0|0 ``` corresponse to $x_1,x_2,x_3$
+* ``` 000|| ``` corresponse to $x_1,x_1,x_1$
+* The space of compositions can be represented as a simplex (bonus material later)
 
 ## Complete Enumerations
 
@@ -135,10 +133,6 @@ $$\mathcal{C}_n = \{ \boldsymbol{k} = (k_1,\dots,k_n), k_1+\dots+k_n=n, k_i \ge 
 * The shift from $\mathcal{X}_n^n$ to $\mathcal{C}_n$ gives substantial savings 
 * For an example with $n = 15$, the number of enumerations reduce from  
 $15^{15} \approx 4.38 \times 10^{17}$ to $\binom{29}{14} \approx 7.7 \times 10^7$
-
-## Geometry of the Bootstrap
-
-Efron & Tibshirani Chapter 20
 
 ## Law Schools Example
 
@@ -164,7 +158,7 @@ theta.hat = cor(law$LSAT,law$GPA)
 theta.hat
 ```
 
-How accurate is this estiamte. Let's look at the bootstrap samples:
+How accurate is this estimate. Let's look at the bootstrap samples:
 
 ```{r echo=TRUE}
 draw.bootstrap.sample = function() {
@@ -187,29 +181,21 @@ ggplot(thetastar2, aes(cor)) +
 
 ## Law Schools Example
 
-Look at all posible enumerations $\binom{2n-1}{n-1}$:
-
-```{r echo=TRUE}
+Evaluate the correlation coefficient for all $\binom{2n-1}{n-1}$ enumeration. 
+```{r echo=FALSE, warning=FALSE, eval=TRUE}
 library(partitions)
 library(assertthat)
+library(parallel)
+
 if(!file.exists("enumData.Rdata")) {
   n = 15
   allCompositions = compositions(n,n)
   nCompositions = dim(allCompositions)[2]
   nCompositions
-  # Check if we get the same value as in theory.
+  # Check if we get the same value as in theory
   nCompositionsTheory = choose(2*n-1,n-1); 
   if(!assert_that(nCompositions == nCompositionsTheory))
     print("there is a problem with the number of compositions")
-}
-```
-
-## Law Schools Example
-
-Now evaluate the correlation coefficient for each enumeration. 
-```{r echo=FALSE, warning=FALSE, eval=TRUE}
-if(!file.exists("enumData.Rdata")) {
-  library(parallel)
   ptm = proc.time()
   enumData = mclapply(1:nCompositions, function(i) {
     ind = allCompositions[,i]
@@ -246,3 +232,21 @@ Use the library parallel to speedup computations.
 On a laptop with 4 cores this takes about 5 hours to compute.  
 
 We can speedup enumeration by changing only two coordinates at the time using Gray codes.
+
+## Geometry of the Bootstrap
+
+Efron & Tibshirani Chapter 20
+
+## Theoretical Underpinnings of the Bootstrap
+
+For background on statistical functionals and asymptotics of the boostrap:
+
+* Lehmann 1999   
+*Elements of Large-Sample Theory*   
+Chapter 6   
+[Stanford library link](!https://searchworks.stanford.edu/view/4010023)
+* Van der Vaart 1998   
+*Asymptotic statistics*   
+Chapter 23   
+[Stanford library link](!https://searchworks.stanford.edu/view/4109687)
+
