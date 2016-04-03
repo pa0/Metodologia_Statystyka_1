@@ -94,12 +94,9 @@ We only use $B$ bootstrap samples rather than an infinite number
 knitr::include_graphics("BootstrapError.JPG")
 ```
 
-## When It Fails
+## Two Sources of Errors
 
-* Maximum order statistic of a random sample from a $U(0,\theta)$ distribution
-* $\theta$ is unkown and we want to estimate using the boostrap
-
-[link to stackexchange](!http://stats.stackexchange.com/questions/9664/what-are-examples-where-a-naive-bootstrap-fails)
+Chapter 19 from Efron & Tibshirani.
 
 ## Complete Enumerations
 
@@ -133,6 +130,7 @@ $$\mathcal{C}_n = \{ \boldsymbol{k} = (k_1,\dots,k_n), k_1+\dots+k_n=n, k_i \ge 
 * The shift from $\mathcal{X}_n^n$ to $\mathcal{C}_n$ gives substantial savings 
 * For an example with $n = 15$, the number of enumerations reduce from  
 $15^{15} \approx 4.38 \times 10^{17}$ to $\binom{29}{14} \approx 7.7 \times 10^7$
+
 
 ## Law Schools Example
 
@@ -233,6 +231,13 @@ On a laptop with 4 cores this takes about 5 hours to compute.
 
 We can speedup enumeration by changing only two coordinates at the time using Gray codes.
 
+## When It Fails
+
+* Maximum order statistic of a random sample from a $U(0,\theta)$ distribution
+* $\theta$ is unkown and we want to estimate using the boostrap
+
+[link to stackexchange](!http://stats.stackexchange.com/questions/9664/what-are-examples-where-a-naive-bootstrap-fails)
+
 ## Geometry of the Bootstrap
 
 Efron & Tibshirani Chapter 20
@@ -246,7 +251,6 @@ For background on statistical functionals and asymptotics of the boostrap:
 Chapter 6   
 [Stanford library link](!https://searchworks.stanford.edu/view/4010023)
 * Van der Vaart 1998   
-*Asymptotic statistics*   
+*Asymptotic Statistics*   
 Chapter 23   
 [Stanford library link](!https://searchworks.stanford.edu/view/4109687)
-
