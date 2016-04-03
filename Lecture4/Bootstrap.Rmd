@@ -20,12 +20,11 @@ fastMode = TRUE
 
 ## What Happened So Far
 
-* We have samples $x_1,x_2,\dots,x_n$ from distribution $F$
 * We want to compute functionals $\theta = T(F)$, e.g. 
     * the mean: $T(F) = \int x \, dF(x) = \int x \, f(x) \, dx$
     * the median: $T(F) = F^{-1}(1/2)$ 
 * Parameter of interest $\theta$ is functional of unkown $F$
-* We tested $\theta = \theta_0$ from a sample $\boldsymbol{x} = \{ x_1,x_2,\dots,x_n \}$ by comparing the observed statistic $s(\boldsymbol{x})$ to the null distribution of test statistics
+* We tested $\theta = \theta_0$ from a sample $\boldsymbol{x} = \{ x_1,x_2,\dots,x_n \}$ drawn from distribution $F$ by comparing the observed statistic $s(\boldsymbol{x})$ to the null distribution of test statistics
 * We estimated $\theta$ and confidence intervals from a sample and quantified robustness to outliers
 
 ## Background
@@ -71,7 +70,7 @@ $$\left( \widehat{\theta}^*_{(m)},\widehat{\theta}^*_{(B-m)} \right)$$
 * In the bootstrap sample $d_i$ and $-d_i$ each have probability $1/2$ of being selected
 * This forms an estimate of the null distribution of the test statistic $T$
 * Then
-$$\text{p-value } = \frac{\#\{T_i^*\ge T\}}{B}$$
+$$\text{p-value } = \frac{\#\{T_i^*\ge T_0\}}{B}$$
 
 ## One Sample Location Problem
 
@@ -123,7 +122,14 @@ $$\mathcal{C}_n = \{ \boldsymbol{k} = (k_1,\dots,k_n), k_1+\dots+k_n=n, k_i \ge 
 
 ## Complete Enumerations
 
-* Mulinomial distribution a vector  $(k_1,k_2,...k_n)$, with each of the $n$ categories being equally likely, $p_i=\frac{1}{n}$
+* Multinomial distribution a vector  $(k_1,k_2,...k_n)$, with each of the $n$ categories being equally likely, $p_i=\frac{1}{n}$
+    * rolling a dice with $k_1,k_2,\dots,k_n$ sides $n$ times
+    * all sides have fixed and equal probability of sucess
+    * counts how many times each side comes up successfully
+    * multinomial distribution gives the probability of any particular combination of numbers of successes
+
+## Complete Enumerations
+
 * To form an exhaustive bootstrap distribution of statistic $T(\mathcal{X}_n)$, we need to compute  
     * $|\mathcal{C}_n| = \binom{2n-1}{n-1}$ statistics and 
     * associated weights $m_n(k)$
@@ -170,6 +176,7 @@ thetastar2 = data.frame(cor=thetastar)
 
 ## Law Schools Example
 
+Evaluate the correlation coefficient using a Monte Carlo simulation.
 ```{r}
 ggplot(thetastar2, aes(cor)) + 
   geom_histogram(binwidth = 0.01) +
@@ -190,7 +197,7 @@ if(!file.exists("enumData.Rdata")) {
   nCompositions = dim(allCompositions)[2]
   nCompositions
   # Check if we get the same value as in theory
-  nCompositionsTheory = choose(2*n-1,n-1); 
+  nCompositionsTheory = choose(2*n-1,n-1) 
   if(!assert_that(nCompositions == nCompositionsTheory))
     print("there is a problem with the number of compositions")
   ptm = proc.time()
@@ -285,15 +292,32 @@ we get the corresponding gray code ``0101``
 
 ## Exploring the Tails of a Bootstrap Distribution
 
-Using Markov chain Monte Carlo to inject a small amount of randomness (something between Monte Carlo and complete enumerations)
-
-Deriving large deviations estimate such as $P( T \ge t)$ 
-
-TODO: Briefly introduce MCMC 
+* Using Markov chain Monte Carlo (MCMC) to inject a small amount of randomness (something between Monte Carlo and complete enumerations)
+* We will use MCMC to deriving large deviations estimate such as $P( T \ge t)$ 
+* To see how it works, we let's have a look at the Metropolis algorithm
+* Consider a the finite sample space
+* Think of it as a state space, where each outcome corresponse to a state
+* MH can sample from a unormalized probability $\pi(x)$ on finite state space $\mathcal{X}$
+* define a markov transition matrix $J(x,y)$ that defines nonzero probilities of moving from $x$ to $y$ and $y$ to $x$
+* MH changes $J(x,y)$ to a new matrix $K(x,y)$ that corresponds to a normalized version of $\pi(x)$
 
 ## Exploring the Tails of a Bootstrap Distribution
 
-We construct a Markov chain: 
+* Recipe: 
+    * Pick initial point in sample space $x_0$ 
+    * Pick potential next move from $J(x,y)$
+
+* A nice introduction to MCMC is [here](https://math.uchicago.edu/~shmuel/Network-course-readings/MCMCRev.pdf).
+
+## Exploring the Tails of a Bootstrap Distribution
+
+why does this work?
+
+eigenvector and eigenvalue of $K$ tend to $\pi$ and $1$ if it converges (if $\pi$ has a stationary distribution)
+
+## Exploring the Tails of a Bootstrap Distribution
+
+We construct a Markov chain to sample from $P( T \ge t)$: 
 
 * picks $I$ between $1 \le I \le n$ uniformly, and
 * replace $x_I^*$ with new value from origin data $\{ x_1, x_2, \dots, x_n \}$
