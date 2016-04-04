@@ -15,7 +15,7 @@ output:
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
-fastMode = TRUE
+fastMode = FALSE
 ```
 
 ## What Happened So Far
@@ -182,7 +182,7 @@ thetastar2 = data.frame(cor=thetastar)
 
 ## Law Schools Example
 
-Evaluate the correlation coefficient using a Monte Carlo simulation.
+Evaluate the correlation coefficient using a Monte Carlo simulation:
 ```{r}
 ggplot(thetastar2, aes(cor)) + 
   geom_histogram(binwidth = 0.01) +
@@ -191,30 +191,43 @@ ggplot(thetastar2, aes(cor)) +
 
 ## Law Schools Example
 
-Evaluate the correlation coefficient for all $\binom{2n-1}{n-1}$ enumeration. 
-```{r echo=FALSE, warning=FALSE, eval=TRUE}
-library(partitions)
-library(assertthat)
-library(parallel)
-
-if(!file.exists("enumData.Rdata")) {
+Create matrix of all $\binom{2n-1}{n-1}$ enumeration:
+```{r echo=TRUE, eval=TRUE}
+  library(partitions)
   n = 15
   allCompositions = compositions(n,n)
+  allCompositions[,1:10]
+```
+
+## Law Schools Example
+
+Check number of compositions:
+```{r echo=TRUE, eval=TRUE}
+  library(assertthat)
   nCompositions = dim(allCompositions)[2]
   nCompositions
   # Check if we get the same value as in theory
   nCompositionsTheory = choose(2*n-1,n-1) 
-  if(!assert_that(nCompositions == nCompositionsTheory))
+  if(!assert_that(nCompositions == nCompositionsTheory)) {
     print("there is a problem with the number of compositions")
+  } else {
+    print("the number of compositions is correct")
+  }
+```
+
+## Law Schools Example
+
+Evaluate the correlation coefficient for all $\binom{2n-1}{n-1}$ bootstrap samples.
+```{r echo=TRUE, eval=TRUE}
+library(parallel)
+if(!file.exists("enumData.Rdata")) {
   ptm = proc.time()
   enumData = mclapply(1:nCompositions, function(i) {
     ind = allCompositions[,i]
     law.list = lapply(1:n,function(j) matrix(rep(law[j,],ind[j]),ncol = 2 ,byrow = TRUE))
     newLaw = do.call(rbind, law.list)
     c(cor(unlist(newLaw[,1]),unlist(newLaw[,2])),dmultinom(ind,prob = rep(1,n)))
-    },
-    mc.cores = 4
-    )
+    }, mc.cores = 4)
   proc.time() - ptm
   enumData = t(simplify2array(enumData))
   colnames(enumData) = c("cor","weight")
@@ -222,6 +235,12 @@ if(!file.exists("enumData.Rdata")) {
 } else {
   load("enumData.Rdata")
 }
+```
+
+## Law Schools Example
+
+Same plot as before but now with all bootstrap samples:
+```{r echo=FALSE, warning=FALSE, eval=TRUE}
 enumDataFrame = data.frame(enumData)
 if(!fastMode) {
   ggplot(enumDataFrame, aes(cor, weight = weight)) + 
