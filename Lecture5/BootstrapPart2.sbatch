@@ -23,6 +23,6 @@
 
 module load R/3.2.0
 
-echo '<!-- rmarkdown v1 -->' > SimulationsEnumerationsV1.Rmd
-cat SimulationsEnumerations.Rmd >> SimulationsEnumerationsV1.Rmd
-Rscript -e "library(knitr); knit2html('SimulationsEnumerationsV1.Rmd')"
+echo '<!-- rmarkdown v1 -->' > BootstrapPart2V1.Rmd
+cat BootstrapPart2.Rmd >> BootstrapPart2V1.Rmd
+Rscript -e "library(knitr); knit2html('BootstrapPart2V1.Rmd')"

@@ -15,10 +15,6 @@ Lecture1/Slides.synctex.gz
 
 Lecture1/Slides.pdf
 
-Lecture1/Slides.html
-
-Lecture1/Slides.html
-
 Lecture1/Slides.pdf
 
 Lecture1/Slides.md
@@ -28,10 +24,6 @@ Lecture1/Slides.md
 Lecture1/Figs/
 
 Lecture1/.Rhistory
-
-Lecture1/Day1-Bootstrap-Example.html
-
-Lecture1/Day1-Examples.html
 
 Lecture2/Slides.pdf
 
@@ -45,8 +37,6 @@ Lecture4/Slides.synctex.gz
 
 Lecture4/Slides.pdf
 
-Lecture2/Enumerations.html
-
 Lecture2/Slides-mpgraph.mp
 
 Lecture2/Slides.top
@@ -56,8 +46,6 @@ Lecture2/Slides.tui
 Lecture2/.Rhistory
 
 Lecture2/enumData.Rdata
-
-Homework1/Homeworks1.html
 
 *.gz
 
@@ -79,61 +67,21 @@ Lecture3/log-permutations.txt
 
 Lecture3/.Rhistory
 
-LectureR/R.html
-
 LectureR/R.pdf
-
-LectureR/RBasics.html
 
 LectureR/RBasics.pdf
 
-Lecture1/LogisticsIntroduction.html
-
 Lecture1/LogisticsIntroduction.pdf
-
-Lecture3/NeuroimagingV1.html
 
 Lecture3/maxCluster.seed1234.Rdata
 
-Lecture3/Neuroimaging.html
-
-HomeworkR/HomeworksR.html
-
-Lecture1/Examples.html
-
-Lecture1/RBasics.html
-
-Homework1/HomeworksR.html
-
-Homework2/Homeworks1.html
-
 maxCluster.seed1234.Rdata
 
-NeuroimagingV1.html
-
-Homework2/Homeworks2.html
-
-Lecture2/SimulationsEnumerations.html
-
 Lecture2/SimulationsEnumerations.pdf
-
-Lecture3/TwoSampleProblems.html
-
-Lecture3/NeuroimagingPresentation.html
-
-Homework1/Homework1.html
-
-Homework1/Solutions1.html
-
-Homework2/Homework2.html
-
-Lecture1/LogisticsIntroductionPart2.html
 
 SimulationsEnumerations/.Rhistory
 
 SimulationsEnumerations/enumData.Rdata
-
-SimulationsEnumerations/SimulationsEnumerations.html
 
 TwoSampleProblems/.Rhistory
 
@@ -145,13 +93,7 @@ TwoSampleProblems/CC200_ROI_labels.csv
 
 TwoSampleProblems/log-permutations.txt
 
-TwoSampleProblems/Neuroimaging.html
-
-TwoSampleProblems/NeuroimagingPresentation.html
-
 TwoSampleProblems/Phenotypic_V1_0b_preprocessed1.csv
-
-TwoSampleProblems/TwoSampleProblems.html
 
 PermutationTests/.Rhistory
 
@@ -161,30 +103,14 @@ PermutationTests/CC200_ROI_labels.csv
 
 PermutationTests/brainMatrix.Rdata
 
-PermutationTests/Neuroimaging.html
-
 PermutationTests/log-permutations.txt
 
 PermutationTests/Phenotypic_V1_0b_preprocessed1.csv
 
-PermutationTests/NeuroimagingPresentation.html
-
-Lecture2/BasicStatistics.html
-
 Lecture2/BasicStatistics.pdf
 
-SignedRankWilcoxon/SignedRankWilcoxonExample.html
-
-Bootstrap/BootstrapExample.html
-
-PermutationTests/PermutationTests.html
-
-Lecture2/SignTestSignedRankWilcoxon.html
-
-Lecture3/Robustness.html
-
-Lecture4/Bootstrap.html
-
-SimulationsEnumerations/SimulationsEnumerationsHomework.html
-
 Lecture4/enumData.Rdata
+
+*.html
+
+Lecture5/enumData.Rdata
