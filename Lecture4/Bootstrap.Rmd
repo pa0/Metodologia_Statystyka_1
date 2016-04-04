@@ -24,24 +24,19 @@ fastMode = FALSE
     * the median: $T(F) = F^{-1}(1/2)$ 
 * Parameter of interest $\theta$ is functional of unkown $F$
 * We tested $\theta = \theta_0$ from a sample $\boldsymbol{x} = \{ x_1,x_2,\dots,x_n \}$ drawn from distribution $F$ by comparing the observed statistic $s(\boldsymbol{x})$ to the null distribution of test statistics
-* We estimated $\theta$ and confidence intervals from a sample and quantified robustness to outliers
-
-----
-
-```{r, out.height = 600, fig.retina = NULL, echo=FALSE}
-knitr::include_graphics("Bootstrap.JPG")
-```
+* We introduced estimators $\widehat{\theta}$ and confidence intervals from a sample 
+* We quantified the robustness of estimators $\widehat{\theta}$ to outliers
 
 ## Background
 
 * Computer more powerful, resampling procedure more widespread
-* The bootstrap is a general tool to measure error in an estimate or significance in of a test hypothesis
+* The bootstrap is another tool to measure error in an estimate or significance of a hypothesis
 * Context for sampling distribution of a statistic
 * A bootstrap sample is a sample from the original sample taken (with replacement)
 * This works when the histogram of the sample is representative of the population
 * In other words, the histogram of the sample resembles the pdf of the random variable
 * Drawing sample from the histogram is then the same as drawing samples from the population
-* Thus yields an estimate of the sampling distribution of the statistic $s(\boldsymbol{x})$
+* Thus yields an estimate of the sampling distribution of the statistic $s(\boldsymbol{x})$ or estimate $\widehat{\theta}$
 
 ## Plug-in Principle
 
@@ -49,7 +44,7 @@ knitr::include_graphics("Bootstrap.JPG")
 * The bootstrap supposes that the empirical distribution $F_n$ is a good description of the unknown distribution $F$
 * The *plugin-in estimate* of a parameter $\theta = T(F)$ is define as
 $$\widehat{\theta} = T(F_n)$$
-* This way one can draw as many samples from $F_n$ to compute sample variability of all kinds of \textit{statistics} $s(x_1, x_2, \dots, x_n)$, e.g. the sample mean, sample median
+* This way one can draw as many samples from $F_n$ to compute sample variability of all kinds of \textit{statistics} $s(x^*)$, e.g. the sample mean, sample median
 * This is done via choosing $n$ samples with replacement (you can pick the same sample multiple times) 
 
 ## Plug-in Principle
@@ -62,6 +57,12 @@ $$\boldsymbol{x}^* = \left[ x_1^*,x_2^*,\dots,x_n^* \right]^T$$
 * Estimate based on original observations $\widehat{\theta}^* = s(\boldsymbol{x}^*)$
 * Denote a collection of $B$ bootstrap samples as $\widehat{\theta}^*_1,\widehat{\theta}^*_2,\dots,\widehat{\theta}^*_B$
 
+----
+
+```{r, out.height = 600, fig.retina = NULL, echo=FALSE}
+knitr::include_graphics("Bootstrap.JPG")
+```
+
 ## Percentile Confidence Intervals
 
 * Order bootstrap samples: $\widehat{\theta}^*_{(1)} \le \widehat{\theta}^*_{(2)} \le \dots \le \widehat{\theta}^*_{(B)}$
@@ -72,7 +73,7 @@ $$\left( \widehat{\theta}^*_{(m)},\widehat{\theta}^*_{(B-m)} \right)$$
 ## Paired Problem
 
 * Consider the paired problem with $d_1,\dots,d_n$ are the differences
-* In the bootstrap sample $d_i$ and $-d_i$ each have probability $1/2$ of being selected
+* In the bootstrap sample $d_i$ and $-d_i$ each have probability $1/2n$ of being selected
 * This forms an estimate of the null distribution of the test statistic $T$
 * Then
 $$\text{p-value } = \frac{\#\{T_i^*\ge T_0\}}{B}$$
@@ -112,7 +113,9 @@ $$\operatorname{cv}(\widehat{\operatorname{se}}_B) = \left( \frac{1}{2n} + \frac
 
 * There are $n^n$ different bootstrap samples
 $$\boldsymbol{x}^{*1},\boldsymbol{x}^{*2},\dots,\boldsymbol{x}^{*n^n}$$
-but some of them have the same subset
+but some of them have the same subset, for example, for $n =3$
+    * $x_1,x_1,x_2$$ same as
+    * $$x_2,x_1,x_1
 * We group the same bootstrap sample and assign a weight $k_i$ describing the number of times it occurs, so $k_1 + \dots + k_n = n$
 * Denote the space of compositions of $n$ into at most $n$ parts as
 $$\mathcal{C}_n = \{ \boldsymbol{k} = (k_1,\dots,k_n), k_1+\dots+k_n=n, k_i \ge 0, k_i \text{ integer} \}$$
@@ -120,14 +123,14 @@ $$\mathcal{C}_n = \{ \boldsymbol{k} = (k_1,\dots,k_n), k_1+\dots+k_n=n, k_i \ge 
 ## Complete Enumerations
 
 * The size of this space is $|\mathcal{C}_n| = \binom{2n-1 }{n-1}$ 
-* Place $n-1$ bars inbetween $n$ balls, example $n=3$, for example
-* ``` 0|0|0 ``` corresponse to $x_1,x_2,x_3$
-* ``` 000|| ``` corresponse to $x_1,x_1,x_1$
-* there will be $2n-1$ positions from which to choose the $n-1$ bars positions
+* Place $n-1$ bars inbetween $n$ balls, for example, for $n=3$
+    * ``` 0|0|0 ``` corresponse to $x_1,x_2,x_3$
+    * ``` 000|| ``` corresponse to $x_1,x_1,x_1$
+* There will be $2n-1$ positions from which to choose the $n-1$ bars positions
 
 ## Complete Enumerations
 
-* Multinomial distribution a vector  $(k_1,k_2,...k_n)$, with each of the $n$ categories being equally likely, $p_i=\frac{1}{n}$
+* Corresponse to a multinomial distribution $m_n(k)$ of the vector $(k_1,k_2,...k_n)$ with each of the $n$ categories are equally likely $p_i=\frac{1}{n}$
     * rolling a dice with $k_1,k_2,\dots,k_n$ sides $n$ times
     * all sides have fixed and equal probability of sucess
     * counts how many times each side comes up successfully
@@ -135,10 +138,10 @@ $$\mathcal{C}_n = \{ \boldsymbol{k} = (k_1,\dots,k_n), k_1+\dots+k_n=n, k_i \ge 
 
 ## Complete Enumerations
 
-* To form an exhaustive bootstrap distribution of statistic $T(\mathcal{X}_n)$, we need to compute  
+* To form an exhaustive bootstrap distribution of statistic $T(\mathcal{C}_n)$, we need to compute  
     * $|\mathcal{C}_n| = \binom{2n-1}{n-1}$ statistics and 
-    * associated weights $m_n(k)$
-* The shift from $\mathcal{X}_n^n$ to $\mathcal{C}_n$ gives substantial savings 
+    * associated weights by evaluating $m_n(k)$
+* The shift from the space of resampled observations to $\mathcal{C}_n$ gives substantial savings 
 * For an example with $n = 15$, the number of enumerations reduce from  
 $15^{15} \approx 4.38 \times 10^{17}$ to $\binom{29}{14} \approx 7.7 \times 10^7$
 
@@ -176,13 +179,13 @@ draw.bootstrap.sample = function() {
 }
 nrep = 40000
 thetastar = replicate(nrep,draw.bootstrap.sample())
-thetastar2 = data.frame(cor=thetastar)
 ```
 
 ## Law Schools Example
 
 Evaluate the correlation coefficient using a Monte Carlo simulation:
 ```{r}
+thetastar2 = data.frame(cor=thetastar)
 ggplot(thetastar2, aes(cor)) + 
   geom_histogram(binwidth = 0.01) +
   geom_vline(xintercept = theta.hat,colour = "red",size = 1.5)
@@ -266,13 +269,19 @@ On a laptop with 4 cores this takes about 5 hours to compute.
 
 We can speedup enumeration by changing only two coordinates at the time using Gray codes.
 
+* For example, if our estimate is the sample mean for $n = 3$
+    * $s(\boldsymbol{x}^{*1}) = 1/n ( x_1 + x_2 + x_3)$
+    * $s(\boldsymbol{x}^{*2}) = 1/n ( x_1 + x_2 + x_2)$
+* To calculate $s(\boldsymbol{x}^{*1})$ from $s(\boldsymbol{x}^{*2})$
+    * $s(\boldsymbol{x}^{*1}) - x_3/n + x_2/n$
+
 ## Speedup for Enumerations using Gray Codes
 
 * Gray codes are ordered lists of binary $n$-tuples 
 * They are ordered so that success values only differ in a single space
-* For instance, for $n = 3$, the list of is:
+* For instance, for $n = 3$, the list of is:   
 `` 000, 001, 011, 010, 110, 111, 101, 100 ``
-* Notice, a computer scientist might intuitively want to write this:
+* Notice, a computer scientist might intuitively want to write this:   
 `` 000, 001, 010, 011, 100, 101, 110, 111 ``
 * This is wrong
 * A better than trying to reorder the wrong elements, we can define recursive algorithm to generate a valid list
@@ -282,10 +291,10 @@ We can speedup enumeration by changing only two coordinates at the time using Gr
 * Start with list for $n = 1$, which is just 0 and 1
 * Get two list by putting a zero before each entry and a one before each entry in $L_n$ 
 * To get $L_{n+1}$ concatenate the two list by first followed by second in reversed order 
-* So from 0 and 1, we get two lists
+* So from 0 and 1, we get two lists   
 `` 00, 01 ``
 `` 10, 11 ``
-* and concatenate
+* and concatenate   
 `` 00, 01, 11, 10 ``
 * repeat...
 
@@ -354,8 +363,8 @@ with one left eigenvector $\pi$ and one eigenvalue $\lambda = 1$
 We construct a Markov chain to sample from $P( T \ge t)$: 
 
 * Pick $I$ between $1 \le I \le n$ uniformly, and
-* Replace $x_I^*$ with new value from origin data $\{ x_1, x_2, \dots, x_n \}$
-* If new sample vector $\tilde{x}$ satisfies $T(\tilde{x}) \ge t$ then change is made 
+* Replace $\boldsymbol{x}_I^*$ with new value from origin data $\{ x_1, x_2, \dots, x_n \}$
+* If new sample vector $\tilde{\boldsymbol{x}}$ satisfies $T(\tilde{\bolsymbol{x}}) \ge t$ then change is made 
 * otherwise the chain stays at new sample vector 
 
 ## Exploring the Tails of a Bootstrap Distribution
@@ -364,7 +373,7 @@ Then to estimate $P( T \ge t)$:
 
 * Choose a grid $t_0 < t_1 < \dots < t_l < t$ with $t_0$ chosen in the middle of distribution of $T$ and $t_i$ chosen so that $P(T \ge t_{i+1} | T \ge t_i)$ is not too small 
 * Estimate $P( T \ge t_0 )$ by ordinary Monte Carlo 
-* Estimate $P( T \ge t_1 | T \ge t_0)$ by running the Markov chain on $\{ \tilde{x}: T(\tilde{x}^*) \ge t_0) \}$ and count what proportion of values satisfy the constrain $T \ge t_1$
+* Estimate $P( T \ge t_1 | T \ge t_0)$ by running the Markov chain on $\{ \tilde{\boldsymbol{x}}: T(\tilde{\boldsymbol{x}}^*) \ge t_0) \}$ and count what proportion of values satisfy the constrain $T \ge t_1$
 * Multiplying these estimates gives the conditional probability:
 $$ \widehat{P}(T \ge t) = \widehat{P}(T \ge t_0) \widehat{P}(T \ge t_1 | T \ge t_0) \cdots \widehat{P}(T \ge t | T \ge t_l) $$
 and joint probability $\widehat{P}(T \ge t) = \widehat{P}(T \ge t_0,T \ge t_1, \dots, T \ge t_l, T \ge t)$
