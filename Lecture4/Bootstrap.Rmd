@@ -27,6 +27,12 @@ fastMode = TRUE
 * We tested $\theta = \theta_0$ from a sample $\boldsymbol{x} = \{ x_1,x_2,\dots,x_n \}$ drawn from distribution $F$ by comparing the observed statistic $s(\boldsymbol{x})$ to the null distribution of test statistics
 * We estimated $\theta$ and confidence intervals from a sample and quantified robustness to outliers
 
+----
+
+```{r, out.height = 600, fig.retina = NULL, echo=FALSE}
+knitr::include_graphics("Bootstrap.JPG")
+```
+
 ## Background
 
 * Computer more powerful, resampling procedure more widespread
@@ -239,56 +245,41 @@ We can speedup enumeration by changing only two coordinates at the time using Gr
 
 ## Speedup for Enumerations using Gray Codes
 
-Gray codes are ordered lists of binary $n$-tuples. 
-
-They are ordered so that success values only differ in a single space.
-
-For instance, for $n = 3$, the list of is:
-
+* Gray codes are ordered lists of binary $n$-tuples 
+* They are ordered so that success values only differ in a single space
+* For instance, for $n = 3$, the list of is:
 `` 000, 001, 011, 010, 110, 111, 101, 100 ``
-
-Notice, a computer scientist might intuitively want to write this:
-
+* Notice, a computer scientist might intuitively want to write this:
 `` 000, 001, 010, 011, 100, 101, 110, 111 ``
-
-This is wrong. 
-
-A better than trying to reorder the wrong elements, we can define recursive algorithm to generate a valid list.
+* This is wrong
+* A better than trying to reorder the wrong elements, we can define recursive algorithm to generate a valid list
 
 ## Speedup for Enumerations using Gray Codes
 
 * Start with list for $n = 1$, which is just 0 and 1
 * Get two list by putting a zero before each entry and a one before each entry in $L_n$ 
 * To get $L_{n+1}$ concatenate the two list by first followed by second in reversed order 
-
-So from 0 and 1, we get two lists
-
+* So from 0 and 1, we get two lists
 `` 00, 01 ``
-
 `` 10, 11 ``
-
-and concatenate
-
+* and concatenate
 `` 00, 01, 11, 10 ``
-
-repeat...
+* repeat...
 
 ## Speedup for Enumerations using Gray Codes
 
-We can also just add one successor at the time. 
-
-As we saw before, a computer scientist would encode integer an $m = \sum \epsilon_i 2^i$ using the binary sequence 
+* We can also just add one successor at the time. 
+* As we saw before, a computer scientist would encode integer an $m = \sum \epsilon_i 2^i$ using the binary sequence 
 $$ \dots \, \epsilon_3 \, \epsilon_2 \, \epsilon_1 \, \epsilon_0 $$
-
-This can be mapped to gray codes 
+* This can be mapped to gray codes 
 $$ \dots \, e_3 \, e_2 \, e_1 \, e_0 $$
 using $e_i = \epsilon_i + \epsilon_{i+1} \, (\bmod 2) \text{ for } (i = 0,1,2,\dots)$ 
 
 ## Speedup for Enumerations using Gray Codes
 
-When $n = 4$, the integer 6 in binary code is ``0110`` and using the mapping 
+* When $n = 4$, the integer 6 in binary code is ``0110`` and using the mapping 
 $$ e_0 = 0 + 1 = 1, e_1 = 1 + 1 = 0, e_2 = 1 + 0 = 1, e_3 = 0 + 0 = 0 $$
-we get the corresponding gray code ``0101``
+* we get the corresponding gray code ``0101``
 
 ## Exploring the Tails of a Bootstrap Distribution
 
@@ -297,31 +288,51 @@ we get the corresponding gray code ``0101``
 * To see how it works, we let's have a look at the Metropolis algorithm
 * Consider a the finite sample space
 * Think of it as a state space, where each outcome corresponse to a state
-* MH can sample from a unormalized probability $\pi(x)$ on finite state space $\mathcal{X}$
-* define a markov transition matrix $J(x,y)$ that defines nonzero probilities of moving from $x$ to $y$ and $y$ to $x$
-* MH changes $J(x,y)$ to a new matrix $K(x,y)$ that corresponds to a normalized version of $\pi(x)$
+* Metropolis can sample from a unormalized probability $\pi(x)$ on finite state space $\mathcal{X}$
+* Define a markov transition matrix $J(x,y)$ that defines nonzero probilities of moving from $x$ to $y$ and $y$ to $x$
+* Metropolis changes $J(x,y)$ to a new matrix $K(x,y)$ that corresponds to a possibly unnormalized version of $\pi(x)$
 
 ## Exploring the Tails of a Bootstrap Distribution
 
 * Recipe: 
     * Pick initial point in sample space $x_0$ 
-    * Pick potential next move from $J(x,y)$
-
-* A nice introduction to MCMC is [here](https://math.uchicago.edu/~shmuel/Network-course-readings/MCMCRev.pdf).
+    * Pick potential next move from $J(x,y)$ with $J(x,y) > 0$ and $J(x,y) < 0$
+    * Evaluate $$A(x,y) = \frac{\pi(y)J(y,x)}{\pi(x)J(x,y)}$$
+    * If $A(x,y) \ge 1$ move to $y$
+    * If $A(x,y) < 1$ flip a coing with this success probability 
+        * and move $x$ if success
+        * otherwise stay $x$
 
 ## Exploring the Tails of a Bootstrap Distribution
 
-why does this work?
+* We can write this in matrix form
+$$
+K(x,y) = 
+\begin{cases}
+J(x, y) & \text{if } x \ne y, A(x, y) ≥ 1 \\
+J(x, y)A(x, y) & \text{if } x \ne y, A(x, y) < 1 \\
+J(x, y) + \sum_{z:A(x,z)<1} J(x, z)(1 − A(x, z)) & \text{if } x = y
+\end{cases}
+$$
+* Then we can use the Fundamental Theorem of Markov Chains to prove that 
+$$ K^n(x, y) \to \pi(y) \text{ for each } x,y \in \mathcal{X} $$
+* or in other words, the matrix $K^n = K^1 K^2 \cdots K^n$ converges to a matrix 
+$$\pi K = \lambda \pi = \pi K = \pi$$
+with one left eigenvector $\pi$ and one eigenvalue $\lambda = 1$
 
-eigenvector and eigenvalue of $K$ tend to $\pi$ and $1$ if it converges (if $\pi$ has a stationary distribution)
+## Exploring the Tails of a Bootstrap Distribution
+
+* Once converged, we can just reapplying the matrix $K^n$ to our current point in state space $x_t$
+* To obtain new samples $x_{t+1}$ from the distribution $\pi$
+* A nice introduction to MCMC is [here](https://math.uchicago.edu/~shmuel/Network-course-readings/MCMCRev.pdf).
 
 ## Exploring the Tails of a Bootstrap Distribution
 
 We construct a Markov chain to sample from $P( T \ge t)$: 
 
-* picks $I$ between $1 \le I \le n$ uniformly, and
-* replace $x_I^*$ with new value from origin data $\{ x_1, x_2, \dots, x_n \}$
-* if new sample vector $\tilde{x}$ satisfies $T(\tilde{x}) \ge t$ then change is made 
+* Pick $I$ between $1 \le I \le n$ uniformly, and
+* Replace $x_I^*$ with new value from origin data $\{ x_1, x_2, \dots, x_n \}$
+* If new sample vector $\tilde{x}$ satisfies $T(\tilde{x}) \ge t$ then change is made 
 * otherwise the chain stays at new sample vector 
 
 ## Exploring the Tails of a Bootstrap Distribution
@@ -331,9 +342,9 @@ Then to estimate $P( T \ge t)$:
 * Choose a grid $t_0 < t_1 < \dots < t_l < t$ with $t_0$ chosen in the middle of distribution of $T$ and $t_i$ chosen so that $P(T \ge t_{i+1} | T \ge t_i)$ is not too small 
 * Estimate $P( T \ge t_0 )$ by ordinary Monte Carlo 
 * Estimate $P( T \ge t_1 | T \ge t_0)$ by running the Markov chain on $\{ \tilde{x}: T(\tilde{x}^*) \ge t_0) \}$ and count what proportion of values satisfy the constrain $T \ge t_1$
-
-Continue and multiplying these estimates gives:
+* Multiplying these estimates gives the conditional probability:
 $$ \widehat{P}(T \ge t) = \widehat{P}(T \ge t_0) \widehat{P}(T \ge t_1 | T \ge t_0) \cdots \widehat{P}(T \ge t | T \ge t_l) $$
+and joint probability $\widehat{P}(T \ge t) = \widehat{P}(T \ge t_0,T \ge t_1, \dots, T \ge t_l, T \ge t)$
 
 ## Theoretical Underpinnings of the Bootstrap
 
