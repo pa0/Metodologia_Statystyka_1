@@ -2,7 +2,6 @@
 title: "The Bootstrap"
 author: "Christof Seiler"
 date: "Stanford University, Spring 2016, STATS 205"
-#output: html_document
 output:
   ioslides_presentation:
     incremental: yes
@@ -191,28 +190,33 @@ ggplot(thetastar2, aes(cor)) +
 
 ## Law Schools Example
 
-Create matrix of all $\binom{2n-1}{n-1}$ enumeration:
+Create matrix of all $\binom{2n-1}{n-1}$ enumerations:
 ```{r echo=TRUE, eval=TRUE}
-  library(partitions)
-  n = 15
-  allCompositions = compositions(n,n)
-  allCompositions[,1:10]
+library(partitions)
+n = 15
+allCompositions = compositions(n,n)
+```
+
+----
+
+```{r echo=TRUE, eval=TRUE}
+allCompositions[,1:10]
 ```
 
 ## Law Schools Example
 
 Check number of compositions:
 ```{r echo=TRUE, eval=TRUE}
-  library(assertthat)
-  nCompositions = dim(allCompositions)[2]
-  nCompositions
-  # Check if we get the same value as in theory
-  nCompositionsTheory = choose(2*n-1,n-1) 
-  if(!assert_that(nCompositions == nCompositionsTheory)) {
-    print("there is a problem with the number of compositions")
-  } else {
-    print("the number of compositions is correct")
-  }
+library(assertthat)
+nCompositions = dim(allCompositions)[2]
+nCompositions
+# Check if we get the same value as in theory
+nCompositionsTheory = choose(2*n-1,n-1) 
+if(!assert_that(nCompositions == nCompositionsTheory)) {
+  print("there is a problem with the number of compositions")
+} else {
+  print("the number of compositions is correct")
+}
 ```
 
 ## Law Schools Example
@@ -254,8 +258,8 @@ if(!fastMode) {
 Use the library parallel to speedup computations. 
 
 ```{r eval=FALSE,echo=TRUE}
-  library(parallel)
-  enumData = mclapply(1:nCompositions, function(i) { ... }, mc.cores = 4 )
+library(parallel)
+enumData = mclapply(1:nCompositions, function(i) { ... }, mc.cores = 4 )
 ```
 
 On a laptop with 4 cores this takes about 5 hours to compute.  
