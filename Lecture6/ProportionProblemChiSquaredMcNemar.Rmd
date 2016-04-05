@@ -1,5 +1,5 @@
 ---
-title: "Proportion Problems, Chi-Squared Test, and McNemar’s Test"
+title: "Proportion Problem, Chi-Squared Test, and McNemar’s Test"
 author: "Christof Seiler"
 date: "Stanford University, Spring 2016, STATS 205"
 output:
@@ -16,7 +16,7 @@ output:
 knitr::opts_chunk$set(echo = FALSE)
 ```
 
-## Previous Lecture
+## Previous Lectures
 
 * One-sample tests: 
     * Sign test
@@ -32,3 +32,60 @@ knitr::opts_chunk$set(echo = FALSE)
 * One- and two-sample proportion problems
 * $\chi^2$ Tests
 * McNemar’s Test
+
+## One- and Two-Sample Proportion Problems
+
+* Discrete variables
+* The random variable $X$ consists of categories
+* For now, we focus on binary categries failure (0) and success (1)
+* So, we say $X \sim \operatorname{Bern}(p)$ is a random variable distributed according to the Bernoulli distribution 
+    * with success probabiliy $p$ and 
+    * failure probabililty $1-p$
+* We know that $\operatorname{E}(X) = p$ and $\operatorname{Var} = p(1-p)$
+
+## One-Sample Problems
+
+* Statistical problems can be 
+    * estimating $p$,
+    * forming confidence intervals,
+    * and testing hypothesis 
+    $$H_0: p = p_0 \text{ versus } H_A: p \ne p_0$$
+* Let $X_1,\dots,X_n \sim \operatorname{Bern}(p)$ and $S$ be the total number of successes
+* Then $S \sim B(p,n)$ follows a binomial distribution
+* If $p$ is unkown but we assume that our observation come from a Bernoulli distribution, then
+* We can estimate $p$ as $\widehat{p} = \frac{S}{n}$
+
+## One-Sample Problems
+
+```{r echo=TRUE}
+n = 10; p = 1/2; nsim = 10000; obsv = rbinom(nsim, size = n, prob = p)
+```
+
+```{r}
+library(ggplot2)
+data = data.frame(bern = table(obsv))
+colnames(data) = c("S","Count")
+ggplot(data, aes(x = S, y = Count)) + 
+  geom_bar(stat="identity")
+```
+
+## One-Sample Problems
+
+```{r echo=TRUE}
+n = 100; p = 1/2; nsim = 1000000; obsv = rbinom(nsim, size = n, prob = p)
+```
+
+```{r}
+data = data.frame(bern = table(obsv))
+colnames(data) = c("S","Count")
+labels = floor(seq(0,n,length.out=25))
+ggplot(data, aes(x = S, y = Count)) + 
+  geom_bar(stat="identity") +
+  scale_x_discrete(breaks=labels, labels=as.character(labels))
+```
+
+## One-Sample Problems
+
+* As $n \to \infty$ while $p$ is fixed:
+    * The de Moivre–Laplace theorem (a special case of the central limit theorem) says $S$ approach a normal distribution
+    * Easy confidence interval (just evaluate cdf of the normal)

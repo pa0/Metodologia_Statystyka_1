@@ -263,6 +263,43 @@ We construct a Markov chain to sample from $P( T \ge t)$:
 
 ## Exploring the Tails of a Bootstrap Distribution
 
+```{r}
+set.seed(1)
+draws = rnorm(100)
+dens = density(draws)
+qstart = 0
+qend = 5
+x = min(which(dens$x >= qstart))
+y = max(which(dens$x <  qend))
+dd = with(dens,data.frame(x,y))
+qplot(x,y,data=dd,geom="line")+
+  geom_ribbon(data=subset(dd,x>qstart & x<qend),aes(ymax=y),ymin=0,fill="red",colour=NA,alpha=0.2)
+```
+
+## Exploring the Tails of a Bootstrap Distribution
+
+```{r}
+qstart = 1
+x = min(which(dens$x >= qstart))
+y = max(which(dens$x <  qend))
+dd = with(dens,data.frame(x,y))
+qplot(x,y,data=dd,geom="line")+
+  geom_ribbon(data=subset(dd,x>qstart & x<qend),aes(ymax=y),ymin=0,fill="red",colour=NA,alpha=0.2)
+```
+
+## Exploring the Tails of a Bootstrap Distribution
+
+```{r}
+qstart = 2
+x = min(which(dens$x >= qstart))
+y = max(which(dens$x <  qend))
+dd = with(dens,data.frame(x,y))
+qplot(x,y,data=dd,geom="line")+
+  geom_ribbon(data=subset(dd,x>qstart & x<qend),aes(ymax=y),ymin=0,fill="red",colour=NA,alpha=0.2)
+```
+
+## Exploring the Tails of a Bootstrap Distribution
+
 Then to estimate $P( T \ge t)$:
 
 * Choose a grid $t_0 < t_1 < \dots < t_l < t$ with $t_0$ chosen in the middle of distribution of $T$ and $t_i$ chosen so that $P(T \ge t_{i+1} | T \ge t_i)$ is not too small 
