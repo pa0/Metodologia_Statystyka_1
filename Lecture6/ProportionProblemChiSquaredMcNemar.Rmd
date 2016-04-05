@@ -33,7 +33,7 @@ knitr::opts_chunk$set(echo = FALSE)
 * $\chi^2$ Tests
 * McNemar’s Test
 
-## One- and Two-Sample Proportion Problems
+## Proportion Problems
 
 * Discrete variables
 * The random variable $X$ consists of categories
@@ -43,7 +43,7 @@ knitr::opts_chunk$set(echo = FALSE)
     * failure probabililty $1-p$
 * We know that $\operatorname{E}(X) = p$ and $\operatorname{Var} = p(1-p)$
 
-## One-Sample Problems
+## Proportion Problems
 
 * Statistical problems can be 
     * estimating $p$,
@@ -55,7 +55,7 @@ knitr::opts_chunk$set(echo = FALSE)
 * If $p$ is unkown but we assume that our observation come from a Bernoulli distribution, then
 * We can estimate $p$ as $\widehat{p} = \frac{S}{n}$
 
-## One-Sample Problems
+## Proportion Problems
 
 ```{r echo=TRUE}
 n = 10; p = 1/2; nsim = 10000; obsv = rbinom(nsim, size = n, prob = p)
@@ -63,29 +63,107 @@ n = 10; p = 1/2; nsim = 10000; obsv = rbinom(nsim, size = n, prob = p)
 
 ```{r}
 library(ggplot2)
-data = data.frame(bern = table(obsv))
-colnames(data) = c("S","Count")
-ggplot(data, aes(x = S, y = Count)) + 
+df = data.frame(bern = table(obsv))
+colnames(df) = c("S","Count")
+ggplot(df, aes(x = S, y = Count)) + 
   geom_bar(stat="identity")
 ```
 
-## One-Sample Problems
+## Proportion Problems
+
+```{r}
+df <- data.frame(y = obsv)
+ggplot(df, aes(sample = y)) + stat_qq() + ggtitle("Normal Q–Q Plot")
+```
+
+## Proportion Problems
 
 ```{r echo=TRUE}
 n = 100; p = 1/2; nsim = 1000000; obsv = rbinom(nsim, size = n, prob = p)
 ```
 
 ```{r}
-data = data.frame(bern = table(obsv))
-colnames(data) = c("S","Count")
+df = data.frame(bern = table(obsv))
+colnames(df) = c("S","Count")
 labels = floor(seq(0,n,length.out=25))
-ggplot(data, aes(x = S, y = Count)) + 
+ggplot(df, aes(x = S, y = Count)) + 
   geom_bar(stat="identity") +
   scale_x_discrete(breaks=labels, labels=as.character(labels))
 ```
 
-## One-Sample Problems
+## Proportion Problems
+
+```{r}
+df <- data.frame(y = obsv)
+ggplot(df, aes(sample = y)) + stat_qq() + ggtitle("Normal Q–Q Plot")
+```
+
+## Proportion Problems
 
 * As $n \to \infty$ while $p$ is fixed:
     * The de Moivre–Laplace theorem (a special case of the central limit theorem) says $S$ approach a normal distribution
     * Easy confidence interval (just evaluate cdf of the normal)
+
+## Example: Squeaky Hip Replacements
+
+143 subjects with ceramic hip replacements
+
+Ten report that their hip replacements squeaked
+```{r echo=TRUE}
+phat = 10/143
+zcv = qnorm(0.975)
+phat+c(-1,1)*zcv*sqrt(phat*(1-phat)/143)
+```
+
+We estimate between roughly 3 and 11% of patients who receive ceramic hip replacements will report squeaky replacements.
+
+## Hypothesis Testing
+
+* Test statistic is $z^2$ with
+$$z = \frac{\widehat{p}-p_0}{\sqrt{p_0(1-p_0)/n}} \sim N(0,1)$$
+* We are interested how large the observed proportion deviates this measured in terms of $|z|$
+* Squared normal is distributed as $\chi^2$ distribution
+
+## Example: Left-Handed Professional Ball Players
+
+* Theory:  
+    * Professional baseball players have different proportion of left handed player than left-handed people in genral population.
+    * From previous study, we know that general public is has a proportion of $p = 0.15$.
+* Hypothesis testing:
+    * $H_0: p = 0 \text{ versus } H_A: p \ne 0.15$
+
+## Example: Left-Handed Professional Ball Players
+
+```{r warning=FALSE,echo=TRUE,message=FALSE}
+library(Rfit)
+head(baseball)
+```
+
+## Example: Left-Handed Professional Ball Players
+
+```{r echo=TRUE}
+ind = with(baseball,throw=='L')
+n = length(ind)
+phat = sum(ind)/n
+phat
+p0 = 0.15
+z = (phat-p0)/(sqrt(p0*(1-p0)/n))
+pvalue = 1-pchisq(z^2,df=1)
+pvalue
+```
+
+## Why Not Use Exact Binomial Test?
+
+* Since we know that $S$ follows a binomial distribution, why shouldn't we use it?
+* Turns out that the binomial test is conservative
+
+## $\chi^2$ Test
+
+* Extension from two categories to multiple caterogries
+* Consider discrete random variable $X$ with $1,2,\dots,c$ categories
+* Let $p(j) = P(X = j)$ define the probabiliy mass function
+* We wish to test:
+$$H_0: p(j) = p_0(j), j = 1,\dots,c$$
+$$H_A: p(j) \ne p_0(j), \text{ for some } j$$
+
+
