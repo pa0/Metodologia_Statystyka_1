@@ -1,5 +1,5 @@
 ---
-title: "Proportion Problem, Chi-Squared Test, and McNemar’s Test"
+title: "Proportion Problem and Chi-Squared Tests"
 author: "Christof Seiler"
 date: "Stanford University, Spring 2016, STATS 205"
 output:
@@ -29,9 +29,8 @@ knitr::opts_chunk$set(echo = FALSE)
 
 ## Today
 
-* One- and two-sample proportion problems
+* Proportion problems
 * $\chi^2$ Tests
-* McNemar’s Test
 
 ## Proportion Problems
 
@@ -130,7 +129,7 @@ $$z = \frac{\widehat{p}-p_0}{\sqrt{p_0(1-p_0)/n}} \sim N(0,1)$$
     * Professional baseball players have different proportion of left handed player than left-handed people in genral population.
     * From previous study, we know that general public is has a proportion of $p = 0.15$.
 * Hypothesis testing:
-    * $H_0: p = 0 \text{ versus } H_A: p \ne 0.15$
+    * $H_0: p = 0.15 \text{ versus } H_A: p \ne 0.15$
 
 ## Example: Left-Handed Professional Ball Players
 
@@ -158,7 +157,9 @@ pvalue
 * Compare to $t$-test, we also have to estimate the variance
 * Tests for discrete observations: No parameter estimation neither in finite sample or asymptotic case
 * Think of nonparametric statistics as either:
-    * discrete observations, so we can enumerate everyting (artificially by ranking, or observations are measured that way)
+    * discrete observations, thus we can enumerate everything
+        * artificially by transforming continuous observations into ranks
+        * observations are just measured on a discrete scale
     * ininite amount of parameters (inference of functions, we'll see that later in the course)
 
 ## Why Not Use Finite Sample Binomial Test?
@@ -187,7 +188,7 @@ pvalue = 2*p^n; pvalue
 * Problem is that the null hypethsis can never be true below our standard $\alpha = 0.05$
 * So in this case, $\alpha$ has no meaning
 
-## $\chi^2$ Test
+## Discrete Random Variable
 
 * Extension from two categories to multiple caterogries
 * Consider discrete random variable $X$ with $1,2,\dots,c$ categories
@@ -196,7 +197,7 @@ pvalue = 2*p^n; pvalue
 $$H_0: p(j) = p_0(j), j = 1,\dots,c$$
 $$H_A: p(j) \ne p_0(j), \text{ for some } j$$
 
-## $\chi^2$ Test
+## Discrete Random Variable
 
 * Let $O_j = \#\{ X_i = j \}$
 * Observed frequencies are constrained $\sum_{j=1}^c O_j = n$ 
@@ -204,7 +205,7 @@ $$H_A: p(j) \ne p_0(j), \text{ for some } j$$
 * The expected frequency for category $j$ is $\operatorname{E}_j = \operatorname{E}_{H_0}(O_j)$
 * Two cases for $H_0$
 
-## $\chi^2$ Test
+## Discrete Random Variable
 
 * Case 1: 
     * All $p_0(j)$ are specified
@@ -213,7 +214,7 @@ $$H_A: p(j) \ne p_0(j), \text{ for some } j$$
     $$\chi^2 = \sum_{j=1}^c \frac{(O_j-E_j)^2}{E_j}$$
 * Hypothesis $H_0$ is rejected in favor of $H_A$ for large values of $\chi^2$
 
-## $\chi^2$ Test Example {.build}
+## Discrete Random Variable Example {.build}
 
 * Roll a dice $n = 370$ times  
 * Observe frequencies
@@ -228,7 +229,7 @@ E = rep(n*p0,6)
 Chi2_0 = sum((O-E)^2/E); Chi2_0
 ```
 
-## $\chi^2$ Test Example
+## Discrete Random Variable Example
 
 Assymptotically equal to $\chi^2$ with $c-1$ degress of freedom
 
@@ -236,13 +237,57 @@ Assymptotically equal to $\chi^2$ with $c-1$ degress of freedom
 pvalue = 1-pchisq(Chi2_0,df=6-1); pvalue
 ```
 
-## $\chi^2$ Test
+## Discrete Random Variable
 
 * Case 2: 
     * Only form of pmf is known
-    * So we get $E_j = np_0(j)$
-    * Test stastitics is
+    * Have to estimate $p$
+    * Same test stastitics but now with estimate $\widehat{p}$
     $$\chi^2 = \sum_{j=1}^c \frac{(O_j-E_j)^2}{E_j}$$
 * Hypothesis $H_0$ is rejected in favor of $H_A$ for large values of $\chi^2$
 
+## Discrete Random Variable Example {.build}
 
+* Number of males in the first seven children for $n = 1334$ Swedish ministers of religion
+```{r echo=TRUE}
+males = 0:7
+ministers = c(6,57,206,362,365,256,69,13)
+n = sum(ministers); n
+df = data.frame(ministers=ministers,males=males); t(df)
+```
+* For example, 206 of these ministers had 2 sons in their first 7 children
+
+## Discrete Random Variable Example {.build}
+
+* The maximum likelihood estimator of $p$ is
+```{r echo=TRUE}
+nChildren = n*7
+nMale = sum(df$ministers*df$males)
+phat = nMale/nChildren; phat
+p0 = dbinom(males,7,phat)
+E = n*p0
+```
+
+```{r}
+df = data.frame(E=round(E,1),ministers=ministers,males=males)
+t(df)
+```
+
+## Discrete Random Variable Example {.build}
+
+```{r echo=TRUE}
+Chi2_0 = sum((df$ministers-E)^2/E)
+pvalue = 1-pchisq(Chi2_0,df=8-1-1); pvalue
+```
+
+## Several Discrete Random Variables
+
+TODO
+
+## Independence of Two Discrete Random Variables
+
+TODO
+
+## McNemar's Test
+
+TODO
