@@ -1,0 +1,34 @@
+---
+title: "Proportion Problems, Chi-Squared Test, and McNemar’s Test"
+author: "Christof Seiler"
+date: "Stanford University, Spring 2016, STATS 205"
+output:
+  ioslides_presentation:
+    incremental: yes
+    smaller: no
+    transition: faster
+    widescreen: yes
+  beamer_presentation:
+    incremental: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+## Previous Lecture
+
+* One-sample tests: 
+    * Sign test
+    * Signed-Rank Wilcoxon
+* Estimators, confidence intervals, and robustness to outliers
+* Bootstrap
+    * Error of estimators and significance for hypothesis testing
+    * Complete enumerations
+    * Tail proabilities
+
+## Today
+
+* One- and two-sample proportion problems
+* $\chi^2$ Tests
+* McNemar’s Test
