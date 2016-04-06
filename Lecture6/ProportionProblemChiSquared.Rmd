@@ -305,12 +305,23 @@ lb = p0-p7 - zcv*se; ub <- p0-p7 + zcv*se; res = c(p0-p7,lb,ub); res
 
 ## Several Discrete Random Variables
 
-TODO
+* Goal is to compare several discrete random variables, which have same range $\{ 1,2,\dots,c \}$
+* Consider hypothesis test:
+    * $H_0:$ $X_1,\dots,X_r$ have the same distribution
+    * $H_A:$ Distributions of $X_i$ and $X_j$ differ for some $i \ne j$
 
 ## Independence of Two Discrete Random Variables
 
 TODO
 
+## Goodness of Fit
+
+* All the above tests are called goodness of fit tests
+* Quantifies how well a model fits observations
+* Measures discrepancy between observed values and expected values under the model
+
 ## McNemar's Test
+
+* Different than the test mentioned so far
 
 TODO

@@ -21,9 +21,8 @@ fastMode = FALSE
 
 * Introduced bootstrap
 * Looked at couple of example applications: 
-    * percentile confidence intervals 
-    * paired problem
-    * one sample location problem
+    * confidence intervals 
+    * hypotheses testing
 * Two sources of errors:
     * sampling variability
     * bootstrap resampling variability
@@ -188,7 +187,7 @@ enumData = mclapply(1:nCompositions, function(i) { ... }, mc.cores = 4 )
 
 ## Speedup for Enumerations using Gray Codes
 
-* We can also just add one successor at the time. 
+* We can also just add one successor at the time
 * As we saw before, a computer scientist would encode an integer as $m = \sum \epsilon_i 2^i$ using the binary sequence 
 $$ \dots \, \epsilon_3 \, \epsilon_2 \, \epsilon_1 \, \epsilon_0 $$
 * This can be mapped to gray codes 
@@ -218,7 +217,7 @@ $e_3 = 1 + 0 = 1$
 * To see how it works, we let's have a look at the Metropolis algorithm
 * Consider a the finite sample space
 * Think of it as a state space, where each outcome corresponds to a state
-* Metropolis can sample from a unormalized probability $\pi(x)$ on finite state space $\mathcal{X}$
+* Metropolis can sample from an unormalized probability $\pi(x)$ on finite state space $\mathcal{X}$
 * Define a Markov transition matrix $J(x,y)$ that defines nonzero probabilities of moving from $x$ to $y$ and $y$ to $x$
 * Metropolis changes $J(x,y)$ to a new matrix $K(x,y)$ that corresponds to a possibly unnormalized version of $\pi(x)$
 
@@ -230,8 +229,8 @@ $e_3 = 1 + 0 = 1$
     * Evaluate $$A(x,y) = \frac{\pi(y)J(y,x)}{\pi(x)J(x,y)}$$
     * If $A(x,y) \ge 1$ move to $y$
     * If $A(x,y) < 1$ flip a coing with this success probability 
-        * and move $x$ if success
-        * otherwise stay $x$
+        * and move to $y$ if success
+        * otherwise stay at $x$
 
 ## Exploring the Tails of a Bootstrap Distribution
 
@@ -252,9 +251,9 @@ with one left eigenvector $\pi$ and one eigenvalue $\lambda = 1$
 
 ## Exploring the Tails of a Bootstrap Distribution
 
-* Once converged, we can just reapplying the matrix $K^n$ to our current point in state space $x_t$
-* To obtain new samples $x_{t+1}$ from the distribution $\pi$
-* A nice introduction to MCMC is [here](https://math.uchicago.edu/~shmuel/Network-course-readings/MCMCRev.pdf).
+* To sample from $\pi$, apply $J$ to the left of the current sample position $x_t$
+* This will give us the next sample $x_{t+1}$
+* A nice introduction to MCMC is [here](https://math.uchicago.edu/~shmuel/Network-course-readings/MCMCRev.pdf)
 
 ## Exploring the Tails of a Bootstrap Distribution
 
