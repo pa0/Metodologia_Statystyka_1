@@ -21,7 +21,7 @@ fastMode = FALSE
 
 * Introduced bootstrap
 * Looked at couple of example applications: 
-    * percentile Confidence Intervals 
+    * percentile confidence intervals 
     * paired problem
     * one sample location problem
 * Two sources of errors:
@@ -52,25 +52,22 @@ ggplot(law2, aes(x = LSAT, y = GPA)) +
   geom_text(aes(label = Observation),hjust = 0,vjust = 0)
 ```
 
-## Law Schools Example
+## Law Schools Example {.build}
 
-Sample correlation coefficient:
-
+* Sample correlation coefficient:
 ```{r}
 theta.hat = cor(law$LSAT,law$GPA)
 theta.hat
 ```
-
-How accurate is this estimate. Let's look at the bootstrap samples:
-
+* How accurate is this estimate. Let's look at the bootstrap samples:
 ```{r echo=TRUE}
 draw.bootstrap.sample = function() {
   n = dim(law)[1]
   ind = sample(n,replace = TRUE)
   return(cor(law[ind,]$LSAT,law[ind,]$GPA))
 }
-nrep = 40000
-thetastar = replicate(nrep,draw.bootstrap.sample())
+B = 40000
+thetastar = replicate(B,draw.bootstrap.sample())
 ```
 
 ## Law Schools Example
@@ -150,21 +147,18 @@ if(!fastMode) {
 
 ## Law Schools Example
 
-Use the library parallel to speedup computations. 
-
+Use the library parallel to speedup computations
 ```{r eval=FALSE,echo=TRUE}
 library(parallel)
 enumData = mclapply(1:nCompositions, function(i) { ... }, mc.cores = 4 )
 ```
 
-On a laptop with 4 cores this takes about 5 hours to compute.  
-
-We can speedup enumeration by changing only two coordinates at the time using Gray codes.
-
+* On a laptop with 4 cores this takes about 5 hours to compute
+* We can speedup enumeration by changing only one coordinates at the time using Gray codes
 * For example, if our estimate is the sample mean for $n = 3$
     * $s(\boldsymbol{x}^{*1}) = ( x_1 + x_2 + x_3)/3$
     * $s(\boldsymbol{x}^{*2}) = ( x_1 + x_2 + x_2)/3$
-* To calculate $s(\boldsymbol{x}^{*1})$ from $s(\boldsymbol{x}^{*2})$
+* To calculate $s(\boldsymbol{x}^{*2})$ from $s(\boldsymbol{x}^{*1})$
     * $s(\boldsymbol{x}^{*1}) - x_3/3 + x_2/3$
 
 ## Speedup for Enumerations using Gray Codes
@@ -180,12 +174,12 @@ We can speedup enumeration by changing only two coordinates at the time using Gr
 
 ## Speedup for Enumerations using Gray Codes
 
-* Start with list for $n = 1$, which is just 0 and 1
+* Start with a list with two entries ``0,1``
 * Get two list:
     * put a zero before each entry in $L_n$ 
     * put a one before each entry in $L_n$ 
 * To get $L_{n+1}$ concatenate the two list by first followed by second in reversed order 
-* So from 0 and 1, we get two lists   
+* So to move from $L_1$ to $L_2$  
 `` 00, 01 ``  
 `` 10, 11 ``
 * and concatenate   
@@ -203,9 +197,19 @@ using $e_i = \epsilon_i + \epsilon_{i+1} \, (\bmod 2) \text{ for } (i = 0,1,2,\d
 
 ## Speedup for Enumerations using Gray Codes
 
-* When $n = 4$, the integer 6 in binary code is ``0110`` and using the mapping 
-$$ e_0 = 0 + 1 = 1, e_1 = 1 + 1 = 0, e_2 = 1 + 0 = 1, e_3 = 0 + 0 = 0 $$
-* we get the corresponding gray code ``0101``
+* When $n = 4$, the integer 7 in binary code is ``0111`` and using the mapping  
+$e_0 = 1 + 1 = 0$  
+$e_1 = 1 + 1 = 0$  
+$e_2 = 1 + 0 = 1$  
+$e_3 = 0 + 0 = 0$
+* we get the corresponding gray code ``0100``
+
+* Next, integer 8 in binary code is ``1000`` and using the mapping  
+$e_0 = 0 + 0 = 0$  
+$e_1 = 0 + 0 = 0$  
+$e_2 = 0 + 1 = 1$  
+$e_3 = 1 + 0 = 1$
+* we get the corresponding gray code ``1100``
 
 ## Exploring the Tails of a Bootstrap Distribution
 
@@ -215,14 +219,14 @@ $$ e_0 = 0 + 1 = 1, e_1 = 1 + 1 = 0, e_2 = 1 + 0 = 1, e_3 = 0 + 0 = 0 $$
 * Consider a the finite sample space
 * Think of it as a state space, where each outcome corresponds to a state
 * Metropolis can sample from a unormalized probability $\pi(x)$ on finite state space $\mathcal{X}$
-* Define a markov transition matrix $J(x,y)$ that defines nonzero probilities of moving from $x$ to $y$ and $y$ to $x$
+* Define a Markov transition matrix $J(x,y)$ that defines nonzero probabilities of moving from $x$ to $y$ and $y$ to $x$
 * Metropolis changes $J(x,y)$ to a new matrix $K(x,y)$ that corresponds to a possibly unnormalized version of $\pi(x)$
 
 ## Exploring the Tails of a Bootstrap Distribution
 
 * Recipe: 
     * Pick initial point in sample space $x_0$ 
-    * Pick potential next move from $J(x,y)$ with $J(x,y) > 0$ and $J(x,y) < 0$
+    * Pick potential next move from $J(x,y)$ with $J(x,y) > 0$ and $J(y,x) > 0$
     * Evaluate $$A(x,y) = \frac{\pi(y)J(y,x)}{\pi(x)J(x,y)}$$
     * If $A(x,y) \ge 1$ move to $y$
     * If $A(x,y) < 1$ flip a coing with this success probability 
@@ -243,7 +247,7 @@ $$
 * Then we can use the Fundamental Theorem of Markov Chains to prove that 
 $$ K^n(x, y) \to \pi(y) \text{ for each } x,y \in \mathcal{X} $$
 * or in other words, the matrix $K^n = K^1 K^2 \cdots K^n$ converges to a matrix 
-$$\pi K = \lambda \pi = \pi K = \pi$$
+$$\pi K = \lambda \pi \leftrightarrow \pi K = \pi$$
 with one left eigenvector $\pi$ and one eigenvalue $\lambda = 1$
 
 ## Exploring the Tails of a Bootstrap Distribution
@@ -257,9 +261,9 @@ with one left eigenvector $\pi$ and one eigenvalue $\lambda = 1$
 We construct a Markov chain to sample from $P( T \ge t)$: 
 
 * Pick $I$ between $1 \le I \le n$ uniformly, and
-* Replace $\boldsymbol{x}_I^*$ with new value from origin data $\{ x_1, x_2, \dots, x_n \}$
-* If new sample vector $\tilde{\boldsymbol{x}}$ satisfies $T(\tilde{\boldsymbol{x}}) \ge t$ then change is made 
-* otherwise the chain stays at new sample vector 
+* Replace $x^*_I$ with new value from origin data $\{ x_1, x_2, \dots, x_n \}$
+* If new sample vector $\tilde{\boldsymbol{x}}^*$ satisfies $T(\tilde{\boldsymbol{x}}^*) \ge t$ then change is made 
+* otherwise the chain stays at previous sample vector 
 
 ## Exploring the Tails of a Bootstrap Distribution
 
@@ -304,7 +308,7 @@ Then to estimate $P( T \ge t)$:
 
 * Choose a grid $t_0 < t_1 < \dots < t_l < t$ with $t_0$ chosen in the middle of distribution of $T$ and $t_i$ chosen so that $P(T \ge t_{i+1} | T \ge t_i)$ is not too small 
 * Estimate $P( T \ge t_0 )$ by ordinary Monte Carlo 
-* Estimate $P( T \ge t_1 | T \ge t_0)$ by running the Markov chain on $\{ \tilde{\boldsymbol{x}}: T(\tilde{\boldsymbol{x}}^*) \ge t_0) \}$ and count what proportion of values satisfy the constrain $T \ge t_1$
+* Estimate $P( T \ge t_1 | T \ge t_0)$ by running the Markov chain on $\{ \tilde{\boldsymbol{x}}^*: T(\tilde{\boldsymbol{x}}^*) \ge t_0) \}$ and count what proportion of values satisfy the constrain $T \ge t_1$
 * Multiplying these estimates gives the conditional probability:
 $$ \widehat{P}(T \ge t) = \widehat{P}(T \ge t_0) \widehat{P}(T \ge t_1 | T \ge t_0) \cdots \widehat{P}(T \ge t | T \ge t_l) $$
 and joint probability $\widehat{P}(T \ge t) = \widehat{P}(T \ge t_0,T \ge t_1, \dots, T \ge t_l, T \ge t)$
