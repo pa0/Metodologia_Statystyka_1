@@ -23,7 +23,7 @@ ggplot(law2, aes(x = LSAT, y = GPA)) +
 ```
 
 Which observation do you need to remove from the sample to make the Monte Carlo simulation and complete enumrations look more similar? 
-Recompute the complete enumrations bootstrap after removing your observation. Did anything change in the histogram compared to the one we had in class? If yes, explain what happened and why? Do all the computations and plotting in a R markdown file. To speedup computations implement the Gray code for compositions (for details of the implementation have a look at [Wilf](https://searchworks.stanford.edu/view/1332691) and [Klingsberg](http://www.sciencedirect.com/science/article/pii/0196677482900062)). How much speedup can you get by using Gray codes? Show either experimentally or theoretically.
+Recompute the complete enumrations bootstrap after removing your observation. Did anything change in the histogram compared to the one we had in class? If yes, explain what happened and why. Do all the computations and plotting in a R markdown file. To speedup computations implement the Gray code for compositions (for details of the implementation have a look at [Wilf](https://searchworks.stanford.edu/view/1332691) and [Klingsberg](http://www.sciencedirect.com/science/article/pii/0196677482900062)). How much speedup can you get by using Gray codes? Show either experimentally or theoretically.
 
 ## Exercise 3
 
