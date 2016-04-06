@@ -319,9 +319,22 @@ TODO
 * All the above tests are called goodness of fit tests
 * Quantifies how well a model fits observations
 * Measures discrepancy between observed values and expected values under the model
+* But what if the model doesn't fit
+* Can we visualize the residuals?
+
+## Correspondence Analysis
+
+* Can be used to plot contingency tables for exploratory data analysis
+* Decomposes the $\chi^2$ statistic into orthogonal factors
+
+TODO:
+
+* checkout [vcd package](https://cran.r-project.org/web/packages/vcdExtra/vignettes/vcd-tutorial.pdf)
+* checkout Julie's book and [slides](http://juliejosse.com/wp-content/uploads/2016/01/CA_stf2015.pdf)
+* Cochran-Mantel-Haenszel tests for ordinal factors?
 
 ## McNemar's Test
 
-* Different than the test mentioned so far
+* Different than the goodness of fit tests mentioned so far
 
 TODO
