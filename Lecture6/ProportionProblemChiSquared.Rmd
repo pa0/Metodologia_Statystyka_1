@@ -280,6 +280,29 @@ Chi2_0 = sum((df$ministers-E)^2/E)
 pvalue = 1-pchisq(Chi2_0,df=8-1-1); pvalue
 ```
 
+## Discrete Random Variable
+
+* Since $S$ converges in distribution to a normal, we could just evaluate cdf of normal
+* Another interesting case where this is possible is for difference in proporitions
+* The confidence interval for $p_j - \widehat{p}_k$
+* As before the $p_j = O_j/n$ are the proportion of samples of category $j$, then
+$$\widehat{p}_j - \widehat{p}_k \pm z_{\alpha/2} \sqrt{\frac{\widehat{p}_j+\widehat{p}_k-(\widehat{p}_j-\widehat{p}_k)^2}{n}}$$
+
+## Discrete Random Variable Example {.build}
+
+* Difference in the probabilities of all daughters or all sons
+```{r}
+t(df[,-1])
+```
+* 6 ministers had no sons, and 13 ministers had all sons
+```{r echo=TRUE}
+n = 1334; p0 = 6/n; p7 = 13/n
+se = sqrt((p0+p7-(p0-p7)^2)/n)
+zcv = qnorm(0.975)
+lb = p0-p7 - zcv*se; ub <- p0-p7 + zcv*se; res = c(p0-p7,lb,ub); res
+```
+* Confidence interval covers 0, thus no significant difference in the proportions
+
 ## Several Discrete Random Variables
 
 TODO
