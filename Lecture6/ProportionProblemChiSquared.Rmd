@@ -25,7 +25,7 @@ knitr::opts_chunk$set(echo = FALSE)
 * Bootstrap
     * Error of estimators and significance for hypothesis testing
     * Complete enumerations
-    * Tail proabilities
+    * Tail probability
 
 ## Today
 
@@ -153,13 +153,15 @@ pvalue
 
 ## What is Nonparametrics Statistics Again?
 
+<!--
 * Rank-based methods: we do not estimate any additional parameters (exepct of course the parameter of interest $\theta$)
-* Compare to $t$-test, we also have to estimate the variance
+* Compare to $t$-test, we also have to estimate the variance 
 * Tests for discrete observations: No parameter estimation neither in finite sample or asymptotic case
+-->
 * Think of nonparametric statistics as either:
     * discrete observations, thus we can enumerate everything
         * artificially by transforming continuous observations into ranks
-        * observations are just measured on a discrete scale
+        * observations are just measured on a discrete scale, e.g. counts
     * ininite amount of parameters (inference of functions, we'll see that later in the course)
 
 ## Why Not Use Finite Sample Binomial Test?
@@ -309,10 +311,80 @@ lb = p0-p7 - zcv*se; ub <- p0-p7 + zcv*se; res = c(p0-p7,lb,ub); res
 * Consider hypothesis test:
     * $H_0:$ $X_1,\dots,X_r$ have the same distribution
     * $H_A:$ Distributions of $X_i$ and $X_j$ differ for some $i \ne j$
+* Total number of samples $n = \sum_{i=1}^r n_i$
+* Observed frequencies: 
+$$O_{ij} = \#\{ \text{sample items in sample drawn on } X_i \text{ such that } X_i = j\},$$
+* for $i = 1,\dots,r$ and $j = 1,\dots,c$
+* $O_{ij}$ is a $r \times c$ matrix of observed frequency
+* They are called *contingency tables*
+
+## Several Discrete Random Variables
+
+* Compare observed frequencies to the expected frequencies under $H_0$
+* Estimate the common distribution $(p_1,\dots,p_c)^T$, where $p_j$ is the probability that category $j$ occurs
+* Estimate probability of category $j$ overall
+$$ \widehat{p}_j = \frac{\sum_{i=1}^r O_{ij}}{n}, j = 1,\dots,c$$
+* Estimate expected frequencies $\widehat{E}_{ij} = n_i \widehat{p}_j$
+* Notice that the sample size can vary between variables
+
+## Several Discrete Random Variables
+
+* Test statistics
+$$\chi^2 = \sum_{i=1}^r \sum_{j=1}^c \frac{(O_{ij}-\widehat{E}_{ij})^2}{\widehat{E}_{ij}}$$
+* degrees of freedom:
+    * $c−1$ because total sample size is known, and
+    * $c−1$ estimates, then
+    * $r(c−1)−(c−1)=(r−1)(c−1)$
+* This is called *test for homogeneity*
+
+## Several Discrete Random Variables Example {.build}
+
+* Type of Crime and Alcoholic Status
+* Contingency table with frequencies of criminals who committed crimes with or without alcoholics
+```{r}
+c1 = c(50,88,155,379,18,63) 
+c2 = c(43,62,110,300,14,144)
+ct = cbind(c1,c2)
+colnames(ct) = c("Alcoholic","Non-Alcoholic")
+rownames(ct) = c("Arson","Rape","Violence","Theft","Coining","Fraud")
+t(ct)
+chifit = chisq.test(ct)
+chifit
+```
+
+## Several Discrete Random Variables Example {.build}
+
+```{r echo=TRUE}
+t((chifit$observed-chifit$expected)^2/chifit$expected)
+```
+* Most of the contribution to the test statistic comes from the crime fraud
+* Eliminate fraud and retest
+```{r}
+chifit = chisq.test(ct[-6,])
+chifit
+```
+* Conclusion: Conditional on the criminal not committing fraud, his alcoholic status and type of crime have the same distribution
+
+## Several Discrete Random Variables Example
+
+```{r message=FALSE, fig.width=6.5, fig.height=6.5} 
+library(vcd); mosaic(ct,shade = T)
+```
 
 ## Independence of Two Discrete Random Variables
 
-TODO
+* Test independence of two discrete random variables
+* To discrete random variables $X$ and $Y$ with different ranges $\{1,2,\dots,r\}$ and $\{1,2,\dots,c\}$
+* Consider hyothesis test:
+$$
+\begin{align}
+H_0: P(X=i,Y=j) & = P(X=i)P(Y=j) \text{ for all } i \text{ and } j \\
+H_A: P(X=i,Y=j) & \ne P(X=i)P(Y=j) \text{ for some } i \text{ and } j 
+\end{align}
+$$
+* Construct contingency table of $n$ observations 
+$$O_{ij} = \#_{1 \le l \le n} \{ (X_l,Y_l) = (i,j) \}$$
+* Apply same procdure as for test for homogeneity
 
 ## Goodness of Fit
 
@@ -324,17 +396,66 @@ TODO
 
 ## Correspondence Analysis
 
+* Actively developped in 1965 in France
+* French school of data analysis: Geometry instead of probability
 * Can be used to plot contingency tables for exploratory data analysis
 * Decomposes the $\chi^2$ statistic into orthogonal factors
+* To first approximation: extension Principal Components Analysis (PCA) by 
+* replacing the variance in PCA with an inertia proportional to the $\chi^2$ distance of the table from independence
+* decomposes this measure of departure from independence along axes that are orthogonal according to a $\chi^2$ inner product
 
-TODO:
+## Correspondence Analysis
 
-* checkout [vcd package](https://cran.r-project.org/web/packages/vcdExtra/vignettes/vcd-tutorial.pdf)
+TODO: some math derivations
+
 * checkout Julie's book and [slides](http://juliejosse.com/wp-content/uploads/2016/01/CA_stf2015.pdf)
-* Cochran-Mantel-Haenszel tests for ordinal factors?
+* [Susan's paper, Section 2.6](http://statweb.stanford.edu/~susan/papers/dfc.pdf)
+
+## Correspondence Analysis Example
+
+```{r echo=TRUE}
+library(ca)
+HairEye = margin.table(HairEyeColor, c(1, 2)); HairEye
+```
+
+----
+
+```{r echo=TRUE}
+chisq.test(HairEye)
+```
+
+----
+
+```{r echo=TRUE, message=FALSE, fig.width=6.5, fig.height=6.5}
+mosaic(HairEye, shade = TRUE)
+```
+
+----
+
+```{r}
+ca.res = ca(HairEye); ca.res
+```
+
+----
+
+```{r fig.width=10, fig.height=5}
+plot(ca.res)
+```
 
 ## McNemar's Test
 
 * Different than the goodness of fit tests mentioned so far
+* Data in the form of contingency tables different test 
+* Two discrete random variable with two possible value $\{0,1\}$
+* Four categorie (0,0), (0,1), (1,0), and (1,1)
+$2 \times 2$ contingency table with four categories
+* Probabilies of categories $p_ij$
+* Hypothesis test:
+$$H_0: p_{01} - p_{10}$$
+$$H_A: p_{01} \ne p_{10}$$
 
-TODO
+## McNemar's Test
+
+* Count number of observations for each cateogory and save in contingency table
+* Wald test statistic
+* TODO, etc.
