@@ -14,6 +14,7 @@ output:
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
+set.seed(1234)
 ```
 
 ## Previous Lectures
@@ -37,7 +38,7 @@ knitr::opts_chunk$set(echo = FALSE)
 * Discrete variables
 * The random variable $X$ consists of categories
 * For now, we focus on binary categries failure (0) and success (1)
-* So, we say $X \sim \operatorname{Bern}(p)$ is a RV distributed according to the Bernoulli distribution 
+* $X$ is a random variable distributed according to the Bernoulli distribution 
     * with success probabiliy $p$ and 
     * failure probabililty $1-p$
 * We know that $\operatorname{E}(X) = p$ and $\operatorname{Var} = p(1-p)$
@@ -45,19 +46,18 @@ knitr::opts_chunk$set(echo = FALSE)
 ## Proportion Problems
 
 * Statistical problems can be 
-    * estimating $p$,
-    * forming confidence intervals,
+    * estimating $p$
+    * forming confidence intervals around estimate $\widehat{p}$
     * and testing hypothesis 
     $$H_0: p = p_0 \text{ versus } H_A: p \ne p_0$$
-* Let $X_1,\dots,X_n \sim \operatorname{Bern}(p)$ and $S$ be the total number of successes
-* Then $S \sim B(p,n)$ follows a binomial distribution
-* If $p$ is unkown but we assume that our observation come from a Bernoulli distribution, then
-* We can estimate $p$ as $\widehat{p} = \frac{S}{n}$
+* Let $X_1,\dots,X_n$ iid Bernoulli with success probability $p$ and $S$ be the total number of successes
+* Then $S$ follows a binomial distribution with $n$ trials and success probability $p$
+* If $p$ is unkown, we estimate $p$ with $\widehat{p} = \frac{S}{n}$
 
 ## Proportion Problems
 
 ```{r echo=TRUE}
-n = 10; p = 1/2; nsim = 100; obsv = rbinom(nsim, size = n, prob = p)
+n = 10; p = 1/2; nsim = 10000; obsv = rbinom(nsim, size = n, prob = p)
 ```
 
 ```{r}
@@ -78,7 +78,7 @@ ggplot(df, aes(sample = y)) + stat_qq() + ggtitle("Normal Q–Q Plot")
 ## Proportion Problems
 
 ```{r echo=TRUE}
-n = 100; p = 1/2; nsim = 100; obsv = rbinom(nsim, size = n, prob = p)
+n = 100; p = 1/2; nsim = 10000; obsv = rbinom(nsim, size = n, prob = p)
 ```
 
 ```{r}
@@ -103,31 +103,31 @@ ggplot(df, aes(sample = y)) + stat_qq() + ggtitle("Normal Q–Q Plot")
     * The de Moivre–Laplace theorem (a special case of the central limit theorem) says $S$ approach a normal distribution
     * Easy confidence interval (just evaluate cdf of the normal)
 
-## Example: Squeaky Hip Replacements
+## Example: Squeaky Hip Replacements {.build}
 
-143 subjects with ceramic hip replacements
-
-Ten report that their hip replacements squeaked
+* 143 subjects with ceramic hip replacements
+* Ten report that their hip replacements squeaked
 ```{r echo=TRUE}
 phat = 10/143
+phat
 zcv = qnorm(0.975)
 phat+c(-1,1)*zcv*sqrt(phat*(1-phat)/143)
 ```
-
-We estimate between roughly 3 and 11% of patients who receive ceramic hip replacements will report squeaky replacements.
+* We estimate between roughly 3 and 11% of patients who receive ceramic hip replacements will report squeaky replacements
 
 ## Hypothesis Testing
 
-* Test statistic is $z^2$ with
+* Reject null hypotheis if $|z|$ is large
 $$z = \frac{\widehat{p}-p_0}{\sqrt{p_0(1-p_0)/n}} \sim N(0,1)$$
-* We are interested how large the observed proportion deviates this measured in terms of $|z|$
+* $z$ is asymptotically standard normal 
+* An equivalent test statistic of $|z|$ is $z^2$
 * Squared normal is distributed as $\chi^2$ distribution
 
 ## Example: Left-Handed Professional Ball Players
 
 * Theory:  
-    * Professional baseball players have different proportion of left handed player than left-handed people in genral population.
-    * From previous study, we know that general public is has a proportion of $p = 0.15$.
+    * Professional baseball players have different proportion of left handed player than left-handed people in genral population
+    * From previous study, we know that general public is has a proportion of $p_0 = 0.15$
 * Hypothesis testing:
     * $H_0: p = 0.15 \text{ versus } H_A: p \ne 0.15$
 
@@ -158,15 +158,13 @@ pvalue
 * Compare to $t$-test, we also have to estimate the variance 
 * Tests for discrete observations: No parameter estimation neither in finite sample or asymptotic case
 -->
-* Think of nonparametric statistics as either:
-    * discrete observations, thus we can enumerate everything
-        * artificially by transforming continuous observations into ranks
-        * observations are just measured on a discrete scale, e.g. counts
-    * ininite amount of parameters (inference of functions, we'll see that later in the course)
+* In all three nonparametric test (sign, signed-rank, $\chi^2$) no assumption on variances of observations
+* In contrast, in the $t$-test variances are estimated
+* This is an important feature of nonparametric statistics
 
 ## Why Not Use Finite Sample Binomial Test?
 
-Since we know that $S$ follows a binomial distribution, why shouldn't we use it?
+Since we know that $S$ follows a binomial distribution, why don't we use it?
 
 ```{r echo=FALSE}
 binom.test(sum(ind),n,p=p0)
@@ -175,7 +173,12 @@ binom.test(sum(ind),n,p=p0)
 * Finite sample $p$-values have upper bounded significance level $\alpha$
 * Asymptotic $p$-values may be above above $\alpha$
 
-## Why Not Use Finite Sample Binomial Test?
+## Why Not Use Finite Sample Binomial Test? {.build}
+
+* Problem is due to discreteness
+* Example: $n = 5$ and test $H_0: p = 0.5$ versus $H_A: p \ne 0.5$ 
+* Null distribution of $S$ is binomial with $n = 5$ and $p = 0.5$
+* Suppose outcome is $S = 5$ (most extreme observation)
 
 ```{r echo=TRUE}
 n = 5; S = 5; p = 0.5
@@ -183,11 +186,7 @@ phat = S/n
 pvalue = 2*p^n; pvalue
 ```
 
-* Problem is due to discreteness
-* More extreme case $n = 5$ and test $H_0: p = 0.5$ versus $H_A: p \ne 0.5$
-* Under the null, this distribution is binomial with $n = 5$ and parameter $p = 0.5$
-* Suppose outcome is $S = 5$ (most extreme observation)
-* Problem is that the null hypethsis can never be true below our standard $\alpha = 0.05$
+* Problem is that the null hypethsis can never be true below $\alpha = 0.05$
 * So in this case, $\alpha$ has no meaning
 
 ## Discrete Random Variable (RV)
@@ -201,6 +200,7 @@ $$H_A: p(j) \ne p_0(j), \text{ for some } j$$
 
 ## Discrete RV
 
+* $X_1,\dots,X_n$ is a random sample on $X$
 * Let $O_j = \#\{ X_i = j \}$
 * Observed frequencies are constrained $\sum_{j=1}^c O_j = n$ 
 * So $c-1$ degrees of freedom, if we know $c-1$ frequency we can calculate the $c$th by using the constrain
@@ -215,6 +215,7 @@ $$H_A: p(j) \ne p_0(j), \text{ for some } j$$
     * Test stastitics is
     $$\chi^2 = \sum_{j=1}^c \frac{(O_j-E_j)^2}{E_j}$$
 * Hypothesis $H_0$ is rejected in favor of $H_A$ for large values of $\chi^2$
+* Asymptotically $\chi^2$ distribution with $c−1$ degrees of freedom
 
 ## Discrete RV Example {.build}
 
@@ -239,6 +240,8 @@ Assymptotically equal to $\chi^2$ with $c-1$ degress of freedom
 pvalue = 1-pchisq(Chi2_0,df=6-1); pvalue
 ```
 
+Thus there is no evidence to support the die being unfair
+
 ## Discrete RV
 
 * Case 2: 
@@ -257,7 +260,7 @@ ministers = c(6,57,206,362,365,256,69,13)
 n = sum(ministers); n
 df = data.frame(ministers=ministers,males=males); t(df)
 ```
-* For example, 206 of these ministers had 2 sons in their first 7 children
+* For example, 206 ministers had 2 sons and 5 daughters in their first 7 children
 
 ## Discrete RV Example {.build}
 
@@ -282,13 +285,13 @@ Chi2_0 = sum((df$ministers-E)^2/E)
 pvalue = 1-pchisq(Chi2_0,df=8-1-1); pvalue
 ```
 
+No evidence to refute a binomial probability model for the number of sons in the first seven children of a Swedish minister
+
 ## Discrete RV
 
-* Since $S$ converges in distribution to a normal, we could just evaluate cdf of normal
-* Another interesting case where this is possible is for difference in proporitions
-* The confidence interval for $p_j - \widehat{p}_k$
-* As before the $p_j = O_j/n$ are the proportion of samples of category $j$, then
-$$\widehat{p}_j - \widehat{p}_k \pm z_{\alpha/2} \sqrt{\frac{\widehat{p}_j+\widehat{p}_k-(\widehat{p}_j-\widehat{p}_k)^2}{n}}$$
+* Alternatively to testing for deviation from a binomial probability model
+* We can get a confidence interval on pairwise difference in proportions $\widehat{p}_j - \widehat{p}_k$
+* The confidence intervals are easy again because, we assume asymptotic normallity
 
 ## Discrete RV Example {.build}
 
@@ -339,8 +342,7 @@ $$\chi^2 = \sum_{i=1}^r \sum_{j=1}^c \frac{(O_{ij}-\widehat{E}_{ij})^2}{\widehat
 
 ## Several Discrete RVs Example {.build}
 
-* Type of Crime and Alcoholic Status
-* Contingency table with frequencies of criminals who committed crimes with or without alcoholics
+* Contingency table with frequencies of criminals who committed crimes and their alcoholics status
 ```{r}
 c1 = c(50,88,155,379,18,63) 
 c2 = c(43,62,110,300,14,144)
@@ -355,7 +357,7 @@ chifit
 ## Several Discrete RVs Example {.build}
 
 ```{r echo=TRUE}
-t((chifit$observed-chifit$expected)^2/chifit$expected)
+Chi2_0 = t((chifit$observed-chifit$expected)^2/chifit$expected); Chi2_0
 ```
 * Most of the contribution to the test statistic comes from the crime fraud
 * Eliminate fraud and retest
@@ -363,7 +365,7 @@ t((chifit$observed-chifit$expected)^2/chifit$expected)
 chifit = chisq.test(ct[-6,])
 chifit
 ```
-* Conclusion: Conditional on the criminal not committing fraud, his alcoholic status and type of crime have the same distribution
+* Conclusion: Conditional on the criminal not committing fraud, alcoholic status and type of crime have the same distribution
 
 ## Independence of Two Discrete RVs
 
@@ -382,19 +384,18 @@ $$O_{ij} = \#_{1 \le l \le n} \{ (X_l,Y_l) = (i,j) \}$$
 
 ## Goodness of Fit
 
-* All the above tests are called goodness of fit tests
-* Quantifies how well a model fits observations
-* Measures discrepancy between observed values and expected values under the model
-* But what if the model doesn't fit
+* All the above tests are called goodness-of-fit tests
+* They quantify how well a model fits observations
+* They measure discrepancy between observed values and expected values under the model
 * Can we visualize the residuals?
-* Rather than reject this global hypthesis, can we find what is driving the statistic?
+* Rather than reject this global null hypthesis, can we find what is driving the statistic?
 * Two ways:
     * Visualization of contingency table with association and mosaics plots
     * Visualization of deviation from model with correspondence analysis
 
 ## Association Plots
 
-* Followup on $\chi^2$ tests
+* This is a followup on $\chi^2$ tests when they are rejected
 * Pearson residuals
 $$r_{ij} = \frac{O_{ij}-E_{ij}}{\sqrt{E_{ij}}}$$
 * and the $\chi^2$ statistics is squaring and summing over all cells
@@ -507,6 +508,8 @@ ca.res = ca(HairEye); ca.res
 ```{r fig.width=10, fig.height=5}
 plot(ca.res)
 ```
+
+Color code: <span style="color:blue">Hair</span>, <span style="color:red">Eye</span>
 
 <!--
 ## McNemar's Test {.build}
