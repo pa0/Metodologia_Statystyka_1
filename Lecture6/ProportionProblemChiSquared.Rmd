@@ -1,5 +1,5 @@
 ---
-title: "Proportion Problem and Chi-Squared Tests"
+title: "Proportion Problems and Chi-Squared Tests"
 author: "Christof Seiler"
 date: "Stanford University, Spring 2016, STATS 205"
 output:
@@ -27,9 +27,11 @@ set.seed(1234)
     * Error of estimators and significance for hypothesis testing
     * Complete enumerations
     * Tail probability
+* Observations from continuous distributions
 
 ## Today
 
+* Observations from discrete distributions
 * Proportion problems
 * $\chi^2$ Tests
 
@@ -37,7 +39,7 @@ set.seed(1234)
 
 * Discrete variables
 * The random variable $X$ consists of categories
-* For now, we focus on binary categries failure (0) and success (1)
+* For now, we focus on binary categories failure (0) and success (1)
 * $X$ is a random variable distributed according to the Bernoulli distribution 
     * with success probabiliy $p$ and 
     * failure probabililty $1-p$
@@ -102,18 +104,22 @@ ggplot(df, aes(sample = y)) + stat_qq() + ggtitle("Normal Q–Q Plot")
 * As $n \to \infty$ while $p$ is fixed:
     * The de Moivre–Laplace theorem (a special case of the central limit theorem) says $S$ approach a normal distribution
     * Easy confidence interval (just evaluate cdf of the normal)
+    * Approximation of binomial distribution with $n$ trials and $p$ success by $N(np,np(1-p))$
 
 ## Example: Squeaky Hip Replacements {.build}
 
-* 143 subjects with ceramic hip replacements
-* Ten report that their hip replacements squeaked
+143 subjects with ceramic hip replacements
+
+Ten report that their hip replacements squeaked
+
 ```{r echo=TRUE}
 phat = 10/143
 phat
 zcv = qnorm(0.975)
 phat+c(-1,1)*zcv*sqrt(phat*(1-phat)/143)
 ```
-* We estimate between roughly 3 and 11% of patients who receive ceramic hip replacements will report squeaky replacements
+
+We estimate between roughly 3 and 11% of patients who receive ceramic hip replacements will report squeaky replacements
 
 ## Hypothesis Testing
 
@@ -160,7 +166,6 @@ pvalue
 -->
 * In all three nonparametric test (sign, signed-rank, $\chi^2$) no assumption on variances of observations
 * In contrast, in the $t$-test variances are estimated
-* This is an important feature of nonparametric statistics
 
 ## Why Not Use Finite Sample Binomial Test?
 
@@ -175,10 +180,13 @@ binom.test(sum(ind),n,p=p0)
 
 ## Why Not Use Finite Sample Binomial Test? {.build}
 
-* Problem is due to discreteness
-* Example: $n = 5$ and test $H_0: p = 0.5$ versus $H_A: p \ne 0.5$ 
-* Null distribution of $S$ is binomial with $n = 5$ and $p = 0.5$
-* Suppose outcome is $S = 5$ (most extreme observation)
+Problem is due to discreteness
+
+Example: $n = 5$ and test $H_0: p = 0.5$ versus $H_A: p \ne 0.5$ 
+
+Null distribution of $S$ is binomial with $n = 5$ and $p = 0.5$
+
+Suppose outcome is $S = 5$ (most extreme observation)
 
 ```{r echo=TRUE}
 n = 5; S = 5; p = 0.5
@@ -186,8 +194,9 @@ phat = S/n
 pvalue = 2*p^n; pvalue
 ```
 
-* Problem is that the null hypethsis can never be true below $\alpha = 0.05$
-* So in this case, $\alpha$ has no meaning
+Problem is that the null hypethsis can never be true below $\alpha = 0.05$
+
+So in this case, $\alpha$ has no meaning
 
 ## Discrete Random Variable (RV)
 
@@ -203,7 +212,6 @@ $$H_A: p(j) \ne p_0(j), \text{ for some } j$$
 * $X_1,\dots,X_n$ is a random sample on $X$
 * Let $O_j = \#\{ X_i = j \}$
 * Observed frequencies are constrained $\sum_{j=1}^c O_j = n$ 
-* So $c-1$ degrees of freedom, if we know $c-1$ frequency we can calculate the $c$th by using the constrain
 * The expected frequency for category $j$ is $\operatorname{E}_j = \operatorname{E}_{H_0}(O_j)$
 * Two cases for $H_0$
 
@@ -215,17 +223,23 @@ $$H_A: p(j) \ne p_0(j), \text{ for some } j$$
     * Test stastitics is
     $$\chi^2 = \sum_{j=1}^c \frac{(O_j-E_j)^2}{E_j}$$
 * Hypothesis $H_0$ is rejected in favor of $H_A$ for large values of $\chi^2$
+* Observed frequencies, $(O_1,\dots,O_c)^T$ has a multinomial distribution, so exact distribution can be obtained
 * Asymptotically $\chi^2$ distribution with $c−1$ degrees of freedom
+* If we know $c-1$ frequencies, we can calculate the $c$th from total $n$
 
 ## Discrete RV Example {.build}
 
-* Roll a dice $n = 370$ times  
-* Observe frequencies
+Roll a dice $n = 370$ times
+
+Observe frequencies
+
 ```{r echo=TRUE}
 O = c(58,55,62,68,66,61)
 n = sum(O); n
 ```  
-* Test whether dice is fair $p(j) \equiv 1/6$
+
+Test whether dice is fair $p(j) \equiv 1/6$
+
 ```{r echo=TRUE}
 p0 = 1/6
 E = rep(n*p0,6)
@@ -240,7 +254,7 @@ Assymptotically equal to $\chi^2$ with $c-1$ degress of freedom
 pvalue = 1-pchisq(Chi2_0,df=6-1); pvalue
 ```
 
-Thus there is no evidence to support the die being unfair
+Thus there is no evidence to support the dice being unfair
 
 ## Discrete RV
 
@@ -253,18 +267,21 @@ Thus there is no evidence to support the die being unfair
 
 ## Discrete RV Example {.build}
 
-* Number of males in the first seven children for $n = 1334$ Swedish ministers of religion
+Number of males in the first seven children for $n = 1334$ Swedish ministers of religion
+
 ```{r echo=TRUE}
 males = 0:7
 ministers = c(6,57,206,362,365,256,69,13)
 n = sum(ministers); n
 df = data.frame(ministers=ministers,males=males); t(df)
 ```
-* For example, 206 ministers had 2 sons and 5 daughters in their first 7 children
+
+For example, 206 ministers had 2 sons and 5 daughters in their first 7 children
 
 ## Discrete RV Example {.build}
 
-* The maximum likelihood estimator of $p$ is
+The maximum likelihood estimator of $p$ is
+
 ```{r echo=TRUE}
 nChildren = n*7
 nMale = sum(df$ministers*df$males)
@@ -289,24 +306,28 @@ No evidence to refute a binomial probability model for the number of sons in the
 
 ## Discrete RV
 
-* Alternatively to testing for deviation from a binomial probability model
+* Alternatively to testing for deviation from a model
 * We can get a confidence interval on pairwise difference in proportions $\widehat{p}_j - \widehat{p}_k$
 * The confidence intervals are easy again because, we assume asymptotic normallity
 
 ## Discrete RV Example {.build}
 
-* Difference in the probabilities of all daughters or all sons
+Difference in the probabilities of all daughters or all sons
+
 ```{r}
 t(df[,-1])
 ```
-* 6 ministers had no sons, and 13 ministers had all sons
+
+6 ministers had no sons, and 13 ministers had all sons
+
 ```{r echo=TRUE}
 n = 1334; p0 = 6/n; p7 = 13/n
 se = sqrt((p0+p7-(p0-p7)^2)/n)
 zcv = qnorm(0.975)
-lb = p0-p7 - zcv*se; ub <- p0-p7 + zcv*se; res = c(p0-p7,lb,ub); res
+lb = p0-p7 - zcv*se; ub = p0-p7 + zcv*se; res = c(p0-p7,lb,ub); res
 ```
-* Confidence interval covers 0, thus no significant difference in the proportions
+
+Confidence interval covers 0, thus no significant difference in the proportions
 
 ## Several Discrete RVs
 
@@ -334,43 +355,56 @@ $$ \widehat{p}_j = \frac{\sum_{i=1}^r O_{ij}}{n}, j = 1,\dots,c$$
 
 * Test statistics
 $$\chi^2 = \sum_{i=1}^r \sum_{j=1}^c \frac{(O_{ij}-\widehat{E}_{ij})^2}{\widehat{E}_{ij}}$$
-* degrees of freedom:
-    * $c−1$ because total sample size is known, and
-    * $c−1$ estimates, then
-    * $r(c−1)−(c−1)=(r−1)(c−1)$
+* Asymptotically $\chi^2$ with $(r−1)(c−1)$ degrees of freedom
 * This is called *test for homogeneity*
 
 ## Several Discrete RVs Example {.build}
 
-* Contingency table with frequencies of criminals who committed crimes and their alcoholics status
+Distribution of alcoholic status same for different type of crime?
+
+Contingency table with frequencies of  
+criminals who committed crimes (6 RV's) and  
+their alcoholics status (category: alcoholic and non-alcoholic)
+
 ```{r}
 c1 = c(50,88,155,379,18,63) 
 c2 = c(43,62,110,300,14,144)
 ct = cbind(c1,c2)
 colnames(ct) = c("Alcoholic","Non-Alcoholic")
 rownames(ct) = c("Arson","Rape","Violence","Theft","Coining","Fraud")
-t(ct)
-chifit = chisq.test(ct)
-chifit
+ct
 ```
 
 ## Several Discrete RVs Example {.build}
 
-```{r echo=TRUE}
-Chi2_0 = t((chifit$observed-chifit$expected)^2/chifit$expected); Chi2_0
+```{r}
+chifit = chisq.test(ct)
+chifit
 ```
-* Most of the contribution to the test statistic comes from the crime fraud
-* Eliminate fraud and retest
+
+```{r echo=TRUE}
+Chi2_0 = (chifit$observed-chifit$expected)^2/chifit$expected; Chi2_0
+```
+
+## Several Discrete RVs Example {.build}
+
+Most of the contribution to the test statistic comes from the crime fraud
+
+Eliminate fraud and retest
+
 ```{r}
 chifit = chisq.test(ct[-6,])
 chifit
 ```
-* Conclusion: Conditional on the criminal not committing fraud, alcoholic status and type of crime have the same distribution
+
+Conclusion:  
+Conditional on the criminal not committing fraud,  
+cannot reject that alcoholic status has same distribution for all crimes
 
 ## Independence of Two Discrete RVs
 
 * Test independence of two discrete RV
-* To discrete RV $X$ and $Y$ with different ranges $\{1,2,\dots,r\}$ and $\{1,2,\dots,c\}$
+* $X$ and $Y$ with different ranges $\{1,2,\dots,r\}$ and $\{1,2,\dots,c\}$
 * Consider hyothesis test:
 $$
 \begin{align}
@@ -381,6 +415,7 @@ $$
 * Construct contingency table of $n$ observations 
 $$O_{ij} = \#_{1 \le l \le n} \{ (X_l,Y_l) = (i,j) \}$$
 * Apply same procdure as for test for homogeneity
+* Notice, we need same number of observations
 
 ## Goodness of Fit
 
@@ -390,7 +425,7 @@ $$O_{ij} = \#_{1 \le l \le n} \{ (X_l,Y_l) = (i,j) \}$$
 * Can we visualize the residuals?
 * Rather than reject this global null hypthesis, can we find what is driving the statistic?
 * Two ways:
-    * Visualization of contingency table with association and mosaics plots
+    * Visualization of contingency table with association and mosaic plots
     * Visualization of deviation from model with correspondence analysis
 
 ## Association Plots
@@ -426,13 +461,16 @@ library(vcd); assoc(ct,shade = TRUE)
 
 ## Mosaic Plots {.build}
 
-* Subdivide by marginal frequencies of first variable
+Subdivide by marginal frequencies of first variable
+
 ```{r echo=TRUE}
 frequency = rowSums(ct)
 proportions = frequency/sum(frequency)
 t(data.frame(frequency=round(frequency,0),proportions=round(proportions,2)))
 ```
-* Subdivide by marginal frequencies of second given first variable
+
+Subdivide by marginal frequencies of second given first variable
+
 ```{r echo=TRUE}
 t(ct/rowSums(ct))
 ```
