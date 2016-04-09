@@ -401,22 +401,6 @@ Conclusion:
 Conditional on the criminal not committing fraud,  
 cannot reject that alcoholic status has same distribution for all crimes
 
-## Independence of Two Discrete RVs
-
-* Test independence of two discrete RV
-* $X$ and $Y$ with different ranges $\{1,2,\dots,r\}$ and $\{1,2,\dots,c\}$
-* Consider hyothesis test:
-$$
-\begin{align}
-H_0: P(X=i,Y=j) & = P(X=i)P(Y=j) \text{ for all } i \text{ and } j \\
-H_A: P(X=i,Y=j) & \ne P(X=i)P(Y=j) \text{ for some } i \text{ and } j 
-\end{align}
-$$
-* Construct contingency table of $n$ observations 
-$$O_{ij} = \#_{1 \le l \le n} \{ (X_l,Y_l) = (i,j) \}$$
-* Apply same procedure as for test for homogeneity
-* Notice, we need same number of observations
-
 <!--
 ## McNemar's Test {.build}
 

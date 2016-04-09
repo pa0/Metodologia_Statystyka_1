@@ -17,36 +17,87 @@ knitr::opts_chunk$set(echo = FALSE)
 set.seed(1234)
 ```
 
-## Goodness of Fit
+## Independence of Two Discrete RVs
 
-* All the above tests are called goodness-of-fit tests
-* They quantify how well a model fits observations
-* They measure discrepancy between observed values and expected values under the model
-* Can we visualize the residuals?
-* Rather than reject this global null hypthesis, can we find what is driving the statistic?
-* Two ways:
-    * Visualization of contingency table with association and mosaic plots
-    * Visualization of deviation from model with correspondence analysis
+* Observations are two measurements on the same subject (e.g. eye color and hair color)
+* Random samples $(X_1,Y_1),\dots,(X_n,Y_n)$
+* $X$ and $Y$ with different ranges $\{1,2,\dots,r\}$ and $\{1,2,\dots,c\}$
+* Consider hyothesis test:
+$$
+\begin{align}
+H_0: P(X=i,Y=j) & = P(X=i)P(Y=j) \text{ for all } i \text{ and } j \\
+H_A: P(X=i,Y=j) & \ne P(X=i)P(Y=j) \text{ for some } i \text{ and } j 
+\end{align}
+$$
+* Construct contingency table of $n$ observations 
+$$O_{ij} = \#_{1 \le l \le n} \{ (X_l,Y_l) = (i,j) \}$$
+
+## Independence of Two Discrete RVs {.build}
+
+Expected frequencies under independence assumption are product of marginals
+$$\widehat{E}_{ij} = n \frac{O_{i\cdot}}{n} \frac{O_{\cdot j}}{n}$$
+```{r}
+library(ca)
+HairEye = margin.table(HairEyeColor, c(1, 2)); HairEye
+```
+
+Test statistics $\chi^2 = \sum_{i=1}^r \sum_{j=1}^c \frac{(O_{ij}-\widehat{E}_{ij})^2}{\widehat{E}_{ij}}$
+
+Asymptotically $\chi^2$ with $(r−1)(c−1)$ degrees of freedom
+
+This is called *test of independence*
 
 ## Contingency Tables
 
 * Several discrete random variables with same categories $1,\dots,c$
     * Test of homogeneity
-    * Compare distribution of all random variables
-    * Are the observation generated from one multinomial distribution with one probability vector
-    * Possibly different number of observations
-    * Experimental design: TODO
+    * Are the observations generated from one multinomial distribution with one probability vector?
+    * Possibly different sample size among random variable
+    * E.g. crime example, types of crimes (theft, fraud, etc.) commited by alcoholic and non-alcoholic criminals
 * Two discrete random variables with different categories $1,\dots,r$ and $1,\dots,c$
     * Test of independence
-    * Same number of observations
-    * Experimental design: TODO
+    * Are the pairwise observation independent?
+    * Fixed sample size for all random variables
+    * E.g. hair color, eye color example
+
+## Goodness of Fit
+
+* The test of homogeneity and independence are called goodness-of-fit tests
+* They quantify how well a model fits observations
+* They measure discrepancy between observed values and expected values under the model
+* Rather than reject this global null hypthesis, can we find what is driving the statistic?
+* Can we visualize the residuals?
+* Two ways:
+    * Visualization of contingency table with association and mosaic plots
+    * Visualization of deviation from model with correspondence analysis
+
+## Hair and Eye Color of Statistics Students
+
+Survey of students at the University of Delaware reported by Snee (1974)
+ 
+```{r}
+HairEye = margin.table(HairEyeColor, c(1, 2))
+```
+
+```{r echo=TRUE}
+HairEye
+```
+
+*Rows* hair color of 592 statistics students   
+*Columns* eye color of the same 592 statistics students
+
+## Hair and Eye Color of Statistics Students  {.build}
+
+```{r echo=TRUE}
+chisq.test(HairEye)
+```
 
 ## Association Plots
 
 * This is a followup on $\chi^2$ tests when they are rejected
 * Pearson residuals
 $$r_{ij} = \frac{O_{ij}-E_{ij}}{\sqrt{E_{ij}}}$$
-* and the $\chi^2$ statistics is squaring and summing over all cells
+* $\chi^2$ statistics is squaring and summing over all cells
 $$\chi^2 = \sum_j \sum_i r_{ij}^2$$
 
 ## Association Plots
@@ -57,59 +108,73 @@ $$\chi^2 = \sum_j \sum_i r_{ij}^2$$
 * *Area:* Proportional to $O_{ij}-E_{ij}$
 * *Baseline:* 
     * If $O_{ij} > E_{ij}$, then rectanble above
-    * Otherwise rectangle below
+    * otherwise rectangle below
 * *Color:* Standardized Pearson residuals that are asymptotically standard normal
 
-## Association Plots Example
+## Association Plots
 
-Distribution of alcoholic status same for different type of crime?
-
-Contingency table with frequencies of  
-criminals who committed crimes (6 RV's) and  
-their alcoholics status (category: alcoholic and non-alcoholic)
-
-```{r}
-c1 = c(50,88,155,379,18,63) 
-c2 = c(43,62,110,300,14,144)
-ct = cbind(c1,c2)
-colnames(ct) = c("Alcoholic","Non-Alcoholic")
-rownames(ct) = c("Arson","Rape","Violence","Theft","Coining","Fraud")
-ct
-```
-
-## Association Plots Example
-
-```{r echo=TRUE, message=FALSE, fig.width=5.5, fig.height=5.5}
-library(vcd); assoc(ct,shade = TRUE)
+```{r message=FALSE,fig.height=6}
+library(vcd); assoc(HairEye,shade = TRUE)
 ```
 
 ## Mosaic Plots
 
-* *Width:* Relative frequencies of one variable
-* *Height:* Relative  (conditional) frequencies of the second variable given the first
+* Cell frequency $O_{ij}$, cell probability $p_{ij} = O_{ij} / O_{\cdot\cdot}$
+* Take unit square
+* Divide unit square into rectangles 
+    * *Height* proportional to observed marginal frequencies $O_{i\cdot}$
+    * which is proportional to marginal probabilities $p_i = O_{i\cdot} / O_{\cdot\cdot}$
+* Subdivide resulting rectangles horizontally 
+    * *Width* proportional to $p_{j|i} = O_{ij}/O_{i\cdot}$
+    * which is the conditional probabilities of the second variable given the first
+* *Area* is proportional to the observed cell frequency and probability
+$p_{ij} = p_{i} \times p_{j|i} = ( O_{i\cdot}/O_{\cdot\cdot} ) \times ( O_{ij} / O_{i\cdot} )$
+
+## Mosaic Plots
+
+* The order of conditioning matters
+* Placing explanatory variable(s) first shows how the response(s) depend on them
 * *Color:* Standardized Pearson residuals that are asymptotically standard normal
 
-## Mosaic Plots {.build}
+## Mosaic Plots
 
-Subdivide by marginal frequencies of first variable
+Marginal probabilities of first variable
 
 ```{r echo=TRUE}
-frequency = rowSums(ct)
+frequency = rowSums(HairEye)
 proportions = frequency/sum(frequency)
-t(data.frame(frequency=round(frequency,0),proportions=round(proportions,2)))
-```
-
-Subdivide by marginal frequencies of second given first variable
-
-```{r echo=TRUE}
-t(ct/rowSums(ct))
+data.frame(frequency=round(frequency,0),proportions=round(proportions,2))
 ```
 
 ## Mosaic Plots
 
-```{r echo=TRUE, message=FALSE, fig.width=6, fig.height=6}
-mosaic(ct,shade = TRUE)
+Marginal probabilities of second given first variable
+
+```{r echo=TRUE}
+HairEye/rowSums(HairEye)
 ```
+
+## Mosaic Plots
+
+```{r fig.height=6.5}
+mosaic(HairEye,shade = TRUE)
+```
+
+## Mosaic Plots
+
+If hair color and eye color were independent $p_{ij} =p_i \times p_j$, then then the tiles in each row would all align
+
+<div class="columns-2">
+
+```{r fig.height=5.5}
+mosaic(HairEye,shade = TRUE)
+```
+
+```{r fig.height=5.5}
+mosaic(chisq.test(HairEye)$expected,shade = TRUE)
+```
+
+</div>
 
 ## Correspondence Analysis
 
@@ -140,38 +205,14 @@ $$D_r X^T D_c X = \frac{\chi^2}{n}$$
 * In standard PCA, principle components explain variance
 * In CA, principle components explain devation from independence
 
-## Mosaic, Association, and Correspondence Analysis Example
+## Correspondence Analysis
 
-```{r echo=TRUE}
+```{r}
 library(ca)
-HairEye = margin.table(HairEyeColor, c(1, 2)); HairEye
-```
-
-----
-
-```{r echo=TRUE}
-chisq.test(HairEye)
-```
-
-----
-
-```{r echo=TRUE, message=FALSE, fig.width=6.5, fig.height=6.5}
-mosaic(HairEye, shade = TRUE)
-```
-
----
-
-```{r echo=TRUE, message=FALSE, fig.width=6, fig.height=6}
-assoc(HairEye,shade = TRUE)
-```
-
-----
-
-```{r echo=TRUE}
 ca.res = ca(HairEye); ca.res
 ```
 
-----
+## Correspondence Analysis
 
 ```{r fig.width=10, fig.height=5}
 plot(ca.res)
