@@ -17,7 +17,7 @@ knitr::opts_chunk$set(echo = FALSE)
 set.seed(1234)
 ```
 
-## Independence of Two Discrete RVs
+## Test of Independence
 
 * Observations are two measurements on the same subject (e.g. eye color and hair color)
 * Random samples $(X_1,Y_1),\dots,(X_n,Y_n)$
@@ -32,7 +32,7 @@ $$
 * Construct contingency table of $n$ observations 
 $$O_{ij} = \#_{1 \le l \le n} \{ (X_l,Y_l) = (i,j) \}$$
 
-## Independence of Two Discrete RVs {.build}
+## Test of Independence {.build}
 
 Expected frequencies under independence assumption are product of marginals
 $$\widehat{E}_{ij} = n \frac{O_{i\cdot}}{n} \frac{O_{\cdot j}}{n}$$
@@ -45,26 +45,11 @@ Test statistics $\chi^2 = \sum_{i=1}^r \sum_{j=1}^c \frac{(O_{ij}-\widehat{E}_{i
 
 Asymptotically $\chi^2$ with $(r−1)(c−1)$ degrees of freedom
 
-This is called *test of independence*
+## Test of Independence
 
-## Contingency Tables
-
-* Several discrete random variables with same categories $1,\dots,c$
-    * Test of homogeneity
-    * Are the observations generated from one multinomial distribution with one probability vector?
-    * Possibly different sample size among random variable
-    * E.g. crime example, types of crimes (theft, fraud, etc.) commited by alcoholic and non-alcoholic criminals
-* Two discrete random variables with different categories $1,\dots,r$ and $1,\dots,c$
-    * Test of independence
-    * Are the pairwise observation independent?
-    * Fixed sample size for all random variables
-    * E.g. hair color, eye color example
-
-## Goodness of Fit
-
-* The test of homogeneity and independence are called goodness-of-fit tests
-* They quantify how well a model fits observations
-* They measure discrepancy between observed values and expected values under the model
+* This is a goodness-of-fit test
+* Quantifies how well the independence model fits observations
+* Measures discrepancy between observed values and expected values under the model
 * Rather than reject this global null hypthesis, can we find what is driving the statistic?
 * Can we visualize the residuals?
 * Two ways:
@@ -205,7 +190,7 @@ $$D_r X^T D_c X = \frac{\chi^2}{n}$$
 * In standard PCA, principle components explain variance
 * In CA, principle components explain devation from independence
 
-## Correspondence Analysis
+## Correspondence Analysis {.smaller}
 
 ```{r}
 library(ca)
@@ -219,3 +204,16 @@ plot(ca.res)
 ```
 
 Color code: <span style="color:blue">Hair</span>, <span style="color:red">Eye</span>
+
+## Test of Independence and Test of Homogeneity
+
+* Several discrete random variables with same categories $1,\dots,c$
+    * Test of homogeneity
+    * Are the observations generated from one multinomial distribution with one probability vector?
+    * Possibly different sample size among random variable
+    * E.g. crime example, types of crimes (theft, fraud, etc.) commited by alcoholic and non-alcoholic criminals
+* Two discrete random variables with different categories $1,\dots,r$ and $1,\dots,c$
+    * Test of independence
+    * Are the pairwise observation independent?
+    * Fixed sample size for all random variables
+    * E.g. hair color, eye color example
