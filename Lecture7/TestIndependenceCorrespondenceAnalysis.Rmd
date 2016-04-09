@@ -1,5 +1,5 @@
 ---
-title: "Correspondence Analysis"
+title: "Test of Independence and Correspondence Analysis"
 author: "Christof Seiler"
 date: "Stanford University, Spring 2016, STATS 205"
 output:
