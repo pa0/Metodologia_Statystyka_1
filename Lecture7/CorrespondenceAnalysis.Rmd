@@ -1,0 +1,180 @@
+---
+title: "Correspondence Analysis"
+author: "Christof Seiler"
+date: "Stanford University, Spring 2016, STATS 205"
+output:
+  ioslides_presentation:
+    incremental: yes
+    smaller: no
+    transition: faster
+    widescreen: yes
+  beamer_presentation:
+    incremental: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+set.seed(1234)
+```
+
+## Goodness of Fit
+
+* All the above tests are called goodness-of-fit tests
+* They quantify how well a model fits observations
+* They measure discrepancy between observed values and expected values under the model
+* Can we visualize the residuals?
+* Rather than reject this global null hypthesis, can we find what is driving the statistic?
+* Two ways:
+    * Visualization of contingency table with association and mosaic plots
+    * Visualization of deviation from model with correspondence analysis
+
+## Contingency Tables
+
+* Several discrete random variables with same categories $1,\dots,c$
+    * Test of homogeneity
+    * Compare distribution of all random variables
+    * Are the observation generated from one multinomial distribution with one probability vector
+    * Possibly different number of observations
+    * Experimental design: TODO
+* Two discrete random variables with different categories $1,\dots,r$ and $1,\dots,c$
+    * Test of independence
+    * Same number of observations
+    * Experimental design: TODO
+
+## Association Plots
+
+* This is a followup on $\chi^2$ tests when they are rejected
+* Pearson residuals
+$$r_{ij} = \frac{O_{ij}-E_{ij}}{\sqrt{E_{ij}}}$$
+* and the $\chi^2$ statistics is squaring and summing over all cells
+$$\chi^2 = \sum_j \sum_i r_{ij}^2$$
+
+## Association Plots
+
+* Each cell of contingency table is represented by a rectangle encoding information in width, height, location, and color of the rectangle
+* *Height:* Proportional to Pearson residual $\frac{O_{ij}-E_{ij}}{\sqrt{E_{ij}}}$
+* *Width:*  Proportional to $\sqrt{E_{ij}}$
+* *Area:* Proportional to $O_{ij}-E_{ij}$
+* *Baseline:* 
+    * If $O_{ij} > E_{ij}$, then rectanble above
+    * Otherwise rectangle below
+* *Color:* Standardized Pearson residuals that are asymptotically standard normal
+
+## Association Plots Example
+
+Distribution of alcoholic status same for different type of crime?
+
+Contingency table with frequencies of  
+criminals who committed crimes (6 RV's) and  
+their alcoholics status (category: alcoholic and non-alcoholic)
+
+```{r}
+c1 = c(50,88,155,379,18,63) 
+c2 = c(43,62,110,300,14,144)
+ct = cbind(c1,c2)
+colnames(ct) = c("Alcoholic","Non-Alcoholic")
+rownames(ct) = c("Arson","Rape","Violence","Theft","Coining","Fraud")
+ct
+```
+
+## Association Plots Example
+
+```{r echo=TRUE, message=FALSE, fig.width=5.5, fig.height=5.5}
+library(vcd); assoc(ct,shade = TRUE)
+```
+
+## Mosaic Plots
+
+* *Width:* Relative frequencies of one variable
+* *Height:* Relative  (conditional) frequencies of the second variable given the first
+* *Color:* Standardized Pearson residuals that are asymptotically standard normal
+
+## Mosaic Plots {.build}
+
+Subdivide by marginal frequencies of first variable
+
+```{r echo=TRUE}
+frequency = rowSums(ct)
+proportions = frequency/sum(frequency)
+t(data.frame(frequency=round(frequency,0),proportions=round(proportions,2)))
+```
+
+Subdivide by marginal frequencies of second given first variable
+
+```{r echo=TRUE}
+t(ct/rowSums(ct))
+```
+
+## Mosaic Plots
+
+```{r echo=TRUE, message=FALSE, fig.width=6, fig.height=6}
+mosaic(ct,shade = TRUE)
+```
+
+## Correspondence Analysis
+
+* Actively developped in 1965 in France
+* French school of data analysis: Geometry instead of probability
+* Can be used to plot contingency tables for exploratory data analysis
+* Decomposes the $\chi^2$ statistic into orthogonal factors
+* To first approximation: extension Principal Components Analysis (PCA) by 
+* replacing the variance in PCA with an inertia proportional to the $\chi^2$ distance of the table from independence
+* decomposes this measure of departure from independence along axes that are orthogonal according to a $\chi^2$ inner product
+
+## Correspondence Analysis
+
+* Denote $m \times p$ contingency table as $N$
+* Total number of observations $n = \sum_{i=1}^m \sum_{j=1}^p n_{ij}$
+* Denote frequency table as $F = \frac{N}{n}$
+* Vector of row sums of $F$: $\operatorname{diag}(D_r) = r = \frac{1}{n} N 1_p$
+* Vector of column sums of $F$: $\operatorname{diag}(D_c) = c^T = \frac{1}{n} N^T 1_m$
+* Peform Principle Component Analysis (PCA) on new data matrix
+$$X = D_r^{-1} F D_c^{-1} − 1_m^T 1_p$$
+* Generalized singular value decomposition on $X = USV^T$  
+with constrains $U^T D_r U = I_m$ and $V^T D_c V = I_p$
+
+## Correspondence Analysis
+
+* Relationship to $\chi^2$ statistic
+$$D_r X^T D_c X = \frac{\chi^2}{n}$$
+* In standard PCA, principle components explain variance
+* In CA, principle components explain devation from independence
+
+## Mosaic, Association, and Correspondence Analysis Example
+
+```{r echo=TRUE}
+library(ca)
+HairEye = margin.table(HairEyeColor, c(1, 2)); HairEye
+```
+
+----
+
+```{r echo=TRUE}
+chisq.test(HairEye)
+```
+
+----
+
+```{r echo=TRUE, message=FALSE, fig.width=6.5, fig.height=6.5}
+mosaic(HairEye, shade = TRUE)
+```
+
+---
+
+```{r echo=TRUE, message=FALSE, fig.width=6, fig.height=6}
+assoc(HairEye,shade = TRUE)
+```
+
+----
+
+```{r echo=TRUE}
+ca.res = ca(HairEye); ca.res
+```
+
+----
+
+```{r fig.width=10, fig.height=5}
+plot(ca.res)
+```
+
+Color code: <span style="color:blue">Hair</span>, <span style="color:red">Eye</span>
