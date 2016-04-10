@@ -32,6 +32,20 @@ $$
 * Construct contingency table of $n$ observations 
 $$O_{ij} = \#_{1 \le l \le n} \{ (X_l,Y_l) = (i,j) \}$$
 
+## Test of Independence
+
+Some definitions:
+
+$$
+\begin{align}
+\text{Row sum:} & O_{i\cdot} \\
+\text{Column sum:} & O_{\cdot j} \\
+\text{Total sum:} & O_{\cdot\cdot} \\
+\text{Row vector i:} & O_i \\
+\text{Column vector j:} & O_j
+\end{align}
+$$
+
 ## Test of Independence {.build}
 
 Expected frequencies under independence assumption are product of marginals
@@ -41,7 +55,7 @@ library(ca)
 HairEye = margin.table(HairEyeColor, c(1, 2)); HairEye
 ```
 
-Test statistics $\chi^2 = \sum_{i=1}^r \sum_{j=1}^c \frac{(O_{ij}-\widehat{E}_{ij})^2}{\widehat{E}_{ij}}$
+Test statistics $\chi^2 = \sum_i \sum_j \frac{(O_{ij}-\widehat{E}_{ij})^2}{\widehat{E}_{ij}}$
 
 Asymptotically $\chi^2$ with $(r−1)(c−1)$ degrees of freedom
 
@@ -163,6 +177,35 @@ mosaic(chisq.test(HairEye)$expected,shade = TRUE)
 
 ## Correspondence Analysis
 
+* Exploratory data analysis for non-negative data matrices
+* Converts matrix into a plot where rows and columns are depicted as points
+* Its algebraic form first appeared in 1935
+* Actively developped in 1965 in France
+* We focus on the application of correspondence analysis for contingency tables
+* Analogous to principal components analysis, but appropriate to categorical rather than to continuous variables
+
+## Correspondence Analysis
+
+* Define a distance between rows
+* Use the distance $d_{\chi^2}(x,y)$ between two vector $x$ and $y$ as
+$$d_{\chi^2}(x,y) = (x-y)^T D_c^{-1} (x-y)$$
+* where $D_c$ is a diagonal matrix with 
+$$\operatorname{diag}(D_c)_{j} = c = O_{\cdot j}/ O_{\cdot\cdot}$$
+* Notice that $c$ is the average row probability
+* Or *centroid* (weighted average of frequencies)
+$$c = \sum_i \frac{O_{i\cdot}}{O_{\cdot\cdot}} O_i$$
+
+## Correspondence Analysis
+
+* Compare $d_{\chi^2}(x,y)$ metric 
+$$d_{\chi^2}(x,y) = (x-y)^T D_c^{-1} (x-y)$$
+* and in $\chi^2$ statistic $x$ are rows vectors and $y$ is centroid
+$$\chi^2 = O_{\cdot\cdot} \sum_i \frac{O_{i\cdot}}{O_{\cdot\cdot}} (O_i-c)^T D_c^{-1} (O_i-c)$$
+* in other words: $\chi^2/O_{\cdot\cdot}$ is weighted average of $d_{\chi^2}(x,y)$ distances of the row vectors to their centroid
+* or even more words: it is the Mahalanobis metric between row vectors based on their estimated covariance matrix under the homogeneity assumption
+
+## Correspondence Analysis
+
 * Actively developped in 1965 in France
 * French school of data analysis: Geometry instead of probability
 * Can be used to plot contingency tables for exploratory data analysis
@@ -214,6 +257,6 @@ Color code: <span style="color:blue">Hair</span>, <span style="color:red">Eye</s
     * E.g. crime example, types of crimes (theft, fraud, etc.) commited by alcoholic and non-alcoholic criminals
 * Two discrete random variables with different categories $1,\dots,r$ and $1,\dots,c$
     * Test of independence
-    * Are the pairwise observation independent?
+    * Are the pairwise observations independent?
     * Fixed sample size for all random variables
     * E.g. hair color, eye color example
