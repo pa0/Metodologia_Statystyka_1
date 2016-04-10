@@ -1,5 +1,5 @@
 ---
-title: "Test of Independence and Correspondence Analysis"
+title: "Chi-Squared Tests (Part 2)"
 author: "Christof Seiler"
 date: "Stanford University, Spring 2016, STATS 205"
 output:
@@ -190,55 +190,63 @@ mosaic(chisq.test(HairEye)$expected,shade = TRUE)
 * Use the distance $d_{\chi^2}(x,y)$ between two vector $x$ and $y$ as
 $$d_{\chi^2}(x,y) = (x-y)^T D_c^{-1} (x-y)$$
 * where $D_c$ is a diagonal matrix with 
-$$\operatorname{diag}(D_c)_{j} = c = O_{\cdot j}/ O_{\cdot\cdot}$$
+$$\operatorname{diag}(D_c)_{j} = c_j = \frac{O_{\cdot j}}{O_{\cdot\cdot}}$$
 * Notice that $c$ is the average row probability
-* Or *centroid* (weighted average of frequencies)
-$$c = \sum_i \frac{O_{i\cdot}}{O_{\cdot\cdot}} O_i$$
+
+## Correspondence Analysis
+
+* Notice that $c$ is the average row probability
+* Let $a_i = (O_{i1}/O_{i\cdot},\dots,O_{iJ}/O_{i\cdot})$ be the row marginal proportions
+* Then, the *centroid* is the weighted average of row maginal proportions
+$$c = \sum_i \frac{O_{i\cdot}}{O_{\cdot\cdot}} a_i$$
 
 ## Correspondence Analysis
 
 * Compare $d_{\chi^2}(x,y)$ metric 
 $$d_{\chi^2}(x,y) = (x-y)^T D_c^{-1} (x-y)$$
-* and in $\chi^2$ statistic $x$ are rows vectors and $y$ is centroid
-$$\chi^2 = O_{\cdot\cdot} \sum_i \frac{O_{i\cdot}}{O_{\cdot\cdot}} (O_i-c)^T D_c^{-1} (O_i-c)$$
-* in other words: $\chi^2/O_{\cdot\cdot}$ is weighted average of $d_{\chi^2}(x,y)$ distances of the row vectors to their centroid
-* or even more words: it is the Mahalanobis metric between row vectors based on their estimated covariance matrix under the homogeneity assumption
+* In $\chi^2$ statistic $x$ are row marginal proportions and $y$ is the centroid
+$$\chi^2 = O_{\cdot\cdot} \sum_i \frac{O_{i\cdot}}{O_{\cdot\cdot}} (a_i-c)^T D_c^{-1} (a_i-c)$$
+* $\chi^2/O_{\cdot\cdot}$ is weighted average of $d_{\chi^2}(x,y)$ distances of row marginal proportions to their row centroid
+
+<!--
+* It is the Mahalanobis metric between row vectors based on their estimated covariance matrix under the homogeneity assumption
+-->
 
 ## Correspondence Analysis
 
-* Actively developped in 1965 in France
-* French school of data analysis: Geometry instead of probability
-* Can be used to plot contingency tables for exploratory data analysis
-* Decomposes the $\chi^2$ statistic into orthogonal factors
-* To first approximation: extension Principal Components Analysis (PCA) by 
-* replacing the variance in PCA with an inertia proportional to the $\chi^2$ distance of the table from independence
-* decomposes this measure of departure from independence along axes that are orthogonal according to a $\chi^2$ inner product
+* First "principle component" is best line fit trough cloud of marginal proportion points
+* Modify standard Principal Component Analysis (PCA) to incorporate point weights and weighted metric
+* Use $O_{i\cdot}/O_{\cdot\cdot}$ as weights, which provides decomposition of $\chi^2$ statistics into components
+* After translating points to the origin $c$, the best fit line is the principle eigenvector of matrix
+$$\sum_i \frac{O_{i\cdot}}{O_{\cdot\cdot}} (a_i - c) (a_i - c)^T D_c^{-1}$$
+* The trace of this matrix is equal to $\chi^2/O_{\cdot\cdot}$
 
 ## Correspondence Analysis
 
-* Denote $m \times p$ contingency table as $N$
-* Total number of observations $n = \sum_{i=1}^m \sum_{j=1}^p n_{ij}$
-* Denote frequency table as $F = \frac{N}{n}$
-* Vector of row sums of $F$: $\operatorname{diag}(D_r) = r = \frac{1}{n} N 1_p$
-* Vector of column sums of $F$: $\operatorname{diag}(D_c) = c^T = \frac{1}{n} N^T 1_m$
-* Peform Principle Component Analysis (PCA) on new data matrix
-$$X = D_r^{-1} F D_c^{-1} − 1_m^T 1_p$$
-* Generalized singular value decomposition on $X = USV^T$  
-with constrains $U^T D_r U = I_m$ and $V^T D_c V = I_p$
+* Repeat same for column marginal proportions
+* Can be done in one step by Generalized Singular Value Decomposition (GSVD)
+$$D_r^{-1/2} \left( \left(\frac{O_{ij}}{O_{\cdot\cdot}} \right) - rc^T \right) D_c^{-1/2} = X D_{\alpha} Y^T$$
+with constrains $X^TX = Y^TY = \operatorname{Id}$
+* Singular values are the square roots of the principal inertias $D_{\alpha} = D_{\lambda}^{1/2}$
+* Principal axes of row $D_r^{1/2}Y$
+* Principal axes of column $D_c^{1/2}X$
 
 ## Correspondence Analysis
 
-* Relationship to $\chi^2$ statistic
-$$D_r X^T D_c X = \frac{\chi^2}{n}$$
+* Row and column projection are usually displayed in same plot 
+* Principal inertia is the weighted average of $\chi^2$ distances from the centroid to the projections of the row/column marginal proportions
+* Row-to-column distances are meaningless
 * In standard PCA, principle components explain variance
 * In CA, principle components explain devation from independence
 
+<!--
 ## Correspondence Analysis {.smaller}
 
 ```{r}
 library(ca)
 ca.res = ca(HairEye); ca.res
 ```
+-->
 
 ## Correspondence Analysis
 
@@ -246,13 +254,19 @@ ca.res = ca(HairEye); ca.res
 plot(ca.res)
 ```
 
-Color code: <span style="color:blue">Hair</span>, <span style="color:red">Eye</span>
+Color code: <span style="color:blue">Rows: Hair</span>, <span style="color:red">Columns: Eye</span>
+
+## Mosaic Plots
+
+```{r fig.height=6.5}
+mosaic(HairEye,shade = TRUE)
+```
 
 ## Test of Independence and Test of Homogeneity
 
 * Several discrete random variables with same categories $1,\dots,c$
     * Test of homogeneity
-    * Are the observations generated from one multinomial distribution with one probability vector?
+    * Are the observations generated from one multinomial distribution with common probability vector?
     * Possibly different sample size among random variable
     * E.g. crime example, types of crimes (theft, fraud, etc.) commited by alcoholic and non-alcoholic criminals
 * Two discrete random variables with different categories $1,\dots,r$ and $1,\dots,c$
