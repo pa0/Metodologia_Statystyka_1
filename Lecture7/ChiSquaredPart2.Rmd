@@ -195,7 +195,7 @@ $$d_{\chi^2}(\boldsymbol{x},\boldsymbol{y}) = (\boldsymbol{x}-\boldsymbol{y})^T 
 * where $D_c$ is a diagonal matrix with 
 $$\operatorname{diag}(D_c) = \boldsymbol{c} = \sum_i p_i \boldsymbol{a_i}$$
 * with $\boldsymbol{a_i} = (p_{j|i})$ being the probability vector conditioned on row $i$
-* and the *centroid* $\boldsymbol{c}$ being the weighted average of row probabilities
+* and the *centroid* $\boldsymbol{c}$ being the weighted average of conditional row probabilities
 
 -----
 
