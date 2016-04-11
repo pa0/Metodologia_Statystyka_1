@@ -264,6 +264,15 @@ mosaic(HairEye,shade = TRUE)
 
 ## Test of Independence and Test of Homogeneity
 
+* The null hypothesis of row-column independence: $$\frac{O_{ij}}{O_{\cdot\cdot}} = \frac{O_{i\cdot} O_{\cdot j}}{O_{\cdot\cdot}}$$
+* is equivalent to the hypothesis of homogeneity of the rows: $$\frac{O_{1j}}{O_{1\cdot}} = \frac{O_{2j}}{O_{2\cdot}} = \dots = \frac{O_{Ij}}{O_{I\cdot}}$$
+* Each row of $O$ follows a multinomial distribution
+* Under homogeneity assumption, this distribution is common to all of the rows
+* Maximum likelihood estimates of probability vector is equal to centroid $c$
+* Thus a significant $\chi^2$ is a significant deviation of rows from their centroid
+
+## Test of Independence and Test of Homogeneity
+
 * Several discrete random variables with same categories $1,\dots,c$
     * Test of homogeneity
     * Are the observations generated from one multinomial distribution with common probability vector?
