@@ -57,7 +57,7 @@ HairEye = margin.table(HairEyeColor, c(1, 2)); HairEye
 
 Test statistics $\chi^2 = \sum_i \sum_j \frac{(O_{ij}-\widehat{E}_{ij})^2}{\widehat{E}_{ij}}$
 
-Asymptotically $\chi^2$ with $(r−1)(c−1)$ degrees of freedom
+Asymptotically $\chi^2$ with $(I−1)(J−1)$ degrees of freedom
 
 ## Test of Independence
 
