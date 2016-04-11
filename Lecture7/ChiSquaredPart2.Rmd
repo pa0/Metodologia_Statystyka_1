@@ -49,7 +49,7 @@ $$
 ## Test of Independence {.build}
 
 Expected frequencies under independence assumption are product of marginals
-$$\widehat{E}_{ij} = n \frac{O_{i\cdot}}{n} \frac{O_{\cdot j}}{n}$$
+$$\widehat{E}_{ij} = O_{\cdot\cdot} \frac{O_{i\cdot}}{O_{\cdot\cdot}} \frac{O_{\cdot j}}{O_{\cdot\cdot}}$$
 ```{r}
 library(ca)
 HairEye = margin.table(HairEyeColor, c(1, 2)); HairEye
@@ -187,26 +187,20 @@ mosaic(chisq.test(HairEye)$expected,shade = TRUE)
 ## Correspondence Analysis
 
 * Define a distance between rows
-* Use the distance $d_{\chi^2}(x,y)$ between two vector $x$ and $y$ as
-$$d_{\chi^2}(x,y) = (x-y)^T D_c^{-1} (x-y)$$
+* Use the distance $d_{\chi^2}(\boldsymbol{x},\boldsymbol{y})$ between two vector $\boldsymbol{x}$ and $\boldsymbol{y}$ as
+$$d_{\chi^2}(\boldsymbol{x},\boldsymbol{y}) = (\boldsymbol{x}-\boldsymbol{y})^T D_c^{-1} (\boldsymbol{x}-\boldsymbol{y})$$
 * where $D_c$ is a diagonal matrix with 
-$$\operatorname{diag}(D_c)_{j} = c_j = \frac{O_{\cdot j}}{O_{\cdot\cdot}}$$
-* Notice that $c$ is the average row probability
+$$\operatorname{diag}(D_c) = \boldsymbol{c} = \sum_i p_i \boldsymbol{a_i}$$
+* with $\boldsymbol{a_i} = (p_{j|i})$ being the probability vector conditioned on row $i$
+* and the *centroid* $\boldsymbol{c}$ being the weighted average of row probabilities
 
 ## Correspondence Analysis
 
-* Notice that $c$ is the average row probability
-* Let $a_i = (O_{i1}/O_{i\cdot},\dots,O_{iJ}/O_{i\cdot})$ be the row marginal proportions
-* Then, the *centroid* is the weighted average of row maginal proportions
-$$c = \sum_i \frac{O_{i\cdot}}{O_{\cdot\cdot}} a_i$$
-
-## Correspondence Analysis
-
-* Compare $d_{\chi^2}(x,y)$ metric 
-$$d_{\chi^2}(x,y) = (x-y)^T D_c^{-1} (x-y)$$
-* In $\chi^2$ statistic $x$ are row marginal proportions and $y$ is the centroid
-$$\chi^2 = O_{\cdot\cdot} \sum_i \frac{O_{i\cdot}}{O_{\cdot\cdot}} (a_i-c)^T D_c^{-1} (a_i-c)$$
-* $\chi^2/O_{\cdot\cdot}$ is weighted average of $d_{\chi^2}(x,y)$ distances of row marginal proportions to their row centroid
+* Compare $d_{\chi^2}(\boldsymbol{x},\boldsymbol{y})$ metric 
+$$d_{\chi^2}(\boldsymbol{x},\boldsymbol{y}) = (\boldsymbol{x}-\boldsymbol{y})^T D_c^{-1} (\boldsymbol{x}-\boldsymbol{y})$$
+* to $\chi^2$ statistic 
+$$\chi^2 = O_{\cdot\cdot} \sum_i p_i (\boldsymbol{a_i}-\boldsymbol{c})^T D_c^{-1} (\boldsymbol{a_i}-\boldsymbol{c})$$
+* $\chi^2/O_{\cdot\cdot}$ is weighted average of $d_{\chi^2}(\boldsymbol{a_i},\boldsymbol{c})$ distances of conditional row probabilities $\boldsymbol{a_i}$ to their row centroid $\boldsymbol{c}$
 
 <!--
 * It is the Mahalanobis metric between row vectors based on their estimated covariance matrix under the homogeneity assumption
@@ -216,16 +210,16 @@ $$\chi^2 = O_{\cdot\cdot} \sum_i \frac{O_{i\cdot}}{O_{\cdot\cdot}} (a_i-c)^T D_c
 
 * First "principle component" is best line fit trough cloud of marginal proportion points
 * Modify standard Principal Component Analysis (PCA) to incorporate point weights and weighted metric
-* Use $O_{i\cdot}/O_{\cdot\cdot}$ as weights, which provides decomposition of $\chi^2$ statistics into components
-* After translating points to the origin $c$, the best fit line is the principle eigenvector of matrix
-$$\sum_i \frac{O_{i\cdot}}{O_{\cdot\cdot}} (a_i - c) (a_i - c)^T D_c^{-1}$$
+* Use $p_i$ as weights, which provides decomposition of $\chi^2$ statistics into components
+* After translating points to the origin $\boldsymbol{c}$, the best fit line is the principle eigenvector of matrix
+$$\sum_i p_i (\boldsymbol{a_i} - \boldsymbol{c}) (\boldsymbol{a_i} - \boldsymbol{c})^T D_c^{-1}$$
 * The trace of this matrix is equal to $\chi^2/O_{\cdot\cdot}$
 
 ## Correspondence Analysis
 
 * Repeat same for column marginal proportions
 * Can be done in one step by Generalized Singular Value Decomposition (GSVD)
-$$D_r^{-1/2} \left( \left(\frac{O_{ij}}{O_{\cdot\cdot}} \right) - rc^T \right) D_c^{-1/2} = X D_{\alpha} Y^T$$
+$$D_r^{-1/2} \left( \left( p_{ij} \right) - \boldsymbol{r}\boldsymbol{c}^T \right) D_c^{-1/2} = X D_{\alpha} Y^T$$
 with constrains $X^TX = Y^TY = \operatorname{Id}$
 * Singular values are the square roots of the principal inertias $D_{\alpha} = D_{\lambda}^{1/2}$
 * Principal axes of row $D_r^{1/2}Y$
@@ -264,11 +258,12 @@ mosaic(HairEye,shade = TRUE)
 
 ## Test of Independence and Test of Homogeneity
 
-* The null hypothesis of row-column independence: $$\frac{O_{ij}}{O_{\cdot\cdot}} = \frac{O_{i\cdot} O_{\cdot j}}{O_{\cdot\cdot}}$$
-* is equivalent to the hypothesis of homogeneity of the rows: $$\frac{O_{1j}}{O_{1\cdot}} = \frac{O_{2j}}{O_{2\cdot}} = \dots = \frac{O_{Ij}}{O_{I\cdot}}$$
+* The null hypothesis of row-column independence: $p_{ij} = p_i \times p_j$
+* is equivalent to the hypothesis of homogeneity of the rows: 
+$$p_{j|i=1} = p_{j|i=2} = \dots = p_{j|i=I}$$
 * Each row of $O$ follows a multinomial distribution
-* Under homogeneity assumption, this distribution is common to all of the rows
-* Maximum likelihood estimates of probability vector is equal to centroid $c$
+* Under homogeneity assumption, this distribution has common probability vector
+* Maximum likelihood estimates of probability vector is equal to centroid $\boldsymbol{c}$
 * Thus a significant $\chi^2$ is a significant deviation of rows from their centroid
 
 ## Test of Independence and Test of Homogeneity
