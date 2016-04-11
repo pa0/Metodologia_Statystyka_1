@@ -38,9 +38,9 @@ Some definitions:
 
 $$
 \begin{align}
-\text{Row sum:} & O_{i\cdot} \\
-\text{Column sum:} & O_{\cdot j} \\
-\text{Total sum:} & O_{\cdot\cdot} \\
+\text{Row sum:} & O_{i+} \\
+\text{Column sum:} & O_{+ j} \\
+\text{Total sum:} & O_{++} \\
 \text{Row vector i:} & O_i \\
 \text{Column vector j:} & O_j
 \end{align}
@@ -49,7 +49,7 @@ $$
 ## Test of Independence {.build}
 
 Expected frequencies under independence assumption are product of marginals
-$$\widehat{E}_{ij} = O_{\cdot\cdot} \frac{O_{i\cdot}}{O_{\cdot\cdot}} \frac{O_{\cdot j}}{O_{\cdot\cdot}}$$
+$$\widehat{E}_{ij} = O_{++} \frac{O_{i+}}{O_{++}} \frac{O_{+ j}}{O_{++}}$$
 ```{r}
 library(ca)
 HairEye = margin.table(HairEyeColor, c(1, 2)); HairEye
@@ -118,16 +118,16 @@ library(vcd); assoc(HairEye,shade = TRUE)
 
 ## Mosaic Plots
 
-* Cell frequency $O_{ij}$, cell probability $p_{ij} = O_{ij} / O_{\cdot\cdot}$
+* Cell frequency $O_{ij}$, cell probability $p_{ij} = O_{ij} / O_{++}$
 * Take unit square
 * Divide unit square into rectangles 
-    * *Height* proportional to observed marginal frequencies $O_{i\cdot}$
-    * which is proportional to marginal probabilities $p_i = O_{i\cdot} / O_{\cdot\cdot}$
+    * *Height* proportional to observed marginal frequencies $O_{i+}$
+    * which is proportional to marginal probabilities $p_i = O_{i+} / O_{++}$
 * Subdivide resulting rectangles horizontally 
-    * *Width* proportional to $p_{j|i} = O_{ij}/O_{i\cdot}$
+    * *Width* proportional to $p_{j|i} = O_{ij}/O_{i+}$
     * which is the conditional probabilities of the second variable given the first
 * *Area* is proportional to the observed cell frequency and probability
-$p_{ij} = p_{i} \times p_{j|i} = ( O_{i\cdot}/O_{\cdot\cdot} ) \times ( O_{ij} / O_{i\cdot} )$
+$p_{ij} = p_{i} \times p_{j|i} = ( O_{i+}/O_{++} ) \times ( O_{ij} / O_{i+} )$
 
 ## Mosaic Plots
 
@@ -199,8 +199,8 @@ $$\operatorname{diag}(D_c) = \boldsymbol{c} = \sum_i p_i \boldsymbol{a_i}$$
 * Compare $d_{\chi^2}(\boldsymbol{x},\boldsymbol{y})$ metric 
 $$d_{\chi^2}(\boldsymbol{x},\boldsymbol{y}) = (\boldsymbol{x}-\boldsymbol{y})^T D_c^{-1} (\boldsymbol{x}-\boldsymbol{y})$$
 * to $\chi^2$ statistic 
-$$\chi^2 = O_{\cdot\cdot} \sum_i p_i (\boldsymbol{a_i}-\boldsymbol{c})^T D_c^{-1} (\boldsymbol{a_i}-\boldsymbol{c})$$
-* $\chi^2/O_{\cdot\cdot}$ is weighted average of $d_{\chi^2}(\boldsymbol{a_i},\boldsymbol{c})$ distances of conditional row probabilities $\boldsymbol{a_i}$ to their row centroid $\boldsymbol{c}$
+$$\chi^2 = O_{++} \sum_i p_i (\boldsymbol{a_i}-\boldsymbol{c})^T D_c^{-1} (\boldsymbol{a_i}-\boldsymbol{c})$$
+* $\chi^2/O_{++}$ is weighted average of $d_{\chi^2}(\boldsymbol{a_i},\boldsymbol{c})$ distances of conditional row probabilities $\boldsymbol{a_i}$ to their row centroid $\boldsymbol{c}$
 
 <!--
 * It is the Mahalanobis metric between row vectors based on their estimated covariance matrix under the homogeneity assumption
@@ -213,7 +213,7 @@ $$\chi^2 = O_{\cdot\cdot} \sum_i p_i (\boldsymbol{a_i}-\boldsymbol{c})^T D_c^{-1
 * Use $p_i$ as weights, which provides decomposition of $\chi^2$ statistics into components
 * After translating points to the origin $\boldsymbol{c}$, the best fit line is the principle eigenvector of matrix
 $$\sum_i p_i (\boldsymbol{a_i} - \boldsymbol{c}) (\boldsymbol{a_i} - \boldsymbol{c})^T D_c^{-1}$$
-* The trace of this matrix is equal to $\chi^2/O_{\cdot\cdot}$
+* The trace of this matrix is equal to $\chi^2/O_{++}$
 
 ## Correspondence Analysis
 
