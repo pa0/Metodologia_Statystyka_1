@@ -65,7 +65,7 @@ Asymptotically $\chi^2$ with $(r−1)(c−1)$ degrees of freedom
 * Quantifies how well the independence model fits observations
 * Measures discrepancy between observed values and expected values under the model
 * Rather than reject this global null hypthesis, can we find what is driving the statistic?
-* Can we visualize the residuals?
+* Can we visualize this?
 * Two ways:
     * Visualization of contingency table with association and mosaic plots
     * Visualization of deviation from model with correspondence analysis
@@ -120,7 +120,7 @@ library(vcd); assoc(HairEye,shade = TRUE)
 
 * Cell frequency $O_{ij}$, cell probability $p_{ij} = O_{ij} / O_{++}$
 * Take unit square
-* Divide unit square into rectangles 
+* Divide unit square vertically into rectangles 
     * *Height* proportional to observed marginal frequencies $O_{i+}$
     * which is proportional to marginal probabilities $p_i = O_{i+} / O_{++}$
 * Subdivide resulting rectangles horizontally 
@@ -132,8 +132,11 @@ $p_{ij} = p_{i} \times p_{j|i} = ( O_{i+}/O_{++} ) \times ( O_{ij} / O_{i+} )$
 ## Mosaic Plots
 
 * The order of conditioning matters
-* Placing explanatory variable(s) first shows how the response(s) depend on them
 * *Color:* Standardized Pearson residuals that are asymptotically standard normal
+
+<!--
+* Placing explanatory variable(s) first shows how the response(s) depend on them
+-->
 
 ## Mosaic Plots
 
@@ -216,12 +219,20 @@ $$\chi^2 = O_{++} \sum_i p_i (\boldsymbol{a_i}-\boldsymbol{c})^T D_c^{-1} (\bold
 
 ## Correspondence Analysis
 
-* First "principle component" is best line fit trough cloud of marginal proportion points
+* First "principle component" is best line fit trough cloud of conditional row probabilities
 * Modify standard Principal Component Analysis (PCA) to incorporate point weights and weighted metric
 * Use $p_i$ as weights, which provides decomposition of $\chi^2$ statistics into components
 * After translating points to the origin $\boldsymbol{c}$, the best fit line is the principle eigenvector of matrix
 $$\sum_i p_i (\boldsymbol{a_i} - \boldsymbol{c}) (\boldsymbol{a_i} - \boldsymbol{c})^T D_c^{-1}$$
 * The trace of this matrix is equal to $\chi^2/O_{++}$
+
+-----
+
+```{r, out.height = 480, fig.retina = NULL, echo=FALSE}
+knitr::include_graphics("GeometryCorrespondenceAnalysisProjection.JPG")
+```
+Greenacre and Hastie (1987)  
+The Geometric Interpretation of Correspondence Analysis
 
 ## Correspondence Analysis
 
@@ -236,10 +247,13 @@ with constrains $X^TX = Y^TY = \operatorname{Id}$
 ## Correspondence Analysis
 
 * Row and column projection are usually displayed in same plot 
-* Principal inertia is the weighted average of $\chi^2$ distances from the centroid to the projections of the row/column marginal proportions
 * Row-to-column distances are meaningless
 * In standard PCA, principle components explain variance
 * In CA, principle components explain devation from independence
+
+<!--
+* Principal inertia is the weighted average of $\chi^2$ distances from the centroid to the projections of the row/column marginal proportions
+-->
 
 <!--
 ## Correspondence Analysis {.smaller}
@@ -264,6 +278,12 @@ Color code: <span style="color:blue">Rows: Hair</span>, <span style="color:red">
 mosaic(HairEye,shade = TRUE)
 ```
 
+## Mosaic Plots
+
+```{r fig.height=6.5}
+mosaic(t(HairEye),shade = TRUE)
+```
+
 ## Test of Independence and Test of Homogeneity
 
 * The null hypothesis of row-column independence: $p_{ij} = p_i \times p_j$
@@ -279,10 +299,10 @@ $$p_{j|i=1} = p_{j|i=2} = \dots = p_{j|i=I}$$
 * Several discrete random variables with same categories $1,\dots,I$
     * Test of homogeneity
     * Are the observations generated from one multinomial distribution with common probability vector?
-    * Possibly different sample size among random variable
+    * Possibly different sample size among random variables
     * E.g. crime example, types of crimes (theft, fraud, etc.) commited by alcoholic and non-alcoholic criminals
 * Two discrete random variables with different categories $1,\dots,I$ and $1,\dots,J$
     * Test of independence
     * Are the pairwise observations independent?
-    * Fixed sample size for all random variables
+    * Paired random variables, so same sample size
     * E.g. hair color, eye color example
