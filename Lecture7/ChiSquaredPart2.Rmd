@@ -194,6 +194,14 @@ $$\operatorname{diag}(D_c) = \boldsymbol{c} = \sum_i p_i \boldsymbol{a_i}$$
 * with $\boldsymbol{a_i} = (p_{j|i})$ being the probability vector conditioned on row $i$
 * and the *centroid* $\boldsymbol{c}$ being the weighted average of row probabilities
 
+-----
+
+```{r, out.height = 480, fig.retina = NULL, echo=FALSE}
+knitr::include_graphics("GeometryCorrespondenceAnalysis.JPG")
+```
+Greenacre and Hastie (1987)  
+The Geometric Interpretation of Correspondence Analysis
+
 ## Correspondence Analysis
 
 * Compare $d_{\chi^2}(\boldsymbol{x},\boldsymbol{y})$ metric 
