@@ -21,7 +21,7 @@ set.seed(1234)
 
 * Observations are two measurements on the same subject (e.g. eye color and hair color)
 * Random samples $(X_1,Y_1),\dots,(X_n,Y_n)$
-* $X$ and $Y$ with different ranges $\{1,2,\dots,r\}$ and $\{1,2,\dots,c\}$
+* $X$ and $Y$ with different ranges $\{1,2,\dots,I\}$ and $\{1,2,\dots,J\}$
 * Consider hyothesis test:
 $$
 \begin{align}
@@ -268,12 +268,12 @@ $$p_{j|i=1} = p_{j|i=2} = \dots = p_{j|i=I}$$
 
 ## Test of Independence and Test of Homogeneity
 
-* Several discrete random variables with same categories $1,\dots,c$
+* Several discrete random variables with same categories $1,\dots,I$
     * Test of homogeneity
     * Are the observations generated from one multinomial distribution with common probability vector?
     * Possibly different sample size among random variable
     * E.g. crime example, types of crimes (theft, fraud, etc.) commited by alcoholic and non-alcoholic criminals
-* Two discrete random variables with different categories $1,\dots,r$ and $1,\dots,c$
+* Two discrete random variables with different categories $1,\dots,I$ and $1,\dots,J$
     * Test of independence
     * Are the pairwise observations independent?
     * Fixed sample size for all random variables

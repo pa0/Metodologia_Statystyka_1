@@ -1,5 +1,5 @@
 ---
-title: "Chi-Squared Tests (Part 2)"
+title: "Two-Sample Problems"
 author: "Christof Seiler"
 date: "Stanford University, Spring 2016, STATS 205"
 output:
@@ -16,4 +16,6 @@ output:
 knitr::opts_chunk$set(echo = FALSE)
 set.seed(1234)
 ```
+
+## Example
 
