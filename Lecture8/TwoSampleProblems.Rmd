@@ -17,5 +17,83 @@ knitr::opts_chunk$set(echo = FALSE)
 set.seed(1234)
 ```
 
+## Two-Sample Problems
+
+* Two populations
+* From each population, we have one sample
+* Infer whether or not there is a difference in location between populations
+* Measure (with standard error) the difference (size of the effect) between populations
+* Test: *Wilcoxon two-sample rank test*
+* Estimation procedure: *Hodges–Lehmann estimate*
+
 ## Example
+
+```{r message=FALSE,echo=TRUE}
+library(HSAUR2); head(USmelanoma)
+```
+
+Data: Fisher and van Belle (1993) report mortality rates due to malignant melanoma of the skin for white males during the period 1950-1969, for each state on the US mainland
+
+Mortality: Number of white males died due to malignant melanoma 1950-1969 per one million inhabitants
+
+## Example
+
+Question: Is there a difference in mortality for ocean states and non-ocean states?
+
+```{r}
+library(ggplot2)
+ggplot(USmelanoma, aes(factor(ocean), mortality)) + geom_boxplot(width = 0.3)
+```
+
+## Stochastic Ordering of Alternatives
+
+* Random sample $X_1,\dots,X_{n_1}$ with cdf $F$
+* Random sample $Y_1,\dots,Y_{n_2}$ with cdf $G$
+* Hypothesis test: $$H_0: F(t) = G(t) \hspace{1cm} \text{versus} \hspace{1cm} H_A: F(t) \le G(t)$$
+* For the alternative, $X$ is stochastically larger than $Y$: $$P(X > t) \ge P(Y > t)$$
+
+## Stochastic Ordering of Alternatives
+
+```{r}
+library(ggplot2)
+library(reshape2)
+t = seq(0,20,0.01)
+df = data.frame(t=t,
+                G=pgamma(t,shape = 9,scale = 0.5),
+                F=pgamma(t,shape = 7.5,scale = 1))
+df = melt(df,id = "t")
+ggplot(data = df,aes(x=t,y=value,group=variable,colour=variable)) + geom_line(size=1)
+```
+
+## Stochastic Ordering of Alternatives
+
+```{r}
+df = data.frame(t=t,
+                g=dgamma(t,shape = 9,scale = 0.5),
+                f=dgamma(t,shape = 7.5,scale = 1))
+df = melt(df,id = "t")
+ggplot(data = df,aes(x=t,y=value,group=variable,colour=variable)) + geom_line(size=1)
+```
+
+## Stochastic Ordering of Alternatives
+
+```{r}
+t = seq(0,10,0.01)
+df = data.frame(t=t,
+                G=pnorm(t,mean = 3,sd = 0.7),
+                F=pnorm(t,mean = 5,sd = 0.7))
+df = melt(df,id = "t")
+ggplot(data = df,aes(x=t,y=value,group=variable,colour=variable)) + geom_line(size=1)
+```
+
+## Stochastic Ordering of Alternatives
+
+```{r}
+df = data.frame(t=t,
+                g=dnorm(t,mean = 3,sd = 0.7),
+                f=dnorm(t,mean = 5,sd = 0.7))
+df = melt(df,id = "t")
+ggplot(data = df,aes(x=t,y=value,group=variable,colour=variable)) + geom_line(size=1)
+```
+
 
