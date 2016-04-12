@@ -33,7 +33,7 @@ x[x >= 8] = 7
 
 ## Exercise 3
 
-Correspondence analysis is useful for text analysis. For instance, to compare text from two different authors in terms of the frequency of words used in their texts. The idea: List all words in book 1 by author 1 in columns, and list all words in book 2 by author 2 in rows, count co-occurances in a contingency table. Using association mosaic plots, and correspondence analysis, to determine what categories contributed heavily to the dependence. 
+Correspondence analysis is useful for text analysis. For instance, to compare text from two different authors in terms of the frequency of words used in their texts. The idea: Make a contingency table where rows are words and columns are books. Use association mosaic plots, and correspondence analysis, to determine what words contributed heavily to the inhomogeneity. 
 
 Perform this type of analysis on the following two books:
 
@@ -43,12 +43,14 @@ topWords = function(book,wordLength=5,ntop=20) {
   book = book[sapply(book,nchar) >= wordLength]
   sort(table(book),decreasing = TRUE)[1:ntop]
 }
-data(through,alice,moby,oz)
+data(alice,moby,oz,through)
 topWords(alice)
 topWords(moby)
+topWords(oz)
+topWords(through)
 ```
 
-*Hint:* Use package *vcd* and *ca*. Only use $k$ most frequent number of words that are common in both books.
+*Hint:* Use package *vcd* and *ca*. Limit your analysis to words that occur frequently in all books.
 
 ## Exercise 4
 

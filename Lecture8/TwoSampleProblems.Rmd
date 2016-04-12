@@ -96,4 +96,52 @@ df = melt(df,id = "t")
 ggplot(data = df,aes(x=t,y=value,group=variable,colour=variable)) + geom_line(size=1)
 ```
 
+## Test Based on Wilcoxon Scores
+
+* Both samples are combined in one sample
+* Combinded sample ranked from $1$ to $n_1+n_2$ (low to high)
+* Denote $\operatorname{R}(Y_j)$ rank of observation $j$ in combined sample
+* The Wilcoxon test statistics
+$$ T = \sum_{j=1}^{n_2} \operatorname{R}(Y_j)$$
+* $H_0$ is rejected for small values of $T$
+* Under $H_0$ the two sample are from the same population:  
+Any subset of ranks is equaliy likely as any other of the same size
+
+## Test Based on Wilcoxon Scores
+
+* For example, the probability that a subset of $n_2$ rankings is assigned to $Y$'s is $$\frac{1}{n_1+n_2 \choose n_2}$$
+* There is no mention of the population distribution, so this test is *distriubiton free*
+* So $p$-value can be calculated exactly by looking at the distribution of $T$ or aproximated asymptotically in case of large $n_1+n_2$
+
+## Test Based on Wilcoxon Scores Example
+
+Data: Case-control study of esophageal cancer in Ile-et-Vilaine, France (Breslow et al. 1980)
+
+Hypothesis: Alcohol consumption same in the two groups
+
+```{r}
+library(datasets)
+data(esoph)
+head(esoph)
+```
+
+## Test Based on Wilcoxon Scores Example
+
+```{r}
+x<-rep(esoph$alcgp,esoph$ncases)
+y<-rep(esoph$alcgp,esoph$ncontrols)
+z<-c(x,y)
+w<-c(rep(1,length(x)),rep(0,length(y)))
+barplot(table(z,w),names.arg=c('Cases','Controls'), legend.text=levels(esoph$alcgp))
+```
+
+## Test Based on Wilcoxon Scores Example
+
+```{r echo=TRUE}
+x = as.numeric(x)
+y = as.numeric(y)
+wilcox.test(x,y)
+```
+
+Conclusion: Reject the null hypothesis in favor of the alternative that alcohol consumption is different in the two groups
 
