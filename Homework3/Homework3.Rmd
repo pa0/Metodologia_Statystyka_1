@@ -1,0 +1,67 @@
+---
+title: "Homework 3"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Exercise 1
+
+From our textbook [(Stanford library link)](https://searchworks.stanford.edu/view/10718635):  
+In a large city, four candidates (Smith, Jones, Martinelli, and Wagner) are running for Mayor. A poll was conducted by random dialing with the following results: 
+```{r}
+candidate = c("Smith","Jones","Martinelli","Wagner","Others")
+votes = c(442,208,460,180,205)
+t(data.frame(candidate=candidate,votes=votes))
+```
+Using a 95% confidence interval, determine if there is a significant difference between the two front runners.
+
+## Exercise 2
+
+From our textbook [(Stanford library link)](https://searchworks.stanford.edu/view/10718635):  
+In Example 2.7.1 we tested whether or not a dataset was drawn from a binomial distribution. For this exercise, generate a sample of size n = 500 from a truncated Poisson distribution as illustrated with the following R code:
+```{r echo=TRUE,eval=FALSE}
+x <- rpois(500,3)
+x[x >= 8] = 7
+```
+
+(a) Obtain a plot of the histogram of the sample.
+(b) Obtain an estimate of the sample proportion ``(phat<-mean(x/7))``.
+(c) Test to see if the sample has a binomial distribution with $n = 7$, (i.e., use the same test as in Example 2.7.1).
+
+## Exercise 3
+
+Correspondence analysis is useful for text analysis. For instance, to compare text from two different authors in terms of the frequency of words used in their texts. The idea: List all words in book 1 by author 1 in columns, and list all words in book 2 by author 2 in rows, count co-occurances in a contingency table. Using association mosaic plots, and correspondence analysis, to determine what categories contributed heavily to the dependence. 
+
+Perform this type of analysis on the following two books:
+
+```{r}
+library(languageR)
+topWords = function(book,wordLength=5,ntop=20) {
+  book = book[sapply(book,nchar) >= wordLength]
+  sort(table(book),decreasing = TRUE)[1:ntop]
+}
+data(through,alice,moby,oz)
+topWords(alice)
+topWords(moby)
+```
+
+*Hint:* Use package *vcd* and *ca*. Only use $k$ most frequent number of words that are common in both books.
+
+## Exercise 4
+
+From our textbook [(Stanford library link)](https://searchworks.stanford.edu/view/10718635):  
+Even though the $\chi^2$-tests of homogeneity and independence are the same, they are based on different sampling schemes. The scheme for the test of independence is one-sample of bivariate data, while the scheme for the test of homogeneity consists of one-sample from each population. Let $C$ be a contingency table with $r$ rows and $c$ columns. Assume for the test of homogeneity that the rows contain the samples from the $r$ populations. Determine the (large sample) confidence intervals for each of the following parameters under both schemes, where $p_{ij}$ is the probability of cell $(i,j)$ occurring. Write R code to obtain these confidence intervals assuming the input is a contingency table.
+
+1. $p_{11}$
+2. $p_{11}−p_{12}$
+
+## Deadline
+
+Please email your solutions in the form of a Rmd file to Nan Bi and Lexi Guan.
+
+This homework is due on Saturday, April 23rd at 1:30 pm.
+
+You are encouraged to work through this homework with your peers. But write your own code and explain the results in your own words.
