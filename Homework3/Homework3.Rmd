@@ -33,9 +33,9 @@ x[x >= 8] = 7
 
 ## Exercise 3
 
-Correspondence analysis is useful for text analysis. For instance, to compare text from two different authors in terms of the frequency of words used in their texts. The idea: Make a contingency table where rows are words and columns are books. Use association mosaic plots, and correspondence analysis, to determine what words contributed heavily to the inhomogeneity. 
+Correspondence analysis is useful for text analysis. For instance, to compare text from different authors in terms of the common word frequency. The idea: Make a contingency table where rows are words and columns are books. Use association mosaic plots, and correspondence analysis, to determine what words contributed heavily to the inhomogeneity. 
 
-Perform this type of analysis on the following two books:
+Perform this type of analysis on the following four books form the ``languageR`` package:
 
 ```{r}
 library(languageR)

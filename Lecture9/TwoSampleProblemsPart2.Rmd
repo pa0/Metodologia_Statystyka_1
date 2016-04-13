@@ -1,0 +1,164 @@
+---
+title: "Two-Sample Problems"
+author: "Christof Seiler"
+date: "Stanford University, Spring 2016, STATS 205"
+output:
+  ioslides_presentation:
+    incremental: yes
+    smaller: no
+    transition: faster
+    widescreen: yes
+  beamer_presentation:
+    incremental: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+set.seed(1234)
+```
+
+## Analyses for a Shift in Location
+
+* The estimate of $\Delta$ is the Hodges–Lehmann estimator
+$$ \widehat{\Delta}_W = \operatorname{median}_{i,j} \{ Y_j - X_i \}$$
+* There are $n_1 n_2$ differences
+* Order the differnces $D_{(1)} < D_{(2)} < \dots < D_{(n_1 n_2)}$
+* Fix confidence level at $1 - \alpha$
+* Find $c$ such that
+$$ \alpha/2 = \operatorname{P}_{H_0} ( T^+ \le c ) $$
+* Then the interval $(D_{(c+1)},D_{(n-c)})$ is $(1-\alpha) 100\%$ confidence interval for $\Delta$
+<!--
+* The asymptotic interval for $c$ is $c = \frac{n_1 n_2}{2} - \frac{1}{2} - z_{\alpha/2} \sqrt{\frac{n_1 n_2 (n + 1)}{12}}$
+-->
+
+## Analyses for a Shift in Location Example
+
+Estimate of shift parameter $\Delta$ and confidence intervals:
+```{r echo=TRUE}
+wilcox.test(y,x,conf.int=TRUE)
+```
+
+## Linear Regression Model
+
+* Frame the two-sample location problem as a regression problem
+* Combine sample in one vector $\boldsymbol{Z} = (X_1,\dots,X_{n_1},Y_1,\dots,Y_{n_2}^T)$
+* Let $c$ be a $n \times 1$ vector with 
+    * zeros at position $1$ to $n_1$ and 
+    * ones at positions $n_1+1$ to $n$
+* Then we can rewrite the location model as
+$$Z_i = \alpha + c_i \Delta + e_i$$
+where $e_1,\dots,e_n$ are iid with pdf $f(t)$
+* We can use method of Least Squares (SL) to estimate $\widehat{\Delta}$
+* Or the Hodges–Lehmann estimator
+* The intercept $\alpha$ is estimated in a second step on the residuals
+
+## Efficiency of Estimator
+
+* Suppose, two estimators $\widehat{\Delta}_1,\widehat{\Delta}_2$ converge in distribution 
+$$ \sqrt{n} \left( \widehat{\Delta}_i - \Delta \right) \overset{d}{\to} N(0,\sigma^2_i) \text{ for } i = 1,2$$
+* Asymptotic Relative Efficiency (ARE) between two estimators $\widehat{\Delta}_1$ and $\widehat{\Delta}_2$ is defined as:
+$$ \operatorname{ARE}\left(\widehat{\Delta}_1,\widehat{\Delta}_2\right) = \frac{\sigma_2^2}{\sigma_1^2}$$
+
+## Efficiency of Estimator
+
+Contaminated normal $(0 < \epsilon < 0.5, \sigma_c > 1)$: $$F(x) = (1 − \epsilon) \Phi(x) + \epsilon \Phi(x/\sigma_c)$$
+
+```{r echo=TRUE}
+n = 10000
+sigmaC = 3
+epsilon = 0.25
+sample = c(rnorm((1-epsilon)*n,0,1),rnorm(epsilon*n,0,sigmaC))
+```
+
+## Efficiency of Estimator
+
+```{r fig.width=10,fig.height=4}
+library(gridExtra)
+df = data.frame(sample=sample)
+p1 = ggplot(df, aes(sample)) + geom_histogram(binwidth = 0.1) + ggtitle("Contaminated Normal")
+p2 = ggplot(df, aes(sample = sample)) + stat_qq() + ggtitle("Normal Q–Q Plot")
+grid.arrange(p1, p2, ncol=2)
+```
+
+```{r}
+epsilon = c(0.00,0.01,0.02,0.03,0.05,0.10,0.15,0.25)
+ARE = c(0.955,1.009,1.060,1.108,1.196,1.373,1.497,1.616)
+con = rbind(epsilon,ARE)
+rownames(con) = c("epsilon","ARE(Hodges–Lehmann,LS)")
+con
+```
+
+## Scale Problem
+
+* Besides differences in location, we are often interested in the difference between scales for populations
+* Random sample $X_1,\dots,X_{n_1}$ with common pdf $f\left( (x-\theta_1)\sigma_1 \right)$, $\sigma_1 > 0$
+* Random sample $Y_1,\dots,Y_{n_2}$ with common pdf $f\left( (y-\theta_2)\sigma_2 \right)$, $\sigma_2 > 0$
+* Hypothesis test ($\eta = \sigma_2/\sigma_1$)
+$$ H_0: \eta = 1 \hspace{1cm} \text{versus} \hspace{1cm} H_A: \eta \ne 1 $$
+* Besides discussing rank-based tests for these hypotheses, we also consider the associated estimation of $\eta$, along with a confidence interval for $\eta$
+* So here the location parameters $\theta_1$ and $\theta_2$ are nuisance parameters
+
+<!--
+## Scale Problem
+
+* Fligner–Killeen procedure is a asymptotically distribution-free rank-based procedure
+* First align samples
+$$ X_i^* = X_i - \operatorname{median}(X_l), i = 1,\dots,n_1 $$
+$$ Y_j^* = Y_j - \operatorname{median}(Y_l), i = 1,\dots,n_2 $$
+* Folded samples: $|X_1^*|,\dots,|X_{n_1}^*|,|Y_1^*|,\dots,|Y_{n_2}^*|$
+* Define $Z_i$ as 
+$$ 
+Z_i = 
+\begin{cases}
+\log |X_i^*| & i = 1,\dots,n_1 \\
+\log |Y_{i-n_1}^*| & j = n_1 + 1,\dots,n
+\end{cases}
+$$
+
+## Scale Problem
+
+* Let $c$ be the indicator vector with its first $n_1$ entries set at $0$ and its last $n_2$ entries set at $1$
+* Then the log-linear model for the aligned, folded sample is
+$$ Z_i = \Delta c_i + e_i, i = 1,2,\dots,n$$
+-->
+
+## Placement Test for the Behrens–Fisher Problem
+
+* Suppose that we have two populations which differ by location and scale and we are interested in testing that the locations are the same
+* Random sample $X_1,\dots,X_{n1}$ with cdf $F(x)$
+* Random sample $Y_1,\dots,Y_{n2}$ with cdf $G(x)$
+* Let $θ_X$ and $θ_Y$ denote the medians of the distributions $F(x)$ and $G(y)$
+* Hypothesis test
+$$ H_0: \theta_X = \theta_Y \hspace{1cm} \text{versus} \hspace{1cm} H_A: \theta_X \ne \theta_Y$$
+* This is called the Behrens–Fisher problem and the traditional test in this situation is the two-sample $t$-test which uses a $t$-statistic with the Satterth- waite degrees of freedom correction
+* There is a two-sample Mann–Whitney–Wilcoxon test which serves as a robust alternative to this approximate $t$-test
+
+<!--
+## Analyses for a Shift in Location
+
+* Wilcoxon test equivalently to
+$$ T_W = \sum_{i=1}^{n_2} a(\operatorname{R}(Y_i)) $$
+* when $a(i) = \varphi_W (i/(n+1))$ and $\varphi_W(u) = \sqrt{12} (u-(1/2))$
+* with the following identity
+$$T_W = \frac{\sqrt{12}}{n+1} \left( T - \frac{n_2(n+1)}{2} \right)$$
+* Hence $T_W$ is a linear function of the ranks 
+* $\varphi_W(u)$ is called the Wilcoxon score function, and
+* $a_W(i)$ are called Wilcoxon scores
+
+## Normal Scores
+
+* When taking $a(i) = \varphi_{ns} (i/(n+1))$ and normal cdf $\Phi$
+$$\varphi_{ns}(u) = \Phi^{-1}(u)$$
+* then the scores follow a normal distribution with $\operatorname{E}(T_{ns}) = 0$ and 
+$$\operatorname{Var}(T_{ns}) = \frac{n_1 n_2}{n-1} \sum_{i=1}^n a_{ns}^2(i)$$
+* We can then reject using asymptotic level $\alpha$ when 
+$$\left| \frac{T_{ns}}{\sqrt{\operatorname{Var}_{H_0}(T_{ns})}} \right| > z_{\alpha/2}$$
+
+## Analyses Based on General Score Functions
+
+* Set of rank-based scores is generated by $\varphi(u)$ on interval $(0,1)$
+* Assume that $\varphi(u)$ is square integrable 
+$$ \int_0^1 \varphi(u) \, du = 0 \hspace{1cm} \text{and} \hspace{1cm} \int_0^1 \varphi^2(u) \, du = 1 $$
+
+## Efficiency and Optimal Scores
+-->
