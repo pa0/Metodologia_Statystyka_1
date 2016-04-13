@@ -138,10 +138,10 @@ y = as.numeric(y)
 ## Wilcoxon for Stochastic Ordering of Alternatives Example
 
 ```{r echo=TRUE}
-wilcox.test(x,y)
+wilcox.test(x,y,alternative = "greater")
 ```
 
-Conclusion: Reject the null hypothesis in favor of the alternative that alcohol consumption is different in the two groups
+Conclusion: Reject the null hypothesis in favor of the alternative that alcohol consumption is higher in participants who suffer from esophageal cancer
 
 ## Analyses for a Shift in Location
 
@@ -166,28 +166,33 @@ ggplot(data = df,aes(x=t,y=value,group=variable,colour=variable)) + geom_line(si
 * Random sample $X_1,\dots,X_{n_1}$ with cdf $F(t)$ and pdf $f(t)$
 * Random sample $Y_1,\dots,Y_{n_2}$ with cdf $F(t-\Delta)$ and pdf $f(t-\Delta)$
 * Hypothesis test: $$H_0: \Delta = 0 \hspace{1cm} \text{versus} \hspace{1cm} H_A: \Delta \ne 0$$
-* Additionally, we can also esimate $\widehat{\Delta}$ and confidence intervals
+* Additionally, we can esimate $\widehat{\Delta}$ and form confidence intervals
 
 ## Analyses for a Shift in Location
 
 * Wilcoxon test statistics (same as before):
 $$ T = \sum_{j=1}^{n_2} \operatorname{R}(Y_j)$$
+among the combined samples $X_1,\dots,X_{n1},Y_1,\dots,Y_{n2}$
 * Mann–Whitney test statistic (equivalent):
-$$ T^+ = \#_{i,j}\{ Y_j - X_i > 0 \} $$
-* relating the two:
-$$ T^+ = T - \frac{n_2(n_2+1)}{2}$$
+$$ T^+ = \#_{i,j}\{ X_i < Y_j \} $$
+among $n_1 n_2$ possible pairs
+* Relating the two:
+$$ T^+ = T + \frac{n_2(n_2+1)}{2}$$
+
+<!--
 * Ties are assigned the average of the ranks of tied observations
+-->
 
 ## Equivalence between $T$ and $T^+$
 
-* Show that $T^+ = T - \frac{n_2(n_2+1)}{2}$
+* Show that $T^+ = T + \frac{n_2(n_2+1)}{2}$
 * Rank of $Y_j$ is equal to the number of $X$'s less than $Y_j$  
 plus the number of $Y$'s less than $Y_j$ plus one
 $$ \operatorname{R}(Y_j) = \#_i\{ X_i < Y_j \} + \#_{j'}\{ Y_{j'} < Y_j \} + 1 $$
 * Substituting in $T = \sum_{j=1}^{n_2} \operatorname{R}(Y_j)$ gives
-$$ T^+ = \#_{i,j}\{ X_i < Y_j \} + \#_{i,j}\{ Y_{j'} < Y_j \} + n $$
+$$ T^+ = \#_{j,i}\{ X_i < Y_j \} + \#_{j,j'}\{ Y_{j'} < Y_j \} + n_2 $$
 * First term is $T$
-* Second term is $\{1 + 2 + \dots + n_2 - 1\} + n_2$
+* Second term is $\{0 + 1 + 2 + \dots + n_2 - 1\} + n_2 = \frac{n_2(n_2+1)}{2}$
 
 ## Analyses for a Shift in Location Example
 
@@ -196,9 +201,9 @@ a true shift parameter $\Delta$ was set at the value $8$
 ```{r echo=TRUE}
 n1 = 42
 n2 = 50
-nsamples = 10
-x = round(rt(11,5)*nsamples+n1,1)
-y = round(rt(9,5)*nsamples+n2,1)
+trails = 10
+x = round(rt(11,5)*trails+n1,1)
+y = round(rt(9,5)*trails+n2,1)
 sort(x)
 sort(y)
 ```
@@ -245,13 +250,6 @@ TODO: page 125, comment 6 in red book
 knitr::include_graphics("PairwiseAdjacentPermutations.JPG")
 ```
 
-## Analyses for a Shift in Location Example
-
-Estimate of shift parameter $\Delta$ and confidence intervals:
-```{r echo=TRUE}
-wilcox.test(y,x,conf.int=TRUE)
-```
-
 ## Analyses for a Shift in Location
 
 * The estimate of $\Delta$ is the Hodges–Lehmann estimator
@@ -266,18 +264,26 @@ $$ \alpha/2 = \operatorname{P}_{H_0} ( T^+ \le c ) $$
 * The asymptotic interval for $c$ is $c = \frac{n_1 n_2}{2} - \frac{1}{2} - z_{\alpha/2} \sqrt{\frac{n_1 n_2 (n + 1)}{12}}$
 -->
 
+## Analyses for a Shift in Location Example
+
+Estimate of shift parameter $\Delta$ and confidence intervals:
+```{r echo=TRUE}
+wilcox.test(y,x,conf.int=TRUE)
+```
+
 ## Linear Regression Model
 
 * Frame the two-sample location problem as a regression problem
-* Combine sample in one vector $\boldsymbol{Z} = (X_1,\dots,X_{n+1},Y_1,\dots,Y_{n+1}^T)$
+* Combine sample in one vector $\boldsymbol{Z} = (X_1,\dots,X_{n_1},Y_1,\dots,Y_{n_2}^T)$
 * Let $c$ be a $n \times 1$ vector with 
-    * ones at position $1$ to $n+1$ and 
-    * zeros at positions $n_1+1$ to $n$
+    * zeros at position $1$ to $n_1$ and 
+    * ones at positions $n_1+1$ to $n$
 * Then we can rewrite the location model as
 $$Z_i = \alpha + c_i \Delta + e_i$$
 where $e_1,\dots,e_n$ are iid with pdf $f(t)$
 * We can use method of Least Squares (SL) to estimate $\widehat{\Delta}$
 * Or the Hodges–Lehmann estimator
+* The intercept $\alpha$ is estimated in a second step on the residuals
 
 ## Efficiency of Estimator
 
@@ -324,6 +330,30 @@ con
 $$ H_0: \eta = 1 \hspace{1cm} \text{versus} \hspace{1cm} H_A: \eta \ne 1 $$
 * Besides discussing rank-based tests for these hypotheses, we also consider the associated estimation of $\eta$, along with a confidence interval for $\eta$
 * So here the location parameters $\theta_1$ and $\theta_2$ are nuisance parameters
+
+<!--
+## Scale Problem
+
+* Fligner–Killeen procedure is a asymptotically distribution-free rank-based procedure
+* First align samples
+$$ X_i^* = X_i - \operatorname{median}(X_l), i = 1,\dots,n_1 $$
+$$ Y_j^* = Y_j - \operatorname{median}(Y_l), i = 1,\dots,n_2 $$
+* Folded samples: $|X_1^*|,\dots,|X_{n_1}^*|,|Y_1^*|,\dots,|Y_{n_2}^*|$
+* Define $Z_i$ as 
+$$ 
+Z_i = 
+\begin{cases}
+\log |X_i^*| & i = 1,\dots,n_1 \\
+\log |Y_{i-n_1}^*| & j = n_1 + 1,\dots,n
+\end{cases}
+$$
+
+## Scale Problem
+
+* Let $c$ be the indicator vector with its first $n_1$ entries set at $0$ and its last $n_2$ entries set at $1$
+* Then the log-linear model for the aligned, folded sample is
+$$ Z_i = \Delta c_i + e_i, i = 1,2,\dots,n$$
+-->
 
 ## Placement Test for the Behrens–Fisher Problem
 
