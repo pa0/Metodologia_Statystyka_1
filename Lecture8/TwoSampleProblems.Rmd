@@ -180,9 +180,14 @@ $$ T^+ = T - \frac{n_2(n_2+1)}{2}$$
 
 ## Equivalence between $T$ and $T^+$
 
-Show that $$ T^+ = T - \frac{n_2(n_2+1)}{2}$$
-
-TODO: page 126, comment 7 in red book
+* Show that $T^+ = T - \frac{n_2(n_2+1)}{2}$
+* Rank of $Y_j$ is equal to the number of $X$'s less than $Y_j$  
+plus the number of $Y$'s less than $Y_j$ plus one
+$$ \operatorname{R}(Y_j) = \#_i\{ X_i < Y_j \} + \#_{j'}\{ Y_{j'} < Y_j \} + 1 $$
+* Substituting in $T = \sum_{j=1}^{n_2} \operatorname{R}(Y_j)$ gives
+$$ T^+ = \#_{i,j}\{ X_i < Y_j \} + \#_{i,j}\{ Y_{j'} < Y_j \} + n $$
+* First term is $T$
+* Second term is $\{1 + 2 + \dots + n_2 - 1\} + n_2$
 
 ## Analyses for a Shift in Location Example
 
@@ -212,6 +217,7 @@ Use asymptotics:
 wilcox.test(x,y,exact=FALSE,correct=FALSE)
 ```
 
+<!--
 ## Asymptotic Distribution of $T$
 
 Show that 
@@ -219,6 +225,7 @@ $$\operatorname{E}(T) = \frac{n_2(n+1)}{2} $$
 $$\operatorname{Var}(T) = \frac{n_1 n_2 (n+1)}{12}$$
 
 TODO: page 125, comment 6 in red book
+-->
 
 ## Permutations and Mann-Whitney
 
@@ -269,7 +276,7 @@ $$ \alpha/2 = \operatorname{P}_{H_0} ( T^+ \le c ) $$
 * Then we can rewrite the location model as
 $$Z_i = \alpha + c_i \Delta + e_i$$
 where $e_1,\dots,e_n$ are iid with pdf $f(t)$
-* We can use method of least squares
+* We can use method of Least Squares (SL) to estimate $\widehat{\Delta}$
 * Or the Hodges–Lehmann estimator
 
 ## Efficiency of Estimator
@@ -304,9 +311,30 @@ grid.arrange(p1, p2, ncol=2)
 epsilon = c(0.00,0.01,0.02,0.03,0.05,0.10,0.15,0.25)
 ARE = c(0.955,1.009,1.060,1.108,1.196,1.373,1.497,1.616)
 con = rbind(epsilon,ARE)
-rownames(con) = c("epsilon","ARE(W,LS)")
+rownames(con) = c("epsilon","ARE(Hodges–Lehmann,LS)")
 con
 ```
+
+## Scale Problem
+
+* Besides differences in location, we are often interested in the difference between scales for populations
+* Random sample $X_1,\dots,X_n$ with common pdf $f\left( (x-\theta_1)\sigma_1 \right)$, $\sigma_1 > 0$
+* Random sample $Y_1,\dots,Y_n$ with common pdf $f\left( (y-\theta_2)\sigma_2 \right)$, $\sigma_2 > 0$
+* Hypothesis test ($\eta = \sigma_2/\sigma_1$)
+$$ H_0: \eta = 1 \hspace{1cm} \text{versus} \hspace{1cm} H_A: \eta \ne 1 $$
+* Besides discussing rank-based tests for these hypotheses, we also consider the associated estimation of $\eta$, along with a confidence interval for $\eta$
+* So here the location parameters $\theta_1$ and $\theta_2$ are nuisance parameters
+
+## Placement Test for the Behrens–Fisher Problem
+
+* Suppose that we have two populations which differ by location and scale and we are interested in testing that the locations are the same
+* Random sample $X_1,X_2,\dots,X_{n1}$ with cdf $F(x)$
+* Random sample $Y_1,Y_2,\dots,Y_{n2}$ with cdf $G(x)$
+* Let $θ_X$ and $θ_Y$ denote the medians of the distributions $F(x)$ and $G(y)$
+* Hypothesis test
+$$ H_0: \theta_X = \theta_Y \hspace{1cm} \text{versus} \hspace{1cm} H_A: \theta_X \ne \theta_Y$$
+* This is called the Behrens–Fisher problem and the traditional test in this situation is the two-sample $t$-test which uses a $t$-statistic with the Satterth- waite degrees of freedom correction
+* There is a two-sample Mann–Whitney–Wilcoxon test which serves as a robust alternative to this approximate $t$-test
 
 <!--
 ## Analyses for a Shift in Location
