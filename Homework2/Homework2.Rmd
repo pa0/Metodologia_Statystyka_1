@@ -9,7 +9,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Exercise 1
 
-Which is the most likely bootstrap sample and its associated probability in $n = 3$, $n = 5$, $n = 10$, $n = 12$, $n = 15$, and $20$?
+Which is the most likely bootstrap sample and its associated probability in $n = 3$, $n = 5$, $n = 10$, $n = 12$, $n = 15$, and $n = 20$?
 
 ## Exercise 2
 
