@@ -1,5 +1,5 @@
 ---
-title: "Two-Sample Problems"
+title: "Two-Sample Problems (Part 1)"
 author: "Christof Seiler"
 date: "Stanford University, Spring 2016, STATS 205"
 output:

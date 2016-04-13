@@ -1,5 +1,5 @@
 ---
-title: "Two-Sample Problems"
+title: "Two-Sample Problems (Part 2)"
 author: "Christof Seiler"
 date: "Stanford University, Spring 2016, STATS 205"
 output:
@@ -20,7 +20,7 @@ set.seed(1234)
 ## Analyses for a Shift in Location
 
 * The estimate of $\Delta$ is the Hodges–Lehmann estimator
-$$ \widehat{\Delta}_W = \operatorname{median}_{i,j} \{ Y_j - X_i \}$$
+$$ \widehat{\Delta} = \operatorname{median}_{i,j} \{ Y_j - X_i \}$$
 * There are $n_1 n_2$ differences
 * Order the differnces $D_{(1)} < D_{(2)} < \dots < D_{(n_1 n_2)}$
 * Fix confidence level at $1 - \alpha$
@@ -30,6 +30,20 @@ $$ \alpha/2 = \operatorname{P}_{H_0} ( T^+ \le c ) $$
 <!--
 * The asymptotic interval for $c$ is $c = \frac{n_1 n_2}{2} - \frac{1}{2} - z_{\alpha/2} \sqrt{\frac{n_1 n_2 (n + 1)}{12}}$
 -->
+
+## Analyses for a Shift in Location Example
+
+$t$-distribution with 5 degrees of freedom and  
+a true shift parameter $\Delta$ was set at the value $8$ 
+```{r echo=TRUE}
+n1 = 42
+n2 = 50
+trails = 10
+x = round(rt(11,5)*trails+n1,1)
+y = round(rt(9,5)*trails+n2,1)
+sort(x)
+sort(y)
+```
 
 ## Analyses for a Shift in Location Example
 
@@ -74,6 +88,7 @@ sample = c(rnorm((1-epsilon)*n,0,1),rnorm(epsilon*n,0,sigmaC))
 
 ```{r fig.width=10,fig.height=4}
 library(gridExtra)
+library(ggplot2)
 df = data.frame(sample=sample)
 p1 = ggplot(df, aes(sample)) + geom_histogram(binwidth = 0.1) + ggtitle("Contaminated Normal")
 p2 = ggplot(df, aes(sample = sample)) + stat_qq() + ggtitle("Normal Q–Q Plot")
