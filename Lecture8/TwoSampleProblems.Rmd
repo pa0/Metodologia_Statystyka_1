@@ -45,14 +45,14 @@ library(ggplot2)
 ggplot(USmelanoma, aes(factor(ocean), mortality)) + geom_boxplot(width = 0.3)
 ```
 
-## Stochastic Ordering of Alternatives
+## Wilcoxon for Stochastic Ordering of Alternatives
 
 * Random sample $X_1,\dots,X_{n_1}$ with cdf $F$
 * Random sample $Y_1,\dots,Y_{n_2}$ with cdf $G$
 * Hypothesis test: $$H_0: F(t) = G(t) \hspace{1cm} \text{versus} \hspace{1cm} H_A: F(t) \le G(t)$$
-* For the alternative, $X$ is stochastically larger than $Y$: $$P(X > t) \ge P(Y > t)$$
+* For the alternative, $X$ is stochastically larger than $Y$: $$\operatorname{P}(X > t) \ge \operatorname{P}(Y > t)$$
 
-## Stochastic Ordering of Alternatives
+## Wilcoxon for Stochastic Ordering of Alternatives
 
 ```{r}
 library(ggplot2)
@@ -65,7 +65,7 @@ df = melt(df,id = "t")
 ggplot(data = df,aes(x=t,y=value,group=variable,colour=variable)) + geom_line(size=1)
 ```
 
-## Stochastic Ordering of Alternatives
+## Wilcoxon for Stochastic Ordering of Alternatives
 
 ```{r}
 df = data.frame(t=t,
@@ -75,7 +75,7 @@ df = melt(df,id = "t")
 ggplot(data = df,aes(x=t,y=value,group=variable,colour=variable)) + geom_line(size=1)
 ```
 
-## Stochastic Ordering of Alternatives
+## Wilcoxon for Stochastic Ordering of Alternatives
 
 ```{r}
 t = seq(0,10,0.01)
@@ -86,7 +86,7 @@ df = melt(df,id = "t")
 ggplot(data = df,aes(x=t,y=value,group=variable,colour=variable)) + geom_line(size=1)
 ```
 
-## Stochastic Ordering of Alternatives
+## Wilcoxon for Stochastic Ordering of Alternatives
 
 ```{r}
 df = data.frame(t=t,
@@ -96,10 +96,10 @@ df = melt(df,id = "t")
 ggplot(data = df,aes(x=t,y=value,group=variable,colour=variable)) + geom_line(size=1)
 ```
 
-## Test Based on Wilcoxon Scores
+## Wilcoxon for Stochastic Ordering of Alternatives
 
 * Both samples are combined in one sample
-* Combinded sample ranked from $1$ to $n_1+n_2$ (low to high)
+* Combinded sample ranked from $1$ to $n = n_1+n_2$ (low to high)
 * Denote $\operatorname{R}(Y_j)$ rank of observation $j$ in combined sample
 * The Wilcoxon test statistics
 $$ T = \sum_{j=1}^{n_2} \operatorname{R}(Y_j)$$
@@ -107,41 +107,233 @@ $$ T = \sum_{j=1}^{n_2} \operatorname{R}(Y_j)$$
 * Under $H_0$ the two sample are from the same population:  
 Any subset of ranks is equaliy likely as any other of the same size
 
-## Test Based on Wilcoxon Scores
+## Wilcoxon for Stochastic Ordering of Alternatives
 
-* For example, the probability that a subset of $n_2$ rankings is assigned to $Y$'s is $$\frac{1}{n_1+n_2 \choose n_2}$$
+* For example, the probability that a subset of $n_2$ rankings is assigned to $Y$'s is $$\frac{1}{n \choose n_2}$$
 * There is no mention of the population distribution, so this test is *distriubiton free*
 * So $p$-value can be calculated exactly by looking at the distribution of $T$ or aproximated asymptotically in case of large $n_1+n_2$
 
-## Test Based on Wilcoxon Scores Example
+## Wilcoxon for Stochastic Ordering of Alternatives Example
 
 Data: Case-control study of esophageal cancer in Ile-et-Vilaine, France (Breslow et al. 1980)
 
 Hypothesis: Alcohol consumption same in the two groups
 
-```{r}
-library(datasets)
-data(esoph)
-head(esoph)
-```
-
-## Test Based on Wilcoxon Scores Example
-
-```{r}
-x<-rep(esoph$alcgp,esoph$ncases)
-y<-rep(esoph$alcgp,esoph$ncontrols)
-z<-c(x,y)
-w<-c(rep(1,length(x)),rep(0,length(y)))
-barplot(table(z,w),names.arg=c('Cases','Controls'), legend.text=levels(esoph$alcgp))
-```
-
-## Test Based on Wilcoxon Scores Example
-
 ```{r echo=TRUE}
+library(datasets); data(esoph); head(esoph)
+```
+
+## Wilcoxon for Stochastic Ordering of Alternatives Example
+
+```{r}
+x = rep(esoph$alcgp,esoph$ncases)
+y = rep(esoph$alcgp,esoph$ncontrols)
+z = c(x,y)
+w = c(rep(1,length(x)),rep(0,length(y)))
+barplot(table(z,w),names.arg=c('Cases','Controls'), legend.text=levels(esoph$alcgp))
 x = as.numeric(x)
 y = as.numeric(y)
+```
+
+## Wilcoxon for Stochastic Ordering of Alternatives Example
+
+```{r echo=TRUE}
 wilcox.test(x,y)
 ```
 
 Conclusion: Reject the null hypothesis in favor of the alternative that alcohol consumption is different in the two groups
 
+## Analyses for a Shift in Location
+
+* Now for two-sample location problem
+* The parameter $\Delta$, for $-\infty < \Delta < \infty$ is shift in location
+$$ G(t) = F(t - \Delta) \hspace{1cm} \text{and} \hspace{1cm} g(t) = f(t - \Delta)$$
+* For example, difference in means and medians
+* Location model assume that the scale parameter of $X$ and $Y$ are the same (e.g. variance in normal distribution)
+
+## Analyses for a Shift in Location
+
+```{r}
+df = data.frame(t=t,
+                g=dnorm(t,mean = 3,sd = 0.7),
+                f=dnorm(t,mean = 5,sd = 0.7))
+df = melt(df,id = "t")
+ggplot(data = df,aes(x=t,y=value,group=variable,colour=variable)) + geom_line(size=1)
+```
+
+## Analyses for a Shift in Location
+
+* Random sample $X_1,\dots,X_{n_1}$ with cdf $F(t)$ and pdf $f(t)$
+* Random sample $Y_1,\dots,Y_{n_2}$ with cdf $F(t-\Delta)$ and pdf $f(t-\Delta)$
+* Hypothesis test: $$H_0: \Delta = 0 \hspace{1cm} \text{versus} \hspace{1cm} H_A: \Delta \ne 0$$
+* Additionally, we can also esimate $\widehat{\Delta}$ and confidence intervals
+
+## Analyses for a Shift in Location
+
+* Wilcoxon test statistics (same as before):
+$$ T = \sum_{j=1}^{n_2} \operatorname{R}(Y_j)$$
+* Mann–Whitney test statistic (equivalent):
+$$ T^+ = \#_{i,j}\{ Y_j - X_i > 0 \} $$
+* relating the two:
+$$ T^+ = T - \frac{n_2(n_2+1)}{2}$$
+* Ties are assigned the average of the ranks of tied observations
+
+## Equivalence between $T$ and $T^+$
+
+Show that $$ T^+ = T - \frac{n_2(n_2+1)}{2}$$
+
+TODO: page 126, comment 7 in red book
+
+## Analyses for a Shift in Location Example
+
+$t$-distribution with 5 degrees of freedom and  
+a true shift parameter $\Delta$ was set at the value $8$ 
+```{r echo=TRUE}
+n1 = 42
+n2 = 50
+nsamples = 10
+x = round(rt(11,5)*nsamples+n1,1)
+y = round(rt(9,5)*nsamples+n2,1)
+sort(x)
+sort(y)
+```
+
+## Analyses for a Shift in Location Example
+
+Use exact null distribution of $T+$:
+```{r echo=TRUE}
+wilcox.test(x,y,exact=TRUE,correct=TRUE)
+```
+
+## Analyses for a Shift in Location Example
+
+Use asymptotics: 
+```{r echo=TRUE}
+wilcox.test(x,y,exact=FALSE,correct=FALSE)
+```
+
+## Asymptotic Distribution of $T$
+
+Show that 
+$$\operatorname{E}(T) = \frac{n_2(n+1)}{2} $$
+$$\operatorname{Var}(T) = \frac{n_1 n_2 (n+1)}{12}$$
+
+TODO: page 125, comment 6 in red book
+
+## Permutations and Mann-Whitney
+
+* Rank all $n_1+n_2$ observations
+* Color the first sample red and the second sample blue 
+* Count how many moves it takes to unscramble the two populations
+* *Moves:* pairwise adjacent transpositions
+* *Unscrable:* bring all the reds to the left
+* Few moves, things were pretty well sorted, we have grounds for believing the numbers were drawn from different populations
+* If observations were drawn from the same population, they should be well intermingled and require many moves to unscramble
+* This test which is equivalent to the popular Mann Whitney statistic
+* Reference: Critchlow (1986), *A Unified Approach to Constructing Nonparametric Rank Tests* [(Link)](https://statistics.stanford.edu/research/unified-approach-constructing-nonparametric-rank-tests)
+
+-----
+
+```{r, out.height = 550, fig.retina = NULL, echo=FALSE}
+knitr::include_graphics("PairwiseAdjacentPermutations.JPG")
+```
+
+## Analyses for a Shift in Location Example
+
+Estimate of shift parameter $\Delta$ and confidence intervals:
+```{r echo=TRUE}
+wilcox.test(y,x,conf.int=TRUE)
+```
+
+## Analyses for a Shift in Location
+
+* The estimate of $\Delta$ is the Hodges–Lehmann estimator
+$$ \widehat{\Delta}_W = \operatorname{median}_{i,j} \{ Y_j - X_i \}$$
+* There are $n_1 n_2$ differences
+* Order the differnces $D_{(1)} < D_{(2)} < \dots < D_{(n_1 n_2)}$
+* Fix confidence level at $1 - \alpha$
+* Find $c$ such that
+$$ \alpha/2 = \operatorname{P}_{H_0} ( T^+ \le c ) $$
+* Then the interval $(D_{(c+1)},D_{(n-c)})$ is $(1-\alpha) 100\%$ confidence interval for $\Delta$
+<!--
+* The asymptotic interval for $c$ is $c = \frac{n_1 n_2}{2} - \frac{1}{2} - z_{\alpha/2} \sqrt{\frac{n_1 n_2 (n + 1)}{12}}$
+-->
+
+## Linear Regression Model
+
+* Frame the two-sample location problem as a regression problem
+* Combine sample in one vector $\boldsymbol{Z} = (X_1,\dots,X_{n+1},Y_1,\dots,Y_{n+1}^T)$
+* Let $c$ be a $n \times 1$ vector with 
+    * ones at position $1$ to $n+1$ and 
+    * zeros at positions $n_1+1$ to $n$
+* Then we can rewrite the location model as
+$$Z_i = \alpha + c_i \Delta + e_i$$
+where $e_1,\dots,e_n$ are iid with pdf $f(t)$
+* We can use method of least squares
+* Or the Hodges–Lehmann estimator
+
+## Efficiency of Estimator
+
+* Suppose, two estimators $\widehat{\Delta}_1,\widehat{\Delta}_2$ converge in distribution 
+$$ \sqrt{n} \left( \widehat{\Delta}_i - \Delta \right) \overset{d}{\to} N(0,\sigma^2_i) \text{ for } i = 1,2$$
+* Asymptotic Relative Efficiency (ARE) between two estimators $\widehat{\Delta}_1$ and $\widehat{\Delta}_2$ is defined as:
+$$ \operatorname{ARE}\left(\widehat{\Delta}_1,\widehat{\Delta}_2\right) = \frac{\sigma_2^2}{\sigma_1^2}$$
+
+## Efficiency of Estimator
+
+Contaminated normal $(0 < \epsilon < 0.5, \sigma_c > 1)$: $$F(x) = (1 − \epsilon) \Phi(x) + \epsilon \Phi(x/\sigma_c)$$
+
+```{r echo=TRUE}
+n = 10000
+sigmaC = 3
+epsilon = 0.25
+sample = c(rnorm((1-epsilon)*n,0,1),rnorm(epsilon*n,0,sigmaC))
+```
+
+## Efficiency of Estimator
+
+```{r fig.width=10,fig.height=4}
+library(gridExtra)
+df = data.frame(sample=sample)
+p1 = ggplot(df, aes(sample)) + geom_histogram(binwidth = 0.1) + ggtitle("Contaminated Normal")
+p2 = ggplot(df, aes(sample = sample)) + stat_qq() + ggtitle("Normal Q–Q Plot")
+grid.arrange(p1, p2, ncol=2)
+```
+
+```{r}
+epsilon = c(0.00,0.01,0.02,0.03,0.05,0.10,0.15,0.25)
+ARE = c(0.955,1.009,1.060,1.108,1.196,1.373,1.497,1.616)
+con = rbind(epsilon,ARE)
+rownames(con) = c("epsilon","ARE(W,LS)")
+con
+```
+
+<!--
+## Analyses for a Shift in Location
+
+* Wilcoxon test equivalently to
+$$ T_W = \sum_{i=1}^{n_2} a(\operatorname{R}(Y_i)) $$
+* when $a(i) = \varphi_W (i/(n+1))$ and $\varphi_W(u) = \sqrt{12} (u-(1/2))$
+* with the following identity
+$$T_W = \frac{\sqrt{12}}{n+1} \left( T - \frac{n_2(n+1)}{2} \right)$$
+* Hence $T_W$ is a linear function of the ranks 
+* $\varphi_W(u)$ is called the Wilcoxon score function, and
+* $a_W(i)$ are called Wilcoxon scores
+
+## Normal Scores
+
+* When taking $a(i) = \varphi_{ns} (i/(n+1))$ and normal cdf $\Phi$
+$$\varphi_{ns}(u) = \Phi^{-1}(u)$$
+* then the scores follow a normal distribution with $\operatorname{E}(T_{ns}) = 0$ and 
+$$\operatorname{Var}(T_{ns}) = \frac{n_1 n_2}{n-1} \sum_{i=1}^n a_{ns}^2(i)$$
+* We can then reject using asymptotic level $\alpha$ when 
+$$\left| \frac{T_{ns}}{\sqrt{\operatorname{Var}_{H_0}(T_{ns})}} \right| > z_{\alpha/2}$$
+
+## Analyses Based on General Score Functions
+
+* Set of rank-based scores is generated by $\varphi(u)$ on interval $(0,1)$
+* Assume that $\varphi(u)$ is square integrable 
+$$ \int_0^1 \varphi(u) \, du = 0 \hspace{1cm} \text{and} \hspace{1cm} \int_0^1 \varphi^2(u) \, du = 1 $$
+
+## Efficiency and Optimal Scores
+-->
