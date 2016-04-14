@@ -180,7 +180,7 @@ ggplot(df, aes(x=factor(geese),fill=factor(geese),y=plasma)) +
 * Let $θ_X$ and $θ_Y$ denote the medians of the distributions $F(t)$ and $G(t)$
 * Hypothesis test
 $$ H_0: \theta_X = \theta_Y \hspace{1cm} \text{versus} \hspace{1cm} H_A: \theta_X \ne \theta_Y$$
-* This is called the Behrens–Fisher problem and the traditional test in this situation is the two-sample $t$-test which uses a $t$-statistic with the Satterth- waite degrees of freedom correction
+* This is called the Behrens–Fisher problem and the traditional test in this situation is the two-sample $t$-test which uses a $t$-statistic with the Satterthwaite degrees of freedom correction
 * There is a two-sample Mann–Whitney–Wilcoxon test which serves as a robust alternative to this approximate $t$-test
 
 ## Placement Test for the Behrens–Fisher Problem
@@ -190,7 +190,7 @@ $$ H_0: \theta_X = \theta_Y \hspace{1cm} \text{versus} \hspace{1cm} H_A: \theta_
 $$ T^+ = \#_{i,j} \{ X_i < Y_j \} = \sum_{j=1}^{n_2} \operatorname{R}(Y_j) - \frac{n_2(n_2+1)}{2}$$
 * Null expectation of $T+$ same as in the location problem but different null variance
 * Let $P1,\dots,P_{n1}$ denote the placements of the $X_i$'s in terms of the $Y$-sample
-$$Pi = \#_j \{ Y_j < X_i \}, i = 1,\dots,n_1$$
+$$P_i = \#_j \{ Y_j < X_i \}, i = 1,\dots,n_1$$
 * Let  Q1,...,Qn denote the placements of the $Y_j$'s in terms of the $X$-sample
 $$Q_j = \#_i \{X_i < Y_j \}, j=1,\dots,n_2$$
 
@@ -200,7 +200,51 @@ $$Q_j = \#_i \{X_i < Y_j \}, j=1,\dots,n_2$$
 $$\bar{P} = \frac{1}{n_1} \sum_{i=1}^{n_1} P_i \hspace{1cm}\text{and}\hspace{1cm} \bar{Q} = \frac{1}{n_2} \sum_{j=1}^{n_2} Q_j$$
 $$V_1 = \sum_{i=1}^{n_1} (P_i-\bar{P})^2 \hspace{1cm}\text{and}\hspace{1cm} V_2 = \sum_{j=1}^{n_2} (Q_j-\bar{Q})^2$$
 * Then the standardized test statistic is
-$$ Z_{f_p} = \frac{T^+ - n_1 n_2 / 2}{(V_1 + V_2 + \bar{PQ})^{1/2}} $$
+$$ Z_{f_p} = \frac{T^+ - n_1 n_2 / 2}{\left(V_1 + V_2 + \bar{P}\bar{Q}\right)^{1/2}} $$
+
+## Placement Test for the Behrens–Fisher Problem
+
+Monte Carlo simulation of distibution of $Z_{f_p}$ under the null
+
+```{r echo=TRUE}
+n1 = length(lg)
+n2 = length(hg)
+n = n1+n2
+nSim = 1
+
+Yj = replicate(nSim,sample(n,n2,replace = FALSE))
+getXi = function(j) (1:n)[-j]
+Xi = apply(Yj,2,getXi)
+
+Zfp = function(trial) {
+  Pi = function(i) { sum(Yj[,trial] < Xi[i,trial]) }
+  Qj = function(j) { sum(Xi[,trial] < Yj[j,trial]) }
+  P = sapply(1:n1,Pi)
+  Q = sapply(1:n2,Qj)
+  Phat = mean(P)
+  Qhat = mean(Q)
+  V1 = sum((P-Phat)^2)
+  V2 = sum((Q-Qhat)^2)
+  
+  Zfp = (sum(P)-sum(Q))/(2*sqrt(V1+V2+Phat*Qhat))
+  Zfp
+}
+
+ZfpNull = sapply(1:nSim, Zfp)
+```
+
+<!--
+from Kloke & McKean book:
+Tplus = function(Yj) { sum(Yj) + n2*(n2+1)/2 }
+Zfp = ((Tplus(Yj[,trial])-n1*n2)/2) / sqrt(V1+V2+Phat*Qhat)
+-->
+
+## Placement Test for the Behrens–Fisher Problem
+
+```{r}
+df = data.frame(ZfpNull=ZfpNull)
+ggplot(df, aes(ZfpNull)) + geom_histogram(binwidth = 0.1) + ggtitle("Null Distribution of Zfp")
+```
 
 ## Placement Test for the Behrens–Fisher Problem Example
 
