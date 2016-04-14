@@ -261,7 +261,7 @@ XiObsv = ranks[1:n1]
 YjObsv = ranks[(n1+1):n]
 UObsv = U(XiObsv,YjObsv)
 UObsv
-pvalue = mean(UNull > UObsv)
+pvalue = mean(UNull >= UObsv)
 pvalue
 ```
 
