@@ -103,11 +103,21 @@ rownames(con) = c("epsilon","ARE(Hodges–Lehmann,LS)")
 con
 ```
 
+## Analyses for a Shift in Location
+
+* Random sample $X_1,\dots,X_{n_1}$ with cdf $F(t)$ and pdf $f(t)$
+* Random sample $Y_1,\dots,Y_{n_2}$ with cdf $F(t-\Delta)$ and pdf $f(t-\Delta)$
+* Hypothesis test: $$H_0: \Delta = 0 \hspace{1cm} \text{versus} \hspace{1cm} H_A: \Delta \ne 0$$
+* Additionally, we can esimate $\widehat{\Delta}$ and form confidence intervals
+* Wilcoxon test statistics:
+$$ T = \sum_{j=1}^{n_2} \operatorname{R}(Y_j)$$
+among the combined samples $X_1,\dots,X_{n1},Y_1,\dots,Y_{n2}$
+
 ## Scale Problem
 
 * Besides differences in location, we are often interested in the difference between scales for populations
-* Random sample $X_1,\dots,X_{n_1}$ with common pdf $f\left( (x-\theta_1)\sigma_1 \right)$, $\sigma_1 > 0$
-* Random sample $Y_1,\dots,Y_{n_2}$ with common pdf $f\left( (y-\theta_2)\sigma_2 \right)$, $\sigma_2 > 0$
+* Random sample $X_1,\dots,X_{n_1}$ with common pdf $f\left( (x-\theta_1)/\sigma_1 \right)$, $\sigma_1 > 0$
+* Random sample $Y_1,\dots,Y_{n_2}$ with common pdf $f\left( (y-\theta_2)/\sigma_2 \right)$, $\sigma_2 > 0$
 * Hypothesis test ($\eta = \sigma_2/\sigma_1$)
 $$ H_0: \eta = 1 \hspace{1cm} \text{versus} \hspace{1cm} H_A: \eta \ne 1 $$
 * Besides discussing rank-based tests for these hypotheses, we also consider the associated estimation of $\eta$, along with a confidence interval for $\eta$
