@@ -1,0 +1,53 @@
+---
+title: "Permutation Test"
+author: "Christof Seiler"
+date: "Stanford University, Spring 2016, STATS 205"
+output:
+  ioslides_presentation:
+    incremental: yes
+    smaller: no
+    transition: faster
+    widescreen: yes
+  beamer_presentation:
+    incremental: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+set.seed(1234)
+library(ggplot2)
+```
+
+## The Lady and the Tea
+
+The lady and the tea from Fisher's The design of experiments
+
+## Fisher versus Darwin
+
+* Paper: Fisher’s randomization test and Darwin's data – A footnote to the history of statistics
+
+## General Recipe
+
+* Decide on a test statistic $T$
+* List the possible values of $T$
+* Under H0, all ways of re-arranging the data are equally likely
+* $P(T = t)$ is proportional to the number of ways of getting the value $t$
+* The permutation $p$-value is the probability of getting a value of $T$ as extreme or more extreme as the value we observed, "extreme" meaning in a direction inconsistent with $H_0$
+
+## Assumption: Exchangeable Observations
+
+* Book: Permutations, Parametric, and Boostrap Test of Hypothesis - Good, Section 2.2.2
+
+## More Advanced Example
+
+* Paper: Equidistant Letter Sequences in the Book of Genesis
+
+## Modern Application in Neuroimaging
+
+* Explain neuroscience imaging data
+* Explain significant cluster permutation test
+* Paper: Nichols and Holmes, Nonparametric Permutation Tests For Functional Neuroimaging: A Primer with Examples
+
+## Example Final Project: Autistic Brain
+
+* Example for a project based on my autistic brain imaging example

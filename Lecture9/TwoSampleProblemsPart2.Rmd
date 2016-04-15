@@ -211,10 +211,9 @@ Monte Carlo simulation of distibution of $U$ under the null
 
 ```{r echo=TRUE}
 n1 = length(hg); n2 = length(lg); n = n1+n2; nSim = 10000
-
-Yj = replicate(nSim,sample(n,n2,replace = FALSE))
-getXi = function(j) (1:n)[-j]
-Xi = apply(Yj,2,getXi)
+Shuffle = replicate(nSim,sample(n,n,replace = FALSE))
+Xi = Shuffle[1:n1,]
+Yj = Shuffle[(n1+1):n,]
 
 U = function(Xi,Yj) {
   Pi = function(i) { sum(Yj < Xi[i]) }; Qj = function(j) { sum(Xi < Yj[j]) }
@@ -282,12 +281,12 @@ $$J = \frac{n_1 n_2}{d} \max_{i=1,\dots,n} \{ | F_{n_1}(Z_{(i)}) - G_{n_2}(Z_{(i
 
 ## Do it Yourself Test Statistics
 
-* Idea: Put a metric $d(\pi,\sigma)$ between permutations $\pi$ and $\sigma$
+* Idea: Put a metric $d(\pi,\sigma)$ on permutations $\pi$ and $\sigma$
 * Possible metrics:
-    * Metric 1: $K(\pi,\sigma) =$ minimum number of pairwise adjeciant transposition to go from $\pi$ to $\sigma$
+    * Metric 1: $K(\pi,\sigma) =$ minimum number of pairwise adjacent transposition to go from $\pi$ to $\sigma$
     * Metric 2: $R(\pi,\sigma) = \sqrt{ \sum_{i=1}^n (\pi(i)-\sigma(i))^2 }$ 
 * Example for $K(\pi,\sigma)$: 
-      * $\pi = \{ 1,2,3 \} \text{ and } \sigma = \{ 3,2,1 \}$
+      * $\pi = \{ 3,2,1 \} \text{ and } \sigma = \{  1,2,3 \}$
       * Move 1: \{ 2,3,1 \}
       * Move 2: \{ 2,1,3 \}
       * Move 3: \{ 1,2,3 \}
