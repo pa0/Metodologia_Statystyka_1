@@ -162,7 +162,7 @@ $$ H_0: \eta^2 = 1 $$
 * If $n$ is odd: $1,2,3,\dots,(n-1)/2,(n+1)/2,(n-1)/2,\dots,3,2,1$
 * then the statistic is a function of these ranks $C = \sum_{j=1}^{n_2} R(Y_j)$
 
-## Placement Test for the Behrens–Fisher Problem
+## Behrens–Fisher Problem
 
 ```{r message=FALSE}
 hg = c(227,250,277,290,297,325,337,340)
@@ -172,18 +172,18 @@ ggplot(df, aes(x=factor(geese),fill=factor(geese),y=plasma)) +
   geom_dotplot(binaxis = "y", stackdir = "center", binpositions="all")
 ```
 
-## Placement Test for the Behrens–Fisher Problem
+## Behrens–Fisher Problem
 
 * Suppose that we have two populations which differ by location and scale and we are interested in testing that the locations are the same
 * Random sample $X_1,\dots,X_{n_1}$ with cdf $F(t)$
 * Random sample $Y_1,\dots,Y_{n_2}$ with cdf $G(t)$
 * Let $θ_X$ and $θ_Y$ denote the medians of the distributions $F(t)$ and $G(t)$
 * Hypothesis test
-$$ H_0: \theta_X = \theta_Y \hspace{1cm} \text{versus} \hspace{1cm} H_A: \theta_X \ne \theta_Y$$
+$$ H_0: \theta_X = \theta_Y \hspace{1cm} \text{versus} \hspace{1cm} H_A: \theta_X < \theta_Y$$
 * This is called the Behrens–Fisher problem and the traditional test in this situation is the two-sample $t$-test which uses a $t$-statistic with the Satterthwaite degrees of freedom correction
 * There is a two-sample Fligner-Policello test which serves as a robust alternative to this approximate $t$-test
 
-## Placement Test for the Behrens–Fisher Problem
+## Behrens–Fisher Problem
 
 * Assume that the cdfs $F(t)$ and $G(t)$ are symmetric about $\theta_X$ and $\theta_Y$ 
 * Let $P1,\dots,P_{n1}$ denote the placements of the $X_i$'s in terms of the $Y$-sample
@@ -197,7 +197,7 @@ $$Q_j = \#_i \{X_i < Y_j \}, j=1,\dots,n_2$$
 $$ T^+ = \#_{i,j} \{ X_i < Y_j \} = \sum_{j=1}^{n_2} \operatorname{R}(Y_j) - \frac{n_2(n_2+1)}{2}$$
 -->
 
-## Placement Test for the Behrens–Fisher Problem
+## Behrens–Fisher Problem
 
 * Define 
 $$\bar{P} = \frac{1}{n_1} \sum_{i=1}^{n_1} P_i \hspace{1cm}\text{and}\hspace{1cm} \bar{Q} = \frac{1}{n_2} \sum_{j=1}^{n_2} Q_j$$
@@ -205,25 +205,7 @@ $$V_1 = \sum_{i=1}^{n_1} (P_i-\bar{P})^2 \hspace{1cm}\text{and}\hspace{1cm} V_2 
 * Then the standardized test statistic is
 $$ U = \frac{\sum_{j=1}^{n_2} Q_j - \sum_{i=1}^{n_1} P_j}{2 \left(V_1 + V_2 + \bar{P}\bar{Q}\right)^{1/2}} $$
 
-## Placement Test for the Behrens–Fisher Problem Example
-
-* Hollander and Wolfe (1999) a study of healthy and lead-poisoned geese 
-* The study involved 7 healthy geese and 8 lead-poisoned geese
-* The response of interest was the amount of plasma glucose in the geese in mg/100 ml of plasma
-* The hypotheses of interest are:
-$$H_0:θ_L = θ_H \hspace{1cm}\text{vesus}\hspace{1cm} H_A: θ_L > θ_H$$
-* $θ_L$ and $θ_H$ denote the true median plasma glucose values of lead-poisoned geese and healthy geese
-
-## Placement Test for the Behrens–Fisher Problem Example
-
-```{r echo=TRUE}
-hg
-lg
-fp.test(hg,lg,alternative='greater')
-```
-
-
-## Placement Test for the Behrens–Fisher Problem
+## Behrens–Fisher Problem
 
 Monte Carlo simulation of distibution of $U$ under the null
 
@@ -245,13 +227,23 @@ UNull = rep(0,nSim)
 for(trial in 1:nSim) { UNull[trial] = U(Xi[,trial],Yj[,trial]) }
 ```
 
+## Behrens–Fisher Problem Example
+
+* Hollander and Wolfe (1999) a study of healthy and lead-poisoned geese 
+* The study involved 7 healthy geese and 8 lead-poisoned geese
+* The response of interest was the amount of plasma glucose in the geese in mg/100 ml of plasma
+* The hypotheses of interest are:
+$$H_0: θ_H = θ_L \hspace{1cm}\text{vesus}\hspace{1cm} H_A: θ_H < θ_L$$
+* $θ_L$ denote the true median plasma glucose values of lead-poisoned geese
+* $θ_H$ denote the true median plasma glucose values of healthy geese
+
 <!--
 from Kloke & McKean book:
 Tplus = function(Yj) { sum(Yj) + n2*(n2+1)/2 }
 Zfp = ((Tplus(Yj[,trial])-n1*n2)/2) / sqrt(V1+V2+Phat*Qhat)
 -->
 
-## Placement Test for the Behrens–Fisher Problem
+## Behrens–Fisher Problem Example
 
 Test statistic of our sample
 
@@ -265,7 +257,9 @@ pvalue = mean(UNull >= UObsv)
 pvalue
 ```
 
-## Placement Test for the Behrens–Fisher Problem
+## Behrens–Fisher Problem Example
+
+From Monte Carlo simulation:
 
 ```{r warning=FALSE}
 df = data.frame(UNull=UNull)
@@ -274,66 +268,48 @@ ggplot(df, aes(UNull)) + geom_histogram(binwidth = 0.1) +
   geom_vline(xintercept = UObsv,colour = "red",size = 1.5)
 ```
 
-<!--
-## Scale Problem
+## General Difference in Two Populations
 
-* Besides differences in location, we are often interested in the difference between scales for populations
-* Random sample $X_1,\dots,X_{n_1}$ with common pdf $f\left( (x-\theta_1)/\sigma_1 \right)$, $\sigma_1 > 0$
-* Random sample $Y_1,\dots,Y_{n_2}$ with common pdf $f\left( (y-\theta_2)/\sigma_2 \right)$, $\sigma_2 > 0$
-* Hypothesis test ($\eta = \sigma_2/\sigma_1$)
-$$ H_0: \eta = 1 \hspace{1cm} \text{versus} \hspace{1cm} H_A: \eta \ne 1 $$
-* Besides discussing rank-based tests for these hypotheses, we also consider the associated estimation of $\eta$, along with a confidence interval for $\eta$
-* So here the location parameters $\theta_1$ and $\theta_2$ are nuisance parameters
+* The most general test: Any difference between $X$ and $Y$
+$$ H_0: F(t) = G(t) \hspace{1cm} \text{versus} \hspace{1cm} H_A: F(t) \ne G(t) \hspace{1cm} \text{for at least one } t$$
+* The Kolmogorov-Smirnov test is such a test
+* Obtain empirical distributions $F_{n_1}$ and $G_{n_2}$
+* $F_{n_1} = \# \{X_i \le t \} / n_1$
+* $G_{n_2} = \# \{Y_j \le t \} / n_2$
+* Let $d$ be the greatest common divisor of $n_1$ and $n_1$
+* Then we get statistic (ordered combined observations $Z_{(i)} \le \dots \le Z_{(n)}$)
+$$J = \frac{n_1 n_2}{d} \max_{i=1,\dots,n} \{ | F_{n_1}(Z_{(i)}) - G_{n_2}(Z_{(i)}) | \}$$
 
-## Scale Problem
+## Do it Yourself Test Statistics
 
-* Fligner–Killeen procedure is a asymptotically distribution-free rank-based procedure
-* First align samples
-$$ X_i^* = X_i - \operatorname{median}(X_l), i = 1,\dots,n_1 $$
-$$ Y_j^* = Y_j - \operatorname{median}(Y_l), i = 1,\dots,n_2 $$
-* Folded samples: $|X_1^*|,\dots,|X_{n_1}^*|,|Y_1^*|,\dots,|Y_{n_2}^*|$
-* Define $Z_i$ as 
-$$ 
-Z_i = 
-\begin{cases}
-\log |X_i^*| & i = 1,\dots,n_1 \\
-\log |Y_{i-n_1}^*| & j = n_1 + 1,\dots,n
-\end{cases}
-$$
+* Idea: Put a metric $d(\pi,\sigma)$ between permutations $\pi$ and $\sigma$
+* Possible metrics:
+    * Metric 1: $K(\pi,\sigma) =$ minimum number of pairwise adjeciant transposition to go from $\pi$ to $\sigma$
+    * Metric 2: $R(\pi,\sigma) = \sqrt{ \sum_{i=1}^n (\pi(i)-\sigma(i))^2 }$ 
+* Example for $K(\pi,\sigma)$: 
+      * $\pi = \{ 1,2,3 \} \text{ and } \sigma = \{ 3,2,1 \}$
+      * Move 1: \{ 2,3,1 \}
+      * Move 2: \{ 2,1,3 \}
+      * Move 3: \{ 1,2,3 \}
+      * So $K(\pi,\sigma) = 3$
 
-## Scale Problem
+## Do it Yourself Test Statistics
 
-* Let $c$ be the indicator vector with its first $n_1$ entries set at $0$ and its last $n_2$ entries set at $1$
-* Then the log-linear model for the aligned, folded sample is
-$$ Z_i = \Delta c_i + e_i, i = 1,2,\dots,n$$
--->
+* Four steps program
+* Step 1: 
+    * Let $\pi$ be the observed ranks
+    * The metric is right-invariant $d(\pi,\sigma) = d(\pi\tau,\sigma\tau)$
+    * In other words, this takes care of all possible relabeling of observations into populations
+* Step 2: 
+    * Permutation $\sigma$ is "equivalent" to observed $\pi$ if and only if it assigns the same set of ranks to population 1 and thus to population 2
+    * This builds and equivilant class $[\pi]$ of size $n_1!n_2!$ which is a subset of all possible permutations
 
-<!--
-## Analyses for a Shift in Location
+## Do it Yourself Test Statistics
 
-* Wilcoxon test equivalently to
-$$ T_W = \sum_{i=1}^{n_2} a(\operatorname{R}(Y_i)) $$
-* when $a(i) = \varphi_W (i/(n+1))$ and $\varphi_W(u) = \sqrt{12} (u-(1/2))$
-* with the following identity
-$$T_W = \frac{\sqrt{12}}{n+1} \left( T - \frac{n_2(n+1)}{2} \right)$$
-* Hence $T_W$ is a linear function of the ranks 
-* $\varphi_W(u)$ is called the Wilcoxon score function, and
-* $a_W(i)$ are called Wilcoxon scores
-
-## Normal Scores
-
-* When taking $a(i) = \varphi_{ns} (i/(n+1))$ and normal cdf $\Phi$
-$$\varphi_{ns}(u) = \Phi^{-1}(u)$$
-* then the scores follow a normal distribution with $\operatorname{E}(T_{ns}) = 0$ and 
-$$\operatorname{Var}(T_{ns}) = \frac{n_1 n_2}{n-1} \sum_{i=1}^n a_{ns}^2(i)$$
-* We can then reject using asymptotic level $\alpha$ when 
-$$\left| \frac{T_{ns}}{\sqrt{\operatorname{Var}_{H_0}(T_{ns})}} \right| > z_{\alpha/2}$$
-
-## Analyses Based on General Score Functions
-
-* Set of rank-based scores is generated by $\varphi(u)$ on interval $(0,1)$
-* Assume that $\varphi(u)$ is square integrable 
-$$ \int_0^1 \varphi(u) \, du = 0 \hspace{1cm} \text{and} \hspace{1cm} \int_0^1 \varphi^2(u) \, du = 1 $$
-
-## Efficiency and Optimal Scores
--->
+* Step 3: 
+    * Construct extremal set $E$ containing all permutations which are most in agreament with $H_A$ and least with $H_0$
+* Step 4: 
+    * Test statistics is now defined by choosing a distance $d([\pi],E)$ to measure how far we are from $H_A$
+    * $K(\pi,\sigma)$ is Mann-Whitney test statistic
+    * $R^2(\pi,\sigma)$ is equivalent to Wilcoxon test statistic
+* Reference: Critchlow (1986), *A Unified Approach to Constructing Nonparametric Rank Tests* [(Link)](https://statistics.stanford.edu/research/unified-approach-constructing-nonparametric-rank-tests)
