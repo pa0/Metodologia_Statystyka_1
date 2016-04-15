@@ -22,12 +22,33 @@ library(npsm)
 
 ## Analyses for a Shift in Location
 
+```{r}
+t = seq(0,10,0.01)
+df = data.frame(t=t,
+                g=dnorm(t,mean = 3,sd = 0.7),
+                f=dnorm(t,mean = 5,sd = 0.7))
+df = melt(df,id = "t")
+ggplot(data = df,aes(x=t,y=value,group=variable,colour=variable)) + geom_line(size=1)
+```
+
+## Analyses for a Shift in Location
+
+* Random sample $X_1,\dots,X_{n_1}$ with cdf $F(t)$ and pdf $f(t)$
+* Random sample $Y_1,\dots,Y_{n_2}$ with cdf $F(t-\Delta)$ and pdf $f(t-\Delta)$
+* Hypothesis test: $$H_0: \Delta = 0 \hspace{1cm} \text{versus} \hspace{1cm} H_A: \Delta \ne 0$$
+* Additionally, we can estimate $\widehat{\Delta}$ and form confidence intervals
+* Wilcoxon test statistics:
+$$ T = \sum_{j=1}^{n_2} \operatorname{R}(Y_j)$$
+among the combined samples $X_1,\dots,X_{n1},Y_1,\dots,Y_{n2}$
+
+## Analyses for a Shift in Location
+
 * The estimate of $\Delta$ is the Hodges–Lehmann estimator
 $$ \widehat{\Delta} = \operatorname{median}_{i,j} \{ Y_j - X_i \}$$
 * There are $n_1 n_2$ differences
-* Order the differnces $D_{(1)} < D_{(2)} < \dots < D_{(n_1 n_2)}$
+* Order the differences $D_{(1)} < D_{(2)} < \dots < D_{(n_1 n_2)}$
 * Fix confidence level at $1 - \alpha$
-* Find $c$ such that
+* Find $c$ such that (Mann–Whitney test statistic $T^+$)
 $$ \alpha/2 = \operatorname{P}_{H_0} ( T^+ \le c ) $$
 * Then the interval $(D_{(c+1)},D_{(n-c)})$ is $(1-\alpha) 100\%$ confidence interval for $\widehat{\Delta}$
 
@@ -40,11 +61,11 @@ $$ \alpha/2 = \operatorname{P}_{H_0} ( T^+ \le c ) $$
 $t$-distribution with 5 degrees of freedom and  
 a true shift parameter $\Delta$ was set at the value $8$ 
 ```{r echo=TRUE}
-n1 = 42
-n2 = 50
-trails = 10
-x = round(rt(11,5)*trails+n1,1)
-y = round(rt(9,5)*trails+n2,1)
+n1 = 11
+n2 = 9
+delta = 8
+x = round(rt(n1,5)*10+42,1)
+y = round(rt(n2,5)*10+42+delta,1)
 sort(x)
 sort(y)
 ```
@@ -107,27 +128,6 @@ rownames(con) = c("epsilon","ARE(Hodges–Lehmann,LS)")
 con
 ```
 
-## Analyses for a Shift in Location
-
-```{r}
-t = seq(0,10,0.01)
-df = data.frame(t=t,
-                g=dnorm(t,mean = 3,sd = 0.7),
-                f=dnorm(t,mean = 5,sd = 0.7))
-df = melt(df,id = "t")
-ggplot(data = df,aes(x=t,y=value,group=variable,colour=variable)) + geom_line(size=1)
-```
-
-## Analyses for a Shift in Location
-
-* Random sample $X_1,\dots,X_{n_1}$ with cdf $F(t)$ and pdf $f(t)$
-* Random sample $Y_1,\dots,Y_{n_2}$ with cdf $F(t-\Delta)$ and pdf $f(t-\Delta)$
-* Hypothesis test: $$H_0: \Delta = 0 \hspace{1cm} \text{versus} \hspace{1cm} H_A: \Delta \ne 0$$
-* Additionally, we can esimate $\widehat{\Delta}$ and form confidence intervals
-* Wilcoxon test statistics:
-$$ T = \sum_{j=1}^{n_2} \operatorname{R}(Y_j)$$
-among the combined samples $X_1,\dots,X_{n1},Y_1,\dots,Y_{n2}$
-
 ## Test for Dispertion
 
 ```{r}
@@ -146,7 +146,7 @@ ggplot(data = df,aes(x=t,y=value,group=variable,colour=variable)) + geom_line(si
 $$ H_0: F(t) = G(t) $$
 * Consider the alternative that $X$ and $Y$ have different variability with same median 
 $$ \frac{X-\theta}{\sigma_1} \overset{d}{=} \frac{X-\theta}{\sigma_2} $$
-* Then, what's left to analysis is the dispertion
+* Then, what's left to analysis is the dispersion
 $$ \eta^2 = \frac{\sigma_1}{\sigma_2} = \frac{\operatorname{Var}(X)}{\operatorname{Var}(Y)}$$
 
 ## Test for Dispertion
@@ -301,12 +301,12 @@ $$J = \frac{n_1 n_2}{d} \max_{i=1,\dots,n} \{ | F_{n_1}(Z_{(i)}) - G_{n_2}(Z_{(i
     * In other words, this takes care of all possible relabeling of observations into populations
 * Step 2: 
     * Permutation $\sigma$ is "equivalent" to observed $\pi$ if and only if it assigns the same set of ranks to population 1 and thus to population 2
-    * This builds and equivilant class $[\pi]$ of size $n_1!n_2!$ which is a subset of all possible permutations
+    * This builds and equivalent class $[\pi]$ of size $n_1!n_2!$ which is a subset of all possible permutations
 
 ## Do it Yourself Test Statistics
 
 * Step 3: 
-    * Construct extremal set $E$ containing all permutations which are most in agreament with $H_A$ and least with $H_0$
+    * Construct extremal set $E$ containing all permutations which are most in agreement with $H_A$ and least with $H_0$
 * Step 4: 
     * Test statistics is now defined by choosing a distance $d([\pi],E)$ to measure how far we are from $H_A$
     * $K(\pi,\sigma)$ is Mann-Whitney test statistic
