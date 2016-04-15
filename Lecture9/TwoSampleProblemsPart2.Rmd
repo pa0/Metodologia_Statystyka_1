@@ -48,8 +48,8 @@ $$ \widehat{\Delta} = \operatorname{median}_{i,j} \{ Y_j - X_i \}$$
 * There are $n_1 n_2$ differences
 * Order the differences $D_{(1)} < D_{(2)} < \dots < D_{(n_1 n_2)}$
 * Fix confidence level at $1 - \alpha$
-* Find $c$ such that (Mann–Whitney test statistic $T^+$)
-$$ \alpha/2 = \operatorname{P}_{H_0} ( T^+ \le c ) $$
+* Find $c$ such that
+$$ \alpha/2 = \operatorname{P}_{H_0} ( T \le c ) $$
 * Then the interval $(D_{(c+1)},D_{(n-c)})$ is $(1-\alpha) 100\%$ confidence interval for $\widehat{\Delta}$
 
 <!--
@@ -81,7 +81,7 @@ wilcox.test(y,x,conf.int=TRUE)
 
 * Frame the two-sample location problem as a regression problem
 * Combine sample in one vector $\boldsymbol{Z} = (X_1,\dots,X_{n_1},Y_1,\dots,Y_{n_2}^T)$
-* Let $c$ be a $n \times 1$ vector with 
+* Let $\boldsymbol{c}$ be a $n \times 1$ vector with 
     * zeros at position $1$ to $n_1$ and 
     * ones at positions $n_1+1$ to $n$
 * Then we can rewrite the location model as
@@ -145,9 +145,9 @@ ggplot(data = df,aes(x=t,y=value,group=variable,colour=variable)) + geom_line(si
 * The null hypothesis is that $X$ and $Y$ have the same but unspecified distribution
 $$ H_0: F(t) = G(t) $$
 * Consider the alternative that $X$ and $Y$ have different variability with same median 
-$$ \frac{X-\theta}{\sigma_1} \overset{d}{=} \frac{X-\theta}{\sigma_2} $$
+$$ \frac{X-\theta}{\sigma_1} \overset{d}{=} \frac{Y-\theta}{\sigma_2} $$
 * Then, what's left to analysis is the dispersion
-$$ \eta^2 = \frac{\sigma_1}{\sigma_2} = \frac{\operatorname{Var}(X)}{\operatorname{Var}(Y)}$$
+$$ \eta^2 = \frac{\sigma_1^2}{\sigma_2^2} = \frac{\operatorname{Var}(X)}{\operatorname{Var}(Y)}$$
 
 ## Test for Dispertion
 
@@ -156,7 +156,7 @@ $$ H_0: \eta^2 = 1 $$
 * We will use the Ansari-Bradley two-sample scale statistic $C$
 * Rank combined sample from smallest to largest
 * Assign score 1 to smallest and largest
-* Assign socre 2 to second smallest and largest
+* Assign score 2 to second smallest and second largest
 * etc.
 * If $n$ is even: $1,2,3,\dots,n/2,n/2,\dots,3,2,1$
 * If $n$ is odd: $1,2,3,\dots,(n-1)/2,(n+1)/2,(n-1)/2,\dots,3,2,1$
@@ -174,19 +174,20 @@ ggplot(df, aes(x=factor(geese),fill=factor(geese),y=plasma)) +
 
 ## Behrens–Fisher Problem
 
-* Suppose that we have two populations which differ by location and scale and we are interested in testing that the locations are the same
+* Suppose that we have two populations which differ by location and scale
+* We are interested in testing that the locations are the same
 * Random sample $X_1,\dots,X_{n_1}$ with cdf $F(t)$
 * Random sample $Y_1,\dots,Y_{n_2}$ with cdf $G(t)$
 * Let $θ_X$ and $θ_Y$ denote the medians of the distributions $F(t)$ and $G(t)$
 * Hypothesis test
 $$ H_0: \theta_X = \theta_Y \hspace{1cm} \text{versus} \hspace{1cm} H_A: \theta_X < \theta_Y$$
 * This is called the Behrens–Fisher problem and the traditional test in this situation is the two-sample $t$-test which uses a $t$-statistic with the Satterthwaite degrees of freedom correction
-* There is a two-sample Fligner-Policello test which serves as a robust alternative to this approximate $t$-test
+* There is the two-sample Fligner-Policello test which serves as a robust alternative to this approximate $t$-test
 
 ## Behrens–Fisher Problem
 
 * Assume that the cdfs $F(t)$ and $G(t)$ are symmetric about $\theta_X$ and $\theta_Y$ 
-* Let $P1,\dots,P_{n1}$ denote the placements of the $X_i$'s in terms of the $Y$-sample
+* Let $P_1,\dots,P_{n1}$ denote the placements of the $X_i$'s in terms of the $Y$-sample
 $$P_i = \#_j \{ Y_j < X_i \}, i = 1,\dots,n_1$$
 * Let $Q_1,\dots,Q_n$ denote the placements of the $Y_j$'s in terms of the $X$-sample
 $$Q_j = \#_i \{X_i < Y_j \}, j=1,\dots,n_2$$
@@ -275,9 +276,13 @@ $$ H_0: F(t) = G(t) \hspace{1cm} \text{versus} \hspace{1cm} H_A: F(t) \ne G(t) \
 * Obtain empirical distributions $F_{n_1}$ and $G_{n_2}$
 * $F_{n_1} = \# \{X_i \le t \} / n_1$
 * $G_{n_2} = \# \{Y_j \le t \} / n_2$
-* Let $d$ be the greatest common divisor of $n_1$ and $n_1$
-* Then we get statistic (ordered combined observations $Z_{(i)} \le \dots \le Z_{(n)}$)
+* Assuming $n_1 = n_2$, then we get statistic (ordered combined observations $Z_{(i)} \le \dots \le Z_{(n)}$)
+$$J = \max_{i=1,\dots,n} \{ | F_{n_1}(Z_{(i)}) - G_{n_2}(Z_{(i)}) | \}$$
+
+<!--
+Let $d$ be the greatest common divisor of $n_1$ and $n_1$
 $$J = \frac{n_1 n_2}{d} \max_{i=1,\dots,n} \{ | F_{n_1}(Z_{(i)}) - G_{n_2}(Z_{(i)}) | \}$$
+-->
 
 ## Do it Yourself Test Statistics
 
