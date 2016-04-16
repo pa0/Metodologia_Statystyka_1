@@ -16,6 +16,7 @@ output:
 knitr::opts_chunk$set(echo = FALSE)
 set.seed(1234)
 library(ggplot2)
+library(HistData)
 ```
 
 ## The Lady and the Tea
@@ -35,8 +36,7 @@ library(ggplot2)
 
 * Our theory is that the lady can taste the difference
 * Which translates into our null hypothesis:  
-$H_0:$ lady **cannot** taste difference  
-$H_A:$ lady **can** taste difference
+$H_0:$ lady **cannot** taste difference
 * The test statistics is the number of correct judgements
 * Under the null all judgments are equally likely
 * What is the null distribution of correct judgments?
@@ -44,23 +44,11 @@ $H_A:$ lady **can** taste difference
 
 ## The Lady and the Tea
 
-* Because of randomization, all $8! = 40'320$ permutations of the cups are equally likely, and each one has its own number of correct judgements
+* Because of randomization, all $8! = 40320$ permutations of the cups are equally likely, and each one has its own number of correct judgements
 * There are ${8 \choose 4} = 70$ ways of choosing 4 cups from 8 cups
 * Think of it as, choosing 4 cups in succession by first choosing from 8 cups, then 7, 6, 5, which gives $8 \times 7 \times 6 \times 5 = 1680$
 * But by doing so, we have chosen not only every possible set of 4, but every possible set in every possible order
 * Since 4 cups can be rearranged in order in $4 \times 3 \times 2 \times 1 = 24$, we correct by $1680/24 = 70$
-
-## The Lady and the Tea
-
-Monte Carlo simulations
-
-```{r echo=TRUE}
-nSim = 10000
-truth = c("tea","milk","milk","milk","tea","tea","tea","milk")
-permutations = replicate(nSim,sample(8,replace = FALSE))
-matches = apply(permutations,2,function(i) sum(truth[i] == truth))
-table(matches)/nSim
-```
 
 ## The Lady and the Tea
 
@@ -80,7 +68,7 @@ t(data.frame(truth = truth,judgement = judgement))
 ```{r echo=TRUE}
 t = 0:4
 probability = (choose(4,t)*choose(4,4-t))/choose(8,4)
-data.frame(t=t,probability=probability)
+data.frame(t=t,probability=round(probability,digits=3))
 ```
 
 * Of the four cups where the tea was poured first, select $t$ of them to say "tea" correctly, and $4−t$ to say "tea" incorrectly
@@ -89,32 +77,126 @@ data.frame(t=t,probability=probability)
 
 ## The Lady and the Tea
 
+Monte Carlo simulations
+
+```{r echo=TRUE}
+judgement = c("tea","milk","milk","milk","tea","tea","milk","tea")
+nSim = 10000
+permutations = replicate(nSim,sample(8,replace = FALSE))
+matches = apply(permutations,2,function(i) sum(judgement[i] == judgement))
+data.frame(t=t,
+           probability=round(probability,digits=3),
+           monte=round(table(matches)/nSim,digits=3))
+```
+
+## The Lady and the Tea
+
 ```{r echo=TRUE}
 t = 0:5
 probability = (choose(5,t)*choose(5,5-t))/choose(10,5)
-data.frame(t=t,probability=probability)
+data.frame(t=t,probability=round(probability,digits=3))
 ```
 
 * Increase experiment to total of 10 cups (5 each)
 * If she tasted 10 cups, it would be possible to reject H0 without requiring perfect judgement
 * We need perfect match or one miss will get us a $p$-value below $0.05$
 
-## Fisher versus Darwin
+## Darwin and Fisher
 
-* In chapter 3 of Fisher's book, he then introduced the first nonparametric test developed and is widely used; indeed in their analysis of paired experimental designs
-* Paper: Fisher’s randomization test and Darwin's data – A footnote to the history of statistics
+* In chapter 3 of Fisher's book, he then introduced the first nonparametric test developed
+* He illustrated his approach on data from Darwin
+* Darwin raised cross- and self-fertilized Zea mays plants
+* He planted equal numbers of each in four different pots, but not same number in each pot
+* Darwin measured heights of plants when only between 12 and 24 inches in height
+
+## Darwin and Fisher
+
+Original data (plant height in inches) from Darwin listed in Fisher's book
+
+```{r }
+data("ZeaMays")
+ZeaMays
+```
+
+## Darwin and Fisher {.build}
+
+Fisher proceeds by testing the hypothesis  
+$H_0:$ No difference between crossed and self-fertilized plants
+
+He peforms the paired sample $t$-test 
+```{r}
+t.test(ZeaMays$cross,ZeaMays$self,paired = TRUE,alternative = "two.sided")
+```
+
+## Darwin and Fisher {.build}
+
+```{r echo=TRUE}
+ZeaMays$diff
+```
+* Then he invents the first permutation test
+* Under $H_0$ that self-fertilized versus cross-fertilized does not matter, only chance determined whether $A-B$ or $B-A$
+* So the absolute value of the difference is what it is, but the plus or minus sign is by chance alone
+* Test statistic is sum of the differences
+* There are $2^{15} = 32768$ ways to swap the plus and minus signs, all equaly likely under $H_0$
+* Calculate statistic for each one to get null distribution
+
+## Darwin and Fisher
+
+* Random samples $X_1,\dots,X_n$ from $X$
+* Test $H_0: E(X) = 0$
+* Write the usuall sample mean statistic as
+$$T = \sum_{i=1}^n X_i = \sum_{i=1}^n |X_i| \delta_i$$
+* and split samples into two parts
+$$(|X_1|,\dots,|X_n|) \hspace{1cm}\text{and}\hspace{1cm} (\delta_1,\dots,\delta_n)$$
+* Under $H_0$ the two parts are independent and $\delta_i$ is a fair coin flip $\{-1,1\}$
+* The distribution of $T$ is not well defined under $H_0$
+
+## Darwin and Fisher
+
+* But If we fix $|X_i|$ at their observed values and regard $\delta_i$ as random
+* Then the condition null of $T$ is well defined
+* The only thing left to do is to compute
+$$P\left(T \ge t \, \big| \, H_0, |X_1|, \dots, |X_n| \right)$$
+by listing all possible sample of type
+$$\left(\pm \, |X_1|, \dots, \pm \, |X_n|\right)$$
+* This is usually called the 
+
+## Darwin and Fisher
+
+* We already looked at similar test
+* The *sign test*: 
+    * Test statistic: $S = \#_i \{ X_i \}$
+    * Wilcoxon signed-rank test: $W = \sum_{i=1}^n \operatorname{R}(|X_i|) \delta_i$
+* TODO: show why Wilcoxon signed-rank test is not conditional
+
+## Darwin and Fisher
+
+Using Monte Carlo simulations
+```{r}
+
+```
 
 ## General Recipe
 
 * Decide on a test statistic $T$
 * List the possible values of $T$
-* Under H0, all ways of re-arranging the data are equally likely
+* Under $H_0$, all ways of re-arranging the data are equally likely
 * $P(T = t)$ is proportional to the number of ways of getting the value $t$
 * The permutation $p$-value is the probability of getting a value of $T$ as extreme or more extreme as the value we observed, "extreme" meaning in a direction inconsistent with $H_0$
 
 ## Assumption: Exchangeable Observations
 
 * Book: Permutations, Parametric, and Boostrap Test of Hypothesis - Good, Section 2.2.2
+
+## How to Compute It?
+
+* Small sapmle size: Enumerations of all permutations (e.g. Gray codes)
+* Medium sample size: Fast Frourier Transform
+* Large sample size: Monte Carlo simulations, and Markov chain Monte Carlo
+
+## Permutations and Fast Fourier Tranform
+
+* Paper: On Obtaining Permutation Distributions in Polynomial Time
 
 ## More Advanced Example
 
@@ -129,3 +211,11 @@ data.frame(t=t,probability=probability)
 ## Example Final Project: Autistic Brain
 
 * Example for a project based on my autistic brain imaging example
+
+## References
+
+* Book:  Good. Permutations, Parametric, and Boostrap Test of Hypothesis
+* Paper: Basu (1980). Randomization Analysis of Experimential Data: The Fisher Randomization Test
+* Paper: On Obtaining Permutation Distributions in Polynomial Time
+* Paper: Equidistant Letter Sequences in the Book of Genesis
+* Paper: Nichols and Holmes, Nonparametric Permutation Tests For Functional Neuroimaging: A Primer with Examples
