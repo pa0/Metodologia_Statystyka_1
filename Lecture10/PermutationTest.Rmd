@@ -20,7 +20,73 @@ library(ggplot2)
 
 ## The Lady and the Tea
 
-The lady and the tea from Fisher's The design of experiments
+* Fisher starts his second chapter in his famous book on "The Design of Experiments" first published in 1935:
+* Quote: ``A lady declares that by tasting a cup of tea made with milk she can discriminate whether the milk or the tea infusion was first added to the cup.``
+* Fisher proposed the the following experiment to test this
+* Prepare eight cups of tea
+* In four, pour the tea first
+* In the other four, pour the milk first
+* Hold constant other features of the cups of tea (size, temperature, etc.)
+* Present cups in random order
+* Lady tasts them and judges
+* She knows that there are four of each type
+
+## The Lady and the Tea
+
+* Our theory is that the lady can taste the difference
+* Which translates into our null hypothesis:  
+$H_0:$ lady **cannot** taste difference  
+$H_A:$ lady **can** taste difference
+* The test statistics is the number of correct judgements
+* Under the null all judgments are equally likely
+* What is the null distribution of correct judgments?
+* Once we have that compare it to the experiment and compute the probability of having observed the experimantal outcome or a more extreme case
+
+## The Lady and the Tea
+
+* There ${8 \choose 4} = 70$ ways of choosing 4 cups from 8 cups
+* Think of it as, choosing 4 cups in succession by first choosing from 8 cups, then 7, 6, 5, which gives $8 \times 7 \times 6 \times 5 = 1680$
+* But by doing so, we have chosen not only every possible set of 4, but every possible set in every possible order
+* Since 4 cups can be rearranged in order in $4 \times 3 \times 2 \times 1 = 24$, we correct by $1680/24 = 70$
+
+## The Lady and the Tea
+
+```{r}
+truth = c("tea","milk","milk","milk","tea","tea","tea","milk")
+judgement = c("milk","tea","milk","milk","tea","tea","milk","tea")
+t(data.frame(truth = truth,judgement = judgement))
+```
+
+* Under the null, the reasons for the lady's judgements are unkown, except that they have nothing to do with the truth
+* The judgements are what they are; they are fixed
+* All $70$ ways to line up cups are equally likely
+* But only one line up with match the lady's judgements
+
+## The Lady and the Tea
+
+Of the four cups where the tea was poured first, select $t$ of them to say "tea" correctly, and $4−t$ to say "tea" incorrectly
+
+```{r}
+t = 0:4
+probability = (choose(4,t)*choose(4,4-t))/choose(8,4)
+data.frame(t=t,probability=probability)
+```
+
+The chances of a match is $\frac{1}{70} = 0.014 < 0.05$  
+We need perfect match!
+
+## The Lady and the Tea
+
+Increase experiment to total of 10 cups (5 each)
+
+```{r}
+t = 0:5
+probability = (choose(5,t)*choose(5,5-t))/choose(10,5)
+data.frame(t=t,probability=probability)
+```
+
+If she tasted 10 cups, it would be possible to reject H0 without requiring perfect judgement  
+We need perfect match or one miss to get $p$-value below $0.05$
 
 ## Fisher versus Darwin
 
