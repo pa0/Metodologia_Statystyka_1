@@ -153,30 +153,47 @@ $$(|X_1|,\dots,|X_n|) \hspace{1cm}\text{and}\hspace{1cm} (\delta_1,\dots,\delta_
 
 ## Darwin and Fisher
 
-* But If we fix $|X_i|$ at their observed values and regard $\delta_i$ as random
+* But if we fix $|X_i|$ at their observed values and regard $\delta_i$ as random
 * Then the condition null of $T$ is well defined
 * The only thing left to do is to compute
 $$P\left(T \ge t \, \big| \, H_0, |X_1|, \dots, |X_n| \right)$$
-by listing all possible sample of type
+by listing all possible samples of type
 $$\left(\pm \, |X_1|, \dots, \pm \, |X_n|\right)$$
-* This is usually called the 
+* This is usually called the Fisher's randomization test
+* Permutation tests describe a special case of randomization
+* In permutation tests, we permute group labels on the observations
 
 ## Darwin and Fisher
 
-* We already looked at similar test
+* We already looked at similar tests
 * The *sign test*: 
     * Test statistic: $S = \#_i \{ X_i \}$
     * Wilcoxon signed-rank test: $W = \sum_{i=1}^n \operatorname{R}(|X_i|) \delta_i$
-* TODO: show why Wilcoxon signed-rank test is not conditional
+* In contrast to the randomization test, the Wilcoxon signed-rank test is not conditional on the ranks
 
 ## Darwin and Fisher
 
 Using Monte Carlo simulations
-```{r}
-
+```{r echo=TRUE}
+nSim = 100000
+n = length(ZeaMays$diff)
+absDiff = abs(ZeaMays$diff)
+signs = matrix(replicate(nSim*n,sample(c(-1,1),size=1)),nrow = nSim)
+TNull = apply(signs,1,function(row) mean(row * absDiff))
+T0 = mean(ZeaMays$diff)
+pvalue = 2*mean(TNull >= T0); pvalue
 ```
 
-## General Recipe
+## Darwin and Fisher
+
+```{r}
+df = data.frame(TNull=TNull)
+ggplot(df, aes(TNull)) + geom_histogram(binwidth = 0.05) +
+  geom_vline(xintercept = T0,colour = "red",size = 1.5) +
+  ggtitle("Randomization Distribution for Darwin's Zea Data")
+```
+
+## Permutation Test -- General Recipe
 
 * Decide on a test statistic $T$
 * List the possible values of $T$
@@ -184,19 +201,31 @@ Using Monte Carlo simulations
 * $P(T = t)$ is proportional to the number of ways of getting the value $t$
 * The permutation $p$-value is the probability of getting a value of $T$ as extreme or more extreme as the value we observed, "extreme" meaning in a direction inconsistent with $H_0$
 
+## Permutation Test - One-Sample Problem
+
+* Book: Permutations, Parametric, and Boostrap Test of Hypothesis
+
+## Permutation Test - Two-Sample Problem
+
+* Book: Permutations, Parametric, and Boostrap Test of Hypothesis
+
 ## Assumption: Exchangeable Observations
 
 * Book: Permutations, Parametric, and Boostrap Test of Hypothesis - Good, Section 2.2.2
 
 ## How to Compute It?
 
-* Small sapmle size: Enumerations of all permutations (e.g. Gray codes)
-* Medium sample size: Fast Frourier Transform
-* Large sample size: Monte Carlo simulations, and Markov chain Monte Carlo
-
-## Permutations and Fast Fourier Tranform
-
-* Paper: On Obtaining Permutation Distributions in Polynomial Time
+* Small sample size:  
+Enumerations of all permutations using Gray codes  
+(takes expotional time in $n$)
+* Medium sample size:  
+Fast Frourier Transform  
+(takes polynomial time in $n$)
+* Large sample size:  
+Monte Carlo simulations   
+(time depends on precision)
+or asymptotics
+(time independent of $n$)
 
 ## More Advanced Example
 
@@ -214,8 +243,9 @@ Using Monte Carlo simulations
 
 ## References
 
-* Book:  Good. Permutations, Parametric, and Boostrap Test of Hypothesis
-* Paper: Basu (1980). Randomization Analysis of Experimential Data: The Fisher Randomization Test
-* Paper: On Obtaining Permutation Distributions in Polynomial Time
-* Paper: Equidistant Letter Sequences in the Book of Genesis
-* Paper: Nichols and Holmes, Nonparametric Permutation Tests For Functional Neuroimaging: A Primer with Examples
+* Good (2005). Permutations, Parametric, and Boostrap Test of Hypothesis
+* Basu (1980). Randomization Analysis of Experimential Data: The Fisher Randomization Test
+* Pagano and Tritchler (1983). On Obtaining Permutation Distributions in Polynomial Time
+* Witztum, Rips, and Rosenberg (1994). Equidistant Letter Sequences in the Book of Genesis
+* Nichols and Holmes (2001). Nonparametric Permutation Tests For Functional Neuroimaging: A Primer with Examples
+* Diaconis And Holmes (1994). Gray Codes for Randomization Procedures
