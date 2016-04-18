@@ -234,8 +234,31 @@ ggplot(df, aes(TNull)) + geom_histogram(binwidth = 0.05) +
 ## Assumption: Exchangeable Observations
 
 * A sufficient condition for permutation test is exchangeable of observations
-* This is a weaker assumption than indepdendence of observations
-* 
+* Consider a collection of random variables 
+$$ X_1,\dots,X_n $$
+* If their joint distribution are equal under permuations $\pi$
+$$P_{X_1,\dots,X_n}(A) = P_{X_{\pi(1)},\dots,X_{\pi(n)}}(A)$$ 
+* then $X_1,\dots,X_n$ are called exchangable 
+* This is a weaker assumption than indepdendence of observations in the combined sample
+
+## Assumption: Exchangeable Observations
+
+* Some examples:
+* Independent and identically distributed observations are exchangeable
+* Samples without replacement from a finite population are exchangeable:
+    * An urn contains $b$ black balls, $r$ red balls, $y$ yellow balls, and so forth
+    * A series of balls is extracted from the urn 
+    * After the $i$th extraction, the color of the ball $X_i$ is noted and $k$ balls of the same color are added to the urn, 
+    * where $k$ can be any integer, positive, negative, or zero
+    * The set of random events $\{X_i\}$ form an exchangeable sequence
+* Dependent normally distributed random variables $\{X_i\}$ for which the variance of $X_i$ is a constant independent of $i$ and the covariance of $X_i$ and $X_j$ is a constant independent of $i$ and $j$
+
+## Assumption: Exchangeable Observations
+
+* Sometimes a simple transformation will ensure that observations are exchangeable
+* For example, if we know that $X$ comes from a population with mean $\mu$ and distribution $F(x−\mu)$ and 
+* an independent observation $Y$ comes from a population with mean $v$ and distribution $F(x−v)$
+* then the independent variables $X'=X−\mu$ and $Y'=Y−v$ are exchangeable
 
 ## How to Compute It?
 

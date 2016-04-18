@@ -64,6 +64,6 @@ Even though the $\chi^2$-tests of homogeneity and independence are the same, the
 
 Please email your solutions in the form of a Rmd file to Nan Bi and Lexi Guan.
 
-This homework is due on Saturday, April 25th at 1:30 pm.
+This homework is due on Monday, April 25th at 1:30 pm.
 
 You are encouraged to work through this homework with your peers. But write your own code and explain the results in your own words.
