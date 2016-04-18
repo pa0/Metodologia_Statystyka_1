@@ -33,32 +33,24 @@ x[x >= 8] = 7
 
 ## Exercise 3
 
-Correspondence analysis is useful for text analysis. For instance, to compare text from different authors in terms of the common word frequency. The idea: Make a contingency table where rows are books from different authors and columns are words. Use association plots, mosaic plots, and correspondence analysis, to determine if there are any words that contribute heavily to inhomogeneity among books.
-
-Perform this type of analysis on the following four books form the ``languageR`` package:
-
-```{r}
-library(languageR)
-topWords = function(book,wordLength=5,ntop=20) {
-  book = book[sapply(book,nchar) >= wordLength]
-  sort(table(book),decreasing = TRUE)[1:ntop]
-}
-data(alice,moby,oz,through)
-topWords(alice)
-topWords(moby)
-topWords(oz)
-topWords(through)
-```
-
-*Hint:* Use package *vcd* and *ca*. Limit your analysis to words that occur frequently in all books.
-
-## Exercise 4
-
 From our textbook (Ex. 2.8.21) [(Stanford library link)](https://searchworks.stanford.edu/view/10718635):  
 Even though the $\chi^2$-tests of homogeneity and independence are the same, they are based on different sampling schemes. The scheme for the test of independence is one-sample of bivariate data, while the scheme for the test of homogeneity consists of one-sample from each population. Let $C$ be a contingency table with $r$ rows and $c$ columns. Assume for the test of homogeneity that the rows contain the samples from the $r$ populations. Determine the (large sample) confidence intervals for each of the following parameters under both schemes, where $p_{ij}$ is the probability of cell $(i,j)$ occurring. Write R code to obtain these confidence intervals assuming the input is a contingency table.
 
 1. $p_{11}$
 2. $p_{11}−p_{12}$
+
+## Exercise 4
+
+Correspondence analysis is useful for text analysis. For instance, to compare texts from different authors in terms of common word frequency. The idea: Make a contingency table where rows are books from different authors and columns are words. 
+
+Perform this type of analysis on the following two books form the ``languageR`` package. Use association plots, mosaic plots, and correspondence analysis, to determine if there are any words that contribute heavily to inhomogeneity among books. *Hint:* Use package ``vcd`` and ``ca``. Limit your analysis to words that occur frequently in both books.
+
+```{r}
+library(languageR)
+data(alice,moby)
+alice[1:20]
+moby[1:20]
+```
 
 ## Deadline
 
