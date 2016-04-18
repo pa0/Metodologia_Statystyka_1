@@ -9,7 +9,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Exercise 1
 
-From our textbook [(Stanford library link)](https://searchworks.stanford.edu/view/10718635):  
+From our textbook (Ex. 2.8.17) [(Stanford library link)](https://searchworks.stanford.edu/view/10718635):  
 In a large city, four candidates (Smith, Jones, Martinelli, and Wagner) are running for Mayor. A poll was conducted by random dialing with the following results: 
 ```{r}
 candidate = c("Smith","Jones","Martinelli","Wagner","Others")
@@ -20,8 +20,8 @@ Using a 95% confidence interval, determine if there is a significant difference 
 
 ## Exercise 2
 
-From our textbook [(Stanford library link)](https://searchworks.stanford.edu/view/10718635):  
-In Example 2.7.1 we tested whether or not a dataset was drawn from a binomial distribution. For this exercise, generate a sample of size n = 500 from a truncated Poisson distribution as illustrated with the following R code:
+From our textbook (Ex. 2.8.18) [(Stanford library link)](https://searchworks.stanford.edu/view/10718635):  
+In Example 2.7.1 we tested whether or not a dataset was drawn from a binomial distribution. For this exercise, generate a sample of size $n = 500$ from a truncated Poisson distribution as illustrated with the following R code:
 ```{r echo=TRUE,eval=FALSE}
 x <- rpois(500,3)
 x[x >= 8] = 7
@@ -33,7 +33,7 @@ x[x >= 8] = 7
 
 ## Exercise 3
 
-Correspondence analysis is useful for text analysis. For instance, to compare text from different authors in terms of the common word frequency. The idea: Make a contingency table where rows are words and columns are books. Use association mosaic plots, and correspondence analysis, to determine what words contributed heavily to the inhomogeneity. 
+Correspondence analysis is useful for text analysis. For instance, to compare text from different authors in terms of the common word frequency. The idea: Make a contingency table where rows are books from different authors and columns are words. Use association plots, mosaic plots, and correspondence analysis, to determine if there are any words that contribute heavily to inhomogeneity among books.
 
 Perform this type of analysis on the following four books form the ``languageR`` package:
 
@@ -54,7 +54,7 @@ topWords(through)
 
 ## Exercise 4
 
-From our textbook [(Stanford library link)](https://searchworks.stanford.edu/view/10718635):  
+From our textbook (Ex. 2.8.21) [(Stanford library link)](https://searchworks.stanford.edu/view/10718635):  
 Even though the $\chi^2$-tests of homogeneity and independence are the same, they are based on different sampling schemes. The scheme for the test of independence is one-sample of bivariate data, while the scheme for the test of homogeneity consists of one-sample from each population. Let $C$ be a contingency table with $r$ rows and $c$ columns. Assume for the test of homogeneity that the rows contain the samples from the $r$ populations. Determine the (large sample) confidence intervals for each of the following parameters under both schemes, where $p_{ij}$ is the probability of cell $(i,j)$ occurring. Write R code to obtain these confidence intervals assuming the input is a contingency table.
 
 1. $p_{11}$
@@ -64,6 +64,6 @@ Even though the $\chi^2$-tests of homogeneity and independence are the same, the
 
 Please email your solutions in the form of a Rmd file to Nan Bi and Lexi Guan.
 
-This homework is due on Saturday, April 23rd at 1:30 pm.
+This homework is due on Saturday, April 25th at 1:30 pm.
 
 You are encouraged to work through this homework with your peers. But write your own code and explain the results in your own words.

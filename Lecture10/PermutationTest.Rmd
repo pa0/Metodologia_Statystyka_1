@@ -201,17 +201,41 @@ ggplot(df, aes(TNull)) + geom_histogram(binwidth = 0.05) +
 * $P(T = t)$ is proportional to the number of ways of getting the value $t$
 * The permutation $p$-value is the probability of getting a value of $T$ as extreme or more extreme as the value we observed, "extreme" meaning in a direction inconsistent with $H_0$
 
-## Permutation Test - One-Sample Problem
+## Permutation Test -- One-Sample Problem
 
-* Book: Permutations, Parametric, and Boostrap Test of Hypothesis
+* Location model: $X_i = \theta + e_i$
+* Assume error distribution has symmetric pdf $f(t)$ around $\theta$
+* Hypothesis test: $H_0: \theta = 0$ versus $H_A: \theta > 0$
+* Test statistic: Sum of deviations of $\theta$ about $0$
+* Under null, positive and negative deviations cancel each other out, so sum should be close to zero
+* We reject the null in favor of alternative if sum is "large"
+* To find what large means we comaper to null distribution using permutation
+* What to permute?
+* We use principle of *sufficiency*
 
-## Permutation Test - Two-Sample Problem
+## Permutation Test -- One-Sample Problem
 
-* Book: Permutations, Parametric, and Boostrap Test of Hypothesis
+* Assume that we had lost of signs
+* Under the null, we can recover the orginal distribution by randomly assigning signs ot each deviation
+* We say that the deviations are sufficient
+* Under the alternative of a location parameter larger than zero, randomizing the signs of the deviations should reduce the sum from what it was originally
+* List all possible reassignments of plus and minus signs $2^n$
+* Compare observed sum with all possible sums
+
+## Permutation Test -- Two-Sample Problem
+
+* Test statistic: Sum of observations from second population
+* Assume that we had lost the group assignments
+* Under the null, we can recover the original distribution by randomly assigning groups to each observation
+* Under the alternative one group will have a larger sum
+* List all possible group reassignments and compute sum of second population
+* Compare observed sum to all possible sums
 
 ## Assumption: Exchangeable Observations
 
-* Book: Permutations, Parametric, and Boostrap Test of Hypothesis - Good, Section 2.2.2
+* A sufficient condition for permutation test is exchangeable of observations
+* This is a weaker assumption than indepdendence of observations
+* 
 
 ## How to Compute It?
 
@@ -223,7 +247,7 @@ Fast Frourier Transform
 (takes polynomial time in $n$)
 * Large sample size:  
 Monte Carlo simulations   
-(time depends on precision)
+(time depends on accuracy requirements)
 or asymptotics
 (time independent of $n$)
 
