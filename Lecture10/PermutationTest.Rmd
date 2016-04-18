@@ -1,5 +1,5 @@
 ---
-title: "Permutation Test"
+title: "Permutation Tests"
 author: "Christof Seiler"
 date: "Stanford University, Spring 2016, STATS 205"
 output:
@@ -25,8 +25,8 @@ library(HistData)
 * Quote: ``A lady declares that by tasting a cup of tea made with milk she can discriminate whether the milk or the tea infusion was first added to the cup.``
 * Fisher proposed the the following experiment to test this
 * Prepare eight cups of tea
-* In four, pour the tea first
-* In the other four, pour the milk first
+* In four, add tea first
+* In the other four, add milk first
 * Hold constant other features of the cups of tea (size, temperature, etc.)
 * Present cups in random order
 * Lady tasts them and judges
@@ -65,13 +65,14 @@ t(data.frame(truth = truth,judgement = judgement))
 
 ## The Lady and the Tea
 
+Of the four cups where the tea was poured first, select $t$ of them to say "tea" correctly, and $4−t$ to say "milk" incorrectly
+
 ```{r echo=TRUE}
 t = 0:4
 probability = (choose(4,t)*choose(4,4-t))/choose(8,4)
 data.frame(t=t,probability=round(probability,digits=3))
 ```
 
-* Of the four cups where the tea was poured first, select $t$ of them to say "tea" correctly, and $4−t$ to say "tea" incorrectly
 * The chances of a match is $\frac{1}{70} = 0.014 < 0.05$
 * We need perfect match!
 
@@ -98,16 +99,16 @@ data.frame(t=t,probability=round(probability,digits=3))
 ```
 
 * Increase experiment to total of 10 cups (5 each)
-* If she tasted 10 cups, it would be possible to reject H0 without requiring perfect judgement
+* If she tasted 10 cups, it would be possible to reject $H_0$ without requiring perfect judgement
 * We need perfect match or one miss will get us a $p$-value below $0.05$
 
 ## Darwin and Fisher
 
-* In chapter 3 of Fisher's book, he then introduced the first nonparametric test developed
+* In chapter 3 of Fisher's book, he then introduced the first nonparametric test
 * He illustrated his approach on data from Darwin
-* Darwin raised cross- and self-fertilized Zea mays plants
+* Darwin raised cross- and self-fertilized corn (Zea mays) plants
 * He planted equal numbers of each in four different pots, but not same number in each pot
-* Darwin measured heights of plants when only between 12 and 24 inches in height
+* Darwin measured heights of plants when they were between 12 and 24 inches in height
 
 ## Darwin and Fisher
 
@@ -128,7 +129,7 @@ He peforms the paired sample $t$-test
 t.test(ZeaMays$cross,ZeaMays$self,paired = TRUE,alternative = "two.sided")
 ```
 
-## Darwin and Fisher {.build}
+## Darwin and Fisher
 
 ```{r echo=TRUE}
 ZeaMays$diff
@@ -144,7 +145,7 @@ ZeaMays$diff
 
 * Random samples $X_1,\dots,X_n$ from $X$
 * Test $H_0: E(X) = 0$
-* Write the usuall sample mean statistic as
+* Write the usuall statistic as
 $$T = \sum_{i=1}^n X_i = \sum_{i=1}^n |X_i| \delta_i$$
 * and split samples into two parts
 $$(|X_1|,\dots,|X_n|) \hspace{1cm}\text{and}\hspace{1cm} (\delta_1,\dots,\delta_n)$$
@@ -159,9 +160,31 @@ $$(|X_1|,\dots,|X_n|) \hspace{1cm}\text{and}\hspace{1cm} (\delta_1,\dots,\delta_
 $$P\left(T \ge t \, \big| \, H_0, |X_1|, \dots, |X_n| \right)$$
 by listing all possible samples of type
 $$\left(\pm \, |X_1|, \dots, \pm \, |X_n|\right)$$
-* This is usually called the Fisher's randomization test
+* This is usually called the *Fisher's randomization test*
 * Permutation tests describe a special case of randomization
 * In permutation tests, we permute group labels on the observations
+
+## Darwin and Fisher
+
+Using Monte Carlo simulations
+```{r echo=TRUE}
+nSim = 10000
+n = length(ZeaMays$diff)
+absDiff = abs(ZeaMays$diff)
+signs = matrix(replicate(nSim*n,sample(c(-1,1),size=1)),nrow = nSim)
+TNull = apply(signs,1,function(row) sum(row * absDiff))
+T0 = sum(ZeaMays$diff)
+pvalue = 2*mean(TNull >= T0); pvalue
+```
+
+## Darwin and Fisher
+
+```{r}
+df = data.frame(TNull=TNull)
+ggplot(df, aes(TNull)) + geom_histogram(binwidth = 1) +
+  geom_vline(xintercept = T0,colour = "red",size = 1.5) +
+  ggtitle("Randomization Distribution for Darwin's Zea Data")
+```
 
 ## Darwin and Fisher
 
@@ -170,28 +193,6 @@ $$\left(\pm \, |X_1|, \dots, \pm \, |X_n|\right)$$
     * Test statistic: $S = \#_i \{ X_i \}$
     * Wilcoxon signed-rank test: $W = \sum_{i=1}^n \operatorname{R}(|X_i|) \delta_i$
 * In contrast to the randomization test, the Wilcoxon signed-rank test is not conditional on the ranks
-
-## Darwin and Fisher
-
-Using Monte Carlo simulations
-```{r echo=TRUE}
-nSim = 100000
-n = length(ZeaMays$diff)
-absDiff = abs(ZeaMays$diff)
-signs = matrix(replicate(nSim*n,sample(c(-1,1),size=1)),nrow = nSim)
-TNull = apply(signs,1,function(row) mean(row * absDiff))
-T0 = mean(ZeaMays$diff)
-pvalue = 2*mean(TNull >= T0); pvalue
-```
-
-## Darwin and Fisher
-
-```{r}
-df = data.frame(TNull=TNull)
-ggplot(df, aes(TNull)) + geom_histogram(binwidth = 0.05) +
-  geom_vline(xintercept = T0,colour = "red",size = 1.5) +
-  ggtitle("Randomization Distribution for Darwin's Zea Data")
-```
 
 ## Permutation Test -- General Recipe
 
@@ -215,9 +216,9 @@ ggplot(df, aes(TNull)) + geom_histogram(binwidth = 0.05) +
 
 ## Permutation Test -- One-Sample Problem
 
-* Assume that we had lost of signs
-* Under the null, we can recover the orginal distribution by randomly assigning signs ot each deviation
-* We say that the deviations are sufficient
+* Assume that we had lost the signs information
+* Under the null, we can recover the orginal distribution by randomly assigning signs to each deviation
+* In this case, we say that the deviations are sufficient
 * Under the alternative of a location parameter larger than zero, randomizing the signs of the deviations should reduce the sum from what it was originally
 * List all possible reassignments of plus and minus signs $2^n$
 * Compare observed sum with all possible sums
@@ -227,6 +228,7 @@ ggplot(df, aes(TNull)) + geom_histogram(binwidth = 0.05) +
 * Test statistic: Sum of observations from second population
 * Assume that we had lost the group assignments
 * Under the null, we can recover the original distribution by randomly assigning groups to each observation
+* In this case, we say that the observations (without group labels) are sufficient
 * Under the alternative one group will have a larger sum
 * List all possible group reassignments and compute sum of second population
 * Compare observed sum to all possible sums
@@ -247,7 +249,7 @@ $$P_{X_1,\dots,X_n}(A) = P_{X_{\pi(1)},\dots,X_{\pi(n)}}(A)$$
 * Independent and identically distributed observations are exchangeable
 * Samples without replacement from a finite population are exchangeable:
     * An urn contains $b$ black balls, $r$ red balls, $y$ yellow balls, and so forth
-    * A series of balls is extracted from the urn 
+    * A series of balls are extracted from the urn 
     * After the $i$th extraction, the color of the ball $X_i$ is noted and $k$ balls of the same color are added to the urn, 
     * where $k$ can be any integer, positive, negative, or zero
     * The set of random events $\{X_i\}$ form an exchangeable sequence
@@ -270,7 +272,7 @@ Fast Frourier Transform
 (takes polynomial time in $n$)
 * Large sample size:  
 Monte Carlo simulations   
-(time depends on accuracy requirements)
+(time depends on accuracy requirements)  
 or asymptotics
 (time independent of $n$)
 
@@ -280,8 +282,9 @@ or asymptotics
 * We are asked whether text is meaningful or meaningless
 * We have very limitted partial dictionary: e.g. umbrella and rain
 * Can we decide using this limited dictionary whether text is meaningful?
-* Check whether conceputally related words to appear in close proximity
+* Check whether conceputally related words appear in close proximity
 * If text is meaningless, we don't expect this to happen very often
+* If text is meaningful, we expect this to happen more often than by pure chance
 
 ## Example: Letter Sequences in Bible
 
@@ -299,20 +302,26 @@ Source: Witztum, Rips, and Rosenberg (1994). Equidistant Letter Sequences in the
 ## Example: Letter Sequences in Bible
 
 * Write bible text as a big two-dimensional array of letters ignoring spaces (fix line width)
-1. Define distance between two words $w$ and $w'$: Euclidean distance words $d(w,w') =$  
+1. Define distance between two words $w$ and $w'$: Euclidean distance $d(w,w') =$  
 squared distance between consecutive letters of $w$ +  
 squared distance between consecutive letters of $w'$ +  
-minimal distance between a letter of $w$ and $w'$
-2. Define a statistic: Average distance between a set of predefined word pairs calculated the entire text
+minimal distance between a letter from $w$ and $w'$
+2. Define a statistic: Average distance between a set of predefined word pairs calculated over the entire text
 3. Choose word pair list: From other book (Encyclopedia of Great Men in Israel): 32 Rabbi names and their birthdays
-4. Compute null distribution of average distance between all the words pairs using permutations: Permute $32!$ to assign $i$'s Rabbi name to randomly permuted birthday
+4. Compute null distribution of average distance between all the word pairs using permutations
 
 ## Example: Letter Sequences in Bible
 
-* They computed $p$-value using $999,999$ random name--birthday permutations
+* They computed $p$-value using $999,999$ random name--birthday permutations (from the total of $32!$ permutations to assign $i$th name of Rabbi to randomly permuted birthday)
 * Rank the observed statistics among the permutatations
 * They rejected the null hypothesis that the name--birthday are not close with $p$-value $0.00002$
 * For more details see: Witztum, Rips, and Rosenberg (1994). Equidistant Letter Sequences in the Book of Genesis
+
+## Modern Application in Neuroimaging
+
+```{r, out.height = 400, fig.retina = NULL, echo=FALSE}
+knitr::include_graphics("Brain_Cortex_Harvard.png")
+```
 
 ## Modern Application in Neuroimaging
 
