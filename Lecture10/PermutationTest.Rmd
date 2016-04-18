@@ -274,9 +274,45 @@ Monte Carlo simulations
 or asymptotics
 (time independent of $n$)
 
-## More Advanced Example
+## Example: Letter Sequences in Bible
 
-* Paper: Equidistant Letter Sequences in the Book of Genesis
+* Suppose we have text written in foreign language
+* We are asked whether text is meaningful or meaningless
+* We have very limitted partial dictionary: e.g. umbrella and rain
+* Can we decide using this limited dictionary whether text is meaningful?
+* Check whether conceputally related words to appear in close proximity
+* If text is meaningless, we don't expect this to happen very often
+
+## Example: Letter Sequences in Bible
+
+<div class="columns-2">
+```{r, out.height = 400, fig.retina = NULL, echo=FALSE}
+knitr::include_graphics("BibleExampleText1.png")
+```
+
+```{r, out.height = 400, fig.retina = NULL, echo=FALSE}
+knitr::include_graphics("BibleExampleText2.png")
+```
+</div>
+Source: Witztum, Rips, and Rosenberg (1994). Equidistant Letter Sequences in the Book of Genesis
+
+## Example: Letter Sequences in Bible
+
+* Write bible text as a big two-dimensional array of letters ignoring spaces (fix line width)
+1. Define distance between two words $w$ and $w'$: Euclidean distance words $d(w,w') =$  
+squared distance between consecutive letters of $w$ +  
+squared distance between consecutive letters of $w'$ +  
+minimal distance between a letter of $w$ and $w'$
+2. Define a statistic: Average distance between a set of predefined word pairs calculated the entire text
+3. Choose word pair list: From other book (Encyclopedia of Great Men in Israel): 32 Rabbi names and their birthdays
+4. Compute null distribution of average distance between all the words pairs using permutations: Permute $32!$ to assign $i$'s Rabbi name to randomly permuted birthday
+
+## Example: Letter Sequences in Bible
+
+* They computed $p$-value using $999,999$ random name--birthday permutations
+* Rank the observed statistics among the permutatations
+* They rejected the null hypothesis that the name--birthday are not close with $p$-value $0.00002$
+* For more details see: Witztum, Rips, and Rosenberg (1994). Equidistant Letter Sequences in the Book of Genesis
 
 ## Modern Application in Neuroimaging
 
