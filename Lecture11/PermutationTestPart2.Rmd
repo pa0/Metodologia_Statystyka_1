@@ -24,31 +24,49 @@ library(HistData)
 * A sufficient condition for permutation test is exchangeable of observations
 * Consider a collection of random variables 
 $$ X_1,\dots,X_n $$
-* If their joint distribution are equal under permuations $\pi$
-$$P_{X_1,\dots,X_n}(A) = P_{X_{\pi(1)},\dots,X_{\pi(n)}}(A)$$ 
+* If their joint distribution are equal under all possible permuations $\pi$
+$$ P\left( X_1=x_1,\dots,X_n=x_1 \right) = P \left( X_{\pi(1)}=x_1,\dots,X_{\pi(n)}=x_n \right)$$
+for any sequence of possible values $x_1,\dots,x_n$, 
 * then $X_1,\dots,X_n$ are called exchangable 
 * This is a weaker assumption than indepdendence of observations in the combined sample
 
-## Assumption: Exchangeable Observations
+## Example: Exchangeability and Independence
 
-* Some examples:
-* Independent and identically distributed observations are exchangeable
-* Samples without replacement from a finite population are exchangeable:
-    * An urn contains $b$ black balls, $r$ red balls, $y$ yellow balls, and so forth
-    * A series of balls are extracted from the urn 
-    * After the $i$th extraction, the color of the ball $X_i$ is noted and $k$ balls of the same color are added to the urn, 
-    * where $k$ can be any integer, positive, negative, or zero
-    * The set of random events $\{X_i\}$ form an exchangeable sequence
-* Dependent normally distributed random variables $\{X_i\}$ for which the variance of $X_i$ is a constant independent of $i$ and the covariance of $X_i$ and $X_j$ is a constant independent of $i$ and $j$
+<div class="columns-2">
+```{r, out.height = 400, fig.retina = NULL, echo=FALSE}
+knitr::include_graphics("TreeDiagram.JPG")
+```
 
-## Assumption: Exchangeable Observations
+```{r, out.height = 400, fig.retina = NULL, echo=FALSE}
+knitr::include_graphics("TreeProbabilities.JPG")
+```
+</div>
 
-* Sometimes a simple transformation will ensure that observations are exchangeable
-* For example, if we know that $X$ comes from a population with mean $\mu$ and distribution $F(x−\mu)$ and 
-* an independent observation $Y$ comes from a population with mean $v$ and distribution $F(x−v)$
-* then the independent variables $X'=X−\mu$ and $Y'=Y−v$ are exchangeable
+## Exchangeability and de Finetti's Theorem
 
+* Suppose $X_1,\dots,X_n$ are conditionally i.i.d. given some unknown parameter $\theta$ 
+* Then for any permutation $\pi$ of $\{1,...,n\}$ and any set of values $(x_1,\dots,x_n)$
+* $X_i$'s are conditionally i.i.d. 
+$$f(x_1,\dots,x_n) = \int f(x_1,\dots,x_n | \theta) p(\theta) d\theta = \int \left( \prod_{i=1}^n f(x_i|\theta) \right) p(\theta) d\theta$$
+* product does not depend on order:
+$$= \int \left( \prod_{i=1}^n f(x_{\pi(i)} | \theta) \right) p(\theta) d\theta = f\left( x_{\pi(i)},\dots,x_{\pi(n)} \right)$$
 
+## Exchangeability and de Finetti's Theorem
+
+* This means:
+$$ 
+X_1,\dots,X_n \text{ are exchangeable for all $n$ }
+\Leftarrow
+\begin{cases}
+X_1,\dots,X_n \, \big| \, \theta \text{ i.i.d. } \\
+\theta \sim p(\theta)
+\end{cases}
+$$
+
+* In the other direction:
+    * de Finetti showed in 1931 that all infinite exchangeable binary sequences are mixtures of Bernoulli sequences
+    * Hewitt and Savage (1955) generalized de Finetti's result, the main idea can be summarized
+    * Diaconis and Freedman (1980) generalized it to finite sequences of random variables
 
 ## Example: Letter Sequences in Bible
 
@@ -86,7 +104,7 @@ minimal distance between a letter from $w$ and $w'$
 
 ## Example: Letter Sequences in Bible
 
-* They computed $p$-value using $999,999$ random name--birthday permutations (from the total of $32!$ permutations to assign $i$th name of Rabbi to randomly permuted birthday)
+* They computed $p$-value using $999\,999$ random name--birthday permutations (from the total of $32!$ permutations to assign $i$th name of Rabbi to randomly permuted birthday)
 * Rank the observed statistics among the permutatations
 * They rejected the null hypothesis that the name--birthday are not close with $p$-value $0.00002$
 * For more details see: Witztum, Rips, and Rosenberg (1994). Equidistant Letter Sequences in the Book of Genesis
@@ -109,6 +127,11 @@ knitr::include_graphics("Brain_Cortex_Harvard.png")
 
 ## References
 
+* Cordani and Wechsler (2006). Teaching Independence and Exchangeability
+* Diaconis and Freedman (1980). Finite exchangeable sequences
+* de Finetti (1972). Probability Induction and Statistics
+* Hewitt and Savage (1955). Symmetric measures on Cartesian products
+* Peter Hoff (2009). A First Course in Bayesian Statistical Methods
 * Good (2005). Permutations, Parametric, and Boostrap Test of Hypothesis
 * Witztum, Rips, and Rosenberg (1994). Equidistant Letter Sequences in the Book of Genesis
 * Nichols and Holmes (2001). Nonparametric Permutation Tests For Functional Neuroimaging: A Primer with Examples
