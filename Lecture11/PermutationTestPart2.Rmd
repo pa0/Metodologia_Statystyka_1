@@ -309,7 +309,24 @@ knitr::include_graphics("UncorrectedPValues.png")
 
 ## Data Analysis: Clusterwise Significance
 
-* Explain
+* One could now proceed and correct for multiple comparisons using Gaussian random field theory or controlling the false discorvery rate
+* An alternative options is to use permutations tests
+* The idea (do the following $N$ times):
+    * Permute group assignments
+    * Compute voxelwise $p$-value
+    * Threshold $p$-value image at fixed level (say $0.001$)
+    * Note largest contiguous voxel clusters
+* This forms our null distribution of largest contiguous voxel clusters
+* Declare unpermuted observed clusters as significant when larger than $\operatorname{floor}(\alpha \times N + 1)$ in permutation distribution
+
+## Data Analysis: Clusterwise Significance
+
+* This approach comes at the price of reduced localization power
+* The null hypotheses for voxels within a significant cluster are not tested, so individual voxels cannot be declared significant.
+* Only the omnibus null hypothesis for the cluster can be rejected
+* Further, the choice of primary threshold dic- tates the power of the test in detecting different types of deviation from the omnibus null hypothesis
+* With a lowthreshold,largesuprathresholdclustersaretobe expected, so intense focal "signals" will be missed
+* At higher thresholds these focal activations will be detected, but lower intensity diffuse "signals" may go undetected below the primary threshold.
 
 ## References
 
