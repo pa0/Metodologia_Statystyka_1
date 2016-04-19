@@ -109,21 +109,207 @@ minimal distance between a letter from $w$ and $w'$
 * They rejected the null hypothesis that the name--birthday are not close with $p$-value $0.00002$
 * For more details see: Witztum, Rips, and Rosenberg (1994). Equidistant Letter Sequences in the Book of Genesis
 
-## Modern Application in Neuroimaging
+## Example: Final Project on Autistic Brain
+
+* We encouter two-sample problems in many modern applications.
+    * Compare two populations, such as people who are autistic and healthy controls
+    * Find morphological, connectivity, and functional difference 
+    * Inform new therapies and cures
+* We work on preprocessed neuroimaging data from the Autism Brain Imaging Data Exchange (ABIDE). 
+The data is openly avaialbe on the ABIDE [website](http://preprocessed-connectomes-project.org/abide/).
+    * ABIDE is a collaboration of 16 international imaging sites that have aggregated 
+    * Open sharing neuroimaging data from 539 individuals suffering from ASD and 573 typical controls
+    * We will use a subset of 39 paricipants to speedup our analysis
+
+## Data: Cortical Thickness Measurements
 
 ```{r, out.height = 400, fig.retina = NULL, echo=FALSE}
 knitr::include_graphics("Brain_Cortex_Harvard.png")
 ```
 
-## Modern Application in Neuroimaging
+Source: [multiple-sclerosis-research.blogspot.com](http://multiple-sclerosis-research.blogspot.com/2015/01/education-whats-mri.html)
 
-* Explain neuroscience imaging data
-* Explain significant cluster permutation test
-* Paper: Nichols and Holmes, Nonparametric Permutation Tests For Functional Neuroimaging: A Primer with Examples
+## Data: Cortical Thickness Measurements
 
-## Example Final Project: Autistic Brain
+<div class="columns-2">
+```{r, out.height = 400, fig.retina = NULL, echo=FALSE}
+knitr::include_graphics("CorticalThicknessMeasurement1.jpg")
+```
 
-* Example for a project based on my autistic brain imaging example
+```{r, out.height = 200, fig.retina = NULL, echo=FALSE}
+knitr::include_graphics("CorticalThicknessMeasurement2.jpg")
+```
+</div>
+
+Source: Das, Avants, Grossman, and Gee (2009). Registration based cortical thickness measurement
+
+----
+
+```{r, out.height = 700, fig.retina = NULL, echo=FALSE}
+knitr::include_graphics("MaskCorticalThickness.png")
+```
+
+## Data Preprocessing: Image Registration
+
+```{r, out.height = 250, fig.retina = NULL, echo=FALSE}
+knitr::include_graphics("TemplateDeformations.pdf")
+```
+
+* Analyze geometric difference through deformation
+* Find deformations $\varphi_k$ from template $\boldsymbol{I}_0$ to participant images $\boldsymbol{I}_k$
+
+## Data Preprocessing: Image Registration
+
+* Parametrize $\varphi_k(x,\boldsymbol{q})$  with B-Splines (coordinates $x_i \in \boldsymbol{I}_0$, parameters $\boldsymbol{q}$)
+$$\sum_{i=1}^N \left( \boldsymbol{I}_k(x_i) \circ \varphi_k(x_i,\boldsymbol{q}) - \boldsymbol{I}_0(x_i) \right)^2 + \| \operatorname{Jac} \varphi_k(x_i,q) \|_{\ell_2}^2$$
+* minimize this with fixed $\lambda$
+$$\widehat{\boldsymbol{q}} = \operatorname{minimize}_\boldsymbol{q} \Big\{ \operatorname{Similarity}(\boldsymbol{I}_0,\boldsymbol{I}_k,\boldsymbol{q}) + \lambda \operatorname{Regularity}(\boldsymbol{q}) \Big\}$$
+
+----
+
+```{r, out.height = 600, fig.retina = NULL, echo=FALSE}
+knitr::include_graphics("RegistrationElipsoidToCircle/Page1.pdf")
+```
+
+----
+
+```{r, out.height = 600, fig.retina = NULL, echo=FALSE}
+knitr::include_graphics("RegistrationElipsoidToCircle/Page2.pdf")
+```
+
+----
+
+```{r, out.height = 600, fig.retina = NULL, echo=FALSE}
+knitr::include_graphics("RegistrationElipsoidToCircle/Page3.pdf")
+```
+
+----
+
+```{r, out.height = 600, fig.retina = NULL, echo=FALSE}
+knitr::include_graphics("RegistrationElipsoidToCircle/Page4.pdf")
+```
+
+----
+
+```{r, out.height = 600, fig.retina = NULL, echo=FALSE}
+knitr::include_graphics("RegistrationElipsoidToCircle/Page5.pdf")
+```
+
+----
+
+```{r, out.height = 600, fig.retina = NULL, echo=FALSE}
+knitr::include_graphics("RegistrationElipsoidToCircle/Page6.pdf")
+```
+
+----
+
+```{r, out.height = 600, fig.retina = NULL, echo=FALSE}
+knitr::include_graphics("RegistrationElipsoidToCircle/Page7.pdf")
+```
+
+----
+
+```{r, out.height = 600, fig.retina = NULL, echo=FALSE}
+knitr::include_graphics("RegistrationElipsoidToCircle/Page8.pdf")
+```
+
+----
+
+```{r, out.height = 600, fig.retina = NULL, echo=FALSE}
+knitr::include_graphics("RegistrationElipsoidToCircle/Page9.pdf")
+```
+
+----
+
+```{r, out.height = 600, fig.retina = NULL, echo=FALSE}
+knitr::include_graphics("RegistrationElipsoidToCircle/Page10.pdf")
+```
+
+----
+
+```{r, out.height = 600, fig.retina = NULL, echo=FALSE}
+knitr::include_graphics("RegistrationElipsoidToCircle/Page11.pdf")
+```
+
+----
+
+```{r, out.height = 600, fig.retina = NULL, echo=FALSE}
+knitr::include_graphics("RegistrationElipsoidToCircle/Page12.pdf")
+```
+
+----
+
+```{r, out.height = 600, fig.retina = NULL, echo=FALSE}
+knitr::include_graphics("RegistrationElipsoidToCircle/Page13.pdf")
+```
+
+----
+
+```{r, out.height = 600, fig.retina = NULL, echo=FALSE}
+knitr::include_graphics("RegistrationElipsoidToCircle/Page14.pdf")
+```
+
+----
+
+```{r, out.height = 600, fig.retina = NULL, echo=FALSE}
+knitr::include_graphics("RegistrationElipsoidToCircle/Page15.pdf")
+```
+
+----
+
+```{r, out.height = 600, fig.retina = NULL, echo=FALSE}
+knitr::include_graphics("RegistrationElipsoidToCircle/Page16.pdf")
+```
+
+----
+
+```{r, out.height = 600, fig.retina = NULL, echo=FALSE}
+knitr::include_graphics("RegistrationSpine/Page1.pdf")
+```
+
+----
+
+```{r, out.height = 600, fig.retina = NULL, echo=FALSE}
+knitr::include_graphics("RegistrationSpine/Page20.pdf")
+```
+
+----
+
+```{r, out.height = 600, fig.retina = NULL, echo=FALSE}
+knitr::include_graphics("RegistrationSpine/Page40.pdf")
+```
+
+## Data Analysis: Voxelwise Hypothesis Testing
+
+Split the data in two groups: autistic (1) and healthy participants (2).
+
+```{r echo=TRUE,eval=FALSE}
+PaInfo <- read.csv("Phenotypic_V1_0b_preprocessed1.csv", header=TRUE)
+copiedFilesInd = PaInfo$FILE_ID %in% substr(fileNames,1,16)
+copiedFilesGroup = PaInfo$DX_GROUP[copiedFilesInd]
+ThicknessAutistic = brainMatrix[copiedFilesGroup==1,mask==1]
+ThicknessHealthy = brainMatrix[copiedFilesGroup==2,mask==1]
+```
+
+Peform voxelwise nonparametric test Wilcoxon two-sample rank test.
+
+```{r echo=TRUE,eval=FALSE}
+uncorrectedPValues = sapply(1:dim(ThicknessAutistic)[2], 
+                            function(i) 
+                              wilcox.test(ThicknessAutistic[,i],
+                                          ThicknessHealthy[,i],
+                                          alternative = "two.sided")$p.value)
+```
+
+----
+
+```{r, out.height = 700, fig.retina = NULL, echo=FALSE}
+knitr::include_graphics("UncorrectedPValues.png")
+```
+
+## Data Analysis: Clusterwise Significance
+
+* Explain
 
 ## References
 
@@ -135,3 +321,4 @@ knitr::include_graphics("Brain_Cortex_Harvard.png")
 * Good (2005). Permutations, Parametric, and Boostrap Test of Hypothesis
 * Witztum, Rips, and Rosenberg (1994). Equidistant Letter Sequences in the Book of Genesis
 * Nichols and Holmes (2001). Nonparametric Permutation Tests For Functional Neuroimaging: A Primer with Examples
+* Das, Avants, Grossman, and Gee (2009). Registration Based Cortical Thickness Measurement
