@@ -1,0 +1,26 @@
+---
+title: "Regression"
+author: "Christof Seiler"
+date: "Stanford University, Spring 2016, STATS 205"
+output:
+  ioslides_presentation:
+    incremental: yes
+    smaller: no
+    transition: faster
+    widescreen: yes
+  beamer_presentation:
+    incremental: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+set.seed(1234)
+library(ggplot2)
+library(HistData)
+```
+
+## Overview
+
+* Linear regression with different metric
+* Non-linear regression
+
