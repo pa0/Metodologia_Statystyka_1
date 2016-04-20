@@ -21,12 +21,9 @@ library(HistData)
 
 ## Exchangeablility
 
-* Experiment:
-    * after viewing 20 tosses of a coin with unknown probability 
-    * and observing 17 heads
-    * the probability of heads on the 21st toss is likely to be assessed as quite different from the probability on the 1st toss 
-* If we assume exchangeability we refuse to change our belief from experience, and say that the probability of heads on the 21st toss is the same as on the 1st toss
-* The idea is that before we observe the 20 flips of the coin, if we think of 17 heads and 3 tails as a possible outcome, we don't think of the positions that the 3 heads can occupy as being special
+* The idea is that before we observe 20 flips of a coin
+* and if we think of 17 heads and 3 tails as a possible outcome
+* then exchangeablility means that we don't think of the positions that the 3 heads can occupy as being special
 
 ## Exchangeablility
 
@@ -114,8 +111,8 @@ X_1,\dots,X_n \, \big| \, \theta \text{ i.i.d. } \\
 $$
 
 * In the other direction:
-    * de Finetti showed in 1931 that all infinite exchangeable binary sequences are mixtures of Bernoulli sequences when putting a Beta prior on the success parameter
-    * Hewitt and Savage (1955) generalized de Finetti's result, the main idea can be summarized
+    * de Finetti showed in 1931 that all infinite exchangeable binary sequences are i.i.d. Bernoulli with beta prior $\mathcal{B}(b/a,w/a)$ on the success paramter
+    * Hewitt and Savage (1955) generalized de Finetti's result
     * Diaconis and Freedman (1980) generalized it to finite sequences of random variables
 
 ## Example: Letter Sequences in Bible
@@ -124,11 +121,13 @@ $$
 * We are asked whether text is meaningful or meaningless
 * We have very limitted partial dictionary: e.g. umbrella and rain
 * Can we decide using this limited dictionary whether text is meaningful?
-* Check whether conceputally related words appear in close proximity
+* Idea: Check whether conceputally related words appear in close proximity
 * If text is meaningless, we don't expect this to happen very often
 * If text is meaningful, we expect this to happen more often than by pure chance
 
 ## Example: Letter Sequences in Bible
+
+Write bible as two-dimensional array of letters ignoring spaces
 
 <div class="columns-2">
 ```{r, out.height = 400, fig.retina = NULL, echo=FALSE}
@@ -139,12 +138,13 @@ knitr::include_graphics("BibleExampleText1.png")
 knitr::include_graphics("BibleExampleText2.png")
 ```
 </div>
-Source: Witztum, Rips, and Rosenberg (1994). Equidistant Letter Sequences in the Book of Genesis
+
+Source: Witztum, Rips, and Rosenberg (1994)
 
 ## Example: Letter Sequences in Bible
 
-* Write bible text as a big two-dimensional array of letters ignoring spaces (fix line width)
-1. Define distance between two words $w$ and $w'$: Euclidean distance $d(w,w') =$  
+1. Define distance between two words $w$ and $w'$:  
+Euclidean distance (considering letter matrix separated by spacing $1$) $d(w,w') =$  
 squared distance between consecutive letters of $w$ +  
 squared distance between consecutive letters of $w'$ +  
 minimal distance between a letter from $w$ and $w'$
@@ -155,21 +155,22 @@ minimal distance between a letter from $w$ and $w'$
 ## Example: Letter Sequences in Bible
 
 * They computed $p$-value using $999\,999$ random name--birthday permutations (from the total of $32!$ permutations to assign $i$th name of Rabbi to randomly permuted birthday)
-* Rank the observed statistics among the permutatations
-* They rejected the null hypothesis that the name--birthday are not close with $p$-value $0.00002$
+* Rank the observed statistics among the permutations
+* They found a $p$-value of $0.00002$
+* Thus, we can say that equidistant letter sequences of Rabbi name and birthday is not due to chance
 * For more details see: Witztum, Rips, and Rosenberg (1994). Equidistant Letter Sequences in the Book of Genesis
 
 ## Example: Final Project on Autistic Brain
 
-* We encouter two-sample problems in many modern applications.
+* We encouter two-sample problems in many neuroimaging studies
     * Compare two populations, such as people who are autistic and healthy controls
     * Find morphological, connectivity, and functional difference 
     * Inform new therapies and cures
 * We work on preprocessed neuroimaging data from the Autism Brain Imaging Data Exchange (ABIDE). 
-The data is openly avaialbe on the ABIDE [website](http://preprocessed-connectomes-project.org/abide/).
-    * ABIDE is a collaboration of 16 international imaging sites that have aggregated 
-    * Open sharing neuroimaging data from 539 individuals suffering from ASD and 573 typical controls
-    * We will use a subset of 39 paricipants to speedup our analysis
+The data is openly avaialbe on the ABIDE [website](http://preprocessed-connectomes-project.org/abide/)
+    * ABIDE is a collaboration of 16 international imaging sites
+    * Openly sharing neuroimaging data from 539 individuals suffering from Autism Spectrum Disorder (ASD) and 573 typical controls
+    * We will focus on a subset of 39 paricipants (all aquired at Stanford)
 
 ## Data: Cortical Thickness Measurements
 
@@ -212,6 +213,7 @@ knitr::include_graphics("TemplateDeformations.pdf")
 
 * Parametrize $\varphi_k(x,\boldsymbol{q})$  with B-Splines (coordinates $x_i \in \boldsymbol{I}_0$, parameters $\boldsymbol{q}$)
 $$\sum_{i=1}^N \left( \boldsymbol{I}_k(x_i) \circ \varphi_k(x_i,\boldsymbol{q}) - \boldsymbol{I}_0(x_i) \right)^2 + \| \operatorname{Jac} \varphi_k(x_i,q) \|_{\ell_2}^2$$
+* B-Splines are piecewise polynomial functions and can be used as basis functions to describe more complicated nonlinear functions
 * minimize this with fixed $\lambda$
 $$\widehat{\boldsymbol{q}} = \operatorname{minimize}_\boldsymbol{q} \Big\{ \operatorname{Similarity}(\boldsymbol{I}_0,\boldsymbol{I}_k,\boldsymbol{q}) + \lambda \operatorname{Regularity}(\boldsymbol{q}) \Big\}$$
 
@@ -331,7 +333,7 @@ knitr::include_graphics("RegistrationSpine/Page40.pdf")
 
 ## Data Analysis: Voxelwise Hypothesis Testing
 
-Split the data in two groups: autistic (1) and healthy participants (2).
+Split the data in two groups: autistic (1) and healthy participants (2)
 
 ```{r echo=TRUE,eval=FALSE}
 PaInfo <- read.csv("Phenotypic_V1_0b_preprocessed1.csv", header=TRUE)
@@ -341,7 +343,7 @@ ThicknessAutistic = brainMatrix[copiedFilesGroup==1,mask==1]
 ThicknessHealthy = brainMatrix[copiedFilesGroup==2,mask==1]
 ```
 
-Peform voxelwise nonparametric test Wilcoxon two-sample rank test.
+Peform voxelwise nonparametric test Wilcoxon two-sample rank test
 
 ```{r echo=TRUE,eval=FALSE}
 uncorrectedPValues = sapply(1:dim(ThicknessAutistic)[2], 
@@ -364,19 +366,21 @@ knitr::include_graphics("UncorrectedPValues.png")
 * The idea (do the following $N$ times):
     * Permute group assignments
     * Compute voxelwise $p$-value
-    * Threshold $p$-value image at fixed level (say $0.001$)
-    * Note largest contiguous voxel clusters
-* This forms our null distribution of largest contiguous voxel clusters
+    * Threshold $p$-value image at fixed primary threshold (e.g. $0.001$)
+    * Note largest contiguous voxel cluster size
+* This forms our null distribution of largest contiguous voxel cluster sizes
 * Declare unpermuted observed clusters as significant when larger than $\operatorname{floor}(\alpha \times N + 1)$ in permutation distribution
 
 ## Data Analysis: Clusterwise Significance
 
 * This approach comes at the price of reduced localization power
-* The null hypotheses for voxels within a significant cluster are not tested, so individual voxels cannot be declared significant.
+* The null hypotheses for voxels within a significant cluster are not tested, so individual voxels cannot be declared significant
 * Only the omnibus null hypothesis for the cluster can be rejected
-* Further, the choice of primary threshold dic- tates the power of the test in detecting different types of deviation from the omnibus null hypothesis
-* With a lowthreshold,largesuprathresholdclustersaretobe expected, so intense focal "signals" will be missed
-* At higher thresholds these focal activations will be detected, but lower intensity diffuse "signals" may go undetected below the primary threshold.
+* Further, the choice of primary threshold dictates the power of the test in detecting different types of deviation from the omnibus null hypothesis
+* With small primary threshold (e.g. $0.001$),  
+we will foucs on many but small clusters
+* With large primary threshold (e.g. $0.01$),  
+we will foucs on few but large clusters
 
 ## References
 
