@@ -203,7 +203,7 @@ knitr::include_graphics("MaskCorticalThickness.png")
 ## Data Preprocessing: Image Registration
 
 ```{r, out.height = 250, fig.retina = NULL, echo=FALSE}
-knitr::include_graphics("TemplateDeformations.pdf")
+knitr::include_graphics("TemplateDeformations.png")
 ```
 
 * Analyze geometric difference through deformation
@@ -220,115 +220,43 @@ $$\widehat{\boldsymbol{q}} = \operatorname{minimize}_\boldsymbol{q} \Big\{ \oper
 ----
 
 ```{r, out.height = 600, fig.retina = NULL, echo=FALSE}
-knitr::include_graphics("RegistrationElipsoidToCircle/Page1.pdf")
+knitr::include_graphics("RegistrationElipsoidToCircle/Page1.png")
 ```
 
 ----
 
 ```{r, out.height = 600, fig.retina = NULL, echo=FALSE}
-knitr::include_graphics("RegistrationElipsoidToCircle/Page2.pdf")
+knitr::include_graphics("RegistrationElipsoidToCircle/Page5.png")
 ```
 
 ----
 
 ```{r, out.height = 600, fig.retina = NULL, echo=FALSE}
-knitr::include_graphics("RegistrationElipsoidToCircle/Page3.pdf")
+knitr::include_graphics("RegistrationElipsoidToCircle/Page10.png")
 ```
 
 ----
 
 ```{r, out.height = 600, fig.retina = NULL, echo=FALSE}
-knitr::include_graphics("RegistrationElipsoidToCircle/Page4.pdf")
+knitr::include_graphics("RegistrationElipsoidToCircle/Page15.png")
 ```
 
 ----
 
 ```{r, out.height = 600, fig.retina = NULL, echo=FALSE}
-knitr::include_graphics("RegistrationElipsoidToCircle/Page5.pdf")
+knitr::include_graphics("RegistrationSpine/Page1.png")
 ```
 
 ----
 
 ```{r, out.height = 600, fig.retina = NULL, echo=FALSE}
-knitr::include_graphics("RegistrationElipsoidToCircle/Page6.pdf")
+knitr::include_graphics("RegistrationSpine/Page20.png")
 ```
 
 ----
 
 ```{r, out.height = 600, fig.retina = NULL, echo=FALSE}
-knitr::include_graphics("RegistrationElipsoidToCircle/Page7.pdf")
-```
-
-----
-
-```{r, out.height = 600, fig.retina = NULL, echo=FALSE}
-knitr::include_graphics("RegistrationElipsoidToCircle/Page8.pdf")
-```
-
-----
-
-```{r, out.height = 600, fig.retina = NULL, echo=FALSE}
-knitr::include_graphics("RegistrationElipsoidToCircle/Page9.pdf")
-```
-
-----
-
-```{r, out.height = 600, fig.retina = NULL, echo=FALSE}
-knitr::include_graphics("RegistrationElipsoidToCircle/Page10.pdf")
-```
-
-----
-
-```{r, out.height = 600, fig.retina = NULL, echo=FALSE}
-knitr::include_graphics("RegistrationElipsoidToCircle/Page11.pdf")
-```
-
-----
-
-```{r, out.height = 600, fig.retina = NULL, echo=FALSE}
-knitr::include_graphics("RegistrationElipsoidToCircle/Page12.pdf")
-```
-
-----
-
-```{r, out.height = 600, fig.retina = NULL, echo=FALSE}
-knitr::include_graphics("RegistrationElipsoidToCircle/Page13.pdf")
-```
-
-----
-
-```{r, out.height = 600, fig.retina = NULL, echo=FALSE}
-knitr::include_graphics("RegistrationElipsoidToCircle/Page14.pdf")
-```
-
-----
-
-```{r, out.height = 600, fig.retina = NULL, echo=FALSE}
-knitr::include_graphics("RegistrationElipsoidToCircle/Page15.pdf")
-```
-
-----
-
-```{r, out.height = 600, fig.retina = NULL, echo=FALSE}
-knitr::include_graphics("RegistrationElipsoidToCircle/Page16.pdf")
-```
-
-----
-
-```{r, out.height = 600, fig.retina = NULL, echo=FALSE}
-knitr::include_graphics("RegistrationSpine/Page1.pdf")
-```
-
-----
-
-```{r, out.height = 600, fig.retina = NULL, echo=FALSE}
-knitr::include_graphics("RegistrationSpine/Page20.pdf")
-```
-
-----
-
-```{r, out.height = 600, fig.retina = NULL, echo=FALSE}
-knitr::include_graphics("RegistrationSpine/Page40.pdf")
+knitr::include_graphics("RegistrationSpine/Page40.png")
 ```
 
 ## Data Analysis: Voxelwise Hypothesis Testing
