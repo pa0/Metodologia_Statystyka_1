@@ -43,13 +43,14 @@ Even though the $\chi^2$-tests of homogeneity and independence are the same, the
 
 Correspondence analysis is useful for text analysis. For instance, to compare texts from different authors in terms of common word frequency. The idea: Make a contingency table where rows are books from different authors and columns are words. 
 
-Perform this type of analysis on the following two books form the ``languageR`` package. Use association plots, mosaic plots, and correspondence analysis, to determine if there are any words that contribute heavily to inhomogeneity among books. *Hint:* Use package ``vcd`` and ``ca``. Limit your analysis to words that occur frequently in both books.
+Perform this type of analysis on the following three books form the ``languageR`` package. Use association plots, mosaic plots, and correspondence analysis, to determine if there are any words that contribute heavily to inhomogeneity among books. *Hint:* Use package ``vcd`` and ``ca``. Limit your analysis to words that occur frequently in both books.
 
 ```{r}
 library(languageR)
-data(alice,moby)
+data(alice,moby,oz)
 alice[1:20]
 moby[1:20]
+oz[1:20]
 ```
 
 ## Deadline

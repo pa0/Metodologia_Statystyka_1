@@ -21,6 +21,15 @@ library(HistData)
 
 ## Exchangeablility
 
+* Experiment:
+    * after viewing 20 tosses of a coin with unknown probability 
+    * and observing 17 heads
+    * the probability of heads on the 21st toss is likely to be assessed as quite different from the probability on the 1st toss 
+* If we assume exchangeability we refuse to change our belief from experience, and say that the probability of heads on the 21st toss is the same as on the 1st toss
+* The idea is that before we observe the 20 flips of the coin, if we think of 17 heads and 3 tails as a possible outcome, we don't think of the positions that the 3 heads can occupy as being special
+
+## Exchangeablility
+
 * An infinite sequence $X_1,\dots,X_n,\dots$ of random variables is said to be exchangeable if for all $n = 2,3,\dots$,
 $$X_1,\dots,X_n \overset{d}{=} X_{\pi(1)},\dots,X_{\pi(n)} \text{ for all } \pi \in S(n)$$
 where $S(n)$ is the group of permutations of $\{1,\dots,n\}$
@@ -105,7 +114,7 @@ X_1,\dots,X_n \, \big| \, \theta \text{ i.i.d. } \\
 $$
 
 * In the other direction:
-    * de Finetti showed in 1931 that all infinite exchangeable binary sequences are mixtures of Bernoulli sequences
+    * de Finetti showed in 1931 that all infinite exchangeable binary sequences are mixtures of Bernoulli sequences when putting a Beta prior on the success parameter
     * Hewitt and Savage (1955) generalized de Finetti's result, the main idea can be summarized
     * Diaconis and Freedman (1980) generalized it to finite sequences of random variables
 
@@ -371,6 +380,7 @@ knitr::include_graphics("UncorrectedPValues.png")
 
 ## References
 
+* Diaconis (1977). Finite Forms Of De Finetti's Theorem On Exchangeability
 * Diaconis and Freedman (1980). Finite exchangeable sequences
 * de Finetti (1972). Probability Induction and Statistics
 * Hewitt and Savage (1955). Symmetric measures on Cartesian products
@@ -380,3 +390,4 @@ knitr::include_graphics("UncorrectedPValues.png")
 * Nichols and Holmes (2001). Nonparametric Permutation Tests For Functional Neuroimaging: A Primer with Examples
 * Das, Avants, Grossman, and Gee (2009). Registration Based Cortical Thickness Measurement
 * Steffen Lauritzen (2007). [Lecture notes](http://www.stats.ox.ac.uk/~steffen/teaching/grad/definetti.pdf)
+
