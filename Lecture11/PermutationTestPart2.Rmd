@@ -111,9 +111,9 @@ X_1,\dots,X_n \, \big| \, \theta \text{ i.i.d. } \\
 $$
 
 * In the other direction:
-    * de Finetti showed in 1931 that all infinite exchangeable binary sequences are i.i.d. Bernoulli with beta prior $\mathcal{B}(b/a,w/a)$ on the success paramter
-    * Hewitt and Savage (1955) generalized de Finetti's result
-    * Diaconis and Freedman (1980) generalized it to finite sequences of random variables
+    * de Finetti showed in 1931 that all infinite exchangeable binary sequences are i.i.d. Bernoulli with beta prior $\mathcal{B}(b/a,w/a)$ on the success parameter
+    * Hewitt and Savage (1955) generalized it to any infinite exchangeable sequences
+    * Diaconis and Freedman (1980) generalized it to finite exchangeable sequences
 
 ## Example: Letter Sequences in Bible
 
