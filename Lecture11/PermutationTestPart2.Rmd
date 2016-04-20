@@ -19,6 +19,32 @@ library(ggplot2)
 library(HistData)
 ```
 
+## Exchangeablility
+
+* An infinite sequence $X_1,\dots,X_n,\dots$ of random variables is said to be exchangeable if for all $n = 2,3,\dots$,
+$$X_1,\dots,X_n \overset{d}{=} X_{\pi(1)},\dots,X_{\pi(n)} \text{ for all } \pi \in S(n)$$
+where $S(n)$ is the group of permutations of $\{1,\dots,n\}$
+* For example, for a binary sequence, we may have:
+$$p(1,1,0,0,0,1,1,0) = p(1,0,1,0,1,0,0,1)$$
+* If $X_1,\dots,X_n,\dots$ are independent and identically distributed, they are exchangeable, but not conversely
+
+## Polya's Urn
+
+* Consider an urn with $b$ black balls and $w$ white balls 
+* Draw a ball at random and note its colour
+* Replace the ball together with $a$ balls of the same colour
+* Repeat the procedure ad infinitum
+* Let $X_i =1$ if the $i$th draw yields a black ball and $X_i = 0$ otherwise
+* The sequence $X_1,\dots,X_n,\dots$ is exchangeable:
+$$ 
+\begin{align}
+p(1,1,0,1) & = \frac{b}{b+w} \frac{b+a}{b+w+a} \frac{w}{b+w+2a} \frac{b+2a}{b+w+3a} \\
+           & = \frac{b}{b+w} \frac{w}{b+w+a} \frac{b+a}{b+w+2a} \frac{b+2a}{b+w+3a} = p(1,0,1,1)
+\end{align}
+$$
+* $X_1,\dots,X_n,\dots$ are not independent
+        
+<!--
 ## Assumption: Exchangeable Observations
 
 * A sufficient condition for permutation test is exchangeable of observations
@@ -32,6 +58,20 @@ for any sequence of possible values $x_1,\dots,x_n$,
 
 ## Example: Exchangeability and Independence
 
+* Consider an urn containing $r$ red balls and $b$ blue balls
+* Experiment: 
+    * draw a ball
+    * note color of ball
+    * replace ball back in urn along with $c$ additional balls of same color
+    * denote event of observing a red ball at i$th$ trial as $R_i$ and blue $B_i$
+    * then observing to red balls in three draws is same regardless of the sequence it is observed:
+$P(B_1,R_2,R_3) = P(B_1) P(R_2|B_1) P(R_3|R_2,B_1) = \frac{b}{r+b} \frac{r}{r+b+c} \frac{r+c}{r+b+c}$
+$P(R_1,B_2,R_3) = P(R_1) P(B_2|R_1) P(R_3|B_2,B_1) = \frac{r}{r+b} \frac{b}{r+b+c} \frac{r+c}{r+b+c}$
+$P(R_1,R_2,B_3) = P(R_1) P(R_2|R_1) P(B_3|R_2,B_1) = \frac{r}{r+b} \frac{r+c}{r+b+c} \frac{b}{r+b+c}$
+* The probability only depends on the number of events observed
+
+## Example: Exchangeability and Independence
+
 <div class="columns-2">
 ```{r, out.height = 400, fig.retina = NULL, echo=FALSE}
 knitr::include_graphics("TreeDiagram.JPG")
@@ -41,6 +81,7 @@ knitr::include_graphics("TreeDiagram.JPG")
 knitr::include_graphics("TreeProbabilities.JPG")
 ```
 </div>
+-->
 
 ## Exchangeability and de Finetti's Theorem
 
@@ -330,7 +371,6 @@ knitr::include_graphics("UncorrectedPValues.png")
 
 ## References
 
-* Cordani and Wechsler (2006). Teaching Independence and Exchangeability
 * Diaconis and Freedman (1980). Finite exchangeable sequences
 * de Finetti (1972). Probability Induction and Statistics
 * Hewitt and Savage (1955). Symmetric measures on Cartesian products
@@ -339,3 +379,4 @@ knitr::include_graphics("UncorrectedPValues.png")
 * Witztum, Rips, and Rosenberg (1994). Equidistant Letter Sequences in the Book of Genesis
 * Nichols and Holmes (2001). Nonparametric Permutation Tests For Functional Neuroimaging: A Primer with Examples
 * Das, Avants, Grossman, and Gee (2009). Registration Based Cortical Thickness Measurement
+* Steffen Lauritzen (2007). [Lecture notes](http://www.stats.ox.ac.uk/~steffen/teaching/grad/definetti.pdf)
