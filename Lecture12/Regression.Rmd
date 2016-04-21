@@ -16,11 +16,63 @@ output:
 knitr::opts_chunk$set(echo = FALSE)
 set.seed(1234)
 library(ggplot2)
-library(HistData)
+library(Rfit)
+library(npsm)
 ```
 
 ## Overview
 
-* Linear regression with different metric
-* Non-linear regression
+* Rank-based linear regression
+* Smoothing or estimating curves
+    * Density Estimation
+    * Non-linear regression
 
+## Curve Estimation
+
+* A curve of interest can be a probability density function $f$ or a regression function $r$
+* In density estimation, we observe $X_1,\dots,X_n$ from some unknown cdf $F$ with density $f$
+$$ X_1,\dots,X_n \sim f $$
+and the goal is to estimate density $f$
+* In regression, we observe pairs $(x_1,Y_1),\dots,(x_n,Y_n)$ that are related as
+$$ Y_i = r(x_i) + e_i $$
+with $E(e_i) = 0$, and the goal is to estimate the regression function $r$
+
+## Density Estimation
+
+```{r fig.width=10,fig.height=5}
+dat <- data.frame(cond = factor(rep(c("A","B"), each=200)), 
+                   rating = c(rnorm(200),rnorm(200, mean=.8)))
+ggplot(dat, aes(x=rating)) + 
+  geom_histogram(aes(y=..density..),binwidth=.1,colour="black", fill="white") +
+  geom_density(alpha=.2, fill="#FF6666")
+```
+
+## Non-Linear Regression
+
+```{r fig.width=10,fig.height=5}
+data(poly)
+x = poly[,1]
+y = poly[,2]
+plot(y~x,xlab=expression(x),ylab=expression(y))
+title("Bandwidth 0.5")
+lines(ksmooth(x,y,"normal",0.5),lwd=2,col="red")
+```
+
+## Rank-Based Linear Regression
+
+```{r message=FALSE,fig.width=10,fig.height=5}
+data(engel)
+plot(engel)
+abline(rfit(foodexp~income,data=engel))
+abline(lm(foodexp~income,data=engel),lty=2)
+legend("topleft",c('R','LS'),lty=c(1,2))
+```
+
+## Simple Linear Regression
+
+
+
+## References
+
+* Wassermann (2006). All of Nonparametric Statistics
+* Hollander, Wolfe, and Chicken (2014). Nonparametric Statistical Methods
