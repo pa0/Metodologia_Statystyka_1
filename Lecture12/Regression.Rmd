@@ -73,7 +73,79 @@ abline(lm(foodexp~income,data=engel),lty=2)
 legend("topleft",c('R','LS'),lty=c(1,2))
 ```
 
-## Some Notation
+## Test for Slope
+
+* For a single regression model ($i = 1,\dots,n$)
+$$ Y_i = \alpha + \beta x_i + e_i $$
+* Intercept $\alpha$ and slope $\beta$ are unkown
+* Error $e_1,\dots,e_n$ are sample from continous population with median 0
+* Theil (1950) tested for: $H_0: \beta = \beta_0$
+* Which means for every unit increase in the value of the independent (predictor) variable $x$, we expect an increase (or decrease, depending on the sign) of the dependent (response) varibale $Y$
+
+## Test for Slope
+
+* Difference 
+$$D_i = Y_i - \beta_0 x_i \hspace{1cm}\text{for}\hspace{1cm} n = 1,\dots,n$$
+* Let 
+$$C = \sum_{i=1}^{n-1} \sum_{j=i+1}^n \operatorname{sign}(D_j - D_i)$$
+
+## Test for Slope
+
+* Motivation for the Test:
+$$ D_j - D_i = Y_j - \beta_0 x_j - (Y_i - \beta_0 x_i) = Y_j - Y_i + \beta_0 (x_i - x_j)$$
+* under null the median of $Y_j - Y_i = \beta(x_j - x_i) + (e_j - e_i)$ is $\beta (x_j - x_i)$
+* under null the median of $D_j - D_i$ is $\beta (x_j - x_i) + \beta_0 (x_j - x_i) = (\beta - \beta_0)(x_j - x_i)$
+* hence, we tend to obtain positive $D_j - D_i$ difference when $\beta > \beta_0$ which leads to large $C$
+* The statistics $C$ is simply the Kendall's correlation statistics, and can be interpreted as a test for correlation between $x$ and $Y$
+
+## Test for Slope (Example)
+
+```{r, out.height = 400, fig.retina = NULL, echo=FALSE}
+knitr::include_graphics("1280px-Cloud_Seeding.png")
+```
+
+* Smith (1967) described experiment in Australia on cloud seeding
+* To investigate impact cloud seeding on rainfall
+
+## Test for Slope (Example)
+
+* Two area on montain served as target and control
+* During any period a random process was used to determine whether to clouds over the target area should be seeded
+* The effect of seeding was measured by double ratio 
+$$\frac{T/Q \text{ (seeded)}}{T/Q \text{ (unseeded)}}$$
+* $T$ total rainfalls in the target areas
+* $G$ total rainfalls in the control areas
+* Slope parameter $\beta$ represenents the rate of change in $Y$ per unit change in $x$
+* Test $H_0: \beta = 0$ versus $H_A: \beta < \beta_0$ (rainfall increases due to seeding)
+
+## Test for Slope (Example)
+
+Data collected over 5 years:
+```{r}
+year = 1:5
+doubleRatio = c(1.26,1.27,1.12,1.16,1.03)
+df = data.frame(year=year,doubleRatio=doubleRatio)
+df
+```
+
+Under the null $\beta_0 = 0$ se have $D_i = Y_i$:
+
+## Test for Slope (Example)
+
+```{r}
+pairs = t(combn(5,2))
+diff = doubleRatio[pairs[,2]]-doubleRatio[pairs[,1]]
+df = data.frame(i=pairs[,1],j=pairs[,2],D=diff,cD=sign(diff))
+df
+```
+
+```{r echo = TRUE}
+C = sum(sign(diff)); C
+```
+
+Gives $p$-value of $0.117$, no evidence for increased rainfall due to seeding
+
+## The Geometry -- Some Notation
 
 * Setup the following linear model (for $i = 1,\dots,n$)
 $$ Y_i = x_i^T \boldsymbol{\beta} + e_i^* $$
@@ -85,7 +157,7 @@ $$ Y_i = \alpha + \boldsymbol{x}_i \boldsymbol{\beta} + e_i$$
 * Assumption: $f(t)$ can be either asymmetric or symmetric depending on whether signs or ranks are used
 * The intercept $\alpha$ is independent of the slope $\boldsymbol{\beta}$
 
-## Some Notation
+## The Geometry -- Some Notation
 
 * Let $\boldsymbol{Y} = (Y_1,\dots,Y_n)^T$ denote the $n \times 1$ vector of observations
 * Let $\boldsymbol{X}$ denote the $n × p$ matrix with rows $x^T_i$
@@ -97,7 +169,7 @@ $$ \boldsymbol{Y} = \boldsymbol{1}\alpha + \boldsymbol{X}\boldsymbol{\beta} + \b
 $$ \boldsymbol{Y} = \boldsymbol{1}\boldsymbol{\beta} + \boldsymbol{\eta} + \boldsymbol{e} $$
 with $\boldsymbol{\eta} = \Omega_F$
 
-## Some Notation
+## The Geometry -- Some Notation
 
 * Now we can estimate $\boldsymbol{\beta}$
 * And test hypothesis
@@ -141,6 +213,30 @@ knitr::include_graphics("EstimationGeometry.png")
 </div>
 
 Source: Hettmansperger and McKean (2011)  
+
+## The Geometry of Estimation
+
+* Written in coordinate form, we can estimate 
+$$ D_{\varphi}(\boldsymbol{\beta}) = \| \boldsymbol{Y}-\boldsymbol{X}\boldsymbol{\beta} \|_{\varphi} $$
+* $D_{\varphi}(\boldsymbol{\beta})$ is a piecewise linear, continious, and convex function of $\boldsymbol{\beta}$, 
+* and the gradient with respect to $\boldsymbol{\beta}$ is given by
+$$ \nabla D_{\varphi}(\boldsymbol{\beta}) = \boldsymbol{X}^T \boldsymbol{a}(R(\boldsymbol{Y}-\boldsymbol{X}\boldsymbol{\beta})) $$
+with $\boldsymbol{a}(R(\boldsymbol{Y}-\boldsymbol{X}\boldsymbol{\beta})^T = \left( a(R(Y_1-x_1^T\boldsymbol{\beta}),\dots,a(R(Y_n-x_n^T\boldsymbol{\beta}) \right)$
+* Our estimate is $\nabla D_{\varphi}(\boldsymbol{\beta}) = 0$
+
+## The Geometry of Testing
+
+<div class="columns-2">
+```{r, out.height = 270, fig.retina = NULL, echo=FALSE}
+knitr::include_graphics("EstimationGeometry.png")
+```
+
+* $\Omega_R$ is the reduced model space of $\Omega_F$ subject to $H_0$: $\Omega_R = \{ \boldsymbol{\eta} \in \Omega_F: \boldsymbol{\eta} = \boldsymbol{X}\boldsymbol{\beta} \}$
+* for some $\boldsymbol{\beta}$ such that $\boldsymbol{M}\boldsymbol{\beta} = 0$
+* $RD_{\varphi} = D_{\varphi}(Y,\Omega_R) - D_{\varphi}(Y,\Omega_F)$
+* Large values of $RD_{\varphi}$ indicate $H_A$ while small values support $H_0$
+
+</div>
 
 ## References
 
