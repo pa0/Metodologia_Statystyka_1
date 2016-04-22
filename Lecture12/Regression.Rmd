@@ -115,8 +115,8 @@ knitr::include_graphics("1280px-Cloud_Seeding.png")
 $$\frac{T/Q \text{ (seeded)}}{T/Q \text{ (unseeded)}}$$
 * $T$ total rainfalls in the target areas
 * $G$ total rainfalls in the control areas
-* Slope parameter $\beta$ represenents the rate of change in $Y$ per unit change in $x$
-* Test $H_0: \beta = 0$ versus $H_A: \beta < \beta_0$ (rainfall increases due to seeding)
+* Slope parameter $\beta$ represenents the rate of change in $Y$ (double ratio) per unit change in $x$ (year)
+* Test $H_0: \beta = 0$ versus $H_A: \beta \ne 0$ (seeding no impact on rainfall)
 
 ## Test for Slope (Example)
 
@@ -135,17 +135,90 @@ Under the null $\beta_0 = 0$ se have $D_i = Y_i$:
 ```{r}
 pairs = t(combn(5,2))
 diff = doubleRatio[pairs[,2]]-doubleRatio[pairs[,1]]
-df = data.frame(i=pairs[,1],j=pairs[,2],D=diff,cD=sign(diff))
+df = data.frame(i=pairs[,1],j=pairs[,2],D=diff,signD=sign(diff))
 df
 ```
 
-```{r echo = TRUE}
+```{r echo=TRUE}
 C = sum(sign(diff)); C
 ```
 
-Gives $p$-value of $0.117$, no evidence for increased rainfall due to seeding
+## Test for Slope (Example)
 
-## The Geometry -- Some Notation
+```{r echo = TRUE}
+ken = cor.test(year,doubleRatio,method="kendall",alternative = "two.sided")
+ken$p.value
+```
+
+No evidence for cloud seeding impacting rainfall
+
+## Correlation
+
+* In a simple linear regression setting as before, we have reponse variable $Y$ predictor variable $X$, and the fit of the model is of main interest
+* Often, we want to predict random variable $Y$ from $x$ and we treat $x$ as nonstochstic
+* In correltaion analysis, we consider random pairs $(X,Y)$, and the strength of of a relationship or association between $X$ and $Y$ is of main interest
+* No association means that $X$ and $Y$ are independent:  
+$$ H_0: X \text{ and } Y \text{ are independent versus } H_A: X \text{ and } Y \text{ are dependent} $$
+* We assume that $(X,Y)$ is a continuous random vector with cdf $F(x,y)$ and pdf $f(x,y)$
+* Recall that $X$ and $Y$ are independent if their joint cdf factors into the product of marginals cdfs
+$$ F(x,y) = F_X(x) F_Y(y) $$
+
+## Correlation
+
+* Last week, we discussed $\chi^2$ goodness-of-fit test for discrete random variables
+* In the discrete case, independence was $P(X=x,Y=y) = P(X=x) P(Y=y)$ for all $x$ and $y$
+* In the continuous case, we have the Pearson's measure of association and two popular nonparametric measures (Kendall and Spearman)
+* Random sample $(X_1,Y_1),\dots,(X_n,Y_n)$
+
+## Pearson's Correlation Coefficient
+
+* The traditional correlation coefficient
+$$ \rho = \frac{ E\left( (X - \mu_X) (Y - \mu_Y) \right)}{\sigma_X \sigma_Y} $$
+* Measure of linear association 
+* Note that if $X$ and $Y$ are independent then $\rho = 0$
+* And if $\rho \ne 0$ then are dependent
+
+## Pearson's Correlation Coefficient
+
+* The numenator is estimated by the sample covariance 
+* The denominator is estimated by the product of sample standard deviations
+$$ r = \frac{n^{-1} \sum_{i=1}^n (X_i- \bar{X} )(Y_i-\bar{Y})}{\sqrt{\sum_{i=1}^n(X_i-\bar{X})^2 \cdot \sum_{i=1}^n (Y_i-\bar{Y})^2}} $$
+* The estimate of the correlation coefficient is directly related to simple least squares regression
+* Let $\widehat{\sigma}_x$ and $\widehat{\sigma}_y$ denote the respective sample standard deviations of $X$ and $Y$, then
+$r = \frac{ \widehat{\sigma}_x }{ \widehat{\sigma}_y } \widehat{\beta}$
+* $\widehat{\beta}$ is least squares estimate of slope in simple regression of $Y_i$ on $X_i$
+* Under the null $\sqrt{n} r$ is asymptotically normal
+
+## Kendall's $\tau_K$
+
+* Kendall's $\tau_K$ is a measure of monotonicity between X and Y
+* two pairs of random variables $(X_1,Y_1)$ and $(X_2,Y_2)$ be independent random vectors with the same distribution as $(X,Y)$
+* The pairs $(X_1,Y_1)$ and $(X_2,Y_2)$ are *concordant* or *discordant* if
+$$ \operatorname{sign}\{ (X_1-X_2)(Y_1-Y_2) \} = 1 \hspace{1cm}\text{or}\hspace{1cm} \operatorname{sign}\{ (X_1-X_2)(Y_1-Y_2) \} = -1 $$
+* Concordant pairs are indicative of increasing monotonicity between $X$ and $Y$
+* Discordant pairs indicate decreasing monotonicity
+* If $X$ and $Y$ are independent then $\tau_K = 0$
+* If $\tau_K = 0$ then $X$ and $Y$ are dependent
+
+## Kendall's $\tau_K$
+
+* Using a random sample $(X_1,Y_1),(X_2,Y_2),\dots,(X_n,Y_n)$
+* Estimator: count the number of concordant pairs and subtract from that the number of discordant pairs
+* In standardized form
+$$ \widehat{\tau}_K = {n \choose 2}^{-1} \sum_{i < j} \operatorname{sign} \{ (X_i-X_j)(Y_i-Y_j) \} $$
+* Tests of the hypotheses can be based on the exact finite sample distribution
+
+## Spearman $\rho_S$
+
+* Random sample $(X_1,Y_1),(X_2,Y_2),\dots,(X_n,Y_n)$
+* Denote by $\operatorname{R}(X_i)$ the rank of $X_i$ among $X_1,X_2,\dots,X_n$
+* Denote by $\operatorname{R}(Y_i)$ as the rank of $Y_i$ among $Y_1,Y_2,\dots,Y_n$
+* Estimate of $\rho_S$ is the sample correlation coefficient
+$$ r_S = \frac{\sum_{i=1}^n \left(\operatorname{R}(X_i)-((n+1)/2))(\operatorname{R}(Y_i)-((n+1)/2)\right)}{n(n^2-1)/12} $$
+* We accept $HA:$ $X$ and $Y$ are dependent for large values of $|r_S|$
+* This test can be carried out using the exact distribution
+
+## The Geometry of Linear Models
 
 * Setup the following linear model (for $i = 1,\dots,n$)
 $$ Y_i = x_i^T \boldsymbol{\beta} + e_i^* $$
@@ -157,7 +230,7 @@ $$ Y_i = \alpha + \boldsymbol{x}_i \boldsymbol{\beta} + e_i$$
 * Assumption: $f(t)$ can be either asymmetric or symmetric depending on whether signs or ranks are used
 * The intercept $\alpha$ is independent of the slope $\boldsymbol{\beta}$
 
-## The Geometry -- Some Notation
+## The Geometry of Linear Models
 
 * Let $\boldsymbol{Y} = (Y_1,\dots,Y_n)^T$ denote the $n \times 1$ vector of observations
 * Let $\boldsymbol{X}$ denote the $n × p$ matrix with rows $x^T_i$
@@ -169,7 +242,7 @@ $$ \boldsymbol{Y} = \boldsymbol{1}\alpha + \boldsymbol{X}\boldsymbol{\beta} + \b
 $$ \boldsymbol{Y} = \boldsymbol{1}\boldsymbol{\beta} + \boldsymbol{\eta} + \boldsymbol{e} $$
 with $\boldsymbol{\eta} = \Omega_F$
 
-## The Geometry -- Some Notation
+## The Geometry of Linear Models
 
 * Now we can estimate $\boldsymbol{\beta}$
 * And test hypothesis
