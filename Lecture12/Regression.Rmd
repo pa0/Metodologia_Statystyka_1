@@ -60,6 +60,11 @@ lines(ksmooth(x,y,"normal",0.5),lwd=2,col="red")
 
 ## Rank-Based Linear Regression
 
+* But today, we focus on linear regression
+* We generalize rank-based methods from two-sample location problems to general linear models
+
+## Rank-Based Linear Regression
+
 ```{r message=FALSE,fig.width=10,fig.height=5}
 data(engel)
 plot(engel)
@@ -68,11 +73,77 @@ abline(lm(foodexp~income,data=engel),lty=2)
 legend("topleft",c('R','LS'),lty=c(1,2))
 ```
 
-## Simple Linear Regression
+## Some Notation
 
+* Setup the following linear model (for $i = 1,\dots,n$)
+$$ Y_i = x_i^T \boldsymbol{\beta} + e_i^* $$
+where $\boldsymbol{\beta}$ is a $1 \times p$ vector of unkown parameters
+* $\boldsymbol{\beta}$ are the parameter of interst
+* Center (usually using the median $T(e_i^*) = \alpha$) the errors $e_i = e_i^* - \alpha$
+$$ Y_i = \alpha + \boldsymbol{x}_i \boldsymbol{\beta} + e_i$$
+* Let $f(t)$ be the pdf of the erros $e_i$
+* Assumption: $f(t)$ can be either asymmetric or symmetric depending on whether signs or ranks are used
+* The intercept $\alpha$ is independent of the slope $\boldsymbol{\beta}$
 
+## Some Notation
+
+* Let $\boldsymbol{Y} = (Y_1,\dots,Y_n)^T$ denote the $n \times 1$ vector of observations
+* Let $\boldsymbol{X}$ denote the $n × p$ matrix with rows $x^T_i$
+* Then we can write the linear model in matrix form:
+$$ \boldsymbol{Y} = \boldsymbol{1}\alpha + \boldsymbol{X}\boldsymbol{\beta} + \boldsymbol{e} $$
+* $\boldsymbol{X}$ is centered (that's fine since we have $\alpha$ in the model), and assume $\boldsymbol{X}$ is full column rank
+* Let $\Omega_F$ be the column space spanned by coluns of $\boldsymbol{X}$
+* So we can rewrite the linear model as (coordinate-free because not restricited to any specific basis vectors)
+$$ \boldsymbol{Y} = \boldsymbol{1}\boldsymbol{\beta} + \boldsymbol{\eta} + \boldsymbol{e} $$
+with $\boldsymbol{\eta} = \Omega_F$
+
+## Some Notation
+
+* Now we can estimate $\boldsymbol{\beta}$
+* And test hypothesis
+$$ H_0: \boldsymbol{M}\boldsymbol{\beta} = 0 \hspace{2cm} H_A: \boldsymbol{M}\boldsymbol{\beta} \ne 0 $$
+* $\boldsymbol{M}$ is a $q \times p$ matrix of full rank
+
+## The Geometry of Estimation
+
+$$ \boldsymbol{Y} = \boldsymbol{1}\boldsymbol{\beta} + \boldsymbol{\eta} + \boldsymbol{e} \hspace{1cm}\text{with}\hspace{1cm} \boldsymbol{\eta} = \Omega_F$$
+
+* Task is to minimize some distance between $\boldsymbol{Y}$ and subspace $\Omega_F$
+* Think of $\boldsymbol{\eta}$ as a hyperplane and the task as projecting $\boldsymbol{Y}$ onto it
+* For the projection we need to define a distance
+* Instead of using the usual Euclidean distance, we use a distance based on signs and ranks
+$$ \| v_i \|_{\varphi} = \sum_{i=1}^n a(R(v_i)) v_i $$
+* with scores $a(1) \le a(2) \le \cdots \le a(n)$ and score function $a(i) = \varphi(i/(n+1))$ 
+* $\varphi$ is nondecreasing, centered, standardized and defined on the interval $(0,1)$
+
+## The Geometry of Estimation
+
+* $\|\boldsymbol{v}\|_{\varphi}$ is a pseudo-norm:
+    * triangle inequality, non-negative, $\|\alpha \boldsymbol{v}\|_{\varphi} = |\alpha \|\boldsymbol{v}\|_{\varphi}$, and 
+    * additionally $\|\boldsymbol{v}\|_{\varphi} = 0$ if and only if $v_1 = \dots = v_n$
+* By setting $\varphi_R(u) = \sqrt{12}(u − 1/2)$, we get the Wilcoxon pseudo-norm
+* By setting $\varphi_S(u) = \operatorname{sgn}(u − 1/2)$, we get the sign pseudo-norm (equivalent to using the $L_1$ norm)
+* In general
+$$ D(\boldsymbol{Y},\Omega_F) = \| \boldsymbol{Y} - \widehat{\boldsymbol{Y}}_{\varphi} \|_{\varphi} = \underset{\boldsymbol{\eta \in \Omega_F}}{\min} \| \boldsymbol{Y}-\boldsymbol{\eta} \|_{\varphi} $$
+
+## The Geometry of Estimation
+
+$$ \widehat{\boldsymbol{\eta}} = D(\boldsymbol{Y},\Omega_F) = \| \boldsymbol{Y} - \widehat{\boldsymbol{Y}}_{\varphi} \|_{\varphi} = \underset{\boldsymbol{\eta \in \Omega_F}}{\min} \| \boldsymbol{Y}-\boldsymbol{\eta} \|_{\varphi} $$
+
+<div class="columns-2">
+```{r, out.height = 270, fig.retina = NULL, echo=FALSE}
+knitr::include_graphics("EstimationGeometry.png")
+```
+
+* Estimate $\widehat{\boldsymbol{\eta}}_{\varphi}$
+* Distance between $Y$ and the space $\Omega_F$ is $d_F$
+* Reduced model subspace $\Omega_R \subset \Omega_F$
+</div>
+
+Source: Hettmansperger and McKean (2011)  
 
 ## References
 
+* Hettmansperger and McKean (2011). Robust Nonparametric Statistical Methods
 * Wassermann (2006). All of Nonparametric Statistics
 * Hollander, Wolfe, and Chicken (2014). Nonparametric Statistical Methods
