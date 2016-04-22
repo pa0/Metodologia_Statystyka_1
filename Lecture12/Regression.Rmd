@@ -1,5 +1,5 @@
 ---
-title: "Regression"
+title: "Rank-Based Linear Regression"
 author: "Christof Seiler"
 date: "Stanford University, Spring 2016, STATS 205"
 output:
