@@ -22,10 +22,10 @@ library(npsm)
 
 ## Overview
 
-* Rank-based linear regression
 * Smoothing or estimating curves
     * Density Estimation
     * Non-linear regression
+* Rank-based linear regression
 
 ## Curve Estimation
 
@@ -63,6 +63,17 @@ lines(ksmooth(x,y,"normal",0.5),lwd=2,col="red")
 * But today, we focus on linear regression
 * We generalize rank-based methods from two-sample location problems to general linear models
 
+## Linear Regression in Two-Sample Problem
+
+* Recall that we framed the two-sample location problem as a regression problem
+* Combine sample in one vector $\boldsymbol{Z} = (X_1,\dots,X_{n_1},Y_1,\dots,Y_{n_2}^T)$
+* Let $\boldsymbol{c}$ be a $n \times 1$ vector with 
+    * zeros at position $1$ to $n_1$ and 
+    * ones at positions $n_1+1$ to $n$
+* Then we can rewrite the location model as
+$$Z_i = \alpha + c_i \Delta + e_i$$
+where $e_1,\dots,e_n$ are iid with pdf $f(t)$
+
 ## Rank-Based Linear Regression
 
 ```{r message=FALSE,fig.width=10,fig.height=5}
@@ -96,7 +107,7 @@ $$ D_j - D_i = Y_j - \beta_0 x_j - (Y_i - \beta_0 x_i) = Y_j - Y_i + \beta_0 (x_
 * under null the median of $Y_j - Y_i = \beta(x_j - x_i) + (e_j - e_i)$ is $\beta (x_j - x_i)$
 * under null the median of $D_j - D_i$ is $\beta (x_j - x_i) + \beta_0 (x_j - x_i) = (\beta - \beta_0)(x_j - x_i)$
 * hence, we tend to obtain positive $D_j - D_i$ difference when $\beta > \beta_0$ which leads to large $C$
-* The statistics $C$ is simply the Kendall's correlation statistics, and can be interpreted as a test for correlation between $x$ and $Y$
+* The statistics $C$ is the Kendall's correlation statistics, and can be interpreted as a test for correlation between $x$ and $Y$
 
 ## Test for Slope (Example)
 
@@ -105,7 +116,7 @@ knitr::include_graphics("1280px-Cloud_Seeding.png")
 ```
 
 * Smith (1967) described experiment in Australia on cloud seeding
-* To investigate impact cloud seeding on rainfall
+* To investigate impact of cloud seeding on rainfall
 
 ## Test for Slope (Example)
 
@@ -128,7 +139,7 @@ df = data.frame(year=year,doubleRatio=doubleRatio)
 df
 ```
 
-Under the null $\beta_0 = 0$ se have $D_i = Y_i$:
+Under the null $\beta_0 = 0$ we have $D_i = Y_i$:
 
 ## Test for Slope (Example)
 
@@ -155,7 +166,7 @@ No evidence for cloud seeding impacting rainfall
 ## Correlation
 
 * In a simple linear regression setting as before, we have reponse variable $Y$ predictor variable $X$, and the fit of the model is of main interest
-* Often, we want to predict random variable $Y$ from $x$ and we treat $x$ as nonstochstic
+* Often, we want to predict random variable $Y$ from $x$ and we treat $x$ as nonstochastic
 * In correltaion analysis, we consider random pairs $(X,Y)$, and the strength of of a relationship or association between $X$ and $Y$ is of main interest
 * No association means that $X$ and $Y$ are independent:  
 $$ H_0: X \text{ and } Y \text{ are independent versus } H_A: X \text{ and } Y \text{ are dependent} $$
@@ -192,11 +203,12 @@ $r = \frac{ \widehat{\sigma}_x }{ \widehat{\sigma}_y } \widehat{\beta}$
 ## Kendall's $\tau_K$
 
 * Kendall's $\tau_K$ is a measure of monotonicity between X and Y
-* two pairs of random variables $(X_1,Y_1)$ and $(X_2,Y_2)$ be independent random vectors with the same distribution as $(X,Y)$
+* Let two pairs of random variables $(X_1,Y_1)$ and $(X_2,Y_2)$ be independent random vectors with the same distribution as $(X,Y)$
 * The pairs $(X_1,Y_1)$ and $(X_2,Y_2)$ are *concordant* or *discordant* if
 $$ \operatorname{sign}\{ (X_1-X_2)(Y_1-Y_2) \} = 1 \hspace{1cm}\text{or}\hspace{1cm} \operatorname{sign}\{ (X_1-X_2)(Y_1-Y_2) \} = -1 $$
 * Concordant pairs are indicative of increasing monotonicity between $X$ and $Y$
 * Discordant pairs indicate decreasing monotonicity
+$$ \tau_K = P\left( \text{concordant} \right) - P\left( \text{discordant} \right)$$
 * If $X$ and $Y$ are independent then $\tau_K = 0$
 * If $\tau_K = 0$ then $X$ and $Y$ are dependent
 
@@ -273,19 +285,16 @@ $$ D(\boldsymbol{Y},\Omega_F) = \| \boldsymbol{Y} - \widehat{\boldsymbol{Y}}_{\v
 
 ## The Geometry of Estimation
 
-$$ \widehat{\boldsymbol{\eta}} = D(\boldsymbol{Y},\Omega_F) = \| \boldsymbol{Y} - \widehat{\boldsymbol{Y}}_{\varphi} \|_{\varphi} = \underset{\boldsymbol{\eta \in \Omega_F}}{\min} \| \boldsymbol{Y}-\boldsymbol{\eta} \|_{\varphi} $$
+$$\widehat{\boldsymbol{\eta}} = D(\boldsymbol{Y},\Omega_F) = \| \boldsymbol{Y} - \widehat{\boldsymbol{Y}}_{\varphi} \|_{\varphi} = \underset{\boldsymbol{\eta \in \Omega_F}}{\min} \| \boldsymbol{Y}-\boldsymbol{\eta} \|_{\varphi}$$
 
-<div class="columns-2">
-```{r, out.height = 270, fig.retina = NULL, echo=FALSE}
+```{r, out.height = 250, fig.retina = NULL, echo=FALSE}
 knitr::include_graphics("EstimationGeometry.png")
 ```
+Source: Hettmansperger & McKean (2011)
 
 * Estimate $\widehat{\boldsymbol{\eta}}_{\varphi}$
 * Distance between $Y$ and the space $\Omega_F$ is $d_F$
 * Reduced model subspace $\Omega_R \subset \Omega_F$
-</div>
-
-Source: Hettmansperger and McKean (2011)  
 
 ## The Geometry of Estimation
 
@@ -299,8 +308,7 @@ with $\boldsymbol{a}(R(\boldsymbol{Y}-\boldsymbol{X}\boldsymbol{\beta})^T = \lef
 
 ## The Geometry of Testing
 
-<div class="columns-2">
-```{r, out.height = 270, fig.retina = NULL, echo=FALSE}
+```{r, out.height = 250, fig.retina = NULL, echo=FALSE}
 knitr::include_graphics("EstimationGeometry.png")
 ```
 
@@ -308,8 +316,6 @@ knitr::include_graphics("EstimationGeometry.png")
 * for some $\boldsymbol{\beta}$ such that $\boldsymbol{M}\boldsymbol{\beta} = 0$
 * $RD_{\varphi} = D_{\varphi}(Y,\Omega_R) - D_{\varphi}(Y,\Omega_F)$
 * Large values of $RD_{\varphi}$ indicate $H_A$ while small values support $H_0$
-
-</div>
 
 ## References
 
