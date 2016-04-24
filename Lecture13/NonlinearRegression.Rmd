@@ -28,13 +28,10 @@ library(ElemStatLearn)
 
 ## Curve Estimation
 
-* A curve of interest can be a probability density function $f$ or a regression function $r$
+* A curve of interest can be a probability density function $f$
 * In density estimation, we observe $X_1,\dots,X_n$ from some unknown cdf $F$ with density $f$
 $$ X_1,\dots,X_n \sim f $$
 and the goal is to estimate density $f$
-* In regression, we observe pairs $(x_1,Y_1),\dots,(x_n,Y_n)$ that are related as
-$$ Y_i = r(x_i) + e_i $$
-with $E(e_i) = 0$, and the goal is to estimate the regression function $r$
 
 ## Density Estimation
 
@@ -48,9 +45,30 @@ ggplot(dat, aes(x=rating)) +
 
 ## Non-Linear Regression
 
+* A curve of interest can be a regression function $r$
+* In regression, we observe pairs $(x_1,Y_1),\dots,(x_n,Y_n)$ that are related as
+$$ Y_i = r(x_i) + e_i $$
+with $E(e_i) = 0$, and the goal is to estimate the regression function $r$
+
+## Non-Linear Regression
+
 ```{r fig.width=10,fig.height=5}
 data(bone)
 ggplot(bone, aes(x=age, y=spnbmd, color=gender, shape=gender)) +  geom_point() +
+  labs(title = "Bone Mineral Density Data") + labs(x = "Age") + labs(y = "Change in BMD")
+```
+
+## Non-Linear Regression
+
+```{r fig.width=10,fig.height=5}
+ggplot(bone, aes(x=age, y=spnbmd, color=gender, shape=gender)) +  geom_point() + geom_smooth(span = 0.05) +
+  labs(title = "Bone Mineral Density Data") + labs(x = "Age") + labs(y = "Change in BMD")
+```
+
+## Non-Linear Regression
+
+```{r fig.width=10,fig.height=5}
+ggplot(bone, aes(x=age, y=spnbmd, color=gender, shape=gender)) +  geom_point() + geom_smooth(span = 10) +
   labs(title = "Bone Mineral Density Data") + labs(x = "Age") + labs(y = "Change in BMD")
 ```
 
@@ -63,9 +81,41 @@ ggplot(bone, aes(x=age, y=spnbmd, color=gender, shape=gender)) +  geom_point() +
 
 ## The Bias–Variance Tradeoff
 
+* Let $\widehat{f_n}(x)$ be an estimate of a function $f(x)$
+* Define the *squared error* loss function as 
+$$\operatorname{Loss} = L(f(x),\widehat{f_n}(x)) = (f(x)-\widehat{f_n}(x))^2$$
+* Define average of this loss as *risk* or *Mean Squared Error* (MSE) 
+$$\operatorname{MSE} = R(f(x),\widehat{f_n}(x)) = \operatorname{E}(\operatorname{Loss})$$
+* The expectation is taken with respect to $\widehat{f_n}$ which is random
+* The MSE can be decomposed into a bias and variance term
+$$ \operatorname{MSE} = \operatorname{Bias}^2 + \operatorname{Var}$$
+* The decomposition is easy to show
 
+## The Bias–Variance Tradeoff
+
+$$\operatorname{E}((f - \widehat{f})^2 ) = \operatorname{E}( f^2 + \widehat{f}^2 + 2 f \widehat{f} ) = \operatorname{E}(f^2) + \operatorname{E}(\widehat{f}^2) - \operatorname{E}(2 f \widehat{f})$$
+
+* Use $\operatorname{Var}(X) = \operatorname{E}(X^2) - \operatorname{E}(X)^2$
+$$\operatorname{E}((f - \widehat{f})^2 ) = \operatorname{Var}(f) + \operatorname{E}(f)^2 + \operatorname{Var}(\widehat{f}) + \operatorname{E}(\widehat{f})^2 - \operatorname{E}(2f\widehat{f})$$
+* Use $\operatorname{E}(f) = f$ and $\operatorname{Var}(f) = 0$
+$$\operatorname{E}((f - \widehat{f})^2 ) = f^2 + \operatorname{Var}(\widehat{f}) + \operatorname{E}(\widehat{f})^2 - 2f\operatorname{E}(\widehat{f})$$
+* Use $(f-\operatorname{E}(\widehat{f}))^2 = f^2 + \operatorname{E}(\widehat{f})^2 - 2f\operatorname{E}(\widehat{f})$
+$$\operatorname{E}((f - \widehat{f})^2 ) = (f-\operatorname{E}(\widehat{f}))^2 + \operatorname{Var}(\widehat{f}) = \operatorname{Bias}^2 + \operatorname{Var}$$
+
+## The Bias–Variance Tradeoff
+
+* This described the risk at one point
+* To summarize the risk, for density problems, we need to integrate
+$$R(f,\widehat{f_n}) = \int R(f(x),\widehat{f_n}(x)) dx$$
+* For regression problems, we sum over all 
+$$R(r,\widehat{r_n}) = \sum_{i=1}^n R(r(x_i),\widehat{r_n}(x_i))$$
+
+## The Bias–Variance Tradeoff
+
+* With the same arguement, the predictive risk for the regression model
+$$Y_i = r(x_i) + e_i$$
+* For a new point $x_i^*$
 
 ## References
 
 * Wassermann (2006). All of Nonparametric Statistics
-* Hollander, Wolfe, and Chicken (2014). Nonparametric Statistical Methods
