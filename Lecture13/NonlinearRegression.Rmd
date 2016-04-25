@@ -362,6 +362,22 @@ $$
 * For example, the Gaussian $K(x) = \frac{1}{2} e^{-x^2/2}$
 * Think of them as basis functions anchored at observation locations $x_i$
 
+## Local Regression
+
+* For points $x_1,\dots,x_n$ drawn from some density $f$
+* Let $h \to 0, nh \to \infty$ 
+* The bias-variance tradeoff for the Nadaraya–Watson kernel estimator
+$$R(\widehat{r_n},r) \approx \frac{h^4}{4} \operatorname{Bias}^2 + \frac{1}{nh} \operatorname{Variance}$$
+* Depends first and second derivatives of the density $f$
+$$\operatorname{Bias}^2 = \left( \int x^2 K(x) dx \right)^2 \int \left( r''(x) + 2r'(x)\frac{f'(x)}{f(x)} \right)^2 dx$$
+* The term $2 r'(x) \frac{f'(x)}{f(x)}$ is called **design bias**
+* It depends on the distribution of the points $x_1,\dots,x_n$
+* Later, we'll see that this bias can be reduced by by using a refinement called local polynomial regression
+
+## Local Polynomials
+
+TODO
+
 ## References
 
 * Wassermann (2006). All of Nonparametric Statistics
