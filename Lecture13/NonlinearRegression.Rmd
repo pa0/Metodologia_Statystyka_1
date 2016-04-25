@@ -43,14 +43,14 @@ ggplot(dat, aes(x=rating)) +
   geom_density(alpha=.2, fill="#FF6666")
 ```
 
-## Non-Linear Regression
+## Nonlinear Regression
 
 * A curve of interest can be a regression function $r$
 * In regression, we observe pairs $(x_1,Y_1),\dots,(x_n,Y_n)$ that are related as
-$$ Y_i = r(x_i) + e_i $$
-with $E(e_i) = 0$, and the goal is to estimate the regression function $r$
+$$ Y_i = r(x_i) + \epsilon_i $$
+with $E(\epsilon_i) = 0$, and the goal is to estimate the regression function $r$
 
-## Non-Linear Regression
+## Nonlinear Regression
 
 ```{r fig.width=10,fig.height=5}
 data(bone)
@@ -58,21 +58,21 @@ ggplot(bone, aes(x=age, y=spnbmd, color=gender, shape=gender)) +  geom_point() +
   labs(title = "Bone Mineral Density Data") + labs(x = "Age") + labs(y = "Change in BMD")
 ```
 
-## Non-Linear Regression
+## Nonlinear Regression
 
 ```{r fig.width=10,fig.height=5}
 ggplot(bone, aes(x=age, y=spnbmd, color=gender, shape=gender)) +  geom_point() + geom_smooth(span = 0.05) +
   labs(title = "Bone Mineral Density Data") + labs(x = "Age") + labs(y = "Change in BMD")
 ```
 
-## Non-Linear Regression
+## Nonlinear Regression
 
 ```{r fig.width=10,fig.height=5}
 ggplot(bone, aes(x=age, y=spnbmd, color=gender, shape=gender)) +  geom_point() + geom_smooth(span = 10) +
   labs(title = "Bone Mineral Density Data") + labs(x = "Age") + labs(y = "Change in BMD")
 ```
 
-## Non-Linear Regression
+## Nonlinear Regression
 
 ```{r fig.width=10,fig.height=5}
 ggplot(bone, aes(x=age, y=spnbmd, color=gender, shape=gender)) +  geom_point() + geom_smooth() +
@@ -113,18 +113,18 @@ $$R(r,\widehat{r_n}) = \sum_{i=1}^n R(r(x_i),\widehat{r_n}(x_i))$$
 ## The Bias–Variance Tradeoff
 
 * Consider the regression model
-$$Y_i = r(x_i) + e_i$$
-* Suppose we draw new observation $Y_i^* = r(x_i) + e_i^*$ for each $x_i$
+$$Y_i = r(x_i) + \epsilon_i$$
+* Suppose we draw new observation $Y_i^* = r(x_i) + \epsilon_i^*$ for each $x_i$
 * If we predict $Y_i^*$ with $\widehat{r_n}(x_i)$ then the *squared prediction error* is 
-$$(Y_i^* - \widehat{r_n}(x_i^*))^2 = (r(x_i) + e_i^* - \widehat{r_n}(x_i))^2$$
+$$(Y_i^* - \widehat{r_n}(x_i^*))^2 = (r(x_i) + \epsilon_i^* - \widehat{r_n}(x_i))^2$$
 * Define *predictive risk* as 
 $$\operatorname{E}\left( \frac{1}{n} \sum_{i=1}^n (Y_i^* - \widehat{r_n}(x_i))^2 \right)$$
 
 ## The Bias–Variance Tradeoff
 
 * Up to a constant, the average risk and the predictive risk are the same
-$$\operatorname{E}\left( \frac{1}{n} \sum_{i=1}^n (Y_i^* - \widehat{r_n}(x_i))^2 \right) = R(r,\widehat{r}_n) + \frac{1}{n}\sum_{i=1}^n \operatorname{E}((e_i^*)^2)$$
-* and in particular, if error $e_i$ has variance $\sigma^2$, then
+$$\operatorname{E}\left( \frac{1}{n} \sum_{i=1}^n (Y_i^* - \widehat{r_n}(x_i))^2 \right) = R(r,\widehat{r}_n) + \frac{1}{n}\sum_{i=1}^n \operatorname{E}((\epsilon_i^*)^2)$$
+* and in particular, if error $\epsilon_i$ has variance $\sigma^2$, then
 $$\operatorname{E}\left( \frac{1}{n} \sum_{i=1}^n (Y_i^* - \widehat{r_n}(x_i))^2 \right) = R(r,\widehat{r_n}) + \sigma^2$$
 
 ## The Bias–Variance Tradeoff
@@ -196,6 +196,173 @@ the bias term increases and the variance term decreases
 the bias term decreases and the variance term increases
 * This is a typical bias–variance analysis
 
+## The Curse of Dimensionality
+
+* Problem with smoothing is the curse of dimensionality in high dimensions
+* Estimation gets harder as the dimensions of the observations increases
+* **Computational:** Computational burden increases exponentially with dimension, and
+* **Statistical:** If data have dimension $d$ then we need sample size $n$ to grow exponentially with $d$
+* We will see that the MSE of any nonparametric estimator of a smooth function curve has form (for $c > 0$)
+$$\operatorname{MSE} \approx \frac{c}{n^{4/(4+d)}}$$
+* If we want to have a fixed $\operatorname{MSE} = \delta$ equal to some small number $\delta$, then solving for $n$
+$$n \propto \left( \frac{c}{\delta} \right)^{d/4}$$
+
+## The Curse of Dimensionality
+
+* We see that $n \propto \left( \frac{c}{\delta} \right)^{d/4}$ grows exponentially with dimension $d$
+* The reason for this is that smoothing involves estimating a function in a local neighborhood
+* But in high-dimensional problems the data are very sparse, so local neighborhood contain very few points
+
+## The Curse of Dimensionality (Example)
+
+* Suppose $n$ data points uniformly distributed on the interval $[0,1]$
+* How many data points will we find in the interval $[0,0.1]$?
+* The answer: about $n/10$ points
+* Now suppose $n$ point in 10 dimensional unit cube $[0,1]^{10}$
+* How many data points in $[0,0.1]^{10}$?
+* The answer: about 
+$$n \times \left(\frac{0.1}{1}\right)^{10} = \frac{n}{10,000,000,000}$$
+* Thus, $n$ has to be huge to ensure that small neighborhoods have any data in them
+* Smoothing methods can in principle be used in high-dimensions problems 
+* But estimator won't be accurate, confidence interval around the estimate will be distressingly large
+
+## The Curse of Dimensionality (Example)
+
+```{r out.width=".8\\linewidth"}
+knitr::include_graphics("CurseDimensionality.png")
+```
+
+Source: Hastie, Tibshirani, and Friedman (2009)
+
+* In ten dimensions 80% of range to capture 10% of the data
+
+## Nonlinear Regression
+
+* We are given $n$ pairs of obserations $(x_1,Y_1),\dots,(x_n,Y_n)$
+* The **response variable** is related to the **covariate** 
+$$Y_i = r(x_i) + \epsilon_i \hspace{2cm} \operatorname{E}(\epsilon_i) = 0, i = 1,\dots,n$$
+with $r$ being the **regression function**
+* For now, assume that variance $\operatorname{Var}(\epsilon_i) = \sigma^2$ is independent of $x$
+* The covariates $x_i$ are fixed
+
+## Linear Smoothers
+
+* All the nonparametric estimators that we will treat in this class are linear smoothers
+* An estimator $\widehat{r_n}$ is a linear smoothers if, for each $x$, there exists a vector $l(x) = (l_1(x),\dots,l_n(x))^T$ such that
+$$\widehat{r_n}(x) = \sum_{i=1}^n l_i(x) Y_i$$
+* Define the vector of fitted values 
+$$\boldsymbol{r} = (\widehat{r_n}(x_1),\dots,\widehat{r_n}(x_n))^T$$
+* Then we can write in matrix form ($L_{ij} = l_j(x_i)$)
+$$\boldsymbol{r} = L Y$$
+* The $i$th row shows weights given to each $Y_i$ in forming the estimate $\widehat{r_n}(x_i)$
+
+## Regressogram Estimator
+
+* Suppose that $a \leq x_i \leq b, i = 1,\dots,n$ 
+* Divide $(a,b)$ into $m$ equally spaced bins denoted by $B_1,B_2,\dots,B_m$
+* Define estimator as 
+$$\widehat{r_n} = \frac{1}{k_j} \sum_{i:x_i \in B_j} Y_i \hspace{0.5cm}\text{for}\hspace{0.5cm} x \in B_j$$
+where $k_j$ is the number of points in $B_j$
+* In this case, 
+$$l(x)^T = \left( 0,0,\dots,\frac{1}{k_j},\dots,\frac{1}{k_j},0,\dots,0 \right)$$
+
+## Regressogram Estimator
+
+* For example, $n = 9, m = 3$
+$$L = \frac{1}{3} \times 
+\begin{bmatrix}
+1 & 1 & 1 & 0 & 0 & 0 & 0 & 0 & 0 \\
+1 & 1 & 1 & 0 & 0 & 0 & 0 & 0 & 0 \\
+1 & 1 & 1 & 0 & 0 & 0 & 0 & 0 & 0 \\
+0 & 0 & 0 & 1 & 1 & 1 & 0 & 0 & 0 \\
+0 & 0 & 0 & 1 & 1 & 1 & 0 & 0 & 0 \\
+0 & 0 & 0 & 1 & 1 & 1 & 0 & 0 & 0 \\
+0 & 0 & 0 & 0 & 0 & 0 & 1 & 1 & 1 \\
+0 & 0 & 0 & 0 & 0 & 0 & 1 & 1 & 1 \\
+0 & 0 & 0 & 0 & 0 & 0 & 1 & 1 & 1 
+\end{bmatrix}$$
+
+## Local Averages Estimator
+
+* Fix bandwidth $h > 0$ and let $B_x = \{ i: |x_i - x| \le h \}$
+* Let $n_x$ be the number of points in $B_x$
+* Estimator is 
+$$ \widehat{r_n}(x) = \frac{1}{n_x} \sum_{i \in B_x} Y_i$$
+* This is a special case of the kernel estimator that we will discuss next
+* In this case, $l(x) = 1/n_x$ if $|x_i - x| \le h$ and $l(x) = 0$ otherwise
+
+## Local Averages Estimator
+
+* For example, $n = 9,x_i = i/9,h = 1/9$
+$$L = 
+\begin{bmatrix}
+1/2 & 1/2 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
+1/3 & 1/3 & 1/3 & 0 & 0 & 0 & 0 & 0 & 0 \\
+0 & 1/3 & 1/3 & 1/3 & 0 & 0 & 0 & 0 & 0 \\
+0 & 0 & 1/3 & 1/3 & 1/3 & 0 & 0 & 0 & 0 \\
+0 & 0 & 0 & 1/3 & 1/3 & 1/3 & 0 & 0 & 0 \\
+0 & 0 & 0 & 0 & 1/3 & 1/3 & 1/3 & 0 & 0 \\
+0 & 0 & 0 & 0 & 0 & 1/3 & 1/3 & 1/3 & 0 \\
+0 & 0 & 0 & 0 & 0 & 0 & 1/3 & 1/3 & 1/3 \\
+0 & 0 & 0 & 0 & 0 & 0 & 0 & 1/2 & 1/2 
+\end{bmatrix}$$
+
+## Linear Smoothers
+
+* This is a rowise weighted average with constrain $\sum_{i=1}^n l_i(x) = 1$
+* Define the effective degrees of freedom by
+$$\nu = \operatorname{tr}(L)$$
+* The effective degrees of freedom behave very much like the number of parameters in a linear regression model
+* For example: $L_{ii} = 1$, $L_{ij} = 0$, we have $\nu = n$
+* For example: $L_{ij} = 1/n$, we have $\nu = 1$
+* For the regressogram estimator: $\nu = m$ (number of bins)
+
+## Choosing the Smoothing Parameter
+
+* The smoothers depend on some smoothing parameter $h$
+* We define a risk 
+$$R(h) = \operatorname{E}\left( \frac{1}{n} \sum_{i=1}^n (\widehat{r_n}(x_i) - r(x_i))^2 \right)$$
+* Ideally, we would like to choose $h$ to minimize $R(h)$ 
+* But $R(h)$ depends on unkown function $r(x)$
+* Instead we minimize an estimate $\widehat{R}(h)$
+* As first guess, we might try minimizing the **training error**
+$$\frac{1}{n} \sum_{i=1}^n (Y_i - \widehat{r_n}(x_i))^2$$
+* This is a poor estimator, because it overfits (undersmoothing)
+* We use the data twice: to estimate the function and to estimate the risk
+
+## Choosing the Smoothing Parameter
+
+* A better idea is to use leave-one-out cross-validation
+$$\operatorname{cv} = \widehat{R}(h) = \frac{1}{n} \sum_{i=1}^n (Y_i - \widehat{r}_{(-i)}(x_i))^2$$
+with $\widehat{r}_{(-i)}$ estimator obtained by omitting the ith pair $(x,Y)$
+* Define 
+$$\widehat{r}_{(-i)} = \sum_{j=1}^n Y_j l_{j,(-i)}(x)$$
+* and we set the weight on $x_i$ to $0$ and renormalize the other weights to sum to one
+$$l_{j,(-i)}(x) = 
+\begin{cases}
+0 & \text{if } j = i \\
+\frac{l_j(x)}{\sum_{k \ne i} l_k(x)} & \text{if } j \ne i
+\end{cases}$$
+* Cross-validation is approximately the predictive risk (predicting the left-one-out observation)
+
+## Local Regression
+
+* We still use the regression model 
+$$Y_i = r(x_i) + \epsilon_i, \operatorname{E}(\epsilon_i) = 0, i = 1,\dots,n$$
+* But now, we consider weighted averages of $Y_i$'s giving higher weights to points close to $x$
+* One option is kernel regression estimator called the Nadaraya–Watson kernel estimator
+$$\widehat{r_n}(x) = \sum_{i=1}^n l_i(x)Y_i$$
+with kernel $K$ and weights $l_i(x)$ given by
+$$
+l_i(x) = \frac{K(\frac{x-x_i}{h})}{\sum_{i=1}^n K(\frac{x-x_i}{h})}
+$$
+
+## Local Regression
+
+* For example, the Gaussian $K(x) = \frac{1}{2} e^{-x^2/2}$
+* Think of them as basis functions anchored at observation locations $x_i$
+
 ## References
 
 * Wassermann (2006). All of Nonparametric Statistics
+* Hastie, Tibshirani, Friedman (2009). The Elements of Statistical Learning
