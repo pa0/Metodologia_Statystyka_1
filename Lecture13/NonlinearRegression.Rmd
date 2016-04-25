@@ -345,6 +345,14 @@ $$l_{j,(-i)}(x) =
 \end{cases}$$
 * Cross-validation is approximately the predictive risk (predicting the left-one-out observation)
 
+## Choosing the Smoothing Parameter
+
+* We can compute leave-one-out cross-validation without leaving one observation out
+$$
+\widehat{R}(h) = \frac{1}{n} \sum_{i=1}^n \left( \frac{Y_i - \widehat{r_n}(x_i)}{1-L_{ii}} \right)
+$$
+* TODO derivation or maybe homework?
+
 ## Local Regression
 
 * We still use the regression model 
