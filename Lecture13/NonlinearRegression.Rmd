@@ -22,7 +22,7 @@ library(ElemStatLearn)
 ## Overview
 
 * Smoothing or estimating curves
-    * Density Estimation
+    * Density estimation
     * Nonlinear regression
 * Rank-based linear regression
 
@@ -31,13 +31,20 @@ library(ElemStatLearn)
 * A curve of interest can be a probability density function $f$
 * In density estimation, we observe $X_1,\dots,X_n$ from some unknown cdf $F$ with density $f$
 $$ X_1,\dots,X_n \sim f $$
-and the goal is to estimate density $f$
+* The goal is to estimate density $f$
 
 ## Density Estimation
 
 ```{r fig.width=10,fig.height=5}
 dat <- data.frame(cond = factor(rep(c("A","B"), each=200)), 
                    rating = c(rnorm(200),rnorm(200, mean=.8)))
+ggplot(dat, aes(x=rating)) + 
+  geom_histogram(aes(y=..density..),binwidth=.1,colour="black", fill="white")
+```
+
+## Density Estimation
+
+```{r fig.width=10,fig.height=5}
 ggplot(dat, aes(x=rating)) + 
   geom_histogram(aes(y=..density..),binwidth=.1,colour="black", fill="white") +
   geom_density(alpha=.2, fill="#FF6666")
@@ -48,7 +55,8 @@ ggplot(dat, aes(x=rating)) +
 * A curve of interest can be a regression function $r$
 * In regression, we observe pairs $(x_1,Y_1),\dots,(x_n,Y_n)$ that are related as
 $$ Y_i = r(x_i) + \epsilon_i $$
-with $E(\epsilon_i) = 0$, and the goal is to estimate the regression function $r$
+with $E(\epsilon_i) = 0$
+* The goal is to estimate the regression function $r$
 
 ## Nonlinear Regression
 
@@ -82,9 +90,9 @@ ggplot(bone, aes(x=age, y=spnbmd, color=gender, shape=gender)) +  geom_point() +
 ## The Bias–Variance Tradeoff
 
 * Let $\widehat{f_n}(x)$ be an estimate of a function $f(x)$
-* Define the *squared error* loss function as 
+* Define the **squared error** loss function as 
 $$\operatorname{Loss} = L(f(x),\widehat{f_n}(x)) = (f(x)-\widehat{f_n}(x))^2$$
-* Define average of this loss as *risk* or *Mean Squared Error* (MSE) 
+* Define average of this loss as **risk** or **Mean Squared Error** (MSE) 
 $$\operatorname{MSE} = R(f(x),\widehat{f_n}(x)) = \operatorname{E}(\operatorname{Loss})$$
 * The expectation is taken with respect to $\widehat{f_n}$ which is random
 * The MSE can be decomposed into a bias and variance term
@@ -115,8 +123,8 @@ $$R(r,\widehat{r_n}) = \sum_{i=1}^n R(r(x_i),\widehat{r_n}(x_i))$$
 * Consider the regression model
 $$Y_i = r(x_i) + \epsilon_i$$
 * Suppose we draw new observation $Y_i^* = r(x_i) + \epsilon_i^*$ for each $x_i$
-* If we predict $Y_i^*$ with $\widehat{r_n}(x_i)$ then the *squared prediction error* is 
-$$(Y_i^* - \widehat{r_n}(x_i^*))^2 = (r(x_i) + \epsilon_i^* - \widehat{r_n}(x_i))^2$$
+* If we predict $Y_i^*$ with $\widehat{r_n}(x_i)$ then the **squared prediction error** is 
+$$(Y_i^* - \widehat{r_n}(x_i))^2 = (r(x_i) + \epsilon_i^* - \widehat{r_n}(x_i))^2$$
 * Define *predictive risk* as 
 $$\operatorname{E}\left( \frac{1}{n} \sum_{i=1}^n (Y_i^* - \widehat{r_n}(x_i))^2 \right)$$
 
@@ -179,7 +187,7 @@ $$\operatorname{Bias} = \operatorname{E}(\widehat{f_n}(0)) - f(0) \approx \frac{
 
 ## The Bias–Variance Tradeoff (Example)
 
-* For the variance term, note that $\operatorname{X} = n p_h (1-p_h)$, then
+* For the variance term, note that $\operatorname{Var}(X) = n p_h (1-p_h)$, then
 $$\operatorname{Var}(\widehat{f_n}(0)) = \frac{\operatorname{Var}(X)}{n^2h^2} = \frac{p_h(1-p_h)}{nh^2}$$
 * Use $1-p_h \approx 1$ since $h$ is small
 $$\operatorname{Var}(\widehat{f_n}(0)) \approx \frac{p_h}{nh^2}$$
@@ -189,7 +197,7 @@ $$\operatorname{Var}(\widehat{f_n}(0)) \approx \frac{hf(0) + \frac{f''(0)h^3}{24
 ## The Bias–Variance Tradeoff (Example)
 
 * And combinding both terms
-$$ \operatorname{MSE} = \operatorname{Bias}^2 + \operatorname{Var}(\widehat{f_n}(0)) = \frac{(f''(0)^2h^4)}{576} + \frac{0}{nh} \equiv Ah^4 + \frac{B}{nh}$$
+$$ \operatorname{MSE} = \operatorname{Bias}^2 + \operatorname{Var}(\widehat{f_n}(0)) = \frac{(f''(0))^2h^4}{576} + \frac{f(0)}{nh} \equiv Ah^4 + \frac{B}{nh}$$
 * As we smooth more (increase $h$),  
 the bias term increases and the variance term decreases
 * As we smooth less (decrease $h$),  
@@ -202,7 +210,7 @@ the bias term decreases and the variance term increases
 * Estimation gets harder as the dimensions of the observations increases
 * **Computational:** Computational burden increases exponentially with dimension, and
 * **Statistical:** If data have dimension $d$ then we need sample size $n$ to grow exponentially with $d$
-* We will see that the MSE of any nonparametric estimator of a smooth function curve has form (for $c > 0$)
+* The MSE of any nonparametric estimator of a smooth curve has form (for $c > 0$)
 $$\operatorname{MSE} \approx \frac{c}{n^{4/(4+d)}}$$
 * If we want to have a fixed $\operatorname{MSE} = \delta$ equal to some small number $\delta$, then solving for $n$
 $$n \propto \left( \frac{c}{\delta} \right)^{d/4}$$
@@ -228,7 +236,7 @@ $$n \times \left(\frac{0.1}{1}\right)^{10} = \frac{n}{10,000,000,000}$$
 
 ## The Curse of Dimensionality (Example)
 
-```{r out.width=".8\\linewidth"}
+```{r out.width="1.0\\linewidth"}
 knitr::include_graphics("CurseDimensionality.png")
 ```
 
@@ -248,7 +256,7 @@ with $r$ being the **regression function**
 ## Linear Smoothers
 
 * All the nonparametric estimators that we will treat in this class are linear smoothers
-* An estimator $\widehat{r_n}$ is a linear smoothers if, for each $x$, there exists a vector $l(x) = (l_1(x),\dots,l_n(x))^T$ such that
+* An estimator $\widehat{r_n}$ is a linear smoother if, for each $x$, there exists a vector $l(x) = (l_1(x),\dots,l_n(x))^T$ such that
 $$\widehat{r_n}(x) = \sum_{i=1}^n l_i(x) Y_i$$
 * Define the vector of fitted values 
 $$\boldsymbol{r} = (\widehat{r_n}(x_1),\dots,\widehat{r_n}(x_n))^T$$
@@ -289,7 +297,7 @@ $$L = \frac{1}{3} \times
 * Estimator is 
 $$ \widehat{r_n}(x) = \frac{1}{n_x} \sum_{i \in B_x} Y_i$$
 * This is a special case of the kernel estimator that we will discuss next
-* In this case, $l(x) = 1/n_x$ if $|x_i - x| \le h$ and $l(x) = 0$ otherwise
+* In this case, $l_i(x) = 1/n_x$ if $|x_i - x| \le h$ and $l(x) = 0$ otherwise
 
 ## Local Averages Estimator
 
