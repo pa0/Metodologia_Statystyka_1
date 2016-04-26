@@ -14,6 +14,7 @@ output:
 knitr::opts_chunk$set(echo = FALSE)
 set.seed(1234)
 library(ggplot2)
+library(reshape2)
 library(ElemStatLearn)
 ```
 
@@ -196,6 +197,29 @@ $$\boldsymbol{a} = (X_x^T W_x X_x)^{-1} X_x^T W_x Y$$
 * This linear smoother 
 $$\boldsymbol{a} = (X_x^T W_x X_x)^{-1} X_x^T W_x Y = L Y$$
 and we can choose the bandwidth by minimizing the cross-validation
+
+## Local Polynomials
+
+```{r fig.width=10,fig.height=5}
+data(bone)
+females = bone$gender=="female"
+boneFemales = data.frame(age=bone[females,"age"],bmd=bone[females,"spnbmd"])
+
+ggplot(boneFemales, aes(x=age, y=bmd)) + 
+  geom_point() + labs(title = "Bone Mineral Density Data") + labs(x = "Age") + labs(y = "Change in BMD")
+```
+
+## Local Polynomials
+
+```{r fig.width=10,fig.height=5}
+degree0 = with(boneFemales,loess.smooth(age,bmd,degree = 0))
+degree1 = with(boneFemales,loess.smooth(age,bmd,degree = 1))
+degree2 = with(boneFemales,loess.smooth(age,bmd,degree = 2))
+df = data.frame(age=degree0$x,degree0=degree0$y,degree1=degree1$y,degree2=degree2$y)
+df = melt(df,id = "age")
+
+ggplot(data = df,aes(x=age,y=value,group=variable,colour=variable)) + geom_line(size=1)
+```
 
 ## Choosing the Smoothing Parameter
 
