@@ -134,19 +134,27 @@ Source: Wassermann (2006)
 * Let $h \to 0, nh \to \infty$ 
 * The bias-variance tradeoff for the Nadaraya–Watson kernel estimator
 $$R(\widehat{r_n},r) \approx \frac{h^4}{4} \operatorname{Bias}^2 + \frac{1}{nh} \operatorname{Variance}$$
-* Depends first and second derivatives of the density $f$
+* Depends on first and second derivatives of the density $f$
 $$\operatorname{Bias}^2 = \left( \int x^2 K(x) dx \right)^2 \int \left( r''(x) + 2r'(x)\frac{f'(x)}{f(x)} \right)^2 dx$$
 * The term $2 r'(x) \frac{f'(x)}{f(x)}$ is called **design bias**
 * It depends on the distribution of the points $x_1,\dots,x_n$
 
 ## Local Regression
 
-* The bias term has two disturbing properties: 
+* The bias term has two properties: 
       * it is large if $p'(x)$ is non-zero and 
       * it is large if $p(x)$ is small
 * The dependence of the bias on the density $p(x)$ is called design bias
 * It can also be shown that the bias is large if $x$ is close to the boundary of the support of $p$
-* These biases can be reduced by by using a refinement called local polynomial regression
+* These biases can be reduced by by using a refinement called **local polynomial regression**
+
+## Local Polynomials
+
+```{r out.width="1.0\\linewidth"}
+knitr::include_graphics("BoundaryBias.png")
+```
+
+Source: Hastie, Tibshirani, Friedman (2009)
 
 ## Local Polynomials
 
@@ -200,26 +208,12 @@ and we can choose the bandwidth by minimizing the cross-validation
 
 ## Local Polynomials
 
-```{r fig.width=10,fig.height=5}
-data(bone)
-females = bone$gender=="female"
-boneFemales = data.frame(age=bone[females,"age"],bmd=bone[females,"spnbmd"])
-
-ggplot(boneFemales, aes(x=age, y=bmd)) + 
-  geom_point() + labs(title = "Bone Mineral Density Data") + labs(x = "Age") + labs(y = "Change in BMD")
-```
-
-## Local Polynomials
-
-```{r fig.width=10,fig.height=5}
-degree0 = with(boneFemales,loess.smooth(age,bmd,degree = 0))
-degree1 = with(boneFemales,loess.smooth(age,bmd,degree = 1))
-degree2 = with(boneFemales,loess.smooth(age,bmd,degree = 2))
-df = data.frame(age=degree0$x,degree0=degree0$y,degree1=degree1$y,degree2=degree2$y)
-df = melt(df,id = "age")
-
-ggplot(data = df,aes(x=age,y=value,group=variable,colour=variable)) + geom_line(size=1)
-```
+* Comparing the bias-variance tradeoff 
+$$R(\widehat{r_n},r) \approx \frac{h^4}{4} \operatorname{Bias}^2 + \frac{1}{nh} \operatorname{Variance}$$
+* for Nadaraya–Watson kernel estimator (depends on first and second derivatives of the density $f$)
+$$\operatorname{Bias}^2 = \left( \int x^2 K(x) dx \right)^2 \int \left( r''(x) + 2r'(x)\frac{f'(x)}{f(x)} \right)^2 dx$$
+* and local linear estimator (no dependence on the density $f$)
+$$\operatorname{Bias}^2 = \left( \int x^2 K(x) dx \right)^2 \int r''(x)^2 dx$$
 
 ## Choosing the Smoothing Parameter
 
@@ -270,3 +264,4 @@ $$\widehat{r}(x_i) = (1-L_{ii})\widehat{r}_{(-i)}(x_i) + L_{ii}Y_i$$
 ## References
 
 * Wassermann (2006). All of Nonparametric Statistics
+* Hastie, Tibshirani, Friedman (2009). The Elements of Statistical Learning
