@@ -161,6 +161,10 @@ $$a = \frac{\sum_{i=1}^n w_i(x)y_i}{\sum_{i=1}^n w_i(x)}$$
 * Let $x$ be some fixed value at which we want to estimate $r(x)$
 * For values $u$ in a neighborhood of $x$, define the polynomial
 $$P_x(u;a) = a_0 + a_1(u-x) + \frac{a_2}{2!}(u-x)^2 + \cdots + \frac{a_p}{p!}(u-x)^p$$
+* We approximate the regression function $r(u)$ in a neighborhood $u$
+$$r(u) \approx P_x(u;a)$$
+* Estimate $a_0 = (a_0,\dots,a_p)^T$ by minimizing and setting to zero
+$$\sum_{i=1}^n $$
 
 ## Choosing the Smoothing Parameter
 

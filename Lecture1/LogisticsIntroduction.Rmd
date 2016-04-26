@@ -4,7 +4,7 @@ author: "Christof Seiler"
 date: "Stanford University, Spring 2016, STATS 205"
 output: 
   ioslides_presentation: 
-    incremental: yes
+    incremental: no
     smaller: yes
     transition: faster
     widescreen: yes
