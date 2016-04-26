@@ -145,11 +145,30 @@ $$\operatorname{Bias}^2 = \left( \int x^2 K(x) dx \right)^2 \int \left( r''(x) +
       * it is large if $p(x)$ is small
 * The dependence of the bias on the density $p(x)$ is called design bias
 * It can also be shown that the bias is large if $x$ is close to the boundary of the support of $p$
-* Later, we'll see that this bias can be reduced by by using a refinement called local polynomial regression
+* These biases can be reduced by by using a refinement called local polynomial regression
 
 ## Local Polynomials
 
-TODO
+* Define function $w_i(x) = K((x_i-x)/h)$ and choose $a \equiv \widehat{r}_n(x)$
+$$\sum_{i=1}^n w_i(x)(Y_i-a)^2$$
+* Take derivative with respect to $a$ and set to zero
+$$a = \frac{\sum_{i=1}^n w_i(x)y_i}{\sum_{i=1}^n w_i(x)}$$
+* Thus the kernel estimator is a locally constant estimator, obtained from locally weighted least squares
+
+## Local Polynomials
+
+* What if we local polynomial of degree $p$ instead of a local constant?
+* Let $x$ be some fixed value at which we want to estimate $r(x)$
+* For values $u$ in a neighborhood of $x$, define the polynomial
+$$P_x(u;a) = a_0 + a_1(u-x) + \frac{a_2}{2!}(u-x)^2 + \cdots + \frac{a_p}{p!}(u-x)^p$$
+
+## Choosing the Smoothing Parameter
+
+* The choice of kernel is not too important
+* Estimates obtained by using different kernels are usually numerically very similar
+* Can be confirmed by theoretical calculations showing that risk is insensitive to choice of kernel
+* Choice of bandwidth matters which controls the amount of smoothing
+* Small bandwidths give very rough estimates while larger bandwidths give smoother estimates
 
 ## Choosing the Smoothing Parameter
 
