@@ -160,11 +160,42 @@ $$a = \frac{\sum_{i=1}^n w_i(x)y_i}{\sum_{i=1}^n w_i(x)}$$
 * What if we local polynomial of degree $p$ instead of a local constant?
 * Let $x$ be some fixed value at which we want to estimate $r(x)$
 * For values $u$ in a neighborhood of $x$, define the polynomial
-$$P_x(u;a) = a_0 + a_1(u-x) + \frac{a_2}{2!}(u-x)^2 + \cdots + \frac{a_p}{p!}(u-x)^p$$
-* We approximate the regression function $r(u)$ in a neighborhood $u$
+$$P_x(u;\boldsymbol{a}) = a_0 + a_1(u-x) + \frac{a_2}{2!}(u-x)^2 + \cdots + \frac{a_p}{p!}(u-x)^p$$
+* We approximate the regression function $r(u)$ in neighborhood $u$
 $$r(u) \approx P_x(u;a)$$
-* Estimate $a_0 = (a_0,\dots,a_p)^T$ by minimizing and setting to zero
-$$\sum_{i=1}^n $$
+* Estimate $\boldsymbol{a} = (a_0,\dots,a_p)^T$ by taking the gradient with respect to $\boldsymbol{a}$ and setting to zero
+$$\sum_{i=1}^n w_i(x_i)(Y_i-P_x(x_i;\boldsymbol{a}))^2$$
+
+## Local Polynomials
+
+* First construct matrices 
+$$X_x = 
+\begin{bmatrix}
+1 & x_1 -x \\
+1 & x_2 -x \\
+\vdots & \vdots \\
+1 & x_n -x 
+\end{bmatrix},
+W_x = 
+\begin{bmatrix}
+w(x_1) & 0 & \cdots & 0 \\
+0 & w(x_1) & \cdots & 0 \\
+\vdots & \vdots & \ddots & \vdots \\
+0 & 0 & \cdots & w(x_n)
+\end{bmatrix}
+$$
+* Then rewrite in matrix form 
+$$\sum_{i=1}^n w_i(x_i)(Y_i-P_x(x_i;\boldsymbol{a}))^2 = (Y - X_x \boldsymbol{a})^TW_x(Y-X_x \boldsymbol{a})$$
+* Take the gradient with respect to $a$ and set to zero
+$$\boldsymbol{a} = (X_x^T W_x X_x)^{-1} X_x^T W_x Y$$
+
+## Local Polynomials
+
+* $p = 1$ is most popular case, this is called **local linear regression**
+* $p = 0$ gives back kernel estimator
+* This linear smoother 
+$$\boldsymbol{a} = (X_x^T W_x X_x)^{-1} X_x^T W_x Y = L Y$$
+and we can choose the bandwidth by minimizing the cross-validation
 
 ## Choosing the Smoothing Parameter
 
