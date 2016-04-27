@@ -1,0 +1,58 @@
+---
+title: "Nonlinear Regression (Part 3)"
+author: "Christof Seiler"
+date: "Stanford University, Spring 2016, STATS 205"
+output:
+  beamer_presentation:
+    incremental: no
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+set.seed(1234)
+library(ggplot2)
+library(reshape2)
+library(ElemStatLearn)
+```
+
+## Overview
+
+Last time:
+
+* Linear Smoothers
+    * Local Averages
+    * Local Regression
+    * Penalized Regression
+* Cross-Validation
+
+Today: 
+
+  * Variance Estimation
+  * Confidence Bands
+  * Smooth Bootstrap
+
+## Nonlinear Regression
+
+* We are given $n$ pairs of obserations $(x_1,Y_1),\dots,(x_n,Y_n)$
+* The **response variable** is related to the **covariate** 
+$$Y_i = r(x_i) + \epsilon_i \hspace{2cm} \operatorname{E}(\epsilon_i) = 0, i = 1,\dots,n$$
+with $r$ being the **regression function**
+* For now, assume that variance $\operatorname{Var}(\epsilon_i) = \sigma^2$ is independent of $x$
+* The covariates $x_i$ are fixed
+
+## Variance Estimation
+
+TODO: Wassermann (2006)
+
+## Confidence Bands
+
+TODO: Wassermann (2006)
+
+## Smooth Bootstrap
+
+TODO: Efron and Tibshirani (1994)
+
+## References
+
+* Wassermann (2006). All of Nonparametric Statistics
+* Efron and Tibshirani (1994). An Introduction to the Bootstrap

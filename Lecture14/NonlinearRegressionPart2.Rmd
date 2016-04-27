@@ -299,10 +299,6 @@ $$
 * After some algebra, we can see that
 $$\widehat{r}(x_i) = (1-L_{ii})\widehat{r}_{(-i)}(x_i) + L_{ii}Y_i$$
 
-## Confidence Bands
-
-TODO
-
 ## References
 
 * Wassermann (2006). All of Nonparametric Statistics
