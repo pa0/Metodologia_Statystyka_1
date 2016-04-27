@@ -42,15 +42,70 @@ with $r$ being the **regression function**
 
 ## Variance Estimation
 
-TODO: Wassermann (2006)
+* There are several variance estimators for linear smoothers
+* Let $$\widehat{r}_n(x)$$ be a linear smoother and
+* with $$\nu = \operatorname{tr}(L), \tilde{\nu} = \operatorname{tr}(L^TL) = \sum_{i=1}^n \| l(x_i)^2 \|^2$$
+* and if $r$ is sufficiently smooth 
+* then $\widehat{\sigma}^2$ is a consistent estimator (it converges in probability to the true value of the parameter)
+
+## Variance Estimation
+
+* The expected value of our estimator is
+$$\operatorname{E}(\widehat{\sigma}^2) = \frac{\operatorname{E}(Y^T\Lambda Y)}{\operatorname{tr}(\Lambda)} = \sigma^2 + \frac{ \boldsymbol{r}^T\Lambda\boldsymbol{r} }{n-2\nu+\tilde{\nu}}$$
+with $$\Lambda = (I-L)^T(I-L)$$ and $$\operatorname{E}(Y^TQY) = \operatorname{tr}(QV)+\mu^TQ\mu$$
+where $V = \operatorname{Var}(Y)$ is covariance matrix of $Y$ and $\mu = \operatorname{E}(Y)$ is the mean vector
+* Assuming that $\nu$ and $\widehat{\nu}$ do not grow too quickly, and that $r$ is smooth, the second term is small for large $n$
+* So $\operatorname{E}(\widehat{\sigma^2}) \sim \sigma^2$
+* and one can show that $\operatorname{Var}(\widehat{\sigma^2}) \to 0$
+
+## Variance Estimation
+
+* Another variance estimator 
+$$\widehat{\sigma}^2 = \frac{1}{2(n-1)} \sum_{i=1}^{n-1} (Y_{i+1}-Y_i)^2$$
+* Assuming $r$ is smooth
+$$Y_{i+1}-Y_i = [ r(x_{i+1})+\epsilon_{i+1} ] - [ r(x_{i})+\epsilon_i ] \approx \epsilon_{i+1} - \epsilon_i$$
+* Therefore 
+$$\operatorname{E}(Y_{i+1}-Y_i) \approx \operatorname{E}(\epsilon_{i+1}) + \operatorname{E}(\epsilon_{i}) = 2\sigma^2$$
 
 ## Confidence Bands
 
-TODO: Wassermann (2006)
+* Variability bands
+$$\widehat{r}_n(x) \pm 2\widehat{\sigma}(x)$$
+* There is a problem with that 
+$$\frac{\widehat{r}_n(x)-r(x)}{\widehat{\sigma}(x)} = \frac{\widehat{r}_n(x)-\bar{r}_n(x)}{\widehat{\sigma}(x)} + \frac{\bar{r}_n(x)-r(x)}{\widehat{\sigma}(x)}$$
+with $\hat{r}$ being the mean
+* First term converges to a normal
+* If we do a good job trading off bias and variance, the second term doesn't vanish with large $n$
+$$
+\frac{\bar{r}_n(x)-r(x)}{\widehat{\sigma}(x)} = \frac{\operatorname{Bias}(\widehat{r}_n(x))}{\sqrt{\operatorname{Variance}(\widehat{r}_n(x)}}
+$$
+
+## Confidence Bands
+
+* The result is that the confidence interval will not be centered around the true function $r$ due to the smoothing bias
+* Possible solutions:
+1. Accept the fact that confidence band is for $\bar{r}_n$ not $r$
+2. Estimate bias (this is difficult because it involves estimating $r''(x)$
+3. Undersmooth: less smoothing will bias results less, and asymptotically the bias will decrease faster than the variance
+* We will go with the first approach
+
+## Constructing Confidence Bands
+
+* For linear smoother $\widehat{r}_n(x)$ with 
+$$\bar{r}(x) = \operatorname{E}(\widehat{r}_n(x)) = \sum_{i=1}^n l_i(x) r(x_i)$$
+and assuming constant variance 
+$$\operatorname{Var}(\widehat{r}_n(x)) = \sigma^2\|l(x)\|^2$$
+* Consider confidence bands
+$$I(x) = (\widehat{r}_n(x) - c \widehat{\sigma}\|l(x)\|, \widehat{r}_n(x) + c \widehat{\sigma}\|l(x)\|)$$
+for some $c$ and $a \le x \le b$
+
+## Constructing Confidence Bands
+
+TODO: Wasserman, page 91 (and appendix p. 119), tube formula
 
 ## Smooth Bootstrap
 
-TODO: Efron and Tibshirani (1994)
+TODO: Efron and Tibshirani (1994), page 70
 
 ## References
 
