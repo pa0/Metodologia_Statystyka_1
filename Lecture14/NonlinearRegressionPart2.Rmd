@@ -5,9 +5,6 @@ date: "Stanford University, Spring 2016, STATS 205"
 output:
   beamer_presentation:
     incremental: no
-  ioslides_presentation:
-    incremental: no
-    widescreen: yes
 ---
 
 ```{r setup, include=FALSE}
@@ -126,6 +123,7 @@ $$
 ```{r out.width=".5\\linewidth"}
 knitr::include_graphics("Kernels.png")
 ```
+
 Source: Wassermann (2006)
 
 ## Local Regression
@@ -171,7 +169,7 @@ $$a = \frac{\sum_{i=1}^n w_i(x)y_i}{\sum_{i=1}^n w_i(x)}$$
 * For values $u$ in a neighborhood of $x$, define the polynomial
 $$P_x(u;\boldsymbol{a}) = a_0 + a_1(u-x) + \frac{a_2}{2!}(u-x)^2 + \cdots + \frac{a_p}{p!}(u-x)^p$$
 * We approximate the regression function $r(u)$ in neighborhood $u$
-$$r(u) \approx P_x(u;a)$$
+$$r(u) \approx P_x(u;\boldsymbol{a})$$
 * Estimate $\boldsymbol{a} = (a_0,\dots,a_p)^T$ by taking the gradient with respect to $\boldsymbol{a}$ and setting to zero
 $$\sum_{i=1}^n w_i(x_i)(Y_i-P_x(x_i;\boldsymbol{a}))^2$$
 
@@ -226,7 +224,34 @@ $$J(r) = \int (r''(x))^2 dx$$
 * For $\lambda = 0$ is interpolating function
 * As $\lambda \to \infty$ is least squares line
 * Between $0 < \lambda < \infty$ $\widehat{r}_n$ are splines (piecewise polynomials)
-* They form a basis for the set of cubic splines at these knots
+
+## Penalized Regression
+
+```{r out.width="1.0\\linewidth"}
+knitr::include_graphics("BSplines.png")
+```
+
+Source: Wassermann (2006)
+
+## Penalized Regression
+
+* **Theorem:** The function $\widehat{r}_n(x)$ that minimizes $M(\lambda)$ with penalty from previous slide is a natural cubic spline with knots at the data points. The estimator $\widehat{r}_n$ is called a smoothing spline.
+* This theorem doesn't give an explict form of $\widehat{r}_n$
+* However we can build an explicit basis using **B-splines**
+$$\widehat{r}_n(x) = \sum_{j=1}^N \widehat{\beta}_j B_j(x)$$
+* where $B_1,\dots,B_N$ are a basis for B-splines with $N = n + 4$
+* Thus, we only need to find the coefficients $\beta = (\beta_1,\dots,\beta_N)^T$ 
+
+## Penalized Regression
+
+* So we take the derivative and set to zero
+$$(Y-B\beta)^T(Y-B\beta) + \lambda\beta^T\Omega\beta$$
+with $B_{ij} = B_j(X_i)$ and $\Omega_{jk} = \int B_j''(x) B_k''(x)$
+* and find
+$$\widehat{\beta} = (B^TB+\lambda\Omega)^{-1}B^TY$$
+* This is another linear smoother 
+$$\widehat{r}_n(x) = B(B^TB+\lambda\Omega)^{-1}B^T = L Y$$
+with fittes values $\boldsymbol{r}$ a smooth version of original observations $Y$
 
 ## Choosing the Smoothing Parameter
 
