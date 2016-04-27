@@ -215,6 +215,19 @@ $$\operatorname{Bias}^2 = \left( \int x^2 K(x) dx \right)^2 \int \left( r''(x) +
 * and local linear estimator (no dependence on the density $f$)
 $$\operatorname{Bias}^2 = \left( \int x^2 K(x) dx \right)^2 \int r''(x)^2 dx$$
 
+## Penalized Regression
+
+* An alternative to local averaging
+* Minimize the penalized sums of squares
+$$M(\lambda) = \sum_{i=1}^n (Y_i-\widehat{r}_n(x_i))^2 + \lambda J(r)$$
+* Roughness penalty, for example
+$$J(r) = \int (r''(x))^2 dx$$
+* The parameter $\lambda$ controls the trade-off between fit
+* For $\lambda = 0$ is interpolating function
+* As $\lambda \to \infty$ is least squares line
+* Between $0 < \lambda < \infty$ $\widehat{r}_n$ are splines (piecewise polynomials)
+* They form a basis for the set of cubic splines at these knots
+
 ## Choosing the Smoothing Parameter
 
 * The choice of kernel is not too important
@@ -260,6 +273,10 @@ $$
 * This is exactly true not an approximation!
 * After some algebra, we can see that
 $$\widehat{r}(x_i) = (1-L_{ii})\widehat{r}_{(-i)}(x_i) + L_{ii}Y_i$$
+
+## Confidence Bands
+
+TODO
 
 ## References
 
