@@ -15,7 +15,7 @@ Suppose the observations $(X_1,\dots,X_K)$ are distributed in accordance with th
 $$
 \frac{\sqrt{|D|}}{(2\pi)^{K/2}} \exp \left( \sum \sum d_{ij} (x_i-\mu_i)(x_j-\mu_j) \right)
 $$
-where the matrix $D = (d_{ij})$ is positive definite; $|D|$ denotes its determinant; $E X_j = \mu_j$; $E(X_j−\mu_j)(X_j−\mu_j) = \sigma_{ij}$; and $(\sigma_{ij})= D^{−1}$. If $\sigma_{ij} = \sigma^2$ when $i = j$ and $\sigma_{ij} = \sigma_{12}$ when $i \ne j$, are the observations independent? Exchangeable?
+where the matrix $D = (d_{ij})$ is positive definite; $|D|$ denotes its determinant; $\operatorname{E}(X_j) = \mu_j$; $\operatorname{E}((X_j−\mu_j)(X_j−\mu_j)) = \sigma_{ij}$; and $(\sigma_{ij})= D^{−1}$. If $\sigma_{ij} = \sigma^2$ when $i = j$ and $\sigma_{ij} = \sigma_{12}$ when $i \ne j$, are the observations independent? Exchangeable?
 
 ## Exercise 2
 
@@ -66,22 +66,18 @@ Regression toward the mean is the phenomenon that if an observation is extreme o
 (c) Obtain an R estimate of the slope of the regression line as well as an associated confidence interval.
 (d) Do these data suggest a regression toward the mean effect?
 
-## Exercise 5
+## Exercise 6
 
-Show that the leave-one-out cross-validation formula for kernel regression. Let $$L_{ij} = \frac{K(X_i,X_j)}{\sum_{i=1}^n } K(x_i,x_k).$$ Let $r_{(-1)}(x)$ be the kernel regression estimator obtained by leaving out $(X_i,Y_i).$
+Show that the leave-one-out cross-validation $$\widehat{R}(h) = \frac{1}{n} \sum_{i=1}^n (Y_i - \widehat{r}_{(-i)}(x_i))^2 \hspace{1cm}\text{is equal to}\hspace{1cm} \widehat{R}(h) = \frac{1}{n} \sum_{i=1}^n \left( \frac{Y_i - \widehat{r}_n(x_i)}{1-L_{ii}} \right).$$ Let $L_{ij} = \frac{K(x_i,x_j)}{\sum_{k=1}^n K(x_i,x_k)}.$ Let $\widehat{r}_{(-1)}(x)$ be the kernel regression estimator obtained by leaving out $(x_i,Y_i).$
 
-(a) First, show that $(−i)(Xi)= nj=1SijZj$ with
-$$Z_j =
+(a) Show that 
+$$\widehat{r}_{(-i)}(x_i) = \sum_{j=1}^n L_{ij} Z_j \hspace{1cm}\text{with}\hspace{1cm}
+Z_j =
 \begin{cases}
 Y_j & i \ne j \\
 \widehat{r}_{(-i)}(x_i) & i = j
-\end{cases}$$
-(b) Second, show that 
-$$$\widehat{r}_n(x_i) - \widehat{r}_{(-i)} = L_{ij} (Y_i - \widehat{r}_{(-i)}(x_i))$$
-Hence,
-$$Y_i $$
-Conclude that
-$$\frac{1}{n} $$
+\end{cases}.$$
+(b) Show that $\widehat{r}_n(x_i) - \widehat{r}_{(-i)}(x) = L_{ij} (Y_i - \widehat{r}_{(-i)}(x_i))$. Hence, $Y_i - \widehat{r}_{(-i)} = \frac{Y_i - \widehat{r}_{n}(x_i)}{1-L_{ii}}.$ And finally conclude that the equality holds
 
 ## Deadline
 

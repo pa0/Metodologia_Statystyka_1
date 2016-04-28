@@ -50,13 +50,13 @@ with $r$ being the **regression function**
 
 ## Choosing the Smoothing Parameter
 
-* If the bandwidth is small, $r(x_0)$ is an average of a small number of $Y_i$ close to $x_0$
-* Its variance will be relatively large—close to that of an individual $Y_i$
-* The bias will tend to be small, because each of the $E(Y_i) = r(x_i)$ should be close to $r(x_0)$
-
+* If the bandwidth is small
+    * $\widehat{r}_n(x_0)$ is an average of a small number of $Y_i$ close to $x_0$
+    * The variance will be relatively large, close to that of an individual $Y_i$
+    * The bias will tend to be small, because each of the $\operatorname{E}(Y_i) = \widehat{r}_n(x_i)$ should be close to $\widehat{r}_n(x_0)$
 * If the bandwidth is large
-* The variance of $r(x_0)$ will be small relative to the variance of any $y_i$, because of the effects of averaging 
-* The bias will be higher, because we are now using observations $x_i$ further from $x_0$, and there is no guarantee that $r(x_i)$ will be close to $r(x_0)$
+    * The variance of $\widehat{r}_n(x_0)$ will be small relative to the variance of any $Y_i$, because of the effects of averaging 
+    * The bias will be higher, because we are now using observations $x_i$ further from $x_0$, and there is no guarantee that $\widehat{r}_n(x_i)$ will be close to $\widehat{r}_n(x_0)$
 
 ## Choosing the Smoothing Parameter
 
@@ -89,9 +89,7 @@ $$l_{j,(-i)}(x) =
 ## Choosing the Smoothing Parameter
 
 * We can compute leave-one-out cross-validation without leaving one observation out
-$$
-\widehat{R}(h) = \frac{1}{n} \sum_{i=1}^n \left( \frac{Y_i - \widehat{r_n}(x_i)}{1-L_{ii}} \right)
-$$
+$$\widehat{R}(h) = \frac{1}{n} \sum_{i=1}^n \left( \frac{Y_i - \widehat{r_n}(x_i)}{1-L_{ii}} \right)$$
 * This is exactly true not an approximation!
 * After some algebra, we can see that
 $$\widehat{r}(x_i) = (1-L_{ii})\widehat{r}_{(-i)}(x_i) + L_{ii}Y_i$$
