@@ -148,23 +148,50 @@ $$
 * For linear smoother $\widehat{r}_n(x)$ with 
 $$\bar{r}(x) = \operatorname{E}(\widehat{r}_n(x)) = \sum_{i=1}^n l_i(x) r(x_i)$$
 and assuming constant variance 
-$$\operatorname{Var}(\widehat{r}_n(x)) = \sigma^2\|l(x)\|^2$$
+$$\operatorname{Var}(\widehat{r}_n(x)) = \sigma^2\|\l(x)\|^2$$
 * Consider confidence bands
-$$I(x) = (\widehat{r}_n(x) - c \widehat{\sigma}\|l(x)\|, \widehat{r}_n(x) + c \widehat{\sigma}\|l(x)\|)$$
+$$\mathcal{I}(x) = (\widehat{r}_n(x) - c \widehat{\sigma}\|l(x)\|, \widehat{r}_n(x) + c \widehat{\sigma}\|l(x)\|)$$
 for some $c$ and $a \le x \le b$
 
 ## Constructing Confidence Bands
 
-* For now, suppose that $\sigma$ is known, then
-$$\operatorname{P}(\bar{r} \notin \text{ for some } x \in [a,b]) = \operatorname{P}\left(\underset{x \in [a,b]}{\max} \frac{|\widehat{r}(x)-\bar{r}|}{\sigma\|l(x)\|} > c \right)$$
+* For now, suppose that $\sigma$ is known, then probability of estimate not in confidence band in at least one position $x$
+$$\operatorname{P}(\bar{r}(x) \notin \mathcal{I}(x) \text{ for some } x \in [a,b]) = \operatorname{P}\left(\underset{x \in [a,b]}{\max} \frac{|\widehat{r}(x)-\bar{r}|}{\sigma\|l(x)\|} > c \right)$$
 * We are left just with the error term
 $$= \operatorname{P}\left( \underset{x \in [a,b]}{\max} \frac{|\sum_i \epsilon_i l_i(x)|}{\sigma\|l(x)\|} > c \right) = \operatorname{P}\left( \underset{x \in [a,b]}{\max} |W(x)| > c \right)$$
 * This is a Gaussian process: a random function such that the vector $(W(x_1),\dots,W(x_k))$ has a multivariate normal distribution, for any finite set of points $x_1,\dots,x_k$
-$$W(x) = \sum_{i=1}^n Z_i T_i(x), \hspace{0.3cm} Z_i = \epsilon_i \sigma \sim N(0,1), \hspace{0.3cm} T_i(x) = l_i(x) \|l(x)\|$$
+$$W(x) = \sum_{i=1}^n Z_i T_i(x), \hspace{0.3cm} Z_i = \epsilon_i/\sigma \sim N(0,1), \hspace{0.3cm} T_i(x) = l_i(x) \|l(x)\|$$
 
 ## Constructing Confidence Bands
 
-TODO: Wasserman, page 91 (and appendix p. 119), tube formula
+* We want to find $c$ for a fixed probability
+* We need to compute the distribution of the maximum of a Gaussian process
+* This is a well studied problem
+    * Hotelling wrote about in 1939 (Tubes and spheres in $n$-spaces and a class of statistical
+problems)
+    * There is a book treatment on this by Adler and Taylor (Random Fields And Geometry) connecting probablity, geometry, and topology
+    * In our neuroimaging example, we used permutation test to find maximum voxel clusters
+
+## Constructing Confidence Bands
+
+* One can show that 
+$$\operatorname{P}\left(\underset{x}{\max} \left| \sum_{i=1}^n Z_i T_i(x) \right| > c\right) \approx 2(1-\Phi(c)) + \frac{\kappa_0}{\pi} e^{-c^2/2}$$
+for large $c$, $\kappa_0 = \int_a^b \| T'(x) \|dx$, and $T'(x) = \partial T_i(x) / \partial x$
+* Think of $T(x)$ as a curve in $R^n$, and $c$ as defining a tube around it with radius $c$
+* Intuition: The task is to integrate the volume of the tube divided by total area, and integrate this along $T(x)$ with respect to Gaussian processes
+* We choose $c$ by solving for $\alpha$ (e.g. $\alpha = 0.05$)
+$$2(1 - \Phi(c)) + \frac{\kappa_0}{\pi} e^{-c^2/2} = \alpha$$
+
+## Constructing Confidence Bands
+
+* So far we assumed that $\sigma$ was known
+* If unknown, we can use an estimate $\widehat{\sigma}$
+* In this setting, one replaces the normal distribution with the $t$-distribution, however, for large $n$ remains an good approximation
+* For changing variance $\sigma(x)$ as a function of $x$, 
+$$\operatorname{Var}(\widehat{r}_n(x)) = \sum_{i=1}^n \sigma^2(x_i)l_i^2(x)$$
+* Then this confidence is used
+$$\mathcal{I}(x) = \widehat{r}_n(x) \pm c \sqrt{\sum_{i=1}^n \widehat{\sigma}^2(x_i) l_i^2(x)}$$
+with $c$ computed the same way
 
 ## Bootstrap Confidence Bands
 

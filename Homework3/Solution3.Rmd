@@ -1,0 +1,185 @@
+---
+title: "STATS 205 - HW3"
+author: "Jonathan Fisk"
+date: "April 18, 2016"
+output: html_document
+---
+
+# Exercise 1
+# this solution is recommended, credits to Jessica Lydia Moore
+
+```{r}
+# Set-Up Data
+candidate = c("Smith","Jones","Martinelli","Wagner","Others")
+votes = c(442,208,460,180,205)
+t(data.frame(candidate=candidate,votes=votes))
+
+# Get Estimated Proportions
+pm <- votes[3]/sum(votes)
+ps <- votes[1]/sum(votes)
+
+# Construct CI
+point.est <- pm - ps
+se <- sqrt((pm+ps-(pm-ps)^2)/sum(votes))
+halfinterval <- qnorm(.975)*se
+lb <- point.est - halfinterval
+ub <- point.est + halfinterval
+c(lb,ub)
+```
+
+Since 0 is in the confidence interval, there is not a statistically significant difference between the two front-runners at the 0.05 level.
+
+## Exercise 1
+
+We establish 95% confidence intervals for the top two candidates (Martinalli and Smith, respectively) by using bootstrap sampling. We then create density plots with lower and upper bounds to see how the voting distribution compares for the two candidates.
+```{r}
+candidate <- c("Smith","Jones","Martinelli","Wagner","Others") 
+votes <- c(442,208,460,180,205)
+voting.data <- data.frame(candidate=candidate,votes=votes)
+top.inds <- c(which(votes == max(votes)), which(votes == sort(votes, decreasing = TRUE)[2]))
+top.runners <- voting.data[top.inds,]
+top.runners <- cbind(top.runners, p = c(top.runners[,"votes"]/sum(votes)))
+
+votes.boot <- c(rep(1, top.runners[1,"votes"]), rep(2, top.runners[2,"votes"]), rep(3, sum(votes) - sum(top.runners[,"votes"])) )
+B <- 10000
+vote.bootstrap.sample <- function() {
+  s <- sample(votes.boot, replace = TRUE)
+  s.1 <- length(which(s == 1)) / length(s)
+  s.2 <- length(which(s == 2)) / length(s)
+  return(c(s.1, s.2))
+}
+theta.bootstrap <- replicate(B, vote.bootstrap.sample())
+
+m <- 0.05/2*B
+CI.M.lower <- sort(theta.bootstrap[1,])[m] 
+CI.M.upper <- sort(theta.bootstrap[1,])[B-m]
+CI.S.lower <- sort(theta.bootstrap[2,])[m] 
+CI.S.upper <- sort(theta.bootstrap[2,])[B-m]
+
+Martinelli <- data.frame(theta.bs = theta.bootstrap[1,], name = "Martinelli", CI.lower = CI.M.lower, CI.upper = CI.M.upper)
+Smith <- data.frame(theta.bs = theta.bootstrap[2,], name = "Smith", CI.lower = CI.S.lower, CI.upper = CI.S.upper)
+votes.bs <- rbind(Martinelli, Smith)
+
+library(ggplot2)
+ggplot(votes.bs, aes(theta.bs, fill = name)) + geom_density(alpha = 0.2) + geom_vline(xintercept = c(CI.M.lower, CI.M.upper), col = "red") + geom_vline(xintercept = c(CI.S.lower, CI.S.upper), col = "blue")
+```
+We see from the density plots and the bounds for each candidate that there is considerable overlap of the two distributions, which means that there is no significant difference between the two front runners.
+
+## Exercise 2
+
+a.
+```{r}
+n <- 500
+set.seed(0)
+x <- rpois(n, 3)
+x[x >= 8] <- 7
+hist(x, breaks = seq(-0.5,7.5,by=1))
+```
+
+b.
+```{r}
+range <- 0:7
+oc <- apply(array(range), 1, FUN = function(y) length(which(x == y)))
+p.hat <- sum(range*oc) / (n * 7)
+pmf <- dbinom(range, size = 7, prob = p.hat)
+rbind(range, round(pmf, 3))
+```
+
+c.
+```{r}
+test.result <- chisq.test(oc, p = pmf)
+pchisq(test.result$statistic, df = 6, lower.tail = FALSE)
+```
+With a p-value of 1.26e-47, we reject the null hypothesis that the sample has a binomial distribution with n=7.
+
+## Exercise 3
+```{r}
+CI.independence <- function(C, diff = FALSE, alpha = 0.05) {
+  n <- sum(C)
+  p1 <- C[1,1] / n
+  df <- (ncol(C) - 1) * (nrow(C) - 1)
+  z.alpha <- qnorm(1 - alpha/2)
+  if(diff) {
+    p2 <- C[1,2] / n
+    p12 <- p1 - p2
+    diff <- z.alpha * sqrt((p1 + p2 - (p12)^2) / n)
+    return(c(p12 - diff, p12 + diff))
+  } else {
+    diff <- z.alpha * sqrt((p1 * (1 - p1)) / n)
+    return(c(p1 - diff, p1 + diff))
+  }
+}
+
+CI.homogeneity <- function(C, diff = FALSE, alpha = 0.05) {
+  n <- sum(C)
+  n1 <- sum(C[1,])
+  p1 <- C[1,1] / n1
+  df <- (ncol(C) - 1) * (nrow(C) - 1)
+  z.alpha <- qnorm(1 - alpha/2)
+  if(diff) {
+    p2 <- C[1,2] / n1
+    p12 <- p1 - p2
+    diff <- z.alpha * sqrt(p1*(1-p1)/n1 + p2*(1-p2)/n1)
+    return(c((p12 - diff)*n1/n, (p12 + diff)*n1/n))
+  } else {
+    diff <- z.alpha * sqrt((p1 * (1 - p1)) / n1)
+    return(c((p1 - diff)*n1/n, (p1 + diff)*n1/n))
+  }
+}
+
+test.contingency <- matrix(round(runif(21, min=1, max=20)), nrow=7, ncol=3)
+```
+1.
+```{r}
+# homogeneity
+CI.homogeneity(test.contingency, diff = FALSE)
+# independence
+CI.independence(test.contingency, diff = FALSE)
+```
+We see that the test for homogeneity has a slightly more confined 95% confidence interval for p11 than the test for independence.
+
+2.
+```{r}
+# homogeneity
+CI.homogeneity(test.contingency, diff = TRUE)
+# independence
+CI.independence(test.contingency, diff = TRUE)
+```
+Again, we see that the test for homogeneity has a slightly more confined 95% confidence interval for p11-p12 than the test for independence.
+
+## Exercise 4
+```{r}
+library(languageR) 
+library(vcd)
+library(ca)
+if(!file.exists('wordcounts.RData')) {
+  data(alice, moby, oz) 
+  words <- unique(c(unique(alice), unique(moby), unique(oz)))
+  word.counts <- apply(array(words), 1, FUN = function(x) {
+    c1 <- length(which(alice == x))
+    c2 <- length(which(moby == x))
+    c3 <- length(which(oz == x))
+    return(c(c1, c2, c3))
+  })
+  save(words, file = 'words.RData')
+  save(word.counts, file = 'wordcounts.RData')
+} else {
+  load('words.RData')
+  load('wordcounts.RData')
+}
+
+c.lim <- 200
+low.ind <- unique(c(which(word.counts[1,] < c.lim), which(word.counts[2,] < c.lim), which(word.counts[3,] < c.lim)))
+wc.final <- word.counts[,-low.ind]
+words.final <- words[-low.ind]
+rownames(wc.final) <- c("alice", "moby", "oz")
+colnames(wc.final) <- words.final
+wc.final
+mosaic(wc.final, shade = TRUE, legend = TRUE)
+assoc(wc.final, shade = TRUE, legend = TRUE)
+
+fit <- ca(wc.final)
+plot(fit) # symmetric map
+plot(fit, mass = TRUE, contrib = "absolute", map = "rowgreen", arrows = c(FALSE, TRUE)) # asymmetric map
+```
+We see that the words that contribute the most to inhomogeneity between the books are: 'said', 'her', 'you', 'of', and 'in'. We see this represented in the dimensions and Pearson residuals for the rectangles corresponding with these words on the mosaic and association plots, as well as the placement of these words, especially along the x-axis (which accounts for 89.4% of the variation), on the two correspondence analysis graphs. 

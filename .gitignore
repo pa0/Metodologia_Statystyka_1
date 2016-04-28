@@ -111,8 +111,6 @@ Lecture2/BasicStatistics.pdf
 
 Lecture4/enumData.Rdata
 
-*.html
-
 Lecture5/enumData.Rdata
 
 Lecture11/ABIDE_LEGEND_V1.02.pdf
@@ -134,3 +132,9 @@ Lecture14/NonlinearRegressionPart2.pdf
 Lecture15/NonlinearRegressionPart3.pdf
 
 Lecture16/DensityEstimation.pdf
+
+Homework3/words.RData
+
+Homework3/wordcounts.RData
+
+*.html
