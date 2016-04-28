@@ -156,7 +156,13 @@ for some $c$ and $a \le x \le b$
 ## Constructing Confidence Bands
 
 * For now, suppose that $\sigma$ is known, then
-$$\operatorname{P}(\bar{r} \notin \text{ for some } x \in [a,b]) = $$
+$$\operatorname{P}(\bar{r} \notin \text{ for some } x \in [a,b]) = \operatorname{P}\left(\underset{x \in [a,b]}{\max} \frac{|\widehat{r}(x)-\bar{r}|}{\sigma\|l(x)\|} > c \right)$$
+* We are left just with the error term
+$$= \operatorname{P}\left( \underset{x \in [a,b]}{\max} \frac{|\sum_i \epsilon_i l_i(x)|}{\sigma\|l(x)\|} > c \right) = \operatorname{P}\left( \underset{x \in [a,b]}{\max} |W(x)| > c \right)$$
+* This is a Gaussian process: a random function such that the vector $(W(x_1),\dots,W(x_k))$ has a multivariate normal distribution, for any finite set of points $x_1,\dots,x_k$
+$$W(x) = \sum_{i=1}^n Z_i T_i(x), \hspace{0.3cm} Z_i = \epsilon_i \sigma \sim N(0,1), \hspace{0.3cm} T_i(x) = l_i(x) \|l(x)\|$$
+
+## Constructing Confidence Bands
 
 TODO: Wasserman, page 91 (and appendix p. 119), tube formula
 
