@@ -1,0 +1,45 @@
+---
+title: "Density Estimation"
+author: "Christof Seiler"
+date: "Stanford University, Spring 2016, STATS 205"
+output:
+  beamer_presentation:
+    incremental: no
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+set.seed(1234)
+library(ggplot2)
+library(reshape2)
+library(ElemStatLearn)
+```
+
+## Overview
+
+Last time:
+
+* Cross-Validation
+* Variance Estimation
+* Confidence Bands
+* Smooth Bootstrap
+
+Today: 
+
+* Density Estimation
+
+## Smoothed Bootstrap
+
+* Parametric bootstrap and the nonparmaetric bootstrap
+* Inermediate choice smoothing empirical cdf
+
+TODO: Efron and Tibshirani (1994), page 164-166
+
+http://statweb.stanford.edu/~susan/courses/s208/node20.html
+
+https://www.jstor.org/stable/2336686
+
+## References
+
+* Wassermann (2006). All of Nonparametric Statistics
+* Efron and Tibshirani (1994). An Introduction to the Bootstrap

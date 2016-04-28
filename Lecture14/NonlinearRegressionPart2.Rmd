@@ -20,7 +20,16 @@ library(ElemStatLearn)
 Last time:
 
 * The bias-variance tradeoff
+    * Bias: Estimator cannot explain true function
+    * Variance: Estimator changes every time we see a new sample
 * The curse of dimensionality
+
+Today:
+
+* Linear Smoothers
+    * Local Averages
+    * Local Regression
+    * Penalized Regression
 
 ## Nonlinear Regression
 
@@ -34,7 +43,7 @@ with $r$ being the **regression function**
 ## Linear Smoothers
 
 * All the nonparametric estimators that we will treat in this class are linear smoothers
-* An estimator $\widehat{r_n}$ is a linear smoother if, for each $x$, there exists a vector $l(x) = (l_1(x),\dots,l_n(x))^T$ such that
+* An estimator $\widehat{r_n}$ is a linear smoother if, for each $x$, there exists a vector $\boldsymbol{l}(x) = (l_1(x),\dots,l_n(x))^T$ such that
 $$\widehat{r_n}(x) = \sum_{i=1}^n l_i(x) Y_i$$
 * Define the vector of fitted values 
 $$\boldsymbol{r} = (\widehat{r_n}(x_1),\dots,\widehat{r_n}(x_n))^T$$
@@ -47,10 +56,11 @@ $$\boldsymbol{r} = L Y$$
 * Suppose that $a \leq x_i \leq b, i = 1,\dots,n$ 
 * Divide $(a,b)$ into $m$ equally spaced bins denoted by $B_1,B_2,\dots,B_m$
 * Define estimator as 
-$$\widehat{r_n} = \frac{1}{k_j} \sum_{i:x_i \in B_j} Y_i \hspace{0.5cm}\text{for}\hspace{0.5cm} x \in B_j$$
+$$\widehat{r_n}(x) = \frac{1}{k_j} \sum_{i:x_i \in B_j} Y_i \hspace{0.5cm}\text{for}\hspace{0.5cm} x \in B_j$$
 where $k_j$ is the number of points in $B_j$
 * In this case, 
 $$l(x)^T = \left( 0,0,\dots,\frac{1}{k_j},\dots,\frac{1}{k_j},0,\dots,0 \right)$$
+* This estimator is step function
 
 ## Regressogram Estimator
 
@@ -95,20 +105,19 @@ $$L =
 
 ## Linear Smoothers
 
-* This is a rowise weighted average with constrain $\sum_{i=1}^n l_i(x) = 1$
+* Rowise weighted average with constrain $\sum_{i=1}^n l_i(x) = 1$
 * Define the effective degrees of freedom by
 $$\nu = \operatorname{tr}(L)$$
 * The effective degrees of freedom behave very much like the number of parameters in a linear regression model
-* For example: $L_{ii} = 1$, $L_{ij} = 0$, we have $\nu = n$
-* For example: $L_{ij} = 1/n$, we have $\nu = 1$
-* For the regressogram estimator: $\nu = m$ (number of bins)
+* For regressogram example: $L_{ii} = 1$, we have $\nu = n$
+* For local averages: $L_{ii} \approx 1/\#\text{neighbors}$, we have $\nu \approx n/\#\text{neighbors}$
 
 ## Local Regression
 
 * We still use the regression model 
 $$Y_i = r(x_i) + \epsilon_i, \operatorname{E}(\epsilon_i) = 0, i = 1,\dots,n$$
 * But now, we consider weighted averages of $Y_i$'s giving higher weights to points close to $x$
-* One option is kernel regression estimator called the Nadaraya–Watson kernel estimator
+* One option is **kernel regression estimator** called the Nadaraya–Watson kernel estimator
 $$\widehat{r_n}(x) = \sum_{i=1}^n l_i(x)Y_i$$
 with kernel $K$ and weights $l_i(x)$ given by
 $$
@@ -139,10 +148,10 @@ $$\operatorname{Bias}^2 = \left( \int x^2 K(x) dx \right)^2 \int \left( r''(x) +
 
 ## Local Regression
 
-* The bias term has two properties: 
-      * it is large if $p'(x)$ is non-zero and 
-      * it is large if $p(x)$ is small
-* The dependence of the bias on the density $p(x)$ is called design bias
+* The bias term $$2 r'(x) \frac{f'(x)}{f(x)}$$ has two properties: 
+      * it is large if $f'(x)$ is non-zero and 
+      * it is large if $f(x)$ is small
+* The dependence of the bias on the density $f(x)$ is called design bias
 * It can also be shown that the bias is large if $x$ is close to the boundary of the support of $p$
 * These biases can be reduced by by using a refinement called **local polynomial regression**
 
@@ -158,7 +167,7 @@ Source: Hastie, Tibshirani, Friedman (2009)
 
 * Define function $w_i(x) = K((x_i-x)/h)$ and choose $a \equiv \widehat{r}_n(x)$
 $$\sum_{i=1}^n w_i(x)(Y_i-a)^2$$
-* Take derivative with respect to $a$ and set to zero
+* Take derivative with respect to $\boldsymbol{a}$ and set to zero
 $$a = \frac{\sum_{i=1}^n w_i(x)y_i}{\sum_{i=1}^n w_i(x)}$$
 * Thus the kernel estimator is a locally constant estimator, obtained from locally weighted least squares
 
@@ -193,7 +202,7 @@ w(x_1) & 0 & \cdots & 0 \\
 $$
 * Then rewrite in matrix form 
 $$\sum_{i=1}^n w_i(x_i)(Y_i-P_x(x_i;\boldsymbol{a}))^2 = (Y - X_x \boldsymbol{a})^TW_x(Y-X_x \boldsymbol{a})$$
-* Take the gradient with respect to $a$ and set to zero
+* Take the gradient with respect to $\boldsymbol{a}$ and set to zero
 $$\boldsymbol{a} = (X_x^T W_x X_x)^{-1} X_x^T W_x Y$$
 
 ## Local Polynomials
@@ -202,7 +211,7 @@ $$\boldsymbol{a} = (X_x^T W_x X_x)^{-1} X_x^T W_x Y$$
 * $p = 0$ gives back kernel estimator
 * This linear smoother 
 $$\boldsymbol{a} = (X_x^T W_x X_x)^{-1} X_x^T W_x Y = L Y$$
-and we can choose the bandwidth by minimizing the cross-validation
+and we can choose the bandwith with cross-validation
 
 ## Local Polynomials
 
@@ -231,7 +240,7 @@ $$J(r) = \int (r''(x))^2 dx$$
 knitr::include_graphics("BSplines.png")
 ```
 
-Source: Wassermann (2006)
+Source: Wasserman (2006)
 
 ## Penalized Regression
 
@@ -240,64 +249,18 @@ Source: Wassermann (2006)
 * However we can build an explicit basis using **B-splines**
 $$\widehat{r}_n(x) = \sum_{j=1}^N \widehat{\beta}_j B_j(x)$$
 * where $B_1,\dots,B_N$ are a basis for B-splines with $N = n + 4$
-* Thus, we only need to find the coefficients $\beta = (\beta_1,\dots,\beta_N)^T$ 
+* Thus, we only need to find the coefficients $\boldsymbol{\beta} = (\beta_1,\dots,\beta_N)^T$ 
 
 ## Penalized Regression
 
 * So we take the derivative and set to zero
-$$(Y-B\beta)^T(Y-B\beta) + \lambda\beta^T\Omega\beta$$
+$$(Y-B\boldsymbol{\beta})^T(Y-B\boldsymbol{\beta}) + \lambda\beta^T\Omega\boldsymbol{\beta}$$
 with $B_{ij} = B_j(X_i)$ and $\Omega_{jk} = \int B_j''(x) B_k''(x)$
 * and find
-$$\widehat{\beta} = (B^TB+\lambda\Omega)^{-1}B^TY$$
+$$\widehat{\boldsymbol{\beta}} = (B^TB+\lambda\Omega)^{-1}B^TY$$
 * This is another linear smoother 
-$$\widehat{r}_n(x) = B(B^TB+\lambda\Omega)^{-1}B^T = L Y$$
+$$\boldsymbol{r} = B(B^TB+\lambda\Omega)^{-1}B^T Y = L Y$$
 with fittes values $\boldsymbol{r}$ a smooth version of original observations $Y$
-
-## Choosing the Smoothing Parameter
-
-* The choice of kernel is not too important
-* Estimates obtained by using different kernels are usually numerically very similar
-* Can be confirmed by theoretical calculations showing that risk is insensitive to choice of kernel
-* Choice of bandwidth matters which controls the amount of smoothing
-* Small bandwidths give very rough estimates while larger bandwidths give smoother estimates
-
-## Choosing the Smoothing Parameter
-
-* The smoothers depend on some smoothing parameter $h$
-* We define a risk 
-$$R(h) = \operatorname{E}\left( \frac{1}{n} \sum_{i=1}^n (\widehat{r_n}(x_i) - r(x_i))^2 \right)$$
-* Ideally, we would like to choose $h$ to minimize $R(h)$ 
-* But $R(h)$ depends on unkown function $r(x)$
-* Instead we minimize an estimate $\widehat{R}(h)$
-* As first guess, we might try minimizing the **training error**
-$$\frac{1}{n} \sum_{i=1}^n (Y_i - \widehat{r_n}(x_i))^2$$
-* This is a poor estimator, because it overfits (undersmoothing)
-* We use the data twice: to estimate the function and to estimate the risk
-
-## Choosing the Smoothing Parameter
-
-* A better idea is to use leave-one-out cross-validation
-$$\operatorname{cv} = \widehat{R}(h) = \frac{1}{n} \sum_{i=1}^n (Y_i - \widehat{r}_{(-i)}(x_i))^2$$
-with $\widehat{r}_{(-i)}$ estimator obtained by omitting the ith pair $(x,Y)$
-* Define 
-$$\widehat{r}_{(-i)} = \sum_{j=1}^n Y_j l_{j,(-i)}(x)$$
-* and we set the weight on $x_i$ to $0$ and renormalize the other weights to sum to one
-$$l_{j,(-i)}(x) = 
-\begin{cases}
-0 & \text{if } j = i \\
-\frac{l_j(x)}{\sum_{k \ne i} l_k(x)} & \text{if } j \ne i
-\end{cases}$$
-* Cross-validation is approximately the predictive risk (predicting the left-one-out observation)
-
-## Choosing the Smoothing Parameter
-
-* We can compute leave-one-out cross-validation without leaving one observation out
-$$
-\widehat{R}(h) = \frac{1}{n} \sum_{i=1}^n \left( \frac{Y_i - \widehat{r_n}(x_i)}{1-L_{ii}} \right)
-$$
-* This is exactly true not an approximation!
-* After some algebra, we can see that
-$$\widehat{r}(x_i) = (1-L_{ii})\widehat{r}_{(-i)}(x_i) + L_{ii}Y_i$$
 
 ## References
 

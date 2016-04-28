@@ -23,13 +23,13 @@ Last time:
     * Local Averages
     * Local Regression
     * Penalized Regression
-* Cross-Validation
 
 Today: 
 
-  * Variance Estimation
-  * Confidence Bands
-  * Smooth Bootstrap
+* Cross-Validation
+* Variance Estimation
+* Confidence Bands
+* Smooth Bootstrap
 
 ## Nonlinear Regression
 
@@ -39,6 +39,62 @@ $$Y_i = r(x_i) + \epsilon_i \hspace{2cm} \operatorname{E}(\epsilon_i) = 0, i = 1
 with $r$ being the **regression function**
 * For now, assume that variance $\operatorname{Var}(\epsilon_i) = \sigma^2$ is independent of $x$
 * The covariates $x_i$ are fixed
+
+## Choosing the Smoothing Parameter
+
+* The choice of kernel is not too important
+* Estimates obtained by using different kernels are usually numerically very similar
+* Can be confirmed by theoretical calculations showing that risk is insensitive to choice of kernel
+* Choice of bandwidth matters which controls the amount of smoothing
+* Small bandwidths give very rough estimates while larger bandwidths give smoother estimates
+
+## Choosing the Smoothing Parameter
+
+* If the bandwidth is small, $r(x_0)$ is an average of a small number of $Y_i$ close to $x_0$
+* Its variance will be relatively large—close to that of an individual $Y_i$
+* The bias will tend to be small, because each of the $E(Y_i) = r(x_i)$ should be close to $r(x_0)$
+
+* If the bandwidth is large
+* The variance of $r(x_0)$ will be small relative to the variance of any $y_i$, because of the effects of averaging 
+* The bias will be higher, because we are now using observations $x_i$ further from $x_0$, and there is no guarantee that $r(x_i)$ will be close to $r(x_0)$
+
+## Choosing the Smoothing Parameter
+
+* The smoothers depend on some smoothing parameter $h$
+* We define a risk 
+$$R(h) = \operatorname{E}\left( \frac{1}{n} \sum_{i=1}^n (\widehat{r_n}(x_i) - r(x_i))^2 \right)$$
+* Ideally, we would like to choose $h$ to minimize $R(h)$ 
+* But $R(h)$ depends on unkown function $r(x)$
+* Instead we minimize an estimate $\widehat{R}(h)$
+* As first guess, we might try minimizing the **training error**
+$$\frac{1}{n} \sum_{i=1}^n (Y_i - \widehat{r_n}(x_i))^2$$
+* This is a poor estimator, because it overfits (undersmoothing)
+* We use the data twice: to estimate the function and to estimate the risk
+
+## Choosing the Smoothing Parameter
+
+* A better idea is to use leave-one-out cross-validation
+$$\operatorname{cv} = \widehat{R}(h) = \frac{1}{n} \sum_{i=1}^n (Y_i - \widehat{r}_{(-i)}(x_i))^2$$
+with $\widehat{r}_{(-i)}$ estimator obtained by omitting the ith pair $(x,Y)$
+* Define 
+$$\widehat{r}_{(-i)} = \sum_{j=1}^n Y_j l_{j,(-i)}(x)$$
+* and we set the weight on $x_i$ to $0$ and renormalize the other weights to sum to one
+$$l_{j,(-i)}(x) = 
+\begin{cases}
+0 & \text{if } j = i \\
+\frac{l_j(x)}{\sum_{k \ne i} l_k(x)} & \text{if } j \ne i
+\end{cases}$$
+* Cross-validation is approximately the predictive risk (predicting the left-one-out observation)
+
+## Choosing the Smoothing Parameter
+
+* We can compute leave-one-out cross-validation without leaving one observation out
+$$
+\widehat{R}(h) = \frac{1}{n} \sum_{i=1}^n \left( \frac{Y_i - \widehat{r_n}(x_i)}{1-L_{ii}} \right)
+$$
+* This is exactly true not an approximation!
+* After some algebra, we can see that
+$$\widehat{r}(x_i) = (1-L_{ii})\widehat{r}_{(-i)}(x_i) + L_{ii}Y_i$$
 
 ## Variance Estimation
 
