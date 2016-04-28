@@ -29,7 +29,7 @@ Today:
 * Cross-Validation
 * Variance Estimation
 * Confidence Bands
-* Smooth Bootstrap
+* Bootstrap Confidence Bands
 
 ## Nonlinear Regression
 
@@ -109,7 +109,7 @@ $$\operatorname{E}(\widehat{\sigma}^2) = \frac{\operatorname{E}(Y^T\Lambda Y)}{\
 with $$\Lambda = (I-L)^T(I-L)$$ and $$\operatorname{E}(Y^TQY) = \operatorname{tr}(QV)+\mu^TQ\mu$$
 where $V = \operatorname{Var}(Y)$ is covariance matrix of $Y$ and $\mu = \operatorname{E}(Y)$ is the mean vector
 * Assuming that $\nu$ and $\widehat{\nu}$ do not grow too quickly, and that $r$ is smooth, the second term is small for large $n$
-* So $\operatorname{E}(\widehat{\sigma^2}) \sim \sigma^2$
+* So $\operatorname{E}(\widehat{\sigma^2}) \approx \sigma^2$
 * and one can show that $\operatorname{Var}(\widehat{\sigma^2}) \to 0$
 
 ## Variance Estimation
@@ -155,11 +155,20 @@ for some $c$ and $a \le x \le b$
 
 ## Constructing Confidence Bands
 
+* For now, suppose that $\sigma$ is known, then
+$$\operatorname{P}(\bar{r} \notin \text{ for some } x \in [a,b]) = $$
+
 TODO: Wasserman, page 91 (and appendix p. 119), tube formula
 
-## Smooth Bootstrap
+## Bootstrap Confidence Bands
 
-TODO: Efron and Tibshirani (1994), page 70
+* Two options:
+    * Resample rows
+    * Resample residuals
+
+TODO: Efron and Tibshirani (1994), page 70, 111
+
+https://cran.r-project.org/web/packages/simpleboot/simpleboot.pdf
 
 ## References
 

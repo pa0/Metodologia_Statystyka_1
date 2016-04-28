@@ -22,7 +22,7 @@ Last time:
 * Cross-Validation
 * Variance Estimation
 * Confidence Bands
-* Smooth Bootstrap
+* Bootstrap Confidence Bands
 
 Today: 
 
