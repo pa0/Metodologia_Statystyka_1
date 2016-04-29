@@ -13,6 +13,7 @@ set.seed(1234)
 library(ggplot2)
 library(reshape2)
 library(ElemStatLearn)
+library(bootstrap)
 ```
 
 ## Overview
@@ -195,13 +196,50 @@ with $c$ computed the same way
 
 ## Bootstrap Confidence Bands
 
-* Two options:
-    * Resample rows
-    * Resample residuals
+* What about ``stat_smooth`` in package ``ggplot2``? Not sure...
+* For example, the package ``simpleboot`` uses the boostrap to compute confidence bands
+* There are two different way to implement the boostrap for regression problems
+    * Resample rows (assume both $Y$ and $X$ are random)
+    * Resample residuals (assumes that only $Y$ is random and $x$ is fixed)
 
-TODO: Efron and Tibshirani (1994), page 70, 111
+## Bootstrap Confidence Bands (Example)
 
-https://cran.r-project.org/web/packages/simpleboot/simpleboot.pdf
+* Experiment with $n = 164$ men to see if the drug cholostyramine lowered blood cholesterol levels
+* They were supposed to take six packets of cholostyramine per day, but many actually took much less
+
+```{r out.width=".8\\linewidth"}
+data(cholost)
+runExample = function(span) {
+  plot(y ~ z, data=cholost, xlab="Compliance",ylab="Improvement")
+  # bootstrap rows
+  B = 100
+  n = dim(cholost)[1]
+  boot = matrix(sample(1:n,size = B*n,replace = TRUE),nrow = B)
+  plotBootstrap = function(i) {
+    bootCholost = cholost[boot[i,],]
+    lo = loess(y ~ z,data=bootCholost,span = span)
+    j = order(bootCholost$z)
+    lines(bootCholost$z[j],lo$fitted[j],col="gray",lwd=1)
+  }
+  for(i in 1:B) { plotBootstrap(i) }
+  # plot original
+  lo = loess(y ~ z,data=cholost,span = span)
+  j = order(cholost$z)
+  lines(cholost$z[j],lo$fitted[j],col="red",lwd=3)
+}
+```
+
+## Bootstrap Confidence Bands (Example)
+
+```{r out.width="1.0\\linewidth"}
+runExample(0.3)
+```
+
+## Bootstrap Confidence Bands (Example)
+
+```{r out.width="1.0\\linewidth"}
+runExample(1.0)
+```
 
 ## References
 
