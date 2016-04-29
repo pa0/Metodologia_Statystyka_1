@@ -34,12 +34,12 @@ Today:
 
 ## Nonlinear Regression
 
-* We are given $n$ pairs of obserations $(x_1,Y_1),\dots,(x_n,Y_n)$
+* We are given $n$ pairs of observations $(x_1,Y_1),\dots,(x_n,Y_n)$
+* The covariates $x_i$ are fixed
 * The **response variable** is related to the **covariate** 
 $$Y_i = r(x_i) + \epsilon_i \hspace{2cm} \operatorname{E}(\epsilon_i) = 0, i = 1,\dots,n$$
 with $r$ being the **regression function**
 * For now, assume that variance $\operatorname{Var}(\epsilon_i) = \sigma^2$ is independent of $x$
-* The covariates $x_i$ are fixed
 
 ## Choosing the Smoothing Parameter
 
@@ -54,10 +54,10 @@ with $r$ being the **regression function**
 * If the bandwidth is small
     * $\widehat{r}_n(x_0)$ is an average of a small number of $Y_i$ close to $x_0$
     * The variance will be relatively large, close to that of an individual $Y_i$
-    * The bias will tend to be small, because each of the $\operatorname{E}(Y_i) = \widehat{r}_n(x_i)$ should be close to $\widehat{r}_n(x_0)$
+    * The bias will tend to be small, because a close $r(x_i)$ should be similar to $r(x_0)$
 * If the bandwidth is large
     * The variance of $\widehat{r}_n(x_0)$ will be small relative to the variance of any $Y_i$, because of the effects of averaging 
-    * The bias will be higher, because we are now using observations $x_i$ further from $x_0$, and there is no guarantee that $\widehat{r}_n(x_i)$ will be close to $\widehat{r}_n(x_0)$
+    * The bias will be higher, because we are now using observations $x_i$ further from $x_0$, and there is no guarantee that $r(x_i)$ will be close to $r(x_0)$
 
 ## Choosing the Smoothing Parameter
 
@@ -65,7 +65,7 @@ with $r$ being the **regression function**
 * We define a risk 
 $$R(h) = \operatorname{E}\left( \frac{1}{n} \sum_{i=1}^n (\widehat{r_n}(x_i) - r(x_i))^2 \right)$$
 * Ideally, we would like to choose $h$ to minimize $R(h)$ 
-* But $R(h)$ depends on unkown function $r(x)$
+* But $R(h)$ depends on unknown function $r(x)$
 * Instead we minimize an estimate $\widehat{R}(h)$
 * As first guess, we might try minimizing the **training error**
 $$\frac{1}{n} \sum_{i=1}^n (Y_i - \widehat{r_n}(x_i))^2$$
@@ -76,7 +76,7 @@ $$\frac{1}{n} \sum_{i=1}^n (Y_i - \widehat{r_n}(x_i))^2$$
 
 * A better idea is to use leave-one-out cross-validation
 $$\operatorname{cv} = \widehat{R}(h) = \frac{1}{n} \sum_{i=1}^n (Y_i - \widehat{r}_{(-i)}(x_i))^2$$
-with $\widehat{r}_{(-i)}$ estimator obtained by omitting the ith pair $(x,Y)$
+with $\widehat{r}_{(-i)}$ estimator obtained by omitting the $i$th pair $(x_i,Y_i)$
 * Define 
 $$\widehat{r}_{(-i)} = \sum_{j=1}^n Y_j l_{j,(-i)}(x)$$
 * and we set the weight on $x_i$ to $0$ and renormalize the other weights to sum to one
@@ -98,10 +98,11 @@ $$\widehat{r}(x_i) = (1-L_{ii})\widehat{r}_{(-i)}(x_i) + L_{ii}Y_i$$
 ## Variance Estimation
 
 * There are several variance estimators for linear smoothers
-* Let $$\widehat{r}_n(x)$$ be a linear smoother and
-* with $$\nu = \operatorname{tr}(L), \tilde{\nu} = \operatorname{tr}(L^TL) = \sum_{i=1}^n \| l(x_i)^2 \|^2$$
-* and if $r$ is sufficiently smooth 
-* then $\widehat{\sigma}^2$ is a consistent estimator (it converges in probability to the true value of the parameter)
+* Let $\widehat{r}_n(x)$ be a linear smoother
+* A consistent estimator (converges in probability to the true value of the parameter) of $\sigma^2$ is
+$$\widehat{\sigma}^2 = \frac{\sum_{i=1}^n (Y_i-\widehat{r}_n(x_i))^2}{n-2\nu+\tilde{\nu}}$$
+* with $$\nu = \operatorname{tr}(L), \tilde{\nu} = \operatorname{tr}(L^TL) = \sum_{i=1}^n \| l(x_i) \|^2$$
+* and if $r$ is sufficiently smooth
 
 ## Variance Estimation
 
@@ -110,12 +111,12 @@ $$\operatorname{E}(\widehat{\sigma}^2) = \frac{\operatorname{E}(Y^T\Lambda Y)}{\
 with $$\Lambda = (I-L)^T(I-L)$$ and $$\operatorname{E}(Y^TQY) = \operatorname{tr}(QV)+\mu^TQ\mu$$
 where $V = \operatorname{Var}(Y)$ is covariance matrix of $Y$ and $\mu = \operatorname{E}(Y)$ is the mean vector
 * Assuming that $\nu$ and $\widehat{\nu}$ do not grow too quickly, and that $r$ is smooth, the second term is small for large $n$
-* So $\operatorname{E}(\widehat{\sigma^2}) \approx \sigma^2$
+* So $\operatorname{E}(\widehat{\sigma}^2) \approx \sigma^2$
 * and one can show that $\operatorname{Var}(\widehat{\sigma^2}) \to 0$
 
 ## Variance Estimation
 
-* Another variance estimator 
+* Another variance estimator (order $x_i$'s)
 $$\widehat{\sigma}^2 = \frac{1}{2(n-1)} \sum_{i=1}^{n-1} (Y_{i+1}-Y_i)^2$$
 * Assuming $r$ is smooth
 $$Y_{i+1}-Y_i = [ r(x_{i+1})+\epsilon_{i+1} ] - [ r(x_{i})+\epsilon_i ] \approx \epsilon_{i+1} - \epsilon_i$$
@@ -124,15 +125,15 @@ $$\operatorname{E}(Y_{i+1}-Y_i) \approx \operatorname{E}(\epsilon_{i+1}) + \oper
 
 ## Confidence Bands
 
-* Variability bands
+* **Variability** bands
 $$\widehat{r}_n(x) \pm 2\widehat{\sigma}(x)$$
 * There is a problem with that 
 $$\frac{\widehat{r}_n(x)-r(x)}{\widehat{\sigma}(x)} = \frac{\widehat{r}_n(x)-\bar{r}_n(x)}{\widehat{\sigma}(x)} + \frac{\bar{r}_n(x)-r(x)}{\widehat{\sigma}(x)}$$
-with $\hat{r}$ being the mean
+with $\bar{r}_n(x)$ being the mean
 * First term converges to a normal
 * If we do a good job trading off bias and variance, the second term doesn't vanish with large $n$
 $$
-\frac{\bar{r}_n(x)-r(x)}{\widehat{\sigma}(x)} = \frac{\operatorname{Bias}(\widehat{r}_n(x))}{\sqrt{\operatorname{Variance}(\widehat{r}_n(x)}}
+\frac{\bar{r}_n(x)-r(x)}{\widehat{\sigma}(x)} = \frac{\operatorname{Bias}(\widehat{r}_n(x))}{\sqrt{\operatorname{Variance}(\widehat{r}_n(x))}}
 $$
 
 ## Confidence Bands
@@ -140,7 +141,7 @@ $$
 * The result is that the confidence interval will not be centered around the true function $r$ due to the smoothing bias
 * Possible solutions:
 1. Accept the fact that confidence band is for $\bar{r}_n$ not $r$
-2. Estimate bias (this is difficult because it involves estimating $r''(x)$
+2. Estimate bias (this is difficult because it involves estimating $r''(x)$)
 3. Undersmooth: less smoothing will bias results less, and asymptotically the bias will decrease faster than the variance
 * We will go with the first approach
 
@@ -149,7 +150,7 @@ $$
 * For linear smoother $\widehat{r}_n(x)$ with 
 $$\bar{r}(x) = \operatorname{E}(\widehat{r}_n(x)) = \sum_{i=1}^n l_i(x) r(x_i)$$
 and assuming constant variance 
-$$\operatorname{Var}(\widehat{r}_n(x)) = \sigma^2\|\l(x)\|^2$$
+$$\operatorname{Var}(\widehat{r}_n(x)) = \sigma^2\|l(x)\|^2$$
 * Consider confidence bands
 $$\mathcal{I}(x) = (\widehat{r}_n(x) - c \widehat{\sigma}\|l(x)\|, \widehat{r}_n(x) + c \widehat{\sigma}\|l(x)\|)$$
 for some $c$ and $a \le x \le b$
@@ -170,16 +171,16 @@ $$W(x) = \sum_{i=1}^n Z_i T_i(x), \hspace{0.3cm} Z_i = \epsilon_i/\sigma \sim N(
 * This is a well studied problem
     * Hotelling wrote about in 1939 (Tubes and spheres in $n$-spaces and a class of statistical
 problems)
-    * There is a book treatment on this by Adler and Taylor (Random Fields And Geometry) connecting probablity, geometry, and topology
+    * There is a book treatment on this by Adler and Taylor (Random Fields And Geometry) connecting probability, geometry, and topology
     * In our neuroimaging example, we used permutation test to find maximum voxel clusters
 
 ## Constructing Confidence Bands
 
-* One can show that 
+* One can show that (cdf of the standard normal $\Phi$)
 $$\operatorname{P}\left(\underset{x}{\max} \left| \sum_{i=1}^n Z_i T_i(x) \right| > c\right) \approx 2(1-\Phi(c)) + \frac{\kappa_0}{\pi} e^{-c^2/2}$$
 for large $c$, $\kappa_0 = \int_a^b \| T'(x) \|dx$, and $T'(x) = \partial T_i(x) / \partial x$
 * Think of $T(x)$ as a curve in $R^n$, and $c$ as defining a tube around it with radius $c$
-* Intuition: The task is to integrate the volume of the tube divided by total area, and integrate this along $T(x)$ with respect to Gaussian processes
+* Intuition: The task is to calculate the volume of this tube
 * We choose $c$ by solving for $\alpha$ (e.g. $\alpha = 0.05$)
 $$2(1 - \Phi(c)) + \frac{\kappa_0}{\pi} e^{-c^2/2} = \alpha$$
 
@@ -187,7 +188,7 @@ $$2(1 - \Phi(c)) + \frac{\kappa_0}{\pi} e^{-c^2/2} = \alpha$$
 
 * So far we assumed that $\sigma$ was known
 * If unknown, we can use an estimate $\widehat{\sigma}$
-* In this setting, one replaces the normal distribution with the $t$-distribution, however, for large $n$ remains an good approximation
+* In this setting, one replaces the normal distribution with the $t$-distribution, however, for large $n$ the previous approach remains a good approximation
 * For changing variance $\sigma(x)$ as a function of $x$, 
 $$\operatorname{Var}(\widehat{r}_n(x)) = \sum_{i=1}^n \sigma^2(x_i)l_i^2(x)$$
 * Then this confidence is used
@@ -203,7 +204,7 @@ $$C = \int_0^1 \operatorname{P}(r(x) \in [d(x),u(x)]) dx$$
 
 ## Bootstrap Confidence Bands
 
-* There are two different way to implement the boostrap for regression problems:
+* There are at least two different ways to implement the boostrap for regression problems
 * Resample rows:
     * Assume both $Y$ and $X$ are random
     * Rows need to be iid
