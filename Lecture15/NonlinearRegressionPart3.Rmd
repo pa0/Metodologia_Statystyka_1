@@ -259,5 +259,5 @@ points(y ~ z, data=cholost)
 
 ## References
 
-* Wassermann (2006). All of Nonparametric Statistics
+* Wasserman (2006). All of Nonparametric Statistics
 * Efron and Tibshirani (1994). An Introduction to the Bootstrap
