@@ -4,7 +4,7 @@ author: "Christof Seiler"
 date: "Stanford University, Spring 2016, STATS 205"
 output:
   beamer_presentation:
-    incremental: no
+    incremental: yes
 ---
 
 ```{r setup, include=FALSE}
@@ -194,51 +194,66 @@ $$\operatorname{Var}(\widehat{r}_n(x)) = \sum_{i=1}^n \sigma^2(x_i)l_i^2(x)$$
 $$\mathcal{I}(x) = \widehat{r}_n(x) \pm c \sqrt{\sum_{i=1}^n \widehat{\sigma}^2(x_i) l_i^2(x)}$$
 with $c$ computed the same way
 
+## Average Coverage
+
+* So far we required coverage bands to cover the function at all $x$
+* We can relax this requirement a bit
+* Suppose we are estimating $r(x)$ over an interval $[0,1]$, then **average coverage** is defined as
+$$C = \int_0^1 \operatorname{P}(r(x) \in [d(x),u(x)]) dx$$
+
 ## Bootstrap Confidence Bands
 
-* What about ``stat_smooth`` in package ``ggplot2``? Not sure...
-* For example, the package ``simpleboot`` uses the boostrap to compute confidence bands
-* There are two different way to implement the boostrap for regression problems
-    * Resample rows (assume both $Y$ and $X$ are random)
-    * Resample residuals (assumes that only $Y$ is random and $x$ is fixed)
+* There are two different way to implement the boostrap for regression problems:
+* Resample rows:
+    * Assume both $Y$ and $X$ are random
+    * Rows need to be iid
+* Resample residuals: 
+    * Assume that only $Y$ is random and $x$ is fixed
+    * Errors need to be iid
 
 ## Bootstrap Confidence Bands (Example)
 
 * Experiment with $n = 164$ men to see if the drug cholostyramine lowered blood cholesterol levels
 * They were supposed to take six packets of cholostyramine per day, but many actually took much less
 
-```{r out.width=".8\\linewidth"}
+## Bootstrap Confidence Bands (Example)
+
+```{r out.width="1.0\\linewidth"}
 data(cholost)
-runExample = function(span) {
-  plot(y ~ z, data=cholost, xlab="Compliance",ylab="Improvement")
-  # bootstrap rows
-  B = 100
-  n = dim(cholost)[1]
-  boot = matrix(sample(1:n,size = B*n,replace = TRUE),nrow = B)
-  plotBootstrap = function(i) {
-    bootCholost = cholost[boot[i,],]
-    lo = loess(y ~ z,data=bootCholost,span = span)
-    j = order(bootCholost$z)
-    lines(bootCholost$z[j],lo$fitted[j],col="gray",lwd=1)
-  }
-  for(i in 1:B) { plotBootstrap(i) }
-  # plot original
-  lo = loess(y ~ z,data=cholost,span = span)
-  j = order(cholost$z)
-  lines(cholost$z[j],lo$fitted[j],col="red",lwd=3)
+plot(y ~ z, data=cholost, xlab="Compliance",ylab="Improvement",main="Resample Rows Bootstrap")
+# bootstrap rows
+B = 1000
+n = dim(cholost)[1]
+span = 0.3
+boot = matrix(sample(1:n,size = B*n,replace = TRUE),nrow = B)
+plotBootstrap = function(i) {
+  bootCholost = cholost[boot[i,],]
+  lo = loess(y ~ z,data=bootCholost,span = span)
+  j = order(bootCholost$z)
+  lines(bootCholost$z[j],lo$fitted[j],col="gray",lwd=1)
 }
+for(i in 1:B) { plotBootstrap(i) }
+# plot original
+lo = loess(y ~ z,data=cholost,span = span)
+j = order(cholost$z)
+lines(cholost$z[j],lo$fitted[j],col="red",lwd=3)
+points(y ~ z, data=cholost)
 ```
 
 ## Bootstrap Confidence Bands (Example)
 
-```{r out.width="1.0\\linewidth"}
-runExample(0.3)
-```
-
-## Bootstrap Confidence Bands (Example)
-
-```{r out.width="1.0\\linewidth"}
-runExample(1.0)
+```{r}
+plot(y ~ z, data=cholost, xlab="Compliance",ylab="Improvement",main="Resample Residuals Bootstrap")
+# bootstrap residuals
+plotBootstrap = function(i) {
+  bootCholost = data.frame(z=cholost[,1],y=lo$fitted+lo$residuals[boot[i,]])
+  bootLo = loess(y ~ z,data=bootCholost,span = span)
+  j = order(bootCholost$z)
+  lines(bootCholost$z[j],bootLo$fitted[j],col="gray",lwd=1)
+}
+for(i in 1:B) { plotBootstrap(i) }
+lines(cholost$z[j],lo$fitted[j],col="red",lwd=3)
+points(y ~ z, data=cholost)
 ```
 
 ## References
