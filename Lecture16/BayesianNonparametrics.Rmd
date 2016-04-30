@@ -17,7 +17,22 @@ library(ElemStatLearn)
 
 ## Overview
 
+Last week:
+
+* Nonlinear regression frequentist style
+
+Today:
+
+* The Bayesian approach
+
+## Introduction
+
+* In parametric Bayesian inference we have a model $$M = \{f(y|\theta): \theta \in \Theta \}$$ and data $$Y_1,\dots,Y_n \sim f(y|\theta)$$
+* We put a prior distribution $\pi(\theta)$ on the parameter $\theta$ and compute the posterior distribution using Bayes' rule $$\pi(\theta|Y) = \frac{\mathcal{L}_n(\theta) \pi(\theta)}{m(Y)}$$
+* $m(y) = $
+
 ## References
 
-* Wassermann (2006). All of Nonparametric Statistics
-* Efron and Tibshirani (1994). An Introduction to the Bootstrap
+* [Wasserman Lecture Notes](http://www.stat.cmu.edu/~larry/=sml/nonparbayes.pdf)
+* [van der Vaart Lecture Notes](http://www.math.leidenuniv.nl/~avdvaart/BNP/)
+* Müller, Quintana, Jara, and Hanson (2015). Bayesian Nonparametric Data Analysis
