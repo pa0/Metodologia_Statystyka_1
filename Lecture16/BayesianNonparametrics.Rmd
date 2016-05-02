@@ -4,7 +4,7 @@ author: "Christof Seiler"
 date: "Stanford University, Spring 2016, STATS 205"
 output:
   beamer_presentation:
-    incremental: yes
+    incremental: no
 ---
 
 ```{r setup, include=FALSE}
@@ -245,7 +245,7 @@ $$
 \begin{aligned}
 F & \sim \operatorname{DP}(\alpha,F_0) \\
 \theta_1,\dots,\theta_n | F & \sim F \\
-X_i | \theta_i & \sim f(x|\theta_i), i = 1,\dots,n
+X_j | \theta_j & \sim f(x|\theta_j), \hspace{0.5cm} j = 1,\dots,n
 \end{aligned}
 $$
 * The beauty of this model is that the discreteness of $F$ automatically creates a clustering of the $\theta_j$'s
