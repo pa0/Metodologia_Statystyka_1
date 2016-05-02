@@ -4,7 +4,7 @@ author: "Christof Seiler"
 date: "Stanford University, Spring 2016, STATS 205"
 output:
   beamer_presentation:
-    incremental: no
+    incremental: yes
 ---
 
 ```{r setup, include=FALSE}
@@ -211,9 +211,9 @@ $$\pi(L_n(x) \le F(x) \le U_n(x) \text{ for all } x|X_1,\dots,X_n) = 1-\alpha$$
 
 ## Density Estimation
 
-* Let $X_1,\dots,X_n \sim F$ where $F$ has density $f$ and $Y_i \in \mathbb{R}$
+* Let $X_1,\dots,X_n \sim F$ where $F$ has density $f$ and $X_i \in \mathbb{R}$
 * Our goal is to estimate $f$
-* The Dirichlet process is not useful prior for this because it produces discrete distribuions
+* The Dirichlet process is not useful prior for this because it produces discrete distributions
 * But we can make a modification
 * The most frequentist estimator is the kernel estimator
 $$\widehat{f}(x) = \frac{1}{n} \sum_{i=1}^n \frac{1}{h} K\left(\frac{x-X_i}{h}\right)$$
@@ -228,8 +228,8 @@ $$f(x) = \sum_{j=1}^k w_j f(x;\theta_j)$$
 * In the Bayesian approach we would put a prior on $\theta_1,\dots,\theta_k$, on $w_1,\dots,w_k$, and on $k$
 * Recently, it became more popular to use an infinite mixture model
 $$f(x) = \sum_{j=1}^{\infty} w_j f(x;\theta)$$
-* As prior for the paramters we cuold take $\theta_1,\theta_2,\dots$ to be drawn from some $F_0$ and
-* We could take $w_1,w_2,\dots$ to be drawn from the stick breakig prior
+* As prior for the paramters we could take $\theta_1,\theta_2,\dots$ to be drawn from some $F_0$ and
+* We could take $w_1,w_2,\dots$ to be drawn from the stick breaking prior
 * This is known as the **Dirichlet process mixture model**
 
 ## Density Estimation
