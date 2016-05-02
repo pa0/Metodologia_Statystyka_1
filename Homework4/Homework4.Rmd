@@ -13,10 +13,11 @@ From Good 2005 (Exercise 4.8, #20, page 78, [Stanford library link](https://sear
 
 Suppose the observations $(X_1,\dots,X_K)$ are distributed in accordance with the multivariate normal probability density
 $$
-\frac{\sqrt{|D|}}{(2\pi)^{K/2}} \exp \left( \sum \sum d_{ij} (x_i-\mu_i)(x_j-\mu_j) \right)
+\frac{\sqrt{|D|}}{(2\pi)^{K/2}} \exp \left( -\frac{1}{2} \sum \sum d_{ij} (x_i-\mu_i)(x_j-\mu_j) \right)
 $$
 where the matrix $D = (d_{ij})$ is positive definite; $|D|$ denotes its determinant; $\operatorname{E}(X_j) = \mu_j$; $\operatorname{E}((X_j−\mu_j)(X_j−\mu_j)) = \sigma_{ij}$; and $(\sigma_{ij})= D^{−1}$. If $\sigma_{ij} = \sigma^2$ when $i = j$ and $\sigma_{ij} = \sigma_{12}$ when $i \ne j$, are the observations independent? Exchangeable?
 
+<!--
 ## Exercise 2
 
 From our textbook (Ex. 4.9.6) [(Stanford library link)](https://searchworks.stanford.edu/view/10718635):  
@@ -24,21 +25,25 @@ From our textbook (Ex. 4.9.6) [(Stanford library link)](https://searchworks.stan
 For the simple regression model, the estimator of slope proposed by Theil (1950) is defined as the median of the pairwise slopes:
 $$\beta^T = \operatorname{med}\{b_{ij}\}$$ 
 where $b_{ij} = (y_j − y_i)/(x_j − x_i)$ for $i<j$.
-(a) Write an R function which takes as input a vector of response variables and a vector of explanatory variables and returns the Theil estimate.
-(b) For a simple regression model where the predictor is a continuous variable, write an R function which computes the bootstrap per- centile confidence interval for the slope parameter based on Theil’s estimate.
-(c) Show that Theil’s estimate reduces to the the Hodges–Lehmann estimator for the two-sample location problem.
 
+(a) Write an R function which takes as input a vector of response variables and a vector of explanatory variables and returns the Theil estimate.
+(b) For a simple regression model where the predictor is a continuous variable, write an R function which computes the bootstrap percentile confidence interval for the slope parameter based on Theil’s estimate.
+(c) Show that Theil’s estimate reduces to the the Hodges–Lehmann estimator for the two-sample location problem.
+-->
+
+<!--
 ## Exercise 3
 
-From our textbook (Ex. 4.9.15) [(Stanford library link)](https://searchworks.stanford.edu/view/10718635):  
+From our textbook (Ex. 4.9.15) [(Stanford library link)](https://searchworks.stanford.edu/view/10718635): 
 
 Using the ``baseball`` data, obtain the scatterplot between the variables home run productions and RBIs. Then compute the Pearson’s, Spearman’s, and Kendall’s analyses for these variables. Comment on the plot and analyses.
 
 From our textbook (Ex. 4.9.16) [(Stanford library link)](https://searchworks.stanford.edu/view/10718635):  
 
 Write an R function which computes the $t$-test version of Spearman’s procedure and returns it along with the corresponding $p$-value and the estimate of $\rho_S$.
+-->
 
-## Exercise 4
+## Exercise 2
 
 From our textbook (Ex. 4.9.19) [(Stanford library link)](https://searchworks.stanford.edu/view/10718635):  
 
@@ -51,24 +56,25 @@ where $X_i$ has a standard Laplace (double exponential) distribution, $e_i$ has 
 (a) Write an R script which generates this bivariate data. The supplied R function ``rlaplace(n)`` generates $n$ iid Laplace variates. For $n = 30$, compute such a bivariate sample. Then obtain the scatterplot and the association analyses based on the Pearson's, Spearman's, and Kendall's procedures.
 (b) Next write an R script which simulates the generation of these bivariate samples and collects the three estimates of association. Run this script for 10,000 simulations and obtain the sample averages of these estimates, their corresponding standard errors, and approximate 95% confidence intervals. Comment on the results.
 
-## Exercise 5
+## Exercise 3
 
 From our textbook (Ex. 4.9.20) [(Stanford library link)](https://searchworks.stanford.edu/view/10718635):  
 
 The electronic memory game Simon was first introduced in the late 1970s. In the game there are four colored buttons which light up and produce a musical note. The device plays a sequence of light/note combinations and the goal is to play the sequence back by pressing the buttons. The game starts with one light/note and progressively adds one each time the player correctly recalls the sequence.
 
-Suppose the game were played by a set of statistics students in two classes (time slots). Each student played the game twice and recorded his or her longest sequence. The results are in the dataset ``simon``.
+Suppose the game were played by a set of statistics students in two classes (time slots). Each student played the game twice and recorded his or her longest sequence. The results are in the dataset ``simon`` in package ``npsm``.
 
 Regression toward the mean is the phenomenon that if an observation is extreme on the first trial it will be closer to the average on the second trial. In other words, students that scored higher than average on the first trial would tend to score lower on the second trial and students who scored low on the first trial would tend to score higher on the second.
 
 (a) Obtain a scatterplot of the data.
-(b) Overlay an R fit of the data. Use Wilcoxon scores. Also overlay the line $y = x$.
+(b) Overlay an R fit of the data (use package ``Rfit``). Use Wilcoxon scores. Also overlay the line $y = x$.
 (c) Obtain an R estimate of the slope of the regression line as well as an associated confidence interval.
 (d) Do these data suggest a regression toward the mean effect?
 
-## Exercise 6
+## Exercise 4
 
-Show that the leave-one-out cross-validation $$\widehat{R}(h) = \frac{1}{n} \sum_{i=1}^n (Y_i - \widehat{r}_{(-i)}(x_i))^2 \hspace{1cm}\text{is equal to}\hspace{1cm} \widehat{R}(h) = \frac{1}{n} \sum_{i=1}^n \left( \frac{Y_i - \widehat{r}_n(x_i)}{1-L_{ii}} \right).$$ Let $L_{ij} = \frac{K(x_i,x_j)}{\sum_{k=1}^n K(x_i,x_k)}.$ Let $\widehat{r}_{(-1)}(x)$ be the kernel regression estimator obtained by leaving out $(x_i,Y_i).$
+Show that the leave-one-out cross-validation $$\widehat{R}(h) = \frac{1}{n} \sum_{i=1}^n (Y_i - \widehat{r}_{(-i)}(x_i))^2 \hspace{1cm}\text{is equal to}\hspace{1cm} \widehat{R}(h) = \frac{1}{n} \sum_{i=1}^n \left( \frac{Y_i - \widehat{r}_n(x_i)}{1-L_{ii}} \right).$$ Let $L_{ij} = \frac{K(x_i,x_j)}{\sum_{k=1}^n K(x_i,x_k)}.$ Let $\widehat{r}_n(x)$ be the kernel regression estimator
+and $\widehat{r}_{(-1)}(x)$ be the kernel regression estimator obtained by leaving out $(x_i,Y_i).$
 
 (a) Show that 
 $$\widehat{r}_{(-i)}(x_i) = \sum_{j=1}^n L_{ij} Z_j \hspace{1cm}\text{with}\hspace{1cm}
@@ -77,12 +83,12 @@ Z_j =
 Y_j & i \ne j \\
 \widehat{r}_{(-i)}(x_i) & i = j
 \end{cases}.$$
-(b) Show that $\widehat{r}_n(x_i) - \widehat{r}_{(-i)}(x) = L_{ij} (Y_i - \widehat{r}_{(-i)}(x_i))$. Hence, $Y_i - \widehat{r}_{(-i)} = \frac{Y_i - \widehat{r}_{n}(x_i)}{1-L_{ii}}.$ And finally conclude that the equality holds
+(b) Show that $\widehat{r}_n(x_i) - \widehat{r}_{(-i)}(x_i) = L_{ij} (Y_i - \widehat{r}_{(-i)}(x_i))$. Hence, $Y_i - \widehat{r}_{(-i)}(x_i) = \frac{Y_i - \widehat{r}_{n}(x_i)}{1-L_{ii}}.$ And finally conclude that the equality holds.
 
 ## Deadline
 
 Please email your solutions in the form of a Rmd file to Nan Bi and Lexi Guan.
 
-This homework is due on Friday, May 6th at 1:30 pm.
+This homework is due on Monday, May 9th at 1:30 pm.
 
 You are encouraged to work through this homework with your peers. But write your own code and explain the results in your own words.

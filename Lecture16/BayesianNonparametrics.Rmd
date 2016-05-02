@@ -27,9 +27,110 @@ Today:
 
 ## Introduction
 
+* In the **Bayesian** approach, 
+    * the true parameter $\theta$ is believed to be random variable
+* In the **Frequentist** approach, 
+    * the true parameter $\theta$ is believed to be one value, 
+    * the randomness comes from sampling error
+
+## Parametric Bayesian
+
 * In parametric Bayesian inference we have a model $$M = \{f(y|\theta): \theta \in \Theta \}$$ and data $$Y_1,\dots,Y_n \sim f(y|\theta)$$
-* We put a prior distribution $\pi(\theta)$ on the parameter $\theta$ and compute the posterior distribution using Bayes' rule $$\pi(\theta|Y) = \frac{\mathcal{L}_n(\theta) \pi(\theta)}{m(Y)}$$
-* $m(y) = $
+* We put a **prior** distribution $\pi(\theta)$ on the parameter $\theta$ and compute the **posterior** distribution using Bayes' rule $$\pi(\theta|Y) = \frac{\mathcal{L}_n(\theta) \pi(\theta)}{m(Y)}$$
+* with marginal distribution $$m(y) = m(y_1,\dots,y_n) = \int f(y_1,\dots,y_n|\theta)\pi(\theta) d\theta$$
+$$= \int \prod_{i=1}^n f(y_i|\theta)\pi(\theta) d\theta$$
+
+## Parametric Bayesian
+
+* We can write a generative model as sampling parameters from the prior
+$$\theta \sim \pi$$
+* And then sampling data from the **likelihood** function 
+$$Y_1,\dots,Y_n|\theta \sim f(y|\theta)$$
+* We can use the posterior distribution to compute the posterior mean of $\theta$
+$$\bar{\theta} = \operatorname{E}(\theta|Y_1,\dots,Y_n) = \int \theta \pi(\theta|Y_1,\dots,Y_n) d\theta$$
+* Also we can summarize the posterior by drawing a large sample $\theta_1,\dots,\theta_N$ from the posterior $\pi(\theta|Y)$ and plotting the samples
+
+## Parametric Bayesian
+
+* Posterior distribution
+$$\pi(\theta|Y) = \frac{\mathcal{L}_n(\theta) \pi(\theta)}{m(Y)}$$
+* Even if we don't know $m(Y)$, we can use tools like Markov chain Monte Carlo (MCMC) to **draw samples** from the posterior and plot them
+* So even without being able to evaluate the posterior distribution, through sampling we **know** the posterior if we sample infinitly many times 
+* And approximately if we get a finite amount of samples
+
+## Nonparametric Bayesian
+
+* We replace the finite dimensional model 
+$$\{ f(y|\theta): \theta \in \Theta \}$$ 
+with an infinite dimensional model such as 
+$$\mathcal{F} = \bigg\{ f: \int (f''(y))^2 dy < \infty \bigg\}$$
+* Surprisingly, neither the prior nor the posterior have a density function
+* But the posterior is still defined
+
+## Nonparametric Bayesian
+
+Some questions:
+
+1. How do we construct a prior $\pi$ on an infinite dimensional set $\mathcal{F}$?
+2. How do we compute the posterior?
+3. How do we draw random samples from the posterior?
+
+## Distributions on Infinite Dimensional Spaces
+
+* We will need to put a prior $\pi$ on an infinite dimensional space
+* For example, suppose we observe
+$$Y_1,\dots,Y_n \sim F$$
+with unkown distribution $F$
+* We put prior $\pi$ on set of all distributions $\mathcal{F}$
+* In many cases, we cannot explicitly write down a formula for $\pi$
+* How can we describe a distribution $\pi$ in another way than writing it down?
+* If we know how to draw from $\pi$ we can get many samples and then even without knowing the formula for $\pi$ we can plot it
+
+## Distributions on Infinite Dimensional Spaces
+
+* The idea find an algorithm to sample from this model
+$$
+\begin{aligned}
+F & \sim \pi \\
+Y_1,\dots,Y_n|F & \sim F
+\end{aligned}
+$$
+* If we have such an algorithms than it is like being able to actually write down an explicit formula
+* After we observe the data $Y = (Y_1,\dots,Y_n)$, we are interested in the posterior distribution
+* The same idea here, instead of writing down a forumla we describe an algorithm to sample for the posterior distribution
+
+## Estimating a Cumulative Distribution Function
+
+* Suppose we observe $Y_1,\dots,Y_n$ from an unkown distribution $F$ ($Y_i \in \mathbb{R}$)
+* The usual frequentist estimate of $F$ is the empirical distribution function
+$$F_n(y) = \frac{1}{n} \sum_{i=1}^n I(Y_i \le y)$$
+* To estimate $F$ from a Bayesian perspective we put a prior on $\pi$ on the set of all $\mathcal{F}$
+* Compute the posterior on $\mathcal{F}$ given $Y = \{ Y_1,\dots,Y_n \}$
+* Such a prior was invented by Thomas Ferguson in 1973
+
+## Estimating a Cumulative Distribution Function
+
+* The prior has two parameter: $F_0$ and $\alpha$ denoted by $\operatorname{DP}(\alpha,F_0)$
+* $F_0$ is a distribution function and should be thought of as a prior guess of $F$
+* The number $\alpha$ controls how tightly concentrated the prior is around $F_0$
+* The model is 
+$$
+\begin{aligned}
+F & \sim \operatorname{DP}(\alpha,F_0) \\
+Y_1,\dots,Y_n|F & \sim F
+\end{aligned}
+$$
+* Ferguson proposed a way to draw samples from this model
+
+## Estimating a Cumulative Distribution Function
+
+* First to draw samples from the prior $\operatorname{DP}(\alpha,F_0)$, we follow four steps
+1. Draw $s_1,s_2,\dots$ independently from $F_0$
+2. Draw $V_1,V_2,\dots \sim \operatorname{Beta}(1,\alpha)$
+3. Let $w_1 = V_1$ and $w_j = V_j \prod_{i=1}^{j-1} (1-V_i)$ for $j = 2,3,\dots$ 
+4. Let $F$ be the discrete distribution that puts mass $w_j$ at $s_j$, that is, $F = \sum_{j=1}^{\infty} w_j \delta_{s_j}$ where $\delta_{s_j}$ is a point mass at $s_j$
+* $F$ is a discrete distribution
+* The construction of weights $w_1,w_2,\dots$ is called the stick breaking process
 
 ## References
 
