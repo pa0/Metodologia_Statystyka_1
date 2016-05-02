@@ -132,6 +132,30 @@ $$
 * $F$ is a discrete distribution
 * The construction of weights $w_1,w_2,\dots$ is called the stick breaking process
 
+## Estimating a Cumulative Distribution Function
+
+* Stick breaking process:
+* Imagine a stick of unit length
+* Then $w_1$ is obtained by breaking the stick at the random point $V_1$
+* The stick has now length $1-V_1$
+* The second weight $w_2$ is obtained by breaking a proportion $V_2$ from the remaining stick
+* The process continues and generates the whole sequence of weights $w_1,w_2,\dots$
+* The Dirichlet process is a generalization of the Dirichlet distribution
+
+## Estimating a Cumulative Distribution Function
+
+* There is an alternative method to sample from the previous model called the **Chinese Restaurant Process**
+* The algorithm is as follows:
+1. Draw $Y_1 \sim F_0$
+2. For $i = 2,\dots,n$, draw
+$$Y_i | Y_1,\dots,Y_{i-1} =
+\begin{cases}
+Y \sim F_{i-1} & \text{with probability} \frac{i-1}{i+\alpha-1}  \\
+Y \sim F_0 & \text{with probability} \frac{\alpha}{i+\alpha-1}
+\end{cases}
+$$
+where $F_{i-1}$ is the empirical distribution of $Y_1,\dots,Y_{i-1}$
+
 ## References
 
 * [Wasserman Lecture Notes](http://www.stat.cmu.edu/~larry/=sml/nonparbayes.pdf)
