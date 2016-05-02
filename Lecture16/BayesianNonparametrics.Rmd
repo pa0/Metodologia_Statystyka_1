@@ -19,7 +19,7 @@ library(ElemStatLearn)
 
 Last week:
 
-* Nonlinear regression frequentist style
+* Estimating functions frequentist style
 
 Today:
 
@@ -36,8 +36,9 @@ Today:
 ## Parametric Bayesian
 
 * In parametric Bayesian inference we have a model $$M = \{f(y|\theta): \theta \in \Theta \}$$ and data $$Y_1,\dots,Y_n \sim f(y|\theta)$$
-* We put a **prior** distribution $\pi(\theta)$ on the parameter $\theta$ and compute the **posterior** distribution using Bayes' rule $$\pi(\theta|Y) = \frac{\mathcal{L}_n(\theta) \pi(\theta)}{m(Y)}$$
-* with marginal distribution $$m(Y) = m(y_1,\dots,y_n) = \int f(y_1,\dots,y_n|\theta)\pi(\theta) d\theta$$
+* We put a **prior** distribution $\pi(\theta)$ on the parameter $\theta$ and compute the **posterior** distribution using Bayes' rule 
+$$\pi(\theta|y) = \frac{\prod_{i=1}^n f(y_i|\theta) \pi(\theta)}{m(y)}$$
+* with marginal distribution $$m(y) = m(y_1,\dots,y_n) = \int f(y_1,\dots,y_n|\theta)\pi(\theta) d\theta$$
 $$= \int \prod_{i=1}^n f(y_i|\theta)\pi(\theta) d\theta$$
 
 ## Parametric Bayesian
@@ -47,14 +48,16 @@ $$\theta \sim \pi$$
 * And then sampling data from the **likelihood** function 
 $$Y_1,\dots,Y_n|\theta \sim f(y|\theta)$$
 * We can use the posterior distribution to compute the posterior mean of $\theta$
-$$\bar{\theta} = \operatorname{E}(\theta|Y_1,\dots,Y_n) = \int \theta \pi(\theta|Y_1,\dots,Y_n) d\theta$$
-* Also we can summarize the posterior by drawing a large sample $\theta_1,\dots,\theta_N$ from the posterior $\pi(\theta|Y)$ and plotting the samples
+$$\bar{\theta} = \operatorname{E}(\theta|y) = \int \theta \pi(\theta|y) d\theta$$
+* Also we can summarize the posterior by drawing a large sample 
+$$\theta_1,\dots,\theta_N \sim \pi(\theta|y)$$ 
+and plotting the samples
 
 ## Parametric Bayesian
 
 * Posterior distribution
-$$\pi(\theta|Y) = \frac{\mathcal{L}_n(\theta) \pi(\theta)}{m(Y)}$$
-* Even if we don't know $m(Y)$, we can use tools like Markov chain Monte Carlo (MCMC) to **draw samples** from the posterior and plot them
+$$\pi(\theta|y) = \frac{\prod_{i=1}^n f(y_i|\theta) \pi(\theta)}{m(y)}$$
+* Even if we don't know $m(y)$, we can use tools like Markov chain Monte Carlo (MCMC) to **draw samples** from the posterior and plot them
 * So even without being able to evaluate the posterior distribution, through sampling we **know** the posterior if we sample infinitly many times 
 * And approximately if we get a finite amount of samples
 
@@ -64,7 +67,7 @@ $$\pi(\theta|Y) = \frac{\mathcal{L}_n(\theta) \pi(\theta)}{m(Y)}$$
 $$\{ f(y|\theta): \theta \in \Theta \}$$ 
 with an infinite dimensional model such as 
 $$\mathcal{F} = \bigg\{ f: \int (f''(y))^2 dy < \infty \bigg\}$$
-* Surprisingly, neither the prior nor the posterior have a density function
+* Surprisingly, sometimes neither the prior nor the posterior have a density function
 * But the posterior is still defined
 
 ## Nonparametric Bayesian
@@ -88,14 +91,14 @@ with unkown distribution $F$
 
 ## Distributions on Infinite Dimensional Spaces
 
-* The idea find an algorithm to sample from this model
+* The idea: find an algorithm to sample from this model
 $$
 \begin{aligned}
 F & \sim \pi \\
 X_1,\dots,X_n|F & \sim F
 \end{aligned}
 $$
-* If we have such an algorithms than it is like being able to actually write down an explicit formula
+* If we have such an algorithms then it is like being able to actually write down an explicit formula
 * After we observe the data $X = (X_1,\dots,X_n)$, we are interested in the posterior distribution
 * The same idea here, instead of writing down a forumla we describe an algorithm to sample for the posterior distribution
 
@@ -120,7 +123,7 @@ F & \sim \operatorname{DP}(\alpha,F_0) \\
 X_1,\dots,X_n|F & \sim F
 \end{aligned}
 $$
-* Ferguson proposed a way to draw samples from this model
+* But how to draw samples from this model?
 
 ## Estimating a Cumulative Distribution Function
 
@@ -195,6 +198,7 @@ $$
 ## Estimating a Cumulative Distribution Function
 
 * To sample from the posterior, we need the following theorem
+* Let $F_n$ be the empirical distribution
 * **Theorem:** Let $X_1,\dots,X_n \sim F$. Let $F$ have prior $\pi = \operatorname{DP}(\alpha,F_0)$. Then the posterior $\pi$ for $F$ given $X_1,\dots,X_n$ is $\operatorname{DP}(\alpha + n,\bar{F}_n)$  where
 $$\bar{F}_n = \frac{n}{n+\alpha} F_n + \frac{\alpha}{n+\alpha} F_0.$$
 
@@ -215,7 +219,7 @@ $$\pi(L_n(x) \le F(x) \le U_n(x) \text{ for all } x|X_1,\dots,X_n) = 1-\alpha$$
 * Our goal is to estimate $f$
 * The Dirichlet process is not useful prior for this because it produces discrete distributions
 * But we can make a modification
-* The most frequentist estimator is the kernel estimator
+* The most popular frequentist estimator is the kernel estimator
 $$\widehat{f}(x) = \frac{1}{n} \sum_{i=1}^n \frac{1}{h} K\left(\frac{x-X_i}{h}\right)$$
 with kernel $K$ and bandwith $h$
 * A related method is the mixture model
@@ -223,8 +227,8 @@ $$f(x) = \sum_{j=1}^k w_j f(x;\theta_j)$$
 
 ## Density Estimation
 
-* For example, if $f(x;\theta)$ is normal then $\theta = (\mu,\theta)$
-* The kernel estimator can be thought of as a mixture with $n$ components
+* For example, if $f(x;\theta)$ is normal then $\theta = (\mu,\sigma^2)$
+* The kernel estimator can be thought of as a mixture with $k$ components
 * In the Bayesian approach we would put a prior on $\theta_1,\dots,\theta_k$, on $w_1,\dots,w_k$, and on $k$
 * Recently, it became more popular to use an infinite mixture model
 $$f(x) = \sum_{j=1}^{\infty} w_j f(x;\theta)$$

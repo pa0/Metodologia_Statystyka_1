@@ -73,22 +73,21 @@ Regression toward the mean is the phenomenon that if an observation is extreme o
 
 ## Exercise 4
 
-Show that the leave-one-out cross-validation $$\widehat{R}(h) = \frac{1}{n} \sum_{i=1}^n (Y_i - \widehat{r}_{(-i)}(x_i))^2 \hspace{1cm}\text{is equal to}\hspace{1cm} \widehat{R}(h) = \frac{1}{n} \sum_{i=1}^n \left( \frac{Y_i - \widehat{r}_n(x_i)}{1-L_{ii}} \right).$$ Let $L_{ij} = \frac{K(x_i,x_j)}{\sum_{k=1}^n K(x_i,x_k)}.$ Let $\widehat{r}_n(x)$ be the kernel regression estimator
-and $\widehat{r}_{(-1)}(x)$ be the kernel regression estimator obtained by leaving out $(x_i,Y_i).$
+Show that the leave-one-out cross-validation $$\widehat{R}(h) = \frac{1}{n} \sum_{i=1}^n (Y_i - \widehat{r}_{(-i)}(x_i))^2 \hspace{1cm}\text{is equal to}\hspace{1cm} \widehat{R}(h) = \frac{1}{n} \sum_{i=1}^n \left( \frac{Y_i - \widehat{r}_n(x_i)}{1-L_{ii}} \right)^2.$$ Let $L_{ij} = \frac{K(x_i,x_j)}{\sum_{k=1}^n K(x_i,x_k)}.$ Let $\widehat{r}_n(x)$ be the kernel regression estimator and $\widehat{r}_{(-1)}(x)$ be the kernel regression estimator obtained by leaving out $(x_i,Y_i).$ Follow the following steps:
 
 (a) Show that 
 $$\widehat{r}_{(-i)}(x_i) = \sum_{j=1}^n L_{ij} Z_j \hspace{1cm}\text{with}\hspace{1cm}
 Z_j =
 \begin{cases}
-Y_j & i \ne j \\
-\widehat{r}_{(-i)}(x_i) & i = j
+Y_j & j \ne i \\
+\widehat{r}_{(-i)}(x_i) & j = i
 \end{cases}.$$
-(b) Show that $\widehat{r}_n(x_i) - \widehat{r}_{(-i)}(x_i) = L_{ij} (Y_i - \widehat{r}_{(-i)}(x_i))$. Hence, $Y_i - \widehat{r}_{(-i)}(x_i) = \frac{Y_i - \widehat{r}_{n}(x_i)}{1-L_{ii}}.$ And finally conclude that the equality holds.
+(b) Show that $\widehat{r}_n(x_i) - \widehat{r}_{(-i)}(x_i) = L_{ii} (Y_i - \widehat{r}_{(-i)}(x_i))$. Hence, $Y_i - \widehat{r}_{(-i)}(x_i) = \frac{Y_i - \widehat{r}_{n}(x_i)}{1-L_{ii}}.$ And finally conclude that the leave-one-out cross-validation equality holds.
 
 ## Deadline
 
 Please email your solutions in the form of a Rmd file to Nan Bi and Lexi Guan.
 
-This homework is due on Monday, May 9th at 1:30 pm.
+This homework is due on Tuesday, May 10th at 1:30 pm.
 
 You are encouraged to work through this homework with your peers. But write your own code and explain the results in your own words.
