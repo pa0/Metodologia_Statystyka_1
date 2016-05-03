@@ -231,7 +231,7 @@ $$f(x) = \sum_{j=1}^k w_j f(x;\theta_j)$$
 * The kernel estimator can be thought of as a mixture with $k$ components
 * In the Bayesian approach we would put a prior on $\theta_1,\dots,\theta_k$, on $w_1,\dots,w_k$, and on $k$
 * Recently, it became more popular to use an infinite mixture model
-$$f(x) = \sum_{j=1}^{\infty} w_j f(x;\theta)$$
+$$f(x) = \sum_{j=1}^{\infty} w_j f(x;\theta_j)$$
 * As prior for the paramters we could take $\theta_1,\theta_2,\dots$ to be drawn from some $F_0$ and
 * We could take $w_1,w_2,\dots$ to be drawn from the stick breaking prior
 * This is known as the **Dirichlet process mixture model**

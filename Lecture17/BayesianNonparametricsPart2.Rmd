@@ -4,7 +4,7 @@ author: "Christof Seiler"
 date: "Stanford University, Spring 2016, STATS 205"
 output:
   beamer_presentation:
-    incremental: no
+    incremental: yes
 ---
 
 ```{r setup, include=FALSE}
@@ -25,7 +25,7 @@ Today:
 ## Nonlinear Regression
 
 * Consider the nonparametric regression model
-$$Y_i = r(x_i) + \epsilon_i, \hspace{0.5cm} i = 1,\dots,n, \hspace{0.5cm} \operatorname{E}(\epsilon_i) = 0$$
+$$Y_i = r(x_i) + \epsilon_i, \hspace{0.5cm} i = 1,\dots,n, \hspace{0.5cm} \epsilon \sim N(0,\sigma^2)$$
 * The frequentist kernel estimator for $r$ is
 $$\widehat{r}(x) = \frac{\sum_{i=1}^n Y_i K \left(\frac{\|x - x_i\|}{h}\right)}{\sum_{i=1}^n K\left(\frac{\|x-x_i\|}{h}\right)}$$
 with kernel $K$ and bandwith $h$
@@ -35,7 +35,9 @@ with kernel $K$ and bandwith $h$
 ## Nonlinear Regression
 
 * A stochastic process $r(x)$ indexed by $x \in \mathcal{X} \subset \mathbb{R}^d$ is a Gaussian process if for each $x_1,\dots,x_n \in \mathcal{X}$ 
-$$\begin{bmatrix}
+$$
+r = 
+\begin{bmatrix}
 r(x_i) \\
 r(x_2) \\
 \vdots \\
@@ -47,24 +49,19 @@ r(x_n)
 
 * Assume that $\mu = 0$, then for $x_1,x_2,\dots,x_n$, the Gaussian process prior is 
 $$\pi(r) = (2\pi)^{-n/2} |K|^{-1/2} \exp\left( -\frac{1}{2} r^T K^{-1} r \right)$$
-* Under change of variables $r = K\alpha$, we can rewrite it as 
-$$\pi(\alpha) = (2\pi)^{-n/2} |K|^{-1/2} \exp\left( -\frac{1}{2} \alpha^T K \alpha \right)$$
-* Using the usual model 
-$$Y_i = r(x_i) + \epsilon_i \hspace{0.5cm} \epsilon \sim N(0,\sigma^2)$$
-
-## Nonlinear Regression
-
 * The log-likelihood is
-$$\log f(y|r) = -\frac{1}{2\sigma^2} \sum_{i=1}^n (y_i - r(x_i))^2 + \operatorname{constant}$$
+$$-\log f(y|r) = \frac{1}{2\sigma^2} \sum_{i=1}^n (y_i - r(x_i))^2 + \operatorname{const}$$
 * The log-posterior is
-$$\log \pi(r|y) = \log f(y|r) \pi(r) = -\frac{1}{2\sigma^2} \| y - K\alpha \|^2_2 - \frac{1}{2} \alpha^T K \alpha + \operatorname{constant}$$
+$$-\log f(y|r) - \log \pi(r) = \frac{1}{2\sigma^2} \| y - r \|^2_2 + \frac{1}{2} r^T K^{-1} r + \operatorname{const}$$
 
 ## Nonlinear Regression
 
 * What functions have high probability according to the Gaussian process prior?
-* The prior favors $\alpha^T K^{-1} \alpha$ being small
-* Suppose we consider an eigenvector $v$ of $K$ with eigenvalue $\lambda$, so that $K v = \lambda v$, then 
+* Consider the eigenvector $v$ of $K$ with eigenvalue $\lambda$
+$$K v = \lambda v$$
+* Then
 $$\frac{1}{\lambda} = v^T K^{-1} v$$
+* The prior favors $r^T K^{-1} r$ being small
 * Thus eigenfunctions with large eigenvalues are favored by the prior
 * These corresponds to smooth functions
 * The eigenfunctions that are very wiggly correspond to small eigenvalues
@@ -72,8 +69,6 @@ $$\frac{1}{\lambda} = v^T K^{-1} v$$
 ## Nonlinear Regression
 
 * The posterior mean is
-$$\operatorname{E}(\alpha|Y) = (K + \sigma^2 I)^{-1} Y$$
-and thus
 $$\widehat{r} = \operatorname{E}(r|Y) = K(K+\sigma^2 I)^{-1} Y$$
 * We see that this is a linear smoother
 
@@ -83,11 +78,25 @@ $$\widehat{r} = \operatorname{E}(r|Y) = K(K+\sigma^2 I)^{-1} Y$$
 knitr::include_graphics("GaussianProcessPrior.png")
 ```
 
-Source: Wasserman
+Source: Rasmussen and Williams (2006)
 
 ## Nonlinear Regression
 
-* Predictive distribution: TODO
+* To compute predictive distribution for a new point $Y_{n+1} = r(x_{n+1}) + \epsilon_{n+1}$
+* The marginal distribution is $(Y_1,\dots,Y_n)^T \sim N(0,(K+\sigma^2 I))$
+* Let $\boldsymbol{k}$ be the vector $(K(x_1,x_{n+1}),\dots,K(x_n,x_{n+1}))^T$
+* Then $(Y_1,\dots,Y_{n+1})^T$ is jointly Gaussian with covariance 
+$$
+\begin{bmatrix}
+K+\sigma^2 I & \boldsymbol{k} \\
+\boldsymbol{k}^T & K(x_{n+1},x_{n+1}) + \sigma^2
+\end{bmatrix}
+$$
+* The conditional distribution of $Y_{n+1}$ is
+$$Y_{n+1}|Y_{1:n},x_{1:n} \sim N(\mu_{n+1},\sigma^2_{n+1})$$
+with
+$$\mu_{n+1} = \boldsymbol{k}^T(K+\sigma^2I)^{-1} y$$
+$$\sigma^2_{n+1} = K(x_{n+1},x_{n+1})+\sigma^2-\boldsymbol{k}^T(K+\sigma^2I)^{-1}\boldsymbol{k})$$
 
 ## References
 
