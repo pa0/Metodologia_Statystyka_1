@@ -20,6 +20,7 @@ Last time:
 
 Today:
 
+* Example of Bayesian nonparametrics in practice
 * Bayesian nonlinear regression
 
 ## Nonlinear Regression
