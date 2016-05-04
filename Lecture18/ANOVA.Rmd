@@ -1,0 +1,24 @@
+---
+title: "ANOVA"
+author: "Christof Seiler"
+date: "Stanford University, Spring 2016, STATS 205"
+output:
+  beamer_presentation:
+    incremental: no
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+set.seed(1234)
+```
+
+## Overview
+
+Before:
+
+* One-Sample, Two-Sample Problems (one or two populations)
+
+Today:
+
+* ANOVA (three or more populations)
+
