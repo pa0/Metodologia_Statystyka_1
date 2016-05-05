@@ -8,8 +8,8 @@
 4. Ranked Set Sampling (1 lecture)
 5. Nonparametric Networks: Graph Limits (Graphons) (1 lecture)
 6. Wavelets (2 lecture)
-7. Advanced Topic (NIPS Paper?) (1 lecture)
-8. Wrap-up (give overview of all topics that we covered) (1 lecture)
+7. Tukey Depth (1 lecture)
+8. Wrap-Up (give overview of all topics that we covered) (1 lecture)
 
 ### Final Project Contents
 
