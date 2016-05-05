@@ -48,7 +48,7 @@ $$Y_{ij} = \mu_i + e_{ij}, \hspace{0.5cm} j=1,\dots,n, \hspace{0.5cm} i = 1,\dot
 with 
     * iid random errors $e_{ij}$ with density $f(x)$ and distribution $F(x)$
     * $\mu_i$ location parameter of $i$th level (for us this will be the median)
-* The **data:**
+* **Data**:
 $$
 \begin{tabular}{cccc}
 \hline
@@ -80,6 +80,11 @@ $$H = \frac{12}{n(n+1)} \sum_{i=1}^n n_i \left( \overline{R}_i - \frac{n+1}{2}\r
 * Standardized weighted average of the squared deviations of the $R_i$ from the average of all ranks $(n + 1)/2$
 * Asymptotically $\chi^2$ distributed with $k-1$ degrees of freedom
 
+## Kruskal-Wallis Test
+
+* Motivation for the test
+TODO
+
 ## Kruskal-Wallis Test (Example)
 
 * Mucociliary efficiency from the rate of dust in the three groups: 
@@ -101,3 +106,46 @@ test = kruskal.test(x,g)
 test$statistic
 test$p.value
 ```
+
+## Two-Way ANOVA
+
+* Suppose we have $n$ treatments and $m$ clusters each of size $n$
+
+## Two-Way ANOVA
+
+* The full **model** is
+$$Y_{kj} = \alpha + \beta_j + b_k + e_{kj}, \hspace{0.5cm} k=1,\dots,n, \hspace{0.5cm} j = 1,\dots,k$$
+with 
+    * $\alpha$ is an intercept parameter
+    * $\beta_j$ is the $j$th treatment effect
+    * $b_k$ is the random effect due to cluster $k$, and
+    * $\epsilon_{kj}$ is the $jk$th random error
+    * assume that the random errors are iid and are independent of the random effects
+
+## Two-Way ANOVA
+
+* **Data**:
+$$
+\begin{tabular}{l|cccc}
+\hline
+& \multicolumn{4}{c}{Treatment} \\
+Blocks & 1 & 2 & \dots & n \\
+\hline
+1 & $Y_{11}$ & $Y_{12}$ & $\dots$ & $Y_{1k}$ \\
+& \vdots & \vdots &       & \vdots \\
+& $Y_{j1}$ & $Y_{j2}$ & \dots & $Y_{jk}$ \\
+2 & $Y_{11}$ & $Y_{12}$ & $\dots$ & $Y_{1k}$ \\
+& \vdots & \vdots &       & \vdots \\
+& $Y_{j1}$ & $Y_{j2}$ & \dots & $Y_{jk}$ \\
+& \vdots & \vdots &       & \vdots \\
+m & $Y_{11}$ & $Y_{12}$ & $\dots$ & $Y_{1k}$ \\
+& \vdots & \vdots &       & \vdots \\
+& $Y_{j1}$ & $Y_{j2}$ & \dots & $Y_{jk}$ \\
+\end{tabular}
+$$
+
+## Friedman's Test
+
+* The **Friedman test statistics**:
+$$\overline{R}_{.j} = \frac{\sum_{k=1}^m R_{kj}}{m}$$
+$$H = \frac{12m}{n(n+1)} \sum_{j=1}^n n_i \left( \overline{R}_{.j} - \frac{n+1}{2}\right)^2$$
