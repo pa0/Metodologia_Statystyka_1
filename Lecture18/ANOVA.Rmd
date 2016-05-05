@@ -20,8 +20,9 @@ Before:
 
 Today:
 
-* ANOVA (three or more populations)
+* ANOVA (two or more populations)
 
+<!--
 ## What is ANOVA?
 
 * Classical ANOVA for balanced data does three things at once:
@@ -29,25 +30,21 @@ Today:
 1. Additive data decomposition of the variance of each component
 2. Comparisons of mean squares
 3. Linear model fit
+-->
 
 ## One-Way ANOVA
 
 * Determine the effect of a single factor $A$ on a response over a specific population
 * Assume $A$ consists of $k$ levels or treatmens
 * In a completely randomize design, $n$ subjects are randomly selected from the reference population
-* $n_j$ randomly assigned to level $i = 1,\dots,k$
-* Let $j$th be the response in the $i$th level denoted by $Y_{ij}$, $j = 1,\dots,n$
-* The **assumptions:**
+* $n_j$ randomly assigned to treatment $j = 1,\dots,k$
+* Let $i$th be the response in the $j$th treatment denoted by $Y_{ij}$, $i = 1,\dots,n_j$
+* **Assumptions:**
     * Responses are independent of another
     * Distribution among levels differ by at most shifts in location
 
 ## One-Way ANOVA
 
-* The full **model** is
-$$Y_{ij} = \mu_i + e_{ij}, \hspace{0.5cm} j=1,\dots,n, \hspace{0.5cm} i = 1,\dots,k$$
-with 
-    * iid random errors $e_{ij}$ with density $f(x)$ and distribution $F(x)$
-    * $\mu_i$ location parameter of $i$th level (for us this will be the median)
 * **Data**:
 $$
 \begin{tabular}{cccc}
@@ -58,32 +55,41 @@ $$
 $Y_{11}$ & $Y_{12}$ & $\dots$ & $Y_{1k}$ \\
 $Y_{21}$ & $Y_{22}$ & \dots & $Y_{2k}$ \\
 \vdots & \vdots &       & \vdots \\
-$Y_{j1}$ & $Y_{j2}$ & \dots & $Y_{jk}$ 
+$Y_{n_j1}$ & $Y_{n_j2}$ & \dots & $Y_{n_jk}$ 
 \end{tabular}
 $$
+* **Model**
+$$Y_{ij} = \theta + \mu_i + e_{ij}, \hspace{0.5cm} i=1,\dots,n_j, \hspace{0.5cm} j = 1,\dots,k$$
+with 
+    * overall median $\theta$
+    * $\mu_i$ is the treatment effect
+    * $e_{ij}$ samples from continuous distribution with median $0$
 
 ## One-Way ANOVA
 
-* The parameters of interest are 
-$$\delta_{ii'} = \mu_{i'} - \mu_i, \hspace{0.5cm} i \ne i', \hspace{0.5cm} i = 1,\dots,k$$
-* The usual statistical analysis is the hypothesis test
-$$H_0: \mu_1 = \cdots = \mu_k \hspace{0.5cm} \text{versus} \hspace{0.5cm} H_A: \mu_i \ne \mu_{i'}$$
-* Followed by pairwise confidence intervals $\delta_{ii'}$
+* The null hypothesis
+$$H_0: \mu_1 = \dots = \mu_k $$
+underlying distributions $F_1,\dots,F_k$ are connected through the relationship
+$$F_j(t) = F(t-\mu_j), -\infty < t < \infty$$
+* The alternative is that at least two of the treatment are not equal 
+$$H_A: \mu_1,\dots,\mu_k \text{ not all equal}$$
 
 ## Kruskal-Wallis Test
 
-* Total sample size $n = \sum_{i=1}^n n_i$
+* Total sample size $n = \sum_{j=1}^k n_j$
 * Rank $R_{ij}$ of response $Y_{ij}$ among all $n$ observations; ranking done without knowledge of treatment
-* Let $\overline{R_i}$ denote the average of the ranks for sample $i$
+* Let $R_{.j}$ denotes the average of the ranks for sample $j$
 * The **Kruskal-Wallis test statistic**
-$$H = \frac{12}{n(n+1)} \sum_{i=1}^n n_i \left( \overline{R}_i - \frac{n+1}{2}\right)^2$$
-* Standardized weighted average of the squared deviations of the $R_i$ from the average of all ranks $(n + 1)/2$
+$$H = \frac{12}{n(n+1)} \sum_{j=1}^k n_j \left( R_{.j} - \frac{n+1}{2}\right)^2$$
 * Asymptotically $\chi^2$ distributed with $k-1$ degrees of freedom
 
 ## Kruskal-Wallis Test
 
 * Motivation for the test
-TODO
+* The **Kruskal-Wallis test statistic**
+$$H = \frac{12}{n(n+1)} \sum_{j=1}^k n_j \left( R_{.j} - \frac{n+1}{2}\right)^2$$
+* The average rank sample $j = 1,\dots,k$ is 
+$$\operatorname{E_{H_0}}(R_{.j}) = \operatorname{E_{H_0}} \left( \frac{1}{n_j} \sum_{i=1}^{n_j} R_{ij} \right) = \frac{1}{n_j} \sum_{i=1}^{n_j} \operatorname{E_{H_0}}(R_{ij}) = \frac{n + 1}{2}$$
 
 ## Kruskal-Wallis Test (Example)
 
@@ -109,8 +115,25 @@ test$p.value
 
 ## Two-Way ANOVA
 
-* Suppose we have $n$ treatments and $m$ clusters each of size $n$
+* Same as before but now we have blocks:
+$$
+\begin{tabular}{l|cccc}
+\hline
+& \multicolumn{4}{c}{Treatment} \\
+Blocks & 1 & 2 & \dots & n \\
+\hline
+1 & $Y_{111}$ & $Y_{121}$ & $\dots$ & $Y_{1k1}$ \\
+& \vdots & \vdots &       & \vdots \\
+& $Y_{11c_{11}}$ & $Y_{12c_{12}}$ & \dots & $Y_{1kc_{1k}}$ \\
+2 & $Y_{211}$ & $Y_{221}$ & $\dots$ & $Y_{2k1}$ \\
+& \vdots & \vdots &       & \vdots \\
+& $Y_{21c_{21}}$ & $Y_{22_{c_{22}}}$ & \dots & $Y_{2kc_{2k}}$ \\
+& \vdots & \vdots &       & \vdots \\
+\end{tabular}
+$$
+* The **Friedman test** is analog to the Kruskal-Wallis test
 
+<!--
 ## Two-Way ANOVA
 
 * The full **model** is
@@ -122,30 +145,19 @@ with
     * $\epsilon_{kj}$ is the $jk$th random error
     * assume that the random errors are iid and are independent of the random effects
 
-## Two-Way ANOVA
-
-* **Data**:
-$$
-\begin{tabular}{l|cccc}
-\hline
-& \multicolumn{4}{c}{Treatment} \\
-Blocks & 1 & 2 & \dots & n \\
-\hline
-1 & $Y_{11}$ & $Y_{12}$ & $\dots$ & $Y_{1k}$ \\
-& \vdots & \vdots &       & \vdots \\
-& $Y_{j1}$ & $Y_{j2}$ & \dots & $Y_{jk}$ \\
-2 & $Y_{11}$ & $Y_{12}$ & $\dots$ & $Y_{1k}$ \\
-& \vdots & \vdots &       & \vdots \\
-& $Y_{j1}$ & $Y_{j2}$ & \dots & $Y_{jk}$ \\
-& \vdots & \vdots &       & \vdots \\
-m & $Y_{11}$ & $Y_{12}$ & $\dots$ & $Y_{1k}$ \\
-& \vdots & \vdots &       & \vdots \\
-& $Y_{j1}$ & $Y_{j2}$ & \dots & $Y_{jk}$ \\
-\end{tabular}
-$$
-
 ## Friedman's Test
 
 * The **Friedman test statistics**:
 $$\overline{R}_{.j} = \frac{\sum_{k=1}^m R_{kj}}{m}$$
 $$H = \frac{12m}{n(n+1)} \sum_{j=1}^n n_i \left( \overline{R}_{.j} - \frac{n+1}{2}\right)^2$$
+-->
+
+## Median Polish
+
+* For special case of no repetiations (one observation per block/treatment cell)
+
+TODO
+
+## Tukey Additivity Plot
+
+TODO
