@@ -18,11 +18,11 @@ library(dplyr)
 
 Before:
 
-* One-Sample, Two-Sample Problems (one or two populations)
+* One-Sample, Two-Sample Problems
 
 Today:
 
-* ANOVA (two or more populations)
+* ANOVA (two or more samples)
 
 <!--
 ## What is ANOVA?
@@ -95,11 +95,11 @@ $$\operatorname{E_{H_0}}(R_{.j}) = \operatorname{E_{H_0}} \left( \frac{1}{n_j} \
 
 ## Kruskal-Wallis Test (Example)
 
-* Mucociliary efficiency from the rate of dust in the three groups: 
+* Efficiency self-clearing mechanism of respiratory tract that conducts air into the lungs from the rate of dust in the three groups: 
     * normal subjects, 
     * subjects with obstructive airway disease, and 
     * subjects with asbestosis
-* Responses are the mucociliary clearance half-times of the subjects
+* Responses are the clearance half-times of the subjects
 * Sample sizes: $n_1 = n_3 = 5$ and $n_2 = 4$
 
 ## Kruskal-Wallis Test (Example)
@@ -122,7 +122,7 @@ $$
 \begin{tabular}{l|cccc}
 \hline
 & \multicolumn{4}{c}{Treatment} \\
-Blocks & 1 & 2 & \dots & n \\
+Blocks & 1 & 2 & \dots & k \\
 \hline
 1 & $Y_{111}$ & $Y_{121}$ & $\dots$ & $Y_{1k1}$ \\
 & \vdots & \vdots &       & \vdots \\
@@ -174,7 +174,7 @@ $$
 ## Median Polish
 
 * Infant mortality rates in the United States 1964-1966 by region and father's eduction
-* Cell entires are number of deaths per 1000 live births
+* Cell entires are number of deaths (under one year old) per 1000 live births
 ```{r}
 df = data.frame(row.names = c("NE","NC","S","W"),
                  ed8       = c(25.3,32.1,38.8,25.4), 
@@ -268,7 +268,7 @@ df[2:5,] = sweep(df[2:5,],2,colMedian); df
 
 ## Median Polish
 
-* Second iteration: Add row effects to top margin and subtract from residuals
+* Second iteration: Add row effects to left margin and subtract from residuals
 ```{r echo=TRUE}
 rowMedian = apply(df[,2:6],1,median); rowMedian
 df[,1] = df[,1]+rowMedian
@@ -277,7 +277,7 @@ df[,2:6] = sweep(df[,2:6],1,rowMedian); df
 
 ## Median Polish
 
-* Second iteratino: Add column effects to left margin and subtract from residuals
+* Second iteration: Add column effects to top margin and subtract from residuals
 ```{r echo=TRUE}
 colMedian = apply(df[2:5,],2,median); colMedian
 df[1,] = df[1,]+colMedian
@@ -292,7 +292,9 @@ df
 
 * Infant mortality rates are highest in North Central region and lowest in Northeast
 * The education of the father is a stronger factor in distinguishing among these rates than geography
+<!--
 * With a single exception: the high school graduates and the college dropouts, where the mortality rates increase as the father's eduction increases
+-->
 * In particular, completion of high school appears to exert the greatest single influence in reducing the mortality rates among infant offspring
 
 ## Median Polish
@@ -376,8 +378,10 @@ $$y_{ij} \approx D + A_i + B_j + (1-p)\frac{A_i B_j}{D}$$
 $$y_{ij} - D - A_i - B_j \approx (1-p) \frac{A_i B_j}{D}$$
 * If $R_{ij} = y_{ij} - D - A_i - B_j$ are residuals, then
 $$R_{ij} \approx (1-p) \frac{A_i B_j}{D}$$
+<!--
 * So for $p = 1$, we shouldn't see a slope
 $$y_{ij} \approx D + A_i + B_j$$
+-->
 
 ## References
 
