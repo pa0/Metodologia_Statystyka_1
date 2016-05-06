@@ -4,7 +4,7 @@ author: "Christof Seiler"
 date: "Stanford University, Spring 2016, STATS 205"
 output:
   beamer_presentation:
-    incremental: no
+    incremental: yes
 ---
 
 ```{r setup, include=FALSE}
@@ -297,7 +297,6 @@ df
 
 ## Median Polish
 
-* Stem-and-leaf plot
 ```{r}
 df
 ```
@@ -320,10 +319,67 @@ plot(df.med,cex = 1.5, cex.lab=1.5, cex.axis=1.5, cex.main=1.5, cex.sub=1.5)
 
 ## Tukey Additivity Plot
 
-Why $\alpha_i \beta_j / \mu$ against $\epsilon_{ij}$? 
-TODO: pp. 268
+* Why $\alpha_i \beta_j / \mu$ against $\epsilon_{ij}$? 
+* To show why this makes sense, we start by asking:
+* Can we find a power transformation of the data so that model 
+$$y_{ij} = \mu + \alpha_i + \beta_j + \epsilon_{ij}$$
+will adequately summarize the transformed data?
+* If so, then equation
+$$y_{ij}^p = m + a_i + b_j + r_{ij}$$
+will hold for some value $p$
+* If fit exact, then
+$$y_{ij}^p = m + a_i + b_j$$
+or 
+$$y_{ij} = (m + a_i + b_j)^{1/p}$$
+
+## Tukey Additivity Plot
+
+* Compare 
+$$y_{ij} = (m + a_i + b_j)^{1/p}$$
+to simple additive model, we use a second-order approximation
+* Rewrite
+$$y_{ij} = m^{1/p} \left( 1 + \frac{a_i}{m} + \frac{b_j}{m} \right)^{1/p}$$
+* Taylor expand second factor $(1 + t)^{1/p}$
+$$y_{ij} \approx m^{1/p} \left( 1 + \frac{1}{p}\left( \frac{a_i}{m}+\frac{b_j}{m} \right) + \frac{1-p}{2p^2} \left( \frac{a_i}{m}+\frac{b_j}{m} \right)^2 \right)$$
+
+## Tukey Additivity Plot
+
+* Arrange terms in this expansion into four groups, terms that depend 
+    * on neither $i$ nor $j$
+    * only on $i$
+    * only on $j$
+    * both $i$ and $j$
+* In simplified notation:
+$$y_{ij} \approx D \left( 1+\frac{A_i}{D}+\frac{B_j}{D}+\frac{C_{ij}}{D} \right) \hspace{1cm} y_{ij} \approx D + A_i + B_j + C_{ij}$$
+$$D = m^{1/p} \hspace{1cm} \frac{A_i}{D} = \frac{1}{p}\frac{a_i}{m}+\frac{1-p}{2p^2}\frac{a_i^2}{m^2} \hspace{1cm} \frac{B_j}{D} = \frac{1}{p}\frac{b_j}{m}+\frac{1-p}{2p^2}\frac{b_j^2}{m^2}$$
+$$\frac{C_{ij}}{D} = \frac{1-p}{2p^2}\frac{2a_i b_j}{m^2} = \frac{1-p}{p^2}\frac{a_i}{m}\frac{b_j}{m}$$
+
+## Tukey Additivity Plot
+
+* Through Taylor expansion, we obtained
+$$y_{ij} \approx D + A_i + B_j + C_{ij}$$
+which is now a function of $p$
+* Examine term when $a_i/m$ and $b_j/m$ are close to $0$ (which means that row and column effects are much smaller than common value)
+* With this assumption expressions $a_i^2/m^2$, $b_j^2/m^2$, and $a_i b_j / m^2$ can be ignored
+$$\frac{A_i}{D}\frac{B_j}{D} \approx \frac{1}{p^2}\frac{a_i}{m}\frac{b_j}{m}$$
+* Using this
+$$\frac{C_{ij}}{D} \approx (1-p)\frac{A_i}{D}\frac{B_j}{D}$$
+* Using this
+$$y_{ij} \approx D \left( 1 + \frac{A_i}{D} + \frac{B_j}{D} + (1-p)\frac{A_i}{D}\frac{B_j}{D} \right)$$
+
+## Tukey Additivity Plot
+
+* Rewrite
+$$y_{ij} \approx D + A_i + B_j + (1-p)\frac{A_i B_j}{D}$$
+* And we conclude that if $y_{ij}^p$ is approximated by an additive model, then, to a second-order approximation, $y_{ij}$ is given by the above approximation
+* For the diagnostic plot
+$$y_{ij} - D - A_i - B_j \approx (1-p) \frac{A_i B_j}{D}$$
+* If $R_{ij} = y_{ij} - D - A_i - B_j$ are residuals, then
+$$R_{ij} \approx (1-p) \frac{A_i B_j}{D}$$
+* So for $p = 1$, we shouldn't see a slope
+$$y_{ij} \approx D + A_i + B_j$$
 
 ## References
 
 * Hoaglin, Mosteller, and Tukey (1983). Understanding Robust and Exploratory Data Analysis
-* http://mgimond.github.io/ES218/Week11a.html
+* Manuel Gimond Course Notes: http://mgimond.github.io/ES218/Week11a.html
