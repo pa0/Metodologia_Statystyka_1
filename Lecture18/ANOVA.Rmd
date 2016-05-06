@@ -10,6 +10,8 @@ output:
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
 set.seed(1234)
+library(tidyr)
+library(dplyr)
 ```
 
 ## Overview
@@ -128,7 +130,7 @@ Blocks & 1 & 2 & \dots & n \\
 2 & $Y_{211}$ & $Y_{221}$ & $\dots$ & $Y_{2k1}$ \\
 & \vdots & \vdots &       & \vdots \\
 & $Y_{21c_{21}}$ & $Y_{22_{c_{22}}}$ & \dots & $Y_{2kc_{2k}}$ \\
-& \vdots & \vdots &       & \vdots \\
+\vdots & \vdots & \vdots &       & \vdots \\
 \end{tabular}
 $$
 * The **Friedman test** is analog to the Kruskal-Wallis test
@@ -154,10 +156,174 @@ $$H = \frac{12m}{n(n+1)} \sum_{j=1}^n n_i \left( \overline{R}_{.j} - \frac{n+1}{
 
 ## Median Polish
 
-* For special case of no repetiations (one observation per block/treatment cell)
+* For special case of no repetitions (one observation per block/treatment cell)
+* This may be the actual data we observe or someone may have summarized all the entries in each cell with a single number
+* **Data**:
+$$
+\begin{tabular}{l|ccc}
+\hline
+& \multicolumn{3}{c}{j} \\
+$i$ & $1$ & \dots & $J$ \\
+\hline
+$1$ & $Y_{11}$ & \dots & $Y_{1J}$ \\
+\vdots & \vdots &  & \vdots \\
+$I$ & $Y_{I1}$ & \dots & $Y_{IJ}$
+\end{tabular}
+$$
 
-TODO
+## Median Polish
+
+* Infant mortality rates in the United States 1964-1966 by region and father's eduction
+* Cell entires are number of deaths per 1000 live births
+```{r}
+df = data.frame(row.names = c("NE","NC","S","W"),
+                 ed8       = c(25.3,32.1,38.8,25.4), 
+                 ed9to11   = c(25.3,29,31,21.1),
+                 ed12      = c(18.2,18.8,19.3,20.3),
+                 ed13to15  = c(18.3,24.3,15.7,24),
+                 ed16      = c(16.3,19,16.8,17.5)
+                 )
+df
+```
+
+## Median Polish -- Cleveland Dot Plot
+
+```{r}
+dotchart( as.matrix(df), cex=1.2)
+```
+
+## Median Polish -- Cleveland Dot Plot
+
+```{r}
+dotchart( t(as.matrix(df)), cex=1.2)
+```
+
+## Median Polish
+
+```{r}
+df.l <- df %>%
+  mutate(Region = as.factor(row.names(.)) )  %>%
+  gather(key=Edu, value = Deaths, -Region) %>% 
+  mutate(Edu = factor(Edu, levels=names(df)))
+
+# side-by-side plot
+OP <- par(mfrow=c(1,2))
+plot(Deaths ~ Region + Edu, df.l)
+par(OP)
+```
+
+## Median Polish
+
+* **Additive model**:
+$$Y_{ij} = \mu + \alpha_i + \beta_j + \epsilon_{ij}$$
+* Overall typical value $\mu$
+* Row effect $\alpha_i$
+* Column effect $\beta_j$
+* Random fluctuation $\epsilon_{ij}$
+
+## Median Polish
+
+* Compute overall typical value $\mu$
+```{r echo=TRUE}
+mu = median(as.matrix(df)); mu; df
+```
+
+## Median Polish
+
+* Compute the row medians
+```{r echo=TRUE}
+df = as.matrix(df) - mu
+rowMedian = apply(df,1,median)
+df = df - rowMedian; df
+```
+
+## Median Polish
+
+* Add row median to residual table
+```{r echo=TRUE}
+df = cbind(roweff=c(rowMedian),df); df
+```
+
+## Median Polish
+
+* Add and overall value to residual table
+```{r echo=TRUE}
+df = rbind(coleff=rep(0,6),df); df[1,1] = mu; df
+```
+
+## Median Polish
+
+* Compute column median
+```{r echo=TRUE}
+colMedian = apply(df[2:5,],2,median); colMedian
+```
+
+## Median Polish
+
+* Create new residual table from column medians
+```{r echo=TRUE}
+df[1,] = df[1,]+colMedian
+df[2:5,] = sweep(df[2:5,],2,colMedian); df
+```
+
+## Median Polish
+
+* Second iteration: Add row effects to top margin and subtract from residuals
+```{r echo=TRUE}
+rowMedian = apply(df[,2:6],1,median); rowMedian
+df[,1] = df[,1]+rowMedian
+df[,2:6] = sweep(df[,2:6],1,rowMedian); df
+```
+
+## Median Polish
+
+* Second iteratino: Add column effects to left margin and subtract from residuals
+```{r echo=TRUE}
+colMedian = apply(df[2:5,],2,median); colMedian
+df[1,] = df[1,]+colMedian
+df[2:5,] = sweep(df[2:5,],2,colMedian); df
+```
+
+## Median Polish
+
+```{r}
+df
+```
+
+* Infant mortality rates are highest in North Central region and lowest in Northeast
+* The education of the father is a stronger factor in distinguishing among these rates than geography
+* With a single exception: the high school graduates and the college dropouts, where the mortality rates increase as the father's eduction increases
+* In particular, completion of high school appears to exert the greatest single influence in reducing the mortality rates among infant offspring
+
+## Median Polish
+
+* Stem-and-leaf plot
+```{r}
+df
+```
+* The residual of 11.15 for the least educated fathers in the South calls for a closer look
 
 ## Tukey Additivity Plot
 
-TODO
+* Comparison value $\alpha_i \beta_j / \mu$
+```{r warning=FALSE,out.width=".8\\linewidth"}
+df = data.frame(row.names = c("NE","NC","S","W"),
+                 ed8       = c(25.3,32.1,38.8,25.4), 
+                 ed9to11   = c(25.3,29,31,21.1),
+                 ed12      = c(18.2,18.8,19.3,20.3),
+                 ed13to15  = c(18.3,24.3,15.7,24),
+                 ed16      = c(16.3,19,16.8,17.5)
+                 )
+df.med = medpolish(df , maxiter=3)
+plot(df.med,cex = 1.5, cex.lab=1.5, cex.axis=1.5, cex.main=1.5, cex.sub=1.5)
+```
+
+## Tukey Additivity Plot
+
+Why $\alpha_i \beta_j / \mu$ against $\epsilon_{ij}$? 
+TODO: pp. 268
+
+## References
+
+* Hoaglin, Mosteller, and Tukey (1983). Understanding Robust and Exploratory Data Analysis
+* http://mgimond.github.io/ES218/Week11a.html
