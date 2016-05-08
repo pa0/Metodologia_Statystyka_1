@@ -108,12 +108,30 @@ $$\widehat{S}(t) = \prod_{t(i) \le t} \left(1- \frac{d_i}{n_i}\right)$$
 
 * TODO: Explain derivations with conditional probabilities
 
+## Kaplan-Meier Estimator
+
+```
+Relapse: 3 6.5 6.5 10 12 15
+Lost to followup: 8.4
+Alive and in remission at at end of study: 4 5.7 10
+```
+
+TODO: Table 6.3
+
 ## Kaplan-Meier Estimator and Log Rank test (Example)
 
-* For demonstration we use the hemor- rhage data discussed in Chapter 6 of Dupont (2002). The study population consisted of patients who had survived a lobar intracerebral hemorrhage and whose genotype was known. The outcome variable was the time until recurrence of lobar intracerebral hemorrhage. The investigators were interested in examining the genetic effect on recurrence as there were three common alleles e2, e3, and e4. The analysis was focused on the effect of homozygous e3/e3 (Group 1) versus at least one e2 or e4 (Group 2)
-* In the output are survival times (in months) for 71 subjects. However, one subject’s genotype information is missing and is excluded from analysis. Of the remaining 70 subjects, 32 are in Group 1 and 38 are in Group 2. A + sign indicates a censored observation; meaning that at that point in time the subject had yet to report recurrence.
+* Patients who had survived a lobar intracerebral hemorrhage and whose genotype was known 
+* The outcome variable was the time until recurrence of lobar intracerebral hemorrhage
+* The investigators were interested in examining the genetic effect on recurrence as there were three common alleles e2, e3, and e4
+* The analysis was focused on the effect of homozygous e3/e3 (Group 1) versus at least one e2 or e4 (Group 2)
+* In the output are survival times (in months) for 71 subjects
+* However, one subject’s genotype information is missing and is excluded from analysis
+* Of the remaining 70 subjects, 32 are in Group 1 and 38 are in Group 2 
+* A + sign indicates a censored observation; meaning that at that point in time the subject had yet to report recurrence
 
-```{r}
+## Kaplan-Meier Estimator and Log Rank test (Example)
+
+```{r out.width=".8\\linewidth"}
 fit = with(hemorrhage, survfit(Surv(time,recur)~genotype))
 plot(fit,lty=1:2, ylab='Probability of Hemorrhage-Free Survival', xlab='Time (in Months)',
      cex = 1.5, cex.lab=1.5, cex.axis=1.5, cex.main=1.5, cex.sub=1.5)
@@ -126,7 +144,111 @@ legend('bottomleft',c('Group 1', 'Group 2'),lty=1:2,bty='n')
 with(hemorrhage, survdiff(Surv(time,recur)~genotype))
 ```
 
-* Note that the log-rank test statistic is 6.3 with p-value 0.0122 based on a null $\chi^2$-distribution with 1 degree of freedom. Thus the log-rank test confirms the difference in survival time of the two groups.
+* Note that the log-rank test statistic is 6.3 with p-value 0.0122 based on a null $\chi^2$-distribution with 1 degree of freedom
+* Thus the log-rank test confirms the difference in survival time of the two groups
+
+## Gehan's Test
+
+* Alternative to the log-rank test
+* Generalization of the Wilcoxon procedure
+* Randomized controlled trial subjects are randomized to one of two treatments, with survival times represented by $X$ and $Y$
+* Let the sample as $X_1,\dots,X_{n1}$ and $Y_1,\dots,Y_{n2}$ with a censored observation denoted by $X_i^+$
+* Only unambiguous pairs of observations are used
+* Not used are ambiguous observations such as when an observed $X$ is greater than a censored $Y (X_i > Y_j^+)$ or when both observations are censored
+
+## Gehan's Test
+
+* The test statistic is defined as the number of times each of the $X$ clearly beats $Y$ minus the number of times $Y$ clearly beats $X$
+* Let $S_1$ denote the set of uncensored observations
+* Let $S_2$ denote the set of observations for which $X$ is censored and $Y$ is uncensored
+* Let $S_3$ denote the set where $Y$ is censored and $X$ is uncensored
+* Then Gehan's test statistic is
+$$
+\begin{aligned}
+U = & \left( \#_{S_1} \{X_i > Y_j \} + \#_{S_2} \{X_i^+ \ge Y_j\} \right) \\
+    & - \left( \#_{S_1} \{Y_j > X_i \} + \#_{S_3} \{ Y_j^+ \ge X_i \} \right)
+\end{aligned}
+$$
+
+## Gehan's Test (Example)
+
+* Experiment to assess the effect of a new treatment relative to a standard
+* There are three required arguments to the function: 
+    * the survival time, 
+    * an indicator variable indicating that the survival time corresponds to an event (and is not censored), 
+    * and a dichotomous variable representing one of two treatments
+* Data:  
+```S 94  180+ 741  1133 1261 382 567+ 988   1355+
+   N 155 375  951+ 1198 175  521 683+ 1216+```
+
+```{r echo=TRUE}
+with(cancertrt,gehan.test(time,event,trt))
+```
+
+## Cox Proportional Hazards Models
+
+* Let $x$ denote the corresponding $p \times 1$ vector of covariates
+* Let $T_0$ denotea baseline response: a response in the absence of all covariate effects
+* The hazard function of $T$ is the instantaneous chance of the event (death)
+$$h(t) = \frac{f(t)}{S(t)}$$
+* Assume that $T_0$ has the exponential distribution with pdf $f(t) = \lambda_0 \exp{-\lambda_0 t}, t > 0$
+* Then the hazard function of $T_0$ has the constant value of $\lambda_0$
+* The proportional hazards model assumes that the hazard function of $T$ is given by
+$$\lambda(t;\boldsymbol{x}) = \lambda_0 e^{\boldsymbol{\beta}^T \boldsymbol{x}}$$
+where $x$ is a $p \times 1$ vector of covariates and $\boldsymbol{\beta}$ is a $p \times 1$ vector of paramets
+* Note that the hazard function of $T$ is proportional to that of $T_0$
+
+## Cox Proportional Hazards Models
+
+* To illustrate these ideas, assume that $T_0$ has constant hazard $\lambda_0$
+* Suppose the only covariate is an indicator variable $w$ which is either 0 or 1 depending on whether a subject is not treated or treated
+* Assuming a proportional hazards model, the hazard function of $T$ is given by
+$$\lambda(t;w) = \lambda_0 e^{w\Delta}$$
+* The hazard ratio of the experimental treatment relative to the control is then $e^{\Delta}$
+* That is, $\Delta$ has the interpretation of log hazard
+      * a value $< 1$ (less hazardous) favors the experimental treatment and 
+      * a value $> 1$ (more hazardous) favors the control
+
+## Cox Proportional Hazards Models
+      
+* The proportional hazards model developed by (Cox 1972) is a semiparametric model which does not necessarily specify the hazard function
+* only the relative effect of covariates is estimated
+* In the simple case under discussion it can be used to estimate the parameter $\Delta$ as shown in the following example
+
+```{r}
+fit = coxph(Surv(time,recur)~genotype,data=hemorrhage)
+summary(fit)
+```
+
+## Cox Proportional Hazards Models
+
+* More generally, assume that the baseline hazard function is $\lambda_0(t)$ 
+* Assume that the hazard function of $T$ is
+$$\lambda(t;\boldsymbol{x}) = \lambda_0(t) e^{ \boldsymbol{\beta}^T \boldsymbol{x} }$$
+* Notice that the hazard ratio of two covariate patterns (e.g. for two subjects) is independent of baseline hazard
+$$\frac{\lambda(t;\boldsymbol{x}_1)}{\lambda(t;\boldsymbol{x}_2)} = e^{\boldsymbol{\beta} (\boldsymbol{x}_1 - \boldsymbol{x}_2)} $$
+
+## Cox Proportional Hazards Models (Example)
+
+* Under investigation in this clinical trial was the pharmaceutical agent diethylstilbestrol DES 
+* Subjects were assigned treatment to 1.0 mg DES (treatment = 2) or to placebo (treatment = 1)
+* Covariates include age, serum hemoglobin level, size, and the Gleason index
+* For demonstration purposes, we have dropped age and shb from the model
+
+## Cox Proportional Hazards Models (Example)
+
+```{r}
+f2 = coxph(Surv(time,event=status)~as.factor(treatment)+size+index,data=prostate)
+summary(f2)
+```
+
+## Cox Proportional Hazards Models (Example)
+
+* These data suggest that the Gleason Index is a significant risk factor of mortality (p-value = 0.0356)
+* Size of tumor is marginally significant (p-value = 0.0819)
+* Given that $\widehat{\Delta} = -1.11272 < 1$ it appears that DES lowers risk of mortality
+* However, the p-value = 0.3550 is nonsignificant
+
 
 ## References
 
