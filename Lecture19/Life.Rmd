@@ -10,13 +10,125 @@ output:
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
 set.seed(1234)
+library(survival)
+library(npsm)
 ```
 
 ## Overview
 
-* Life distribution
-* Survival analysis
-* Reliability analysis
+* Survival data
+* Survival function
+    * Kaplan-Meier estimator
+    * Log Rank test
+* Hazard function
+    * Cox proportional hazards models
+
+## Survival Data
+
+* We are interested in time to an event of interest as the outcome variable
+* In medicine:
+    * Often in a clinical trial the goal is to evaluate the effectiveness of a new treatment at prolonging survival
+    * For example to extend the time to the event of death
+    * It is usually the case that at the end of followup a portion of the subjects in the trial have not experienced the event
+    * For these subjects the outcome variable is **censored**
+
+## Survival Data
+
+* In engineering:
+    * Similarly, in engineering studies, often the lifetimes of mechanical or electrical parts are of interest
+    * In a typical experimental design, lifetimes of these parts are recorded along with covariates (including design variables)
+    *   Often the lifetimes are called failure times, i.e., times until failure
+    * As in a clinical study, at the end of the experiment, there may be parts which are still functioning (censored observations)
+    
+## Survival Data
+
+* In this context, it one object of interesting is the survival function
+* An popular estimator of this function is the Kaplan–Meier estimator
+* It is common to estimate two function (e.g. in a case/control experiment) and to test the hypothesis that they are the same
+* A popular test is the Log Rank Test
+* An alternative test is the Gehan's Test
+* Another object of interst is the hazard function
+* Which can be interpreted as the instantaneous chance of the event (death)
+* In this context, we'll talk about the Cox proportional hazards models
+
+## Survival Function
+
+* Let $T$ denote the time to an event
+* Assume $T$ is a continuous random variable with cdf $F(t)$
+* The survival function is defined as the probability that a subject survives until at least time $t$
+$$S(t) = P(T > t) = 1 - F(t)$$
+* When all subjects in the trial experience the event during the course of the study
+* So that there are no censored observations, an estimate of $S(t)$ may be based on the empirical cdf
+* However, in most studies there are a number of subjects who are not known to have experienced the outcome prior to the study completion
+* Kaplan and Meier (1958) developed their product-limit estimate as an estimate of $S(t)$ which incorporates information from censored observations
+
+## Survival Function (Example: No Censored Observations)
+
+* Treatment of pulmonary metastasis (cancerous spreads to the lung) arising from bone cancer, survival time was collected
+```{r echo=TRUE}
+survTimes = c(11,13,13,13,13,13,14,14,15,15,17)
+```
+* No censored observation, we can estimate survival function at time *t* with empirical cdf
+$$\widehat{S}(t) = \frac{\#\{t_i > t\}}{n}$$
+* Estimate by counting
+$$
+\widehat{S}(t) = 
+\begin{cases}
+1 & 0 \le t < 11 \\
+\frac{10}{11} & 11 \le t < 13 \\
+\frac{5}{11} & 13 \le t < 14 \\
+\frac{3}{11} & 14 \le t < 15 \\
+\frac{1}{11} & 15 \le t < 17 \\
+0 & t \ge 17
+\end{cases}
+$$
+
+## Survival Function (Example: No Censored Observations)
+
+```{r out.width=".8\\linewidth"}
+t = seq(0,17,0.01)
+Shat= sapply(t,function(t) sum(survTimes>t)/length(survTimes))
+plot(t,Shat,type = "l",xlab = "Time (in months)",ylab = "Survival",
+     cex = 1.5, cex.lab=1.5, cex.axis=1.5, cex.main=1.5, cex.sub=1.5)
+```
+
+## Kaplan-Meier Estimator
+
+* In most clinical studies, at the end of followup there are subjects who have yet to experience the event being studied
+    * Either hasn't happened
+    * Or the subject died before
+* In such cases the Kaplan–Meier product limit estimate can be used
+* Let $t(1) < \dots < t(k)$ denote the ordered distinct event times
+* If there are censored responses, then $k < n$
+* Let $ni = \#\text{subjects}$ at risk at the beginning of time $t(i)$ and $d_i = \#\text{events}$ occurring at time $t(i)$
+* The **Kaplan-Meier estimate** of the survival function is defined as
+$$\widehat{S}(t) = \prod_{t(i) \le t} \left(1- \frac{d_i}{n_i}\right)$$
+
+## Kaplan-Meier Estimator
+
+* TODO: Explain derivations with conditional probabilities
+
+## Kaplan-Meier Estimator and Log Rank test (Example)
+
+* For demonstration we use the hemor- rhage data discussed in Chapter 6 of Dupont (2002). The study population consisted of patients who had survived a lobar intracerebral hemorrhage and whose genotype was known. The outcome variable was the time until recurrence of lobar intracerebral hemorrhage. The investigators were interested in examining the genetic effect on recurrence as there were three common alleles e2, e3, and e4. The analysis was focused on the effect of homozygous e3/e3 (Group 1) versus at least one e2 or e4 (Group 2)
+* In the output are survival times (in months) for 71 subjects. However, one subject’s genotype information is missing and is excluded from analysis. Of the remaining 70 subjects, 32 are in Group 1 and 38 are in Group 2. A + sign indicates a censored observation; meaning that at that point in time the subject had yet to report recurrence.
+
+```{r}
+fit = with(hemorrhage, survfit(Surv(time,recur)~genotype))
+plot(fit,lty=1:2, ylab='Probability of Hemorrhage-Free Survival', xlab='Time (in Months)',
+     cex = 1.5, cex.lab=1.5, cex.axis=1.5, cex.main=1.5, cex.sub=1.5)
+legend('bottomleft',c('Group 1', 'Group 2'),lty=1:2,bty='n')
+```
+
+## Kaplan-Meier Estimator and Log Rank test (Example)
+
+```{r}
+with(hemorrhage, survdiff(Surv(time,recur)~genotype))
+```
+
+* Note that the log-rank test statistic is 6.3 with p-value 0.0122 based on a null $\chi^2$-distribution with 1 degree of freedom. Thus the log-rank test confirms the difference in survival time of the two groups.
 
 ## References
 
+* The Statistical Analysis of Failure Time Data (2002). Kalbfleisch and Prentice
+* Analysis of Survival Data (1984). Cox and Oakes
