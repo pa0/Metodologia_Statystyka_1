@@ -108,15 +108,25 @@ $$\widehat{S}(t) = \prod_{t(i) \le t} \left(1- \frac{d_i}{n_i}\right)$$
 
 * TODO: Explain derivations with conditional probabilities
 
-## Kaplan-Meier Estimator
+## Kaplan-Meier Estimator (Example)
 
-```
-Relapse: 3 6.5 6.5 10 12 15
-Lost to followup: 8.4
-Alive and in remission at at end of study: 4 5.7 10
-```
-
-TODO: Table 6.3
+* Data:
+    * Relapse: 3 6.5 6.5 10 12 15
+    * Lost to followup: 8.4
+    * Alive and in remission at at end of study: 4 5.7 10
+* Step-by-step Kaplan–Meier estimate:
+$$
+\begin{tabular}{r|r|r|r|r}
+\hline
+$t$ & $n$ & $d$ & $1-d/n$ & $S(t)$ \\
+\hline
+$3$ & $10$ & $1$ & $9/10=0.9$ & $0.9$ \\
+$6.5$ & $7$ & $2$ & $5/7 = 0.71$ & $0.9\times 0.71 = 0.64$ \\
+$10$ & $4$ & $1$ & $3/4 - 0.75$ & $0.64 \times 0.75 = 0.48$ \\
+$12$ & $2$ & $1$ & $1/2= 0.5$ & $0.48 \times 0.5 = 0.24$ \\
+$15$ & $1$ & $1$ & $0/1 = 0$ & $0$ \\
+\end{tabular}
+$$
 
 ## Kaplan-Meier Estimator and Log Rank test (Example)
 
@@ -254,3 +264,4 @@ summary(f2)
 
 * The Statistical Analysis of Failure Time Data (2002). Kalbfleisch and Prentice
 * Analysis of Survival Data (1984). Cox and Oakes
+* Ibrahim (2005). [Lecture Notes](http://www.amstat.org/chapters/northeasternillinois/pastevents/presentations/summer05_Ibrahim_J.pdf)
