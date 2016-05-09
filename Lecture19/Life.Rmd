@@ -281,7 +281,7 @@ $$\operatorname{Var}(\widehat{S}(t)) = \widehat{S}(t)^2 \sum_{t(i) < t} \frac{d_
 
 ## References
 
-* The Statistical Analysis of Failure Time Data (2002). Kalbfleisch and Prentice
-* Analysis of Survival Data (1984). Cox and Oakes
-* [Lecture Notes (2005)](http://www.amstat.org/chapters/northeasternillinois/pastevents/presentations/summer05_Ibrahim_J.pdf). Ibrahim
+* Kalbfleisch and Prentice (2002). The Statistical Analysis of Failure Time Data
+* Cox and Oakes (1984). Analysis of Survival Data
+* Ibrahim (2005). [Lecture Notes](http://www.amstat.org/chapters/northeasternillinois/pastevents/presentations/summer05_Ibrahim_J.pdf)
 * Hollander and Wolfe, and Chicken (2013). Nonparametric Statistical Methods
