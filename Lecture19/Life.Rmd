@@ -1,5 +1,5 @@
 ---
-title: "Time to Event Analysis"
+title: "Time to Event Analysis (Part 1)"
 author: "Christof Seiler"
 date: "Stanford University, Spring 2016, STATS 205"
 output:
@@ -18,10 +18,8 @@ library(npsm)
 
 * Survival data
 * Survival function
-    * Kaplan-Meier estimator
-    * Log Rank test
 * Hazard function
-    * Cox proportional hazards models
+* Kaplan-Meier estimator
 
 ## Survival Data
 
@@ -43,13 +41,60 @@ library(npsm)
 ## Survival Data
 
 * In this context, it one object of interesting is the survival function
-* An popular estimator of this function is the Kaplan–Meier estimator
+* An popular estimator of this function is the Kaplan-Meier estimator
 * It is common to estimate two function (e.g. in a case/control experiment) and to test the hypothesis that they are the same
 * A popular test is the Log Rank Test
 * An alternative test is the Gehan's Test
 * Another object of interst is the hazard function
 * Which can be interpreted as the instantaneous chance of the event (death)
 * In this context, we'll talk about the Cox proportional hazards models
+
+## Survival Data
+
+* Failure time random variables are always non-negative
+* Denote the failure time by $T$, then $T \ge 0$
+* $T$ can either be discrete (taking a finite set of values, e.g. $a_1,a_2,\dots,a_n$) or continuous (defined on $(0,\infty)$)
+* A random variable $X$ is called a censored failure time random variable if $X = \min(T,U)$, where $U$ is a non-negative censoring variable
+* In order to define a failure time random variable, we need:
+    1.  an unambiguous **time origin** (e.g. randomization to clinical trial, purchase of car)
+    2. a **time scale** (e.g. real time (days, years), mileage of a car)
+    3. definition of the **event** (e.g. death, need a new car transmission)
+
+## Survival Data
+
+```{r out.width="0.6\\linewidth"}
+knitr::include_graphics("SurvivalData.png")
+```
+Source: Ibrahim (2005)
+
+## Survival Data
+
+* Several features which are typically encountered in analysis of survival data:
+    * individuals do not all enter the study at the same time
+    * when the study ends, some individuals still haven't had the event yet
+    * other individuals drop out or get lost in the middle of the study, and all we know about them is the last time they were still "free" of the event
+* The first feature is referred to as **"staggered entry"**
+* The last two features relate to **"censoring"** of the failure time events
+
+## Survival Data
+
+* Right-censoring: only the $X_i = \min(T_i, U_i)$ is observed due to
+    * loss to follow-up
+    * drop-out
+    * study termination
+* We call this right-censoring because the true unobserved event is to the right of our censoring time
+* All we know is that the event has not happened at the end of follow-up
+
+## Survival Data
+
+* Suppose we have a sample of observations on $n$ people:
+$$(T_1,U_1),(T_2,U_2),\dots,(T_n,U_n)$$
+* There are three main types of (right) censoring times:
+    * Type I: All the $U_i$'s are the same (e.g. animal studies, all animals sacrificed after 2 years)
+    * Type II: $U_i = T(r)$, the time of the $r$th failure (e.g. animal studies, stop when 4/6 have tumors)
+    * Type III: the Ui’s are random variables, $\delta_i$'s are failure indicators:
+    $$\delta_i = \begin{cases} 1 & \text{ if } T_i \le U_i \\ 0 & \text{ if } T_i > U_i \end{cases}$$
+* Type I and Type II are called singly censored data, Type III is called randomly censored (or sometimes progressively censored)
 
 ## Survival Function
 
@@ -59,8 +104,6 @@ library(npsm)
 $$S(t) = P(T > t) = 1 - F(t)$$
 * When all subjects in the trial experience the event during the course of the study
 * So that there are no censored observations, an estimate of $S(t)$ may be based on the empirical cdf
-* However, in most studies there are a number of subjects who are not known to have experienced the outcome prior to the study completion
-* Kaplan and Meier (1958) developed their product-limit estimate as an estimate of $S(t)$ which incorporates information from censored observations
 
 ## Survival Function (Example: No Censored Observations)
 
@@ -100,13 +143,74 @@ plot(t,Shat,type = "l",xlab = "Time (in months)",ylab = "Survival",
 * In such cases the Kaplan–Meier product limit estimate can be used
 * Let $t(1) < \dots < t(k)$ denote the ordered distinct event times
 * If there are censored responses, then $k < n$
-* Let $ni = \#\text{subjects}$ at risk at the beginning of time $t(i)$ and $d_i = \#\text{events}$ occurring at time $t(i)$
+* Let $n_i = \#\text{subjects}$ at risk at the beginning of time $t(i)$ and $d_i = \#\text{events}$ occurring at time $t(i)$
 * The **Kaplan-Meier estimate** of the survival function is defined as
 $$\widehat{S}(t) = \prod_{t(i) \le t} \left(1- \frac{d_i}{n_i}\right)$$
 
 ## Kaplan-Meier Estimator
 
-* TODO: Explain derivations with conditional probabilities
+* Suppose $a_k < t < a_{k+1}$, then
+$$S(t) = P(T \ge a_{k+1}) = P(T \ge a_1,T \ge a_2,\dots,T \ge a_{k+1})$$
+* Rewrite in terms of conditional probabilities
+$$P(T \ge a_1) \times P(T \ge a_2 | T \ge a_1) \times \cdots \times P(T \ge a_k+1 | T \ge a_k)$$
+$$ = P(T \ge a_1) \times \prod_{i=1}^k P(T \ge a_{i+1} | T \ge a_i)$$
+* Now use $1 - P(T = a_i|T \ge a_i) = P(T \ge a_{i+1})$
+$$= \prod_{i=1}^k \left( 1 - P(T=a_i|T \ge a_i) \right) = \prod_{i=1}^k \left( 1 - \lambda_i \right)$$
+* $\lambda_i$ is called the discrete Hazard function
+
+## Kaplan-Meier Estimator
+
+* The Hazrd function $\lambda(t)$ is sometimes called an instantaneous failure rate, the force of mortality, or the age-specific failure rate
+* For continuous random variables:
+$$
+\begin{aligned}
+\lambda(t) = & \lim_{\Delta t \to 0} \frac{1}{\Delta} P(t \le T < t+\Delta | T \ge t) \\
+= & \lim_{\Delta t \to 0} \frac{1}{\Delta} \frac{P(t \le T < t+\Delta, T \ge t)}{P(T \ge t)} \\
+= & \lim_{\Delta t \to 0} \frac{1}{\Delta} \frac{P(t \le T < t+\Delta)}{P(T \ge t)} \\
+= & \frac{f(t)}{S(t)}
+\end{aligned}
+$$
+
+## Kaplan-Meier Estimator
+
+* For discrete random variables:
+$$
+\begin{aligned}
+\lambda(a_i) := \lambda_i = & P(T = a_j | T \ge a_i) \\
+ = & \frac{P(T = a_i)}{P(T \ge a_i)} \\
+ = & \frac{f(a_i)}{S(a_i)} \\
+ = & \frac{f(t)}{\sum_{k: a_k \ge a_i} f(a_k)}
+\end{aligned}
+$$ 
+* Using an estimate $d_i/r_i$ of the the Hazard function
+    * $d_i$ is the number of deaths at $a_i$ and
+    * $r_i$ is the number at risk at $a_i$
+$$\widehat{S}(t) = \prod_{i=1}^k \left( 1-\frac{d_i}{r_i} \right)$$
+
+## Kaplan-Meier Estimator
+
+* Intuition behind the Kaplan-Meier Estimator
+* Think of dividing the observed timespan of the study into a series of fine intervals so that there is a separate interval for each time of death or censoring
+* Using the law of conditional probability,
+$$P(T \ge t) = P( \text{ survive } j \text{th interval } I_j | \text{ survived to start of } I_j)$$
+where the product is taken over all the intervals including or preceding time $t$
+
+## Kaplan-Meier Estimator
+
+* 4 possibilities for each interval:
+    1. **No events (death or censoring)**: conditional probability of surviving the interval is 1
+    2. **Censoring**: assume they survive to the end of the interval, so that the conditional probability of surviving the interval is 1
+    3. **Death, but no censoring**: conditional probability of not surviving the interval is \# deaths $(d)$ divided by \# at risk $(r)$ at the beginning of the interval. So the con- ditional probability of surviving the interval is $1-(d/r)$
+    4. **Tied deaths and censoring**: assume censorings last to the end of the interval, so that conditional probability of surviving the interval is still $1 - (d/r)$
+* The general formula for the conditional probability of surviving the $j$th interval that holds for all 4 cases:
+$$1 - \frac{d_i}{r_i}$$
+
+## Kaplan-Meier Estimator
+
+* We could use the same approach by grouping the event times into intervals (say, one interval for each month), and then counting up the number of deaths (events) in each to esti- mate the probability of surviving the interval (this is called the lifetable estimate)
+* However, the assumption that those censored last until the end of the interval wouldn’t be quite accurate, so we would end up with a cruder approximation
+* As the intervals get finer and finer, the approximations made in estimating the probabilities of getting through each inter- val become smaller and smaller, so that the estimator con- verges to the true $S(t)$
+* This intuition clarifies why an alternative name for the KM is the product limit estimator
 
 ## Kaplan-Meier Estimator (Example)
 
@@ -128,140 +232,8 @@ $15$ & $1$ & $1$ & $0/1 = 0$ & $0$ \\
 \end{tabular}
 $$
 
-## Kaplan-Meier Estimator and Log Rank test (Example)
-
-* Patients who had survived a lobar intracerebral hemorrhage and whose genotype was known 
-* The outcome variable was the time until recurrence of lobar intracerebral hemorrhage
-* The investigators were interested in examining the genetic effect on recurrence as there were three common alleles e2, e3, and e4
-* The analysis was focused on the effect of homozygous e3/e3 (Group 1) versus at least one e2 or e4 (Group 2)
-* In the output are survival times (in months) for 71 subjects
-* However, one subject’s genotype information is missing and is excluded from analysis
-* Of the remaining 70 subjects, 32 are in Group 1 and 38 are in Group 2 
-* A + sign indicates a censored observation; meaning that at that point in time the subject had yet to report recurrence
-
-## Kaplan-Meier Estimator and Log Rank test (Example)
-
-```{r out.width=".8\\linewidth"}
-fit = with(hemorrhage, survfit(Surv(time,recur)~genotype))
-plot(fit,lty=1:2, ylab='Probability of Hemorrhage-Free Survival', xlab='Time (in Months)',
-     cex = 1.5, cex.lab=1.5, cex.axis=1.5, cex.main=1.5, cex.sub=1.5)
-legend('bottomleft',c('Group 1', 'Group 2'),lty=1:2,bty='n')
-```
-
-## Kaplan-Meier Estimator and Log Rank test (Example)
-
-```{r}
-with(hemorrhage, survdiff(Surv(time,recur)~genotype))
-```
-
-* Note that the log-rank test statistic is 6.3 with p-value 0.0122 based on a null $\chi^2$-distribution with 1 degree of freedom
-* Thus the log-rank test confirms the difference in survival time of the two groups
-
-## Gehan's Test
-
-* Alternative to the log-rank test
-* Generalization of the Wilcoxon procedure
-* Randomized controlled trial subjects are randomized to one of two treatments, with survival times represented by $X$ and $Y$
-* Let the sample as $X_1,\dots,X_{n1}$ and $Y_1,\dots,Y_{n2}$ with a censored observation denoted by $X_i^+$
-* Only unambiguous pairs of observations are used
-* Not used are ambiguous observations such as when an observed $X$ is greater than a censored $Y (X_i > Y_j^+)$ or when both observations are censored
-
-## Gehan's Test
-
-* The test statistic is defined as the number of times each of the $X$ clearly beats $Y$ minus the number of times $Y$ clearly beats $X$
-* Let $S_1$ denote the set of uncensored observations
-* Let $S_2$ denote the set of observations for which $X$ is censored and $Y$ is uncensored
-* Let $S_3$ denote the set where $Y$ is censored and $X$ is uncensored
-* Then Gehan's test statistic is
-$$
-\begin{aligned}
-U = & \left( \#_{S_1} \{X_i > Y_j \} + \#_{S_2} \{X_i^+ \ge Y_j\} \right) \\
-    & - \left( \#_{S_1} \{Y_j > X_i \} + \#_{S_3} \{ Y_j^+ \ge X_i \} \right)
-\end{aligned}
-$$
-
-## Gehan's Test (Example)
-
-* Experiment to assess the effect of a new treatment relative to a standard
-* There are three required arguments to the function: 
-    * the survival time, 
-    * an indicator variable indicating that the survival time corresponds to an event (and is not censored), 
-    * and a dichotomous variable representing one of two treatments
-* Data:  
-```S 94  180+ 741  1133 1261 382 567+ 988   1355+
-   N 155 375  951+ 1198 175  521 683+ 1216+```
-
-```{r echo=TRUE}
-with(cancertrt,gehan.test(time,event,trt))
-```
-
-## Cox Proportional Hazards Models
-
-* Let $x$ denote the corresponding $p \times 1$ vector of covariates
-* Let $T_0$ denotea baseline response: a response in the absence of all covariate effects
-* The hazard function of $T$ is the instantaneous chance of the event (death)
-$$h(t) = \frac{f(t)}{S(t)}$$
-* Assume that $T_0$ has the exponential distribution with pdf $f(t) = \lambda_0 \exp{-\lambda_0 t}, t > 0$
-* Then the hazard function of $T_0$ has the constant value of $\lambda_0$
-* The proportional hazards model assumes that the hazard function of $T$ is given by
-$$\lambda(t;\boldsymbol{x}) = \lambda_0 e^{\boldsymbol{\beta}^T \boldsymbol{x}}$$
-where $x$ is a $p \times 1$ vector of covariates and $\boldsymbol{\beta}$ is a $p \times 1$ vector of paramets
-* Note that the hazard function of $T$ is proportional to that of $T_0$
-
-## Cox Proportional Hazards Models
-
-* To illustrate these ideas, assume that $T_0$ has constant hazard $\lambda_0$
-* Suppose the only covariate is an indicator variable $w$ which is either 0 or 1 depending on whether a subject is not treated or treated
-* Assuming a proportional hazards model, the hazard function of $T$ is given by
-$$\lambda(t;w) = \lambda_0 e^{w\Delta}$$
-* The hazard ratio of the experimental treatment relative to the control is then $e^{\Delta}$
-* That is, $\Delta$ has the interpretation of log hazard
-      * a value $< 1$ (less hazardous) favors the experimental treatment and 
-      * a value $> 1$ (more hazardous) favors the control
-
-## Cox Proportional Hazards Models
-      
-* The proportional hazards model developed by (Cox 1972) is a semiparametric model which does not necessarily specify the hazard function
-* only the relative effect of covariates is estimated
-* In the simple case under discussion it can be used to estimate the parameter $\Delta$ as shown in the following example
-
-```{r}
-fit = coxph(Surv(time,recur)~genotype,data=hemorrhage)
-summary(fit)
-```
-
-## Cox Proportional Hazards Models
-
-* More generally, assume that the baseline hazard function is $\lambda_0(t)$ 
-* Assume that the hazard function of $T$ is
-$$\lambda(t;\boldsymbol{x}) = \lambda_0(t) e^{ \boldsymbol{\beta}^T \boldsymbol{x} }$$
-* Notice that the hazard ratio of two covariate patterns (e.g. for two subjects) is independent of baseline hazard
-$$\frac{\lambda(t;\boldsymbol{x}_1)}{\lambda(t;\boldsymbol{x}_2)} = e^{\boldsymbol{\beta} (\boldsymbol{x}_1 - \boldsymbol{x}_2)} $$
-
-## Cox Proportional Hazards Models (Example)
-
-* Under investigation in this clinical trial was the pharmaceutical agent diethylstilbestrol DES 
-* Subjects were assigned treatment to 1.0 mg DES (treatment = 2) or to placebo (treatment = 1)
-* Covariates include age, serum hemoglobin level, size, and the Gleason index
-* For demonstration purposes, we have dropped age and shb from the model
-
-## Cox Proportional Hazards Models (Example)
-
-```{r}
-f2 = coxph(Surv(time,event=status)~as.factor(treatment)+size+index,data=prostate)
-summary(f2)
-```
-
-## Cox Proportional Hazards Models (Example)
-
-* These data suggest that the Gleason Index is a significant risk factor of mortality (p-value = 0.0356)
-* Size of tumor is marginally significant (p-value = 0.0819)
-* Given that $\widehat{\Delta} = -1.11272 < 1$ it appears that DES lowers risk of mortality
-* However, the p-value = 0.3550 is nonsignificant
-
-
 ## References
 
 * The Statistical Analysis of Failure Time Data (2002). Kalbfleisch and Prentice
 * Analysis of Survival Data (1984). Cox and Oakes
-* Ibrahim (2005). [Lecture Notes](http://www.amstat.org/chapters/northeasternillinois/pastevents/presentations/summer05_Ibrahim_J.pdf)
+* [Lecture Notes (2005)](http://www.amstat.org/chapters/northeasternillinois/pastevents/presentations/summer05_Ibrahim_J.pdf). Ibrahim
