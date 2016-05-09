@@ -23,6 +23,13 @@ library(npsm)
 
 ## Survival Data
 
+```{r out.width="0.6\\linewidth"}
+knitr::include_graphics("SurvivalData.png")
+```
+Source: Ibrahim (2005)
+
+## Survival Data
+
 * We are interested in time to an event of interest as the outcome variable
 * In medicine:
     * Often in a clinical trial the goal is to evaluate the effectiveness of a new treatment at prolonging survival
@@ -59,13 +66,6 @@ library(npsm)
     1.  an unambiguous **time origin** (e.g. randomization to clinical trial, purchase of car)
     2. a **time scale** (e.g. real time (days, years), mileage of a car)
     3. definition of the **event** (e.g. death, need a new car transmission)
-
-## Survival Data
-
-```{r out.width="0.6\\linewidth"}
-knitr::include_graphics("SurvivalData.png")
-```
-Source: Ibrahim (2005)
 
 ## Survival Data
 
@@ -140,7 +140,7 @@ plot(t,Shat,type = "l",xlab = "Time (in months)",ylab = "Survival",
 * In most clinical studies, at the end of followup there are subjects who have yet to experience the event being studied
     * Either hasn't happened
     * Or the subject died before
-* In such cases the Kaplan–Meier product limit estimate can be used
+* In such cases the Kaplan-Meier product limit estimate can be used
 * Let $t(1) < \dots < t(k)$ denote the ordered distinct event times
 * If there are censored responses, then $k < n$
 * Let $n_i = \#\text{subjects}$ at risk at the beginning of time $t(i)$ and $d_i = \#\text{events}$ occurring at time $t(i)$
@@ -173,15 +173,9 @@ $$
 
 ## Kaplan-Meier Estimator
 
-* For discrete random variables:
-$$
-\begin{aligned}
-\lambda(a_i) := \lambda_i = & P(T = a_j | T \ge a_i) \\
- = & \frac{P(T = a_i)}{P(T \ge a_i)} \\
- = & \frac{f(a_i)}{S(a_i)} \\
- = & \frac{f(t)}{\sum_{k: a_k \ge a_i} f(a_k)}
-\end{aligned}
-$$ 
+* For discrete random variables ($\lambda(a_i) := \lambda_i$):
+$$\lambda_i = P(T = a_j | T \ge a_i) = \frac{P(T = a_i)}{P(T \ge a_i)}$$
+$$= \frac{f(a_i)}{S(a_i)} = \frac{f(t)}{\sum_{k: a_k \ge a_i} f(a_k)}$$ 
 * Using an estimate $d_i/r_i$ of the the Hazard function
     * $d_i$ is the number of deaths at $a_i$ and
     * $r_i$ is the number at risk at $a_i$
@@ -215,9 +209,9 @@ $$1 - \frac{d_i}{r_i}$$
 ## Kaplan-Meier Estimator (Example)
 
 * Data:
-    * Relapse: 3 6.5 6.5 10 12 15
-    * Lost to followup: 8.4
-    * Alive and in remission at at end of study: 4 5.7 10
+    * Relapse: ``3, 6.5, 6.5, 10, 12, 15``
+    * Lost to followup: ``8.4``
+    * Alive and in remission at at end of study: ``4, 5.7, 10``
 * Step-by-step Kaplan–Meier estimate:
 $$
 \begin{tabular}{r|r|r|r|r}
@@ -232,8 +226,63 @@ $15$ & $1$ & $1$ & $0/1 = 0$ & $0$ \\
 \end{tabular}
 $$
 
+## Efron's Redistribute-to-the-Right Algorithm
+
+* An alternative Kaplan-Meier estimator invented by Efron in 1967
+* Example data: ``4, 5, 5+, 6+, 7, 8+, 9, 11``
+* If all were non-cencered then empirical survival function would assign mass $\frac{1}{8}$ to each of the values
+* At first censored time ``5+``, a death has not occured but will occur somewhere to the right of ``5``
+* Efron's algorithm takes the mass of $\frac{1}{8}$ of ``5+`` and redistributes it equally among the five times ``6+, 7, 8+, 9, 11+`` to the right of ``5+``, adding $\frac{1}{5}(\frac{1}{8})$ to the mass at ``6+, 7, 8+, 9, 11+``
+* Now go to the next censored time ``6+`` and redistribute the new mass $\frac{1}{5}(\frac{1}{8})+\frac{1}{8}$ equally among the observations to the right of ``6+``
+* Continue this process until you reach the last observation
+* Efron showed that this yields the Kaplan-Meier estimator
+
+## Properties of Kaplan-Meier Estimator
+
+* In case of no censoring (number of subjects $n$): 
+$$\widehat{S}(t) = \frac{\# \text{deaths at $t$ or greater}}{n}$$
+* Just like an estimated probability from a binomial distribution:
+$$\widehat{S}(t) \overset{d}{\to} N(S(t),S(t)(1-S(t))/n)$$
+* Much harder in the censored case
+* $\widehat{S}(t)$ is approximately normal
+* The mean $\widehat{S}(t)$ converges to the true $S(t)$
+* The variance is more complicated (since the denominator $n$ includes some censored observations)
+
+## Properties of Kaplan-Meier Estimator
+
+* We can calculate the variance using Greenwood's formula
+$$\operatorname{Var}(\widehat{S}(t)) = \widehat{S}(t)^2 \sum_{t(i) < t} \frac{d_i}{(r_i-d_i)r_i}$$
+* Think of the KM estimator as 
+$$\widehat{S}(t) = \prod_{t(i) < t} (1 - \widehat{\lambda_i})$$
+* With $\widehat{\lambda_i} = d_i/r_i$
+* Since $\widehat{\lambda}_i$ are binomial proportions, we have
+$$\widehat{S}(t) \overset{d}{\to} N(\lambda_i,\widehat{\lambda}_i(1-\widehat{\lambda}_i)/r_i)$$
+* Also assume that $\widehat{\lambda}_i$ are independent (hold for large samples)
+* Since $\widehat{S}(t)$ is a function of the $\widehat{\lambda}_i$'s, we can estimate its variance using the delta method
+
+## Properties of Kaplan-Meier Estimator
+
+* Delta method: If $Y$ is normal with mean $\mu$ and variance $\sigma^2$, then $g(Y)$ is approximately normally distributed with mean $g(\mu)$ and variance $\left(g'(\mu)\right)^2\sigma^2$
+* Take the $\log$ so that we can work with sums
+$$\log(\widehat{S}(t)) = \sum_{t_{(i)} < t} \log(1-\widehat{\lambda_i})$$
+* And using the independence assumptions
+$$\operatorname{Var}\left(\log(\widehat{S}(t))\right) = \sum_{i_{(i)}<t} \operatorname{Var}\left(\log(1-\widehat{\lambda}_i)\right)$$
+* If $Z = \log(Y)$, then $Z \sim N(\log(\mu),\left(\frac{1}{\mu}\right)^2 \sigma^2)$
+$$\operatorname{Var}\left(\log(\widehat{S}(t))\right) = \sum_{i_{(i)}<t} \left(\frac{1}{1-\widehat{\lambda}_i}\right)^2 \operatorname{Var}\left(\widehat{\lambda}_i\right)$$
+
+## Properties of Kaplan-Meier Estimator
+
+* Then replace $\operatorname{Var}(\widehat{\lambda}_i)$ with $\widehat{\lambda}_i(1-\widehat{\lambda}_i)/r_i$ and set $\widehat{\lambda}_i = d_i/r_i$
+$$\operatorname{Var}\left(\log(\widehat{S}(t))\right) = \sum_{t_{(i)}<t} \frac{d_i}{(r_i-d_i)r_i}$$
+* Take $\exp$ to transform it back $\widehat{S}(t) = \exp(\log(\widehat{S}(t)))$
+* If $Z = \exp(Y)$, then $Z \sim N\left( e^{\mu},(e^{\mu})^2 \sigma^2 \right)$
+$$\operatorname{Var}(\widehat{S}(t)) = \widehat{S}(t)^2 \operatorname{Var}(\log(\widehat{S}(t)))$$
+* And we end up with
+$$\operatorname{Var}(\widehat{S}(t)) = \widehat{S}(t)^2 \sum_{t(i) < t} \frac{d_i}{(r_i-d_i)r_i}$$
+
 ## References
 
 * The Statistical Analysis of Failure Time Data (2002). Kalbfleisch and Prentice
 * Analysis of Survival Data (1984). Cox and Oakes
 * [Lecture Notes (2005)](http://www.amstat.org/chapters/northeasternillinois/pastevents/presentations/summer05_Ibrahim_J.pdf). Ibrahim
+* Hollander and Wolfe, and Chicken (2013). Nonparametric Statistical Methods
