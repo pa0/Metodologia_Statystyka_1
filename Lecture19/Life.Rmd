@@ -4,7 +4,7 @@ author: "Christof Seiler"
 date: "Stanford University, Spring 2016, STATS 205"
 output:
   beamer_presentation:
-    incremental: no
+    incremental: yes
 ---
 
 ```{r setup, include=FALSE}
@@ -147,6 +147,52 @@ plot(t,Shat,type = "l",xlab = "Time (in months)",ylab = "Survival",
 * The **Kaplan-Meier estimate** of the survival function is defined as
 $$\widehat{S}(t) = \prod_{t(i) \le t} \left(1- \frac{d_i}{n_i}\right)$$
 
+## Kaplan-Meier Estimator (Example)
+
+* Event: time to relapse
+* Data:
+    * Relapse: $3, 6.5, 6.5, 10, 12, 15$
+    * Lost to followup: $8.4$
+    * Alive and in remission at at end of study: $4, 5.7, 10$
+* Step-by-step Kaplan-Meier estimate:
+$$
+\begin{tabular}{r|r|r|r|r}
+\hline
+$t$ & $n$ & $d$ & $1-d/n$ & $S(t)$ \\
+\hline
+$3$ & $10$ & $1$ & $9/10=0.9$ & $0.9$ \\
+$6.5$ & $7$ & $2$ & $5/7 = 0.71$ & $0.9\times 0.71 = 0.64$ \\
+$10$ & $4$ & $1$ & $3/4 = 0.75$ & $0.64 \times 0.75 = 0.48$ \\
+$12$ & $2$ & $1$ & $1/2= 0.5$ & $0.48 \times 0.5 = 0.24$ \\
+$15$ & $1$ & $1$ & $0/1 = 0$ & $0$ \\
+\end{tabular}
+$$
+
+## Kaplan-Meier Estimator
+
+* Intuition behind the Kaplan-Meier Estimator
+* Think of dividing the observed timespan of the study into a series of fine intervals so that there is a separate interval for each time of death or censoring
+* Using the law of conditional probability,
+$$P(T \ge t) = \prod_i P( \text{ survive } i \text{th interval } I_i | \text{ survived to start of } I_i)$$
+where the product is taken over all the intervals including or preceding time $t$
+
+## Kaplan-Meier Estimator
+
+* 4 possibilities for each interval:
+    1. **No events (death or censoring)**: conditional probability of surviving the interval is 1
+    2. **Censoring**: assume they survive to the end of the interval, so that the conditional probability of surviving the interval is 1
+    3. **Death, but no censoring**: conditional probability of not surviving the interval is \# deaths $(d)$ divided by \# at risk $(n)$ at the beginning of the interval. So the conditional probability of surviving the interval is $1-(d/n)$
+    4. **Tied deaths and censoring**: assume censorings last to the end of the interval, so that conditional probability of surviving the interval is still $1 - (d/n)$
+* The general formula for the conditional probability of surviving the $i$th interval that holds for all 4 cases:
+$$1 - \frac{d_i}{n_i}$$
+
+## Kaplan-Meier Estimator
+
+* We could use the same approach by **grouping the event times into intervals** (say, one interval for each month), and then **counting** up the number of deaths (events) in each to estimate the probability of surviving the interval (this is called the lifetable estimate)
+* However, the assumption that those **censored last until the end of the interval wouldn’t be quite accurate**, so we would end up with a cruder approximation
+* As the **intervals get finer and finer**, the approximations made in estimating the probabilities of getting through each interval become smaller and smaller, so that the estimator **converges** to the true $S(t)$
+* This intuition clarifies why an alternative name for the KM is the product limit estimator
+
 ## Kaplan-Meier Estimator
 
 * Suppose $a_k < t < a_{k+1}$, then
@@ -180,52 +226,6 @@ $$= \frac{f(a_i)}{S(a_i)} = \frac{f(t)}{\sum_{k: a_k \ge a_i} f(a_k)}$$
     * $d_i$ is the number of deaths at $a_i$ and
     * $n_i$ is the number at risk at $a_i$
 $$\widehat{S}(t) = \prod_{i=1}^k \left( 1-\frac{d_i}{n_i} \right)$$
-
-## Kaplan-Meier Estimator
-
-* Intuition behind the Kaplan-Meier Estimator
-* Think of dividing the observed timespan of the study into a series of fine intervals so that there is a separate interval for each time of death or censoring
-* Using the law of conditional probability,
-$$P(T \ge t) = \prod_i P( \text{ survive } i \text{th interval } I_i | \text{ survived to start of } I_i)$$
-where the product is taken over all the intervals including or preceding time $t$
-
-## Kaplan-Meier Estimator
-
-* 4 possibilities for each interval:
-    1. **No events (death or censoring)**: conditional probability of surviving the interval is 1
-    2. **Censoring**: assume they survive to the end of the interval, so that the conditional probability of surviving the interval is 1
-    3. **Death, but no censoring**: conditional probability of not surviving the interval is \# deaths $(d)$ divided by \# at risk $(n)$ at the beginning of the interval. So the conditional probability of surviving the interval is $1-(d/n)$
-    4. **Tied deaths and censoring**: assume censorings last to the end of the interval, so that conditional probability of surviving the interval is still $1 - (d/n)$
-* The general formula for the conditional probability of surviving the $i$th interval that holds for all 4 cases:
-$$1 - \frac{d_i}{n_i}$$
-
-## Kaplan-Meier Estimator
-
-* We could use the same approach by **grouping the event times into intervals** (say, one interval for each month), and then **counting** up the number of deaths (events) in each to estimate the probability of surviving the interval (this is called the lifetable estimate)
-* However, the assumption that those **censored last until the end of the interval wouldn’t be quite accurate**, so we would end up with a cruder approximation
-* As the **intervals get finer and finer**, the approximations made in estimating the probabilities of getting through each interval become smaller and smaller, so that the estimator **converges** to the true $S(t)$
-* This intuition clarifies why an alternative name for the KM is the product limit estimator
-
-## Kaplan-Meier Estimator (Example)
-
-* Event: time to relapse
-* Data:
-    * Relapse: $3, 6.5, 6.5, 10, 12, 15$
-    * Lost to followup: $8.4$
-    * Alive and in remission at at end of study: $4, 5.7, 10$
-* Step-by-step Kaplan-Meier estimate:
-$$
-\begin{tabular}{r|r|r|r|r}
-\hline
-$t$ & $n$ & $d$ & $1-d/n$ & $S(t)$ \\
-\hline
-$3$ & $10$ & $1$ & $9/10=0.9$ & $0.9$ \\
-$6.5$ & $7$ & $2$ & $5/7 = 0.71$ & $0.9\times 0.71 = 0.64$ \\
-$10$ & $4$ & $1$ & $3/4 = 0.75$ & $0.64 \times 0.75 = 0.48$ \\
-$12$ & $2$ & $1$ & $1/2= 0.5$ & $0.48 \times 0.5 = 0.24$ \\
-$15$ & $1$ & $1$ & $0/1 = 0$ & $0$ \\
-\end{tabular}
-$$
 
 ## Efron's Redistribute-to-the-Right Algorithm
 
