@@ -15,7 +15,7 @@ Suppose the observations $(X_1,\dots,X_K)$ are distributed in accordance with th
 $$
 \frac{\sqrt{|D|}}{(2\pi)^{K/2}} \exp \left( -\frac{1}{2} \sum \sum d_{ij} (x_i-\mu_i)(x_j-\mu_j) \right)
 $$
-where the matrix $D = (d_{ij})$ is positive definite; $|D|$ denotes its determinant; $\operatorname{E}(X_j) = \mu_j$; $\operatorname{E}((X_j−\mu_j)(X_j−\mu_j)) = \sigma_{ij}$; and $(\sigma_{ij})= D^{−1}$. If $\sigma_{ij} = \sigma^2$ when $i = j$ and $\sigma_{ij} = \sigma_{12}$ when $i \ne j$, are the observations independent? Exchangeable?
+where the matrix $D = (d_{ij})$ is positive definite; $|D|$ denotes its determinant; $\operatorname{E}(X_j) = \mu_j$; $\operatorname{E}((X_i−\mu_i)(X_j−\mu_j)) = \sigma_{ij}$; and $(\sigma_{ij})= D^{−1}$. If $\sigma_{ij} = \sigma^2$ when $i = j$ and $\sigma_{ij} = \sigma_{12}$ when $i \ne j$, are the observations independent? Exchangeable?
 
 <!--
 ## Exercise 2
