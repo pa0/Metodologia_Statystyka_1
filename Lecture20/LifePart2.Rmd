@@ -4,7 +4,7 @@ author: "Christof Seiler"
 date: "Stanford University, Spring 2016, STATS 205"
 output:
   beamer_presentation:
-    incremental: no
+    incremental: yes
 ---
 
 ```{r setup, include=FALSE}
@@ -12,6 +12,7 @@ knitr::opts_chunk$set(echo = FALSE)
 set.seed(1234)
 library(survival)
 library(npsm)
+library(boot)
 ```
 
 ## Overview
@@ -23,12 +24,42 @@ library(npsm)
     * Kaplan-Meier estimator
 
 * Today:
-    * Comparison of survival curves
     * Confidence bands with the Boostrap
+    * Comparison of survival curves
+
+## Confidence bands with the Boostrap
+
+* Efron 1981 on Channing house data
+```{r}
+head(channing[channing$sex=="Male",])
+```
+* 97 men in retirement house in Palo Alto
+* From opening 1964 until data collection day in July 1975
+* 46 were observed exactly, the men died while in the Channing house
+* The remaining 51 were censored, five moved elsewhere, and 46 were still alive at data collection day
+
+## Confidence bands with the Boostrap
+
+```{r out.width=".8\\linewidth"}
+channingMale = channing[channing$sex=="Male",]
+fit = survfit(Surv(time, cens) ~ sex, data = channingMale) 
+plot(fit,ylab='Probability of Survival', xlab='Time (in Months)', main = 'Channing House Men',
+     cex = 1.5, cex.lab=1.5, cex.axis=1.5, cex.main=1.5, cex.sub=1.5, conf.int=FALSE)
+abline(h = 0.5)
+```
+
+## Confidence bands with the Boostrap
+
+* The quantify of interest was the median survival time
+* Randomly censored data consist of iid pairs of observations $(X_i, \delta_i), i = 1,\delta,n$, 
+    * if $\delta_i = 0$ then $X_i$ denotes a censored observation, and 
+    * if $\delta_i = 1$ then $X_i$ denotes an exact "survival" time
+* Efron takes a random sample with replacement from $(X_1,\delta_1),\dots,(X_n,\delta_n)$
+* There are theoretical developements by Akritas in 1986 showing that the boostrap approach works
 
 ## Log Rank Test
 
-* We could use use our asymptotic results on the KM estimator $\widehat{S}(t)$ from last time to devise a test equality of survivar function at some time $t$
+* We could use use our asymptotic results on the KM estimator $\widehat{S}(t)$ from last time or the bootstrap esimator to devise a test equality of survivar function at some time $t$
 * But taking advantage of the entire function will make more efficient use of the data
 * The most common used statistics are based on nonparametric rank tests
 
@@ -135,11 +166,6 @@ with(cancertrt,gehan.test(time,event,trt))
 ```S 94  180+ 741  1133 1261 382 567+ 988   1355+
    N 155 375  951+ 1198 175  521 683+ 1216+```
 
-## Confidence bands with the Boostrap
-
-* Efron 1981
-* Akritas 1986
-
 <!--
 ## Cox Proportional Hazards Models
 
@@ -210,3 +236,5 @@ summary(f2)
 
 * The Statistical Analysis of Failure Time Data (2002). Kalbfleisch and Prentice
 * [Lecture Notes (2005)](http://www.amstat.org/chapters/northeasternillinois/pastevents/presentations/summer05_Ibrahim_J.pdf). Ibrahim
+* Efron (1981). Censored Data and the Bootstrap
+* Akritas (1986). Bootstrapping the Kaplan-Meier Estimator
