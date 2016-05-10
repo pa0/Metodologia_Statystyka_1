@@ -4,7 +4,7 @@ author: "Christof Seiler"
 date: "Stanford University, Spring 2016, STATS 205"
 output:
   beamer_presentation:
-    incremental: yes
+    incremental: no
 ---
 
 ```{r setup, include=FALSE}
@@ -24,7 +24,7 @@ library(npsm)
 
 * Today:
     * Comparison of survival curves
-    * High-Dimensional Regression: Supervised Principal Components
+    * Confidence bands with the Boostrap
 
 ## Log Rank Test
 
@@ -135,9 +135,10 @@ with(cancertrt,gehan.test(time,event,trt))
 ```S 94  180+ 741  1133 1261 382 567+ 988   1355+
    N 155 375  951+ 1198 175  521 683+ 1216+```
 
-## High-Dimensional Regression: Supervised Principal Components
+## Confidence bands with the Boostrap
 
-TODO: Hastie p. 674
+* Efron 1981
+* Akritas 1986
 
 <!--
 ## Cox Proportional Hazards Models
@@ -208,6 +209,4 @@ summary(f2)
 ## References
 
 * The Statistical Analysis of Failure Time Data (2002). Kalbfleisch and Prentice
-* Analysis of Survival Data (1984). Cox and Oakes
 * [Lecture Notes (2005)](http://www.amstat.org/chapters/northeasternillinois/pastevents/presentations/summer05_Ibrahim_J.pdf). Ibrahim
-* Hastie, Tibshirani, and Friedman (2008). The Elements of Statistical Learning
