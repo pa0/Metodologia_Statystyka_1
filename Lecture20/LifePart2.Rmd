@@ -4,7 +4,7 @@ author: "Christof Seiler"
 date: "Stanford University, Spring 2016, STATS 205"
 output:
   beamer_presentation:
-    incremental: no
+    incremental: yes
 ---
 
 ```{r setup, include=FALSE}
@@ -23,26 +23,64 @@ library(npsm)
     * Kaplan-Meier estimator
 
 * Today:
-    * Log rank test
-    * Gehan's Test
-    * Cox proportional hazards models
+    * Comparison of survival curves
+    * High-Dimensional Regression: Supervised Principal Components
 
 ## Log Rank Test
 
-TODO: In Kalbfleisch, Section 1.5 heuristic derivation of log rank test
+* We could use use our asymptotic results on the KM estimator $\widehat{S}(t)$ from last time to devise a test equality of survivar function at some time $t$
+* But taking advantage of the entire function will make more efficient use of the data
+* The most common used statistics are based on nonparametric rank tests
 
-## Kaplan-Meier Estimator and Log Rank Test (Example)
+## Log Rank Test
 
-* Patients who had survived a lobar intracerebral hemorrhage and whose genotype was known 
-* The outcome variable was the time until recurrence of lobar intracerebral hemorrhage
-* The investigators were interested in examining the genetic effect on recurrence as there were three common alleles e2, e3, and e4
-* The analysis was focused on the effect of homozygous e3/e3 (Group 1) versus at least one e2 or e4 (Group 2)
-* In the output are survival times (in months) for 71 subjects
-* However, one subject’s genotype information is missing and is excluded from analysis
+* Let failure time $t_1 < \dots < t_k$ over both samples
+* We construct contingency tables at every event time $t_i$
+* $d_{0j}$ and $d_{1j}$ are the number of deaths in group 0 and 1
+* $n_{0j}$ and $n_{1j}$ are the number at risk in groups 0 and 1
+$$
+\begin{tabular}{c|cc|c}
+\hline
+Group & Failures & Survivors & Total \\
+\hline
+$0$ & $d_{0i}$ & $n_{0i}-d_{0j}$ & $d_{0i}$ \\
+$1$ & $d_{1i}$ & $n_{1i}-d_{1i}$ & $d_{1i}$ \\
+\hline
+Total & $d_{i}$ & $n_{i}-d_{i}$ & $d_{i}$ \\
+\hline
+\end{tabular}
+$$
+* Under the null hypothesis $S_1(t) = S_0(t), 0 < t < \infty$, $d_{1i}$ follows a hypergeometric distribution conditional on the margins
+
+## Log Rank Test
+
+* With the hypergeometric distribution we can get 
+$$E_i = \operatorname{E}(d_{1i}) = n_{0i} \frac{d_i}{n_i}$$
+$$V_i = \operatorname{Var}(d_{1i}) = \frac{\sum_{i=1}^k n_{1i} n_{0i}d_i(n_i-d_i)} {n_i^2(n_i-1)} $$
+* And observed is $O_i = d_{0i}$
+* Using this expectation and variances from previous slide and summing over all timepoints $t_k$, we get the log rank statistics 
+$$\chi^2 = \frac{\left(\sum_{i=1}^k (O_i - E_i)\right)^2}{\sum_{i=1}^k V_i}$$
+
+## Log Rank Test
+
+* Symmetric in two groups
+* The log rank statistic depends on ranks of event times only
+* $O-E$ from the $k$ two by two tables are treated as independent
+* The $O-E$ in the numberator can be written as
+$$\frac{d_{0i}d_{1i}}{d_i} (\widehat{\lambda}_{1i}-\widehat{\lambda}_{0i})$$
+* So it quantifies the sums of differences in the hazard function over all $k$ time points scaled by by the fractino of failures
+
+## Log Rank Test (Example)
+
+* **Study**: Patients who had survived a lobar intracerebral hemorrhage and whose genotype was known 
+* **Data**: Survival times (in months) for 71 subjects
+* **Event**: Time until recurrence of lobar intracerebral hemorrhage
+* **Question**: Genetic effect on recurrence in two gropus with different genotype
+* One subject's genotype information is missing and is excluded from analysis
 * Of the remaining 70 subjects, 32 are in Group 1 and 38 are in Group 2 
-* A + sign indicates a censored observation; meaning that at that point in time the subject had yet to report recurrence
+* A+ sign indicates a censored observation; meaning that at that point in time the subject had yet to report recurrence
 
-## Kaplan-Meier Estimator and Log Rank Test (Example)
+## Log Rank Test (Example)
 
 ```{r out.width=".8\\linewidth"}
 fit = with(hemorrhage, survfit(Surv(time,recur)~genotype))
@@ -51,7 +89,7 @@ plot(fit,lty=1:2, ylab='Probability of Hemorrhage-Free Survival', xlab='Time (in
 legend('bottomleft',c('Group 1', 'Group 2'),lty=1:2,bty='n')
 ```
 
-## Kaplan-Meier Estimator and Log Rank Test (Example)
+## Log Rank Test (Example)
 
 ```{r}
 with(hemorrhage, survdiff(Surv(time,recur)~genotype))
@@ -85,6 +123,9 @@ $$
 
 ## Gehan's Test (Example)
 
+```{r echo=TRUE}
+with(cancertrt,gehan.test(time,event,trt))
+```
 * Experiment to assess the effect of a new treatment relative to a standard
 * There are three required arguments to the function: 
     * the survival time, 
@@ -94,10 +135,11 @@ $$
 ```S 94  180+ 741  1133 1261 382 567+ 988   1355+
    N 155 375  951+ 1198 175  521 683+ 1216+```
 
-```{r echo=TRUE}
-with(cancertrt,gehan.test(time,event,trt))
-```
+## High-Dimensional Regression: Supervised Principal Components
 
+TODO: Hastie p. 674
+
+<!--
 ## Cox Proportional Hazards Models
 
 * Let $x$ denote the corresponding $p \times 1$ vector of covariates
@@ -161,9 +203,11 @@ summary(f2)
 * Size of tumor is marginally significant (p-value = 0.0819)
 * Given that $\widehat{\Delta} = -1.11272 < 1$ it appears that DES lowers risk of mortality
 * However, the p-value = 0.3550 is nonsignificant
+-->
 
 ## References
 
 * The Statistical Analysis of Failure Time Data (2002). Kalbfleisch and Prentice
 * Analysis of Survival Data (1984). Cox and Oakes
 * [Lecture Notes (2005)](http://www.amstat.org/chapters/northeasternillinois/pastevents/presentations/summer05_Ibrahim_J.pdf). Ibrahim
+* Hastie, Tibshirani, and Friedman (2008). The Elements of Statistical Learning
