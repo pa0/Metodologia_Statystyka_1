@@ -4,7 +4,7 @@ author: "Christof Seiler"
 date: "Stanford University, Spring 2016, STATS 205"
 output:
   beamer_presentation:
-    incremental: no
+    incremental: yes
 ---
 
 ```{r setup, include=FALSE}
@@ -23,7 +23,7 @@ set.seed(1234)
     * Conflict predictions in the Congo
     * Police killings
     * University rankings
-    * Virtucal Architecture
+    * Virtual Architecture
     * Digital humanities
     * Natural language processing
     * Linear smoothers
@@ -50,7 +50,7 @@ Source: Bennet et al. (2009)
 
 * What happened? Random noise from scanner
 * The problem is that we are testing around 130,000 voxels in a typical fMRI scan
-* Using the common significance level $\alpha = 0.05$, we expect to see 6,500 false discoveries
+* Using the common significance level $\alpha = 0.05$, we will see 6,500 discoveries just by chance alone
 * We have to adjust for this multiple testing problem
 * Here are the common tools and R functions
 * For detailed treatment take for instance Stats 300C
@@ -78,10 +78,9 @@ $$\operatorname{FWER} = P(V \ge 1)$$
 ## Multiple Comparison Problem
 
 * The FWER makes sense when we are testing a small number of hypotheses
-* For example, in comparing six or ten different treatments, it is very reasonable to control the probability
-of returning even one ineffective treatment
-* If we are testing millions of hypotheses at once, for example in genome-wide association studies, and making a false discovery is not the end of the world
-* We prefer to return some false positives along with many potentially interesting genes, because this enables scientists to follow these leads and to distinguish the important genes from the false discoveries
+* For example, in comparing six or ten different treatments, it is very reasonable to control the probability of returning even one ineffective treatment
+* If we are testing millions of hypotheses at once, for example in genome-wide association studies, and making a **false discovery** is not the end of the world
+* We prefer to return some **false positives** along with many potentially interesting genes, because this enables scientists to follow these leads and to distinguish the important genes from the false discoveries
 
 ## Multiple Comparison Problem
 
@@ -98,15 +97,15 @@ $$
 
 * False discovery proportion (FDP): 
 $$\operatorname{FDP} = \begin{cases} V/R & \text{if } R \ge 1 \\ 0 & \text{otherwise} \end{cases}$$
-* We observe R, we do not observe V, and so FDP is an unobserved random variable
+* We observe $R$, we do not observe $V$, and so FDP is an unobserved random variable
 * **False Discovery Rate** controls the expectation
 $$\operatorname{FDR} = \operatorname{E}(\operatorname{FDP})$$
 
 ## Multiple Comparison Problem
 
-* Consider what it means to control FDR: if we repeat our experiment many times, on average we control the FDP
-*  This is not a statement about our individual experiment, and does not say much about the chance of having our FDP exceed a certain threshold
-* FWER, on the other hand, does control for an individual experiment
+* Consider what it means to control **FDR**: if we repeat our experiment many times, on average we control the FDP
+*  This is **not** a statement about our **individual experiment**, and does not say much about the chance of having our FDP exceed a certain threshold
+* **FWER**, on the other hand, does control for an **individual experiment**
 
 ## Reproducible Reserach
 
@@ -115,7 +114,7 @@ $$\operatorname{FDR} = \operatorname{E}(\operatorname{FDP})$$
 * Keep track of everything
 * Do all the anlaysis in a Rmd
 * Never try out things without writing them down in a script!
-* Some examples: [Link](http://statweb.stanford.edu/~susan/papers/PSBRR.html)
+* Some examples: [(link)](http://statweb.stanford.edu/~susan/papers/PSBRR.html)
 
 ## References
 
