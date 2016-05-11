@@ -4,7 +4,7 @@ author: "Christof Seiler"
 date: "Stanford University, Spring 2016, STATS 205"
 output:
   beamer_presentation:
-    incremental: yes
+    incremental: no
 ---
 
 ```{r setup, include=FALSE}
@@ -130,6 +130,7 @@ with(hemorrhage, survdiff(Surv(time,recur)~genotype))
 * Note that the log-rank test statistic is 6.3 with p-value 0.0122 based on a null $\chi^2$-distribution with 1 degree of freedom
 * Thus the log-rank test confirms the difference in survival time of the two groups
 
+<!--
 ## Gehan's Test
 
 * Alternative to the log-rank test
@@ -166,6 +167,7 @@ with(cancertrt,gehan.test(time,event,trt))
 * Data:  
 ```S 94  180+ 741  1133 1261 382 567+ 988   1355+
    N 155 375  951+ 1198 175  521 683+ 1216+```
+-->
 
 <!--
 ## Cox Proportional Hazards Models
