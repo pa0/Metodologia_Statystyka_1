@@ -55,29 +55,30 @@ abline(h = 0.5)
     * if $\delta_i = 0$ then $X_i$ denotes a censored observation, and 
     * if $\delta_i = 1$ then $X_i$ denotes an exact "survival" time
 * Efron takes a random sample with replacement from $(X_1,\delta_1),\dots,(X_n,\delta_n)$
+* Then recomputes the survival function on the bootstrap sample
 * There are theoretical developements by Akritas in 1986 showing that the boostrap approach works
 
 ## Log Rank Test
 
 * We could use use our asymptotic results on the KM estimator $\widehat{S}(t)$ from last time or the bootstrap esimator to devise a test equality of survivar function at some time $t$
 * But taking advantage of the entire function will make more efficient use of the data
-* The most common used statistics are based on nonparametric rank tests
+* The most commonly used statistics are based on nonparametric rank tests
 
 ## Log Rank Test
 
 * Let failure time $t_1 < \dots < t_k$ over both samples
 * We construct contingency tables at every event time $t_i$
-* $d_{0j}$ and $d_{1j}$ are the number of deaths in group 0 and 1
-* $n_{0j}$ and $n_{1j}$ are the number at risk in groups 0 and 1
+* $d_{0i}$ and $d_{1i}$ are the number of deaths in group 0 and 1
+* $n_{0i}$ and $n_{1i}$ are the number at risk in groups 0 and 1
 $$
 \begin{tabular}{c|cc|c}
 \hline
 Group & Failures & Survivors & Total \\
 \hline
-$0$ & $d_{0i}$ & $n_{0i}-d_{0j}$ & $d_{0i}$ \\
-$1$ & $d_{1i}$ & $n_{1i}-d_{1i}$ & $d_{1i}$ \\
+$0$ & $d_{0i}$ & $n_{0i}-d_{0i}$ & $n_{0i}$ \\
+$1$ & $d_{1i}$ & $n_{1i}-d_{1i}$ & $n_{1i}$ \\
 \hline
-Total & $d_{i}$ & $n_{i}-d_{i}$ & $d_{i}$ \\
+Total & $d_{i}$ & $n_{i}-d_{i}$ & $n_{i}$ \\
 \hline
 \end{tabular}
 $$
@@ -89,7 +90,7 @@ $$
 $$E_i = \operatorname{E}(d_{1i}) = n_{0i} \frac{d_i}{n_i}$$
 $$V_i = \operatorname{Var}(d_{1i}) = \frac{\sum_{i=1}^k n_{1i} n_{0i}d_i(n_i-d_i)} {n_i^2(n_i-1)} $$
 * And observed is $O_i = d_{0i}$
-* Using this expectation and variances from previous slide and summing over all timepoints $t_k$, we get the log rank statistics 
+* Using this expectation and variances and summing over all timepoints $t_k$, we get the log rank statistics 
 $$\chi^2 = \frac{\left(\sum_{i=1}^k (O_i - E_i)\right)^2}{\sum_{i=1}^k V_i}$$
 
 ## Log Rank Test
@@ -99,7 +100,7 @@ $$\chi^2 = \frac{\left(\sum_{i=1}^k (O_i - E_i)\right)^2}{\sum_{i=1}^k V_i}$$
 * $O-E$ from the $k$ two by two tables are treated as independent
 * The $O-E$ in the numberator can be written as
 $$\frac{d_{0i}d_{1i}}{d_i} (\widehat{\lambda}_{1i}-\widehat{\lambda}_{0i})$$
-* So it quantifies the sums of differences in the hazard function over all $k$ time points scaled by by the fractino of failures
+* So it quantifies the sums of differences in the hazard function over all $k$ time points scaled by by the fraction of failures
 
 ## Log Rank Test (Example)
 
