@@ -1,0 +1,32 @@
+---
+title: "Homework 5"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Exercise 1
+
+Write R code to draw 100 sample curves from the Dirichlet Process (DP) prior for different concentration parameter $\alpha$ and one fixed base distribution $F$ (for example the normal distribution). What happens when you change $\alpha$? What does this corresponds to in more standard dstribution, say the normal distribution?
+
+## Exercise 2
+
+From our textbook (Ex. 4.9.19) [(Stanford library link)](https://searchworks.stanford.edu/view/10718635):  
+
+Exercise about a two-way table, and redo with median polish. Are there any differences? What is the median polish robust to?
+
+## Exercise 3
+
+From our textbook (Ex. 4.9.20) [(Stanford library link)](https://searchworks.stanford.edu/view/10718635):  
+
+Exercise about estimating an survival function using Kaplan-Meier estimator.
+
+## Deadline
+
+Please email your solutions in the form of a Rmd file to Nan Bi and Lexi Guan.
+
+This homework is due on Tuesday, May 19th at 1:30 pm.
+
+You are encouraged to work through this homework with your peers. But write your own code and explain the results in your own words.
