@@ -14,8 +14,116 @@ set.seed(1234)
 
 ## Introduction
 
-* Checkout slides, paper, and book chapter
+* Keys to any statistical inference most commonly is random sample from the popuation in question
+* Goal is to get the best possible representation of the population of the quantifiy of interest
+* How to collect sample data?
+* Are there alternative to a random sample?
+* Usually, once the sample items hae been chosen, the desired measurements are collected from each of the selecte items
+* **Ranked set sampling**: It is not a sampling technique; it is a data measurement tequniques
+
+## Introduction
+
+* First introduced in McIntyre in 1952 for situations where
+    * actual measurements for on sample observations is expensive
+    * ranking observations is cheap
+    * collecting sample units is cheap and reliable
+* Example: Bone mineral density in a human population
+    * Subjects for such a study are plentiful
+    * Measurements of BMD via dual x-ray absorptiometry (DXA) on selected subject is expensive
+    * Because we need medical experts (e.g. orthopedic surgeons or anatomist) to manually segment images
+    * Thus it is important to minimize the number of subjects required for the study without sacrificing information about the BMD makeup of the population
+
+## Introduction
+
+* Radiograpbh of the radius bone
+
+```{r out.width="0.5\\linewidth"}
+knitr::include_graphics("Radius.png")
+```
+
+Source: http://webapps.radiology.ucsf.edu/refline/
+
+## Introduction
+
+* Consider random sample $X_1,\dots,X_n$
+* Additionally to simple random sampling, there is stratified sampling, proportional sampling, and concomitant variable based sampling
+* These are different kinds of sampling techniques define **prior** to data collection
+* Ranked set sampling is a techniques **during** data collection
+* It helps to direct attention toward measuremnts of more representative units
+* As a result, we get measurements that are more likely to span the range of values in the population
+
+## Collecting a Ranked Set Sample
+
+* To obtain $k$ observations from a population
+* First, use simple random sampling to select $k$ units from a population
+* Then, rank order them according to a predefined attribute
+* A variety of mechanisms are: 
+    * Visual comparison
+    * Expert opinion
+    * Auxiliary variabele
+    * Cannot involve your quantitiy of interest!
+* The unit that is judged the smallest is included in your ranked set sample
+* This first unit is called the **first judgement order statistics** and denoted by $X_{[1]}$
+* Square brackets are used because this may not coincide with true order statistics usually denoted by $X_{(1)}$
+
+## Collecting a Ranked Set Sample
+
+* The remaining $k-1$ units are not considered further (their role was only to assist selecting the smallest ranked unit)
+* Then we repeat the same procedure to select the second $X_{[2]}$ by picking the second smallest judgement order statistic
+* And continue this procedure until $X_{[k]}$
+* One such run sequcence $X_{[1]},\dots,X_{[k]}$ is called a **cycle**
+* This is called a **balanced** ranked set sample since we collect one unit for each ranks
+* To obtain $n = k\times m$ observation we repeat the entire process
+$$
+\begin{tabular}{lccc}
+\hline 
+Cycle $1$ & $X_{{[1]1}}$ & $\dots$ & $X_{{[k]1}}$ \\
+\vdots & \vdots & \vdots & \vdots \\
+Cycle $m$ & $X_{{[1]m}}$ & $\dots$ & $X_{{[k]m}}$ \\
+\hline
+\end{tabular}
+$$
+
+## Collecting a Ranked Set Sample (Example)
+
+* Unburned hydrocarbons emitted from automobile tailpipes and via evaporation are among the primary contributions to ozone and smog in large cities
+* One way to reduce polution is to use reformulated gasoline, designed to reduce volatility measured through Reid Vapor Pressure (RVP) value
+* To enforce this regular gasoline samples are taken from pumps at stations and RVP is measured
+* There is crude field measure and a more refined lab measure
+* The goal is to use the cruder and cheaper measure as a surragate for the more expansive lab measure in order to reduce the actual amount of lab measures
+
+## Collecting a Ranked Set Sample (Example)
+
+```{r out.width="0.6\\linewidth"}
+knitr::include_graphics("FieldRVP.png")
+```
+
+Source: Hollander and Wolfe, and Chicken (2013)
+
+## Collecting a Ranked Set Sample (Example)
+
+* Group of triple $k=3$ in four cicles $m=4$
+* Sets of simple random samples from all 36 original observations
+```{r out.width="0.8\\linewidth"}
+knitr::include_graphics("SimpleRandomSamples.png")
+```
+
+* Bold values are the ranked set sample (these are now send to the lab for further analysis)
+```{r out.width="0.8\\linewidth"}
+knitr::include_graphics("RankedSet.png")
+```
+
+## Collecting a Ranked Set Sample
+
+* Marginal densities of the order statistics $X_{(1)},\dots,X_{(5)}$ for random sample of size 5 from the standard normal
+```{r out.width="0.8\\linewidth"}
+knitr::include_graphics("Marginals.png")
+```
+
+Source: Hollander and Wolfe, and Chicken (2013)
 
 ## References
 
+* Nahhas, Wolfe, and Chen (2002). Ranked Set Sampling: Cost and Optimal Set Size
 * Wolfe (2004). Ranked Set Sampling: An Approach to More Efficient Data Collection
+* Hollander and Wolfe, and Chicken (2013). Nonparametric Statistical Methods
