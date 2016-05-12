@@ -9,19 +9,28 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Exercise 1
 
-Write R code to draw 100 sample curves from the Dirichlet Process (DP) prior for different concentration parameter $\alpha$ and one fixed base distribution $F$ (for example the normal distribution). What happens when you change $\alpha$? What does this corresponds to in more standard dstribution, say the normal distribution?
+1. Write R code to draw 100 sample curves from the Dirichlet Process (DP) prior for different concentration parameter $\alpha$ and one fixed base distribution $F$ (for example the normal distribution). 
+2. What happens when you change $\alpha$? 
+3. What does this corresponds to in more standard dstribution, say the normal distribution?
 
 ## Exercise 2
 
-From our textbook (Ex. 4.9.19) [(Stanford library link)](https://searchworks.stanford.edu/view/10718635):  
-
-Exercise about a two-way table, and redo with median polish. Are there any differences? What is the median polish robust to?
+1. Download occupational employment statistics from [here](http://www.bls.gov/oes/special.requests/oesm15st.zip).
+2. Construct a two-way table with states as rows and columns as job title.
+3. Perform the Friedman's test on the constructed table. What is our null and alternative hypothesis? What are your conclusions?
+4. Perform median polish on this table. What are you conclusions? Do model fit evaluations using Tukey additivity plot. What are your conclusions?
 
 ## Exercise 3
 
-From our textbook (Ex. 4.9.20) [(Stanford library link)](https://searchworks.stanford.edu/view/10718635):  
+From our textbook (Ex. 6.5.3.) [(Stanford library link)](https://searchworks.stanford.edu/view/10718635):  
 
-Exercise about estimating an survival function using Kaplan-Meier estimator.
+For the dataset ``hodgkins`` in package ``npsm``, plot Kaplan-Meier estimated survival curves for both treatments. Note treatment code 1 denotes radiation of affected node and treatment code 2 denotes total nodal radiation.
+
+## Exercise 4
+
+From our textbook (Ex. 6.5.4.) [(Stanford library link)](https://searchworks.stanford.edu/view/10718635):  
+
+To simulate survival data, often it is useful to simulate multiple time points. For example the time to event and the time to end of study. Then, events occurring after the time to end of study are censored. Suppose the time to event of interest follows an exponential distribution with mean 5 years and the time to end of study follows an exponential distribution with a mean of 1.8 years. For a sample size $n = 100$ simulate survival times from this model. Plot the Kaplan-Meier estimate.
 
 ## Deadline
 
