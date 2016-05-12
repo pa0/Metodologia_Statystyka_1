@@ -36,6 +36,6 @@ To simulate survival data, often it is useful to simulate multiple time points. 
 
 Please email your solutions in the form of a Rmd file to Nan Bi and Lexi Guan.
 
-This homework is due on Tuesday, May 19th at 1:30 pm.
+This homework is due on Thursday, May 19th at 1:30 pm.
 
 You are encouraged to work through this homework with your peers. But write your own code and explain the results in your own words.
