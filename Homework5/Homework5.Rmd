@@ -9,14 +9,14 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Exercise 1
 
-1. Write R code to draw 100 sample curves from the Dirichlet Process (DP) prior for different concentration parameter $\alpha$ and one fixed base distribution $F$ (for example the normal distribution). 
+1. Write R code to draw 100 sample curves from the Dirichlet Process (DP) prior for a range of concentration parameters $\alpha$ and one fixed base distribution $F_0$ (for example the normal distribution). 
 2. What happens when you change $\alpha$? 
-3. What does this corresponds to in more standard dstribution, say the normal distribution?
+3. What does this corresponds to in a more standard dstribution, say the normal distribution?
 
 ## Exercise 2
 
 1. Download occupational employment statistics from [here](http://www.bls.gov/oes/special.requests/oesm15st.zip).
-2. Construct a two-way table with states as rows and columns as job title.
+2. Construct a two-way table of median hourly wages with states as rows and job titles as columns.
 3. Perform the Friedman's test on the constructed table. What is our null and alternative hypothesis? What are your conclusions?
 4. Perform median polish on this table. What are you conclusions? Do model fit evaluations using Tukey additivity plot. What are your conclusions?
 
