@@ -238,4 +238,4 @@ knitr::include_graphics("Ledger.jpg")
 
 * Nahhas, Wolfe, and Chen (2002). Ranked Set Sampling: Cost and Optimal Set Size
 * Wolfe (2004). Ranked Set Sampling: An Approach to More Efficient Data Collection
-* Hollander and Wolfe, and Chicken (2013). Nonparametric Statistical Methods
+* Hollander, Wolfe, and Chicken (2013). Nonparametric Statistical Methods
