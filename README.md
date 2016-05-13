@@ -7,7 +7,7 @@
 3. Nonparametric Networks: Graph Limits (Graphons)
 4. Visual Ranking (Buja)
 7. Why Median in General (from EDA book) and Tukey Depth
-8. Functional (Donoho)
+8. Functionals of Densities (Donoho)
 9. Wrap-Up (give overview of all topics that we covered) (1 lecture)
 
 ### Final Project Contents
