@@ -2,14 +2,13 @@
 
 ## Future and Potential Lectures
 
-1. ANOVA, ANCOVA (2 lectures)
-2. Time to Event Analysis (2 lectures)
-3. Cluster Correlated Data (1 lecture)
-4. Ranked Set Sampling (1 lecture)
-5. Nonparametric Networks: Graph Limits (Graphons) (1 lecture)
-6. Wavelets (2 lecture)
-7. Tukey Depth (1 lecture)
-8. Wrap-Up (give overview of all topics that we covered) (1 lecture)
+1. Ranked Set Sampling
+2. Wavelets
+3. Nonparametric Networks: Graph Limits (Graphons)
+4. Visual Ranking (Buja)
+7. Why Median in General (from EDA book) and Tukey Depth
+8. Functional (Donoho)
+9. Wrap-Up (give overview of all topics that we covered) (1 lecture)
 
 ### Final Project Contents
 
