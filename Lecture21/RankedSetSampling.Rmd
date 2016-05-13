@@ -1,7 +1,7 @@
 ---
 title: "Ranked Set Sampling"
 author: "Christof Seiler"
-date: "Stanford University, Spring 2016, STATS 205"
+date: "Stanford University, Spring 2016, Stats 205"
 output:
   beamer_presentation:
     incremental: no
@@ -121,6 +121,118 @@ knitr::include_graphics("Marginals.png")
 ```
 
 Source: Hollander and Wolfe, and Chicken (2013)
+
+## Ranked Set Sample Estimation of Population Mean
+
+* Two sets of $n$ observations each from a population
+* One set is collected $X_1,\dots,X_n$ is collected using simple random sampling
+* The second using balanced ranked set sampling with set size $k$ and cycles $m$, $n = k\times m$
+* Assumptions: 
+    * Population is continuous with distribution $F$ and density $f$, finite mean $\mu$, and finite variance $\sigma^2$
+    * All $2n$ are mutually independent
+* Ranked Set Sample (RSS) mean
+$$\mu_{\text{RSS}} = \overline{X}_{\text{RSS}} = \sum_{j=1}^m \sum_{i=1}^k \frac{X_{[i]j}}{km}$$
+
+## Ranked Set Sample Estimation of Population Mean
+
+* The $\mu_{\text{RSS}}$ is an unbiased estimator for the population mean $\mu$ regardless of ranking quality
+* This is valid in general, but we'll show it with assumption: perfect rankings
+* Meaning that RSS rankings are order statistics: $X_{[i]} = X_{(i)}$
+* Consider only one cycle $m = 1$
+* Under perfect rankings assumptions
+$$\operatorname{E}(\widehat{\mu}_{\text{RSS}}) = \operatorname{E}(\overline{X}_{\text{RSS}}) = \frac{1}{k} \sum_{i=1}^k \operatorname{E}(X_{(i)}^*)$$
+
+## Ranked Set Sample Estimation of Population Mean
+
+* Since $\operatorname{E}(X_{(i)}^*)$ is distributed like the $i$th order statistics for random sample of size $k$ from a continous distribution $F(x)$ and density $f(x)$ under perfect ranking (for $i = 1,\dots,k$):
+$$\operatorname{E}(X_{(i)}^*) = \int_{-\infty}^{\infty} x \, \frac{k!}{(i-1)!(k-i)!} F(x)^{i-1} (1-F(x))^{k-i} f(x) dx$$
+* This can be written as (with $q = i - 1$)
+$$
+\operatorname{E}(\overline{X}_{\text{RSS}}) = \int_{-\infty}^{\infty} x \, f(x)
+\left\{ 
+\sum_{q=0}^{k-1}
+{k-1 \choose q}
+F(x)^q (1-F(x))^{(k-i)-q} 
+\right\}
+dx
+$$
+* The expression $\{ \cdot \}$ is sum over the entire sample space of the probabilities for a binomial random variable with parameter $k-1$ and $p = F(x)$, thus $\{ \cdot \} = 1$
+
+## Ranked Set Sample Estimation of Population Mean
+
+* Therefore $\widehat{\mu}_{\text{RSS}}$ is an unbiased estimator for $\mu$
+$$\operatorname{E}(\widehat{\mu}_{\text{RSS}}) = \operatorname{E}(\overline{X}_{\text{RSS}}) = \int_{-\infty}^{\infty} x \, f(x) dx  = \mu$$
+* To obtain the variance of $\widehat{\mu}_{\text{RSS}}$, mutual independence allows us to write
+$$\operatorname{Var}(\overline{X}_{\text{RSS}}) = \frac{1}{k^2} \sum_{i=1}^k \operatorname{Var}(X_{(i)}^*)$$
+* Recall bias and variance decomposition
+$$\operatorname{E}((X_{(i)}^* - \mu)^2) = (\operatorname{E}(X_{(i)}^*)-\mu))^2 + \operatorname{Var}(X_{(i)}^*)$$
+
+## Ranked Set Sample Estimation of Population Mean
+
+* Combine
+$$\operatorname{Var}(\overline{X}_{\text{RSS}}) = \frac{1}{k^2} \sum_{i=1}^k \operatorname{E}((X_{(i)}^*-\mu)^2) - \frac{1}{k^2} \sum_{i=1}^k (\operatorname{E}(X_{(i)}^*)-\mu)^2$$
+* We can proceed like with the expectation and use the "binomial distribution trick", which results in the first term being $k \sigma^2$
+$$\operatorname{Var}(\overline{X}_{\text{RSS}}) = \frac{\sigma^2}{k} - \frac{1}{k^2} \sum_{i=1}^k (\operatorname{E}(X_{(i)}^*)-\mu)^2$$
+
+## Ranked Set Sample Estimation of Population Mean
+
+* Comparison of Simple Random Sampling (SRS) and Ranked Set Sampling (RSS) estimators
+* For SRS, we have $\operatorname{E}(\mu_{\text{SRS}}) = \operatorname{E}(\overline{X}) = \mu$ and $\operatorname{Var}(\mu_{\text{SRS}}) = \frac{\sigma^2}{k}$
+* Thus both SRS and RSS are unbiased estimators
+* And the variance
+$$
+\begin{aligned}
+\operatorname{Var}(\overline{X}_{\text{RSS}}) & = \frac{\sigma^2}{k} - \frac{1}{k^2} \sum_{i=1}^k (\operatorname{E}(X_{(i)}^*)-\mu)^2 \\
+& = \operatorname{Var}(\overline{X}) -\frac{1}{k^2} \sum_{i=1}^k (\operatorname{E}(X_{(i)}^*)-\mu)^2 \le \operatorname{Var}(\overline{X})
+\end{aligned}
+$$
+since $$\frac{1}{k^2} \sum_{i=1}^k (\operatorname{E}(X_{(i)}^*)-\mu)^2 \ge 0$$
+
+## Ranked Set Sample Estimation of Population Mean
+
+* So since
+$$\operatorname{Var}(\overline{X}_{\text{RSS}}) \le \operatorname{Var}(\overline{X})$$
+* In the case of perfect rankings, not only is $\overline{X}_{\text{RSS}}$ an unbiased estimator but its variance is also never larger than the variance of the SRS estimator $\overline{X}$ based on the same number of measured observations
+* In fact, this is a strict inequality unless $$\operatorname{E}(X_{(i)}^*) = \mu$$ 
+* Which is the case only if the rankings are purely random
+
+## Ranked Set Sample Estimation of Population Mean
+
+* The $k$ components of the SRS estimator are mutually independent and identically distributed and each is itself an unbiased estimator
+* While the $k$ components of the RSS estimator are also mutually independent, they are not identically distributed and none of them (except for the middle order statistic when $k$ is odd and the underlying distribution is symmetric about $\mu$) are individually unbiased
+* Yet the averaging process leaves $\widehat{\mu}_{\text{RSS}}$ unbiased
+* Interestingly, it is the additional structure associated with the nonidentical nature of the distributions for the terms in $\widehat{\mu}_{\text{RSS}}$ that leads to the improvement in precision for $\widehat{\mu}_{\text{RSS}}$ relative to $\widehat{\mu}_{\text{SRS}}$
+
+## Quinine Content in Cinchona Plants
+
+```{r out.width="0.3\\linewidth"}
+knitr::include_graphics("Cinchona.jpg")
+```
+
+* Primary source of quinine for use in treatment of malaria
+* One source of these plants are in steep hills of southern India
+* Indian goverment wanted to estimate dry bark and quinine content of these plants
+* Full measurement requires uprooting plant, stripping the bark, and drying
+* Luckily, easy measurements such as volume, height, etc. of plant correlate with quinine yield
+
+## Auditing to Detect Fraud
+
+```{r out.width="0.5\\linewidth"}
+knitr::include_graphics("Ledger.jpg")
+```
+
+* Assessing the true value of an account can be expansive
+* Goal is to check whether sales invoices are fraudulent (over the value that an auditor would assign)
+* Instead of auditing all sales invoices, we can use the book value (readily available in the company's electronic ledgers) as the auxiliary ranking variable select a subset
+* Then the audit is done only on this subset of invoices
+* To estimate of the percentage of fraudulent sales or total amount of fraud
+    
+## Other Important Issues
+
+* Set size $k$
+* Imperfect rankings
+* Unbalanced ranked set sampling
+* Cost considerations
 
 ## References
 
