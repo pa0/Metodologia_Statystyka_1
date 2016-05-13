@@ -8,7 +8,8 @@
 4. Visual Ranking (Buja)
 7. Why Median in General (from EDA book) and Tukey Depth
 8. Functionals of Densities (Donoho)
-9. Wrap-Up (give overview of all topics that we covered) (1 lecture)
+9. Nonparametrics on Manifolds
+10. Wrap-Up (give overview of all topics that we covered) (1 lecture)
 
 ### Final Project Contents
 
