@@ -2,14 +2,13 @@
 
 ## Future and Potential Lectures
 
-1. Ranked Set Sampling
-2. Wavelets
-3. Nonparametric Networks: Graph Limits (Graphons)
-4. Visual Ranking (Buja)
-7. Why Median in General (from EDA book) and Tukey Depth
-8. Functionals of Densities (Donoho)
-9. Nonparametrics on Manifolds
-10. Wrap-Up (give overview of all topics that we covered) (1 lecture)
+1. Wavelets
+2. Nonparametric Networks: Graph Limits (Graphons)
+3. Visual Ranking (Buja)
+4. Why Median in General (from EDA book) and Tukey Depth
+5. Nonparametrics on Manifolds
+6. Functionals of Densities (Donoho)
+7. Wrap-Up (give overview of all topics that we covered) (1 lecture)
 
 ### Final Project Contents
 
