@@ -7,7 +7,7 @@
 3. Visual Ranking (Buja)
 4. Tukey Depth
 5. Nonparametrics on Manifolds
-6. ABC sampling
+6. ABC Sampling
 7. Wrap-Up (give overview of all topics that we covered with follow-up courses)
 
 ### Final Project Contents
