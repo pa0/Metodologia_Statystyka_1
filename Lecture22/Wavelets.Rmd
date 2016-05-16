@@ -4,7 +4,7 @@ author: "Christof Seiler"
 date: "Stanford University, Spring 2016, Stats 205"
 output:
   beamer_presentation:
-    incremental: no
+    incremental: yes
 ---
 
 ```{r setup, include=FALSE}
@@ -223,10 +223,10 @@ plot(idwt(wtThresh),type = "l", main = "95% Thresholding", xlab = "Months", ylab
 
 ## Wavelet Thresholding
 
-* The drawback of manual thresholding is the subjective choice of the threshold
-* One might mistakenly choose to threshold all but few coefficients and oversmooth $f$
-* Other methods are based on theoretical or data-driven considerations
-* Many such methods are based on the assumption that the erros are normally distributed
+* The drawback of manual thresholding is the **subjective** choice of the threshold
+* One might mistakenly chose to threshold all but few coefficients and oversmooth $f$
+* Other methods are based on **theoretical** or data-driven considerations
+* Many such methods are based on the **assumption** that the erros are **normally distributed**
 * For instance: Donoho and Johnstone (1994). Ideal spatial adaptation via wavelet shrinkage
 
 ## Wavelet Thresholding
@@ -234,7 +234,13 @@ plot(idwt(wtThresh),type = "l", main = "95% Thresholding", xlab = "Months", ylab
 * Hard thresholding (wavelet coefficient $\theta$, threshold $\lambda$)
 $$\eta_H(\theta,\lambda) = \theta \cdot I(|\theta| > \lambda)$$
 * Soft thresholding
-$$\eta_S(\theta,\lambda) = \operatorname{sgn}(\theta)(|\theta|-\lambda)_+$$
+$$\eta_S(\theta,\lambda) = \operatorname{sgn}(\theta)(|\theta|-\lambda)_+ = 
+\begin{cases}
+\theta + \lambda & \theta < -\lambda \\
+0 & -\lambda \le \theta \le \lambda \\
+\theta - \lambda & \theta > \lambda
+\end{cases}
+$$
 
 ```{r out.width="0.8\\linewidth"}
 knitr::include_graphics("Thresholding.png")
@@ -246,9 +252,9 @@ Source: Wasserman (2006)
 
 * The discrete wavelet transform operation may be represented in matrix form
 $$\tilde{\theta} = W y = W f + W \epsilon$$
-* Writing the unobserved coefficients $\theta = W f$ and the error coefficients $\epsilon = W \epsilon$, we can write
-$$\tilde{\theta} = \theta + \epsilon$$
-* The matrix $W$ is orthogonal by design, so the $tilde{\epsilon}$ are still normally distributed (under the normal error assumption)
+* Writing the unobserved coefficients as $\theta = W f$ and the error coefficients as $\tilde{\epsilon} = W \epsilon$, we have
+$$\tilde{\theta} = \theta + \tilde{\epsilon}$$
+* The matrix $W$ is orthogonal by design, so the $\tilde{\epsilon}$ are still normally distributed (under the normal error assumption)
 * Unless the noise is excessive, the $\tilde{\epsilon}$ are generally smaller in magnitude than $\theta$
 * Which means that under the sparsity property, error coefficients may be ignored
 
@@ -258,21 +264,20 @@ $$\tilde{\theta} = \theta + \epsilon$$
 $$\lambda_v = \sqrt{2\sigma^2\log(n)}$$
 with $\sigma^2$ being the variance of the errors $\epsilon$
 * The variance is usually not known and needs to be estimated
-* With
+* They propose the "VisuShrink" algorithm using thresholding $\eta_S$
 $$\widehat{\theta} = \eta_S(\tilde{\theta},\lambda_v)$$
-* the "VisuShrink" is
+* and the inverse discrete wavelet tranform $W^{-1}$
 $$\widehat{f}_v = W^{-1} \widehat{\theta}$$
-with $W^{-1}$ being the inverse discrete wavelet transform
 
 ## Wavelet Thresholding
 
 * In general, thresholding procedure: 
     * decompose the data via discrete wavelet transform
     * apply some method of thresholding
-    * reconstruct the thresholded using the inverse wavelet tranform
+    * reconstruct using the inverse wavelet tranform on the thresholded coefficients
 $$\widehat{f} = W^{-1} \eta(Wy,\lambda)$$
-* The threshold rule can be hard or soft threshold without affecting
-$$\operatorname{E}\left( \frac{1}{n} \sum_{i=1}^n (f(x_i)-\widehat{f}_v(x_i)^2\right)$$
+* The threshold rule can be hard or soft threshold without affecting the asymptotic mean squared error
+$$\operatorname{E}\left( \frac{1}{n} \sum_{i=1}^n ((f(x_i)-\widehat{f}_v(x_i))^2\right)$$
 
 ## Wavelet Thresholding
 
@@ -295,6 +300,8 @@ plot(y.idwt,type = "l", main = "VisuShrink Soft Thresholding", xlab = "Months", 
 
 ## Other Important Topics
 
+* Different thresholding per level (Donhoho and Johnstone 1995) called "SureShrink"
+* Thresholding without strong distributional assumptions on the errors using cross-validation (Nason 1996)
 * Practical, simultaneous confidence bands for wavelet estimators are not available (Wasserman 2006)
 * Standard wavelet basis functions are not invariant to translation and rotations
 * Recent work by Mallat (2012) and Bruna & Mallat (2013) extend wavelets to handle these kind of invariances
@@ -304,5 +311,8 @@ plot(y.idwt,type = "l", main = "VisuShrink Soft Thresholding", xlab = "Months", 
 
 * Hollander, Wolfe, and Chicken (2013). Nonparametric Statistical Methods
 * Wasserman (2006). All of Nonparametric Statistics
+* Donoho and Johnstone (1994). Ideal Spatial Adaptation via Wavelet Shrinkage
+* Donoho Johnstone (1995). Adapting to Unknown Smoothness via Wavelet Shrinkage
+* Nason (1996). Wavelet Shrinkage using Cross-Validation
 * Mallat (2012). Group Invariant Scattering
 * Bruna and Mallat (2013). Invariant Scattering Convolution Networks
