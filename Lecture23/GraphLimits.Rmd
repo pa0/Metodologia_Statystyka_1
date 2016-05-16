@@ -76,9 +76,28 @@ Source: Caron (2015). [Link](http://www.stats.ox.ac.uk/~caron/slides/Caron_spars
 
 TODO: Chatterjee (2015), p. 14, section 2.6
 
+* A graph limit or graphon is a measurable function $f$ from $[0,1]^2$ into $[0,1]$ that satisfies $f(x,y) = f(y,x)$ for all $x$ and $y$
+* We can use graphons to generate random graphs
+* Consider $U_1,\dots,U_n$ iid uniform random variables between 0 and 1
+* Putting an edge between vertices $i$ and $j$ with probability $f(U_i,U_j)$
+* Do this independently for all $1 \le i < j \le n$
+
 ## Statistical Estimation
 
 TODO: Chatterjee (2015), p. 14, section 2.6
+
+* Given such a model, the statistical question that we can ask is
+* Is it possible to estimate the graphon from a single realization of the graph?
+* In other words, is it possible to estimate the numbers 
+$$f(U_i,U_j), \hspace{0.5cm} 1 \le i < j \le n$$
+* Written in matrix with $(i,j)$th elements that are given by $f(U_i,U_j)$
+
+## Statistical Estimation
+
+TODO: Chatterjee (2015)
+
+* Use the Matrix Estimation by Universal Singular Value Thresholding by Chaterjee
+* Mention the other two papers as well
 
 ## Bayesian Estimation
 
