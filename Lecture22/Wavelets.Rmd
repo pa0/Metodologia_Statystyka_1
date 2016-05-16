@@ -19,6 +19,7 @@ What we've seen so far
 
 * Nonparametric regression using smoothers
 * Different types of smoothers: e.g. kernel and local polynomial
+* Penalized regression
 
 Today
 
@@ -34,6 +35,7 @@ Today
 * This shifts the estimation problem 
     * from directly estimating $f$ 
     * to estimating a set of scalar coefficients that represents $f$
+* Similar to penalized regression but regularization will be replaced by thresholding
 * Wavelets are used in the image file format JPEG 2000 to compress data 
 
 ## Assumptions
@@ -74,11 +76,11 @@ knitr::include_graphics("D2Basis.png")
 
 ## Multiresolution Analysis
 
-* If $\psi$ is a wavelet function, then the collection of functions
+* We consider wavelet functions $\psi$ 
 $$\Psi = \{ \psi_{jk}: j,k \text{ integers}\}$$
 with 
 $$\psi_{jk} = 2^{j/2} \psi(2^j x -k)$$
-forms a basis for square-integrable functions
+that form a basis for square-integrable functions
 * $\Psi$ is a collection of translations and dilations of $\psi$
 * The $\psi$ is constructed to ensure the the set $\Psi$ is orthonormal
 * The property $\int \psi_i^2 = 1$ implies that the value of $\psi$ is near 0 except over a small range
@@ -141,7 +143,7 @@ Source: Wasserman (2006)
 * The simple linear function example has exact solution to determine coefficients
 * Usually this is not the case and numerical approximations are necessary to estimate coefficients
 * One numerical methods is called the **cascade algorithm** by Mallat 1989
-* It works for if the sample size is a power of $2$ 
+* It works if the sample size is a power of $2$ 
 $$n = 2^J$$
 for some positive integer $J$
 * Using this algorithm restricts the upper level of summation to $J-1$ with
@@ -180,13 +182,14 @@ $$
 knitr::include_graphics("Sunspots_1302_Sep_2011_by_NASA.jpg")
 ```
 
-* Monthly mean relative sunspot numbers from 1749 to 1983. Collected at Swiss Federal Observatory, Zurich until 1960, then Tokyo Astronomical Observatory
-* Sunspots are temporary phenomena on the photosphere of the Sun that appear visibly as dark spots compared to surrounding regions
+* Monthly sunspot numbers from 1749 to 1983
+* Collected at Swiss Federal Observatory, Zurich until 1960, then Tokyo Astronomical Observatory
+* Sunspots are temporary phenomena on the photosphere of the sun that appear visibly as dark spots compared to surrounding regions
 * They correspond to concentrations of magnetic field flux that inhibit convection and result in reduced surface temperature compared to the surrounding photosphere
 
 ## Wavelet Thresholding
 
-* The original data has length 2820, but only the first 2048 to make it a dyadic number
+* The original data has length 2820, but only the first 2048 are used here to make it a dyadic number
 * So the modified data is now from January 1749 to July 1919
 
 ```{r  fig.height=3.5}
