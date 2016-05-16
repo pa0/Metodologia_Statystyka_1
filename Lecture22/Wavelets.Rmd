@@ -11,7 +11,6 @@ output:
 knitr::opts_chunk$set(echo = FALSE)
 set.seed(1234)
 library(datasets)
-library(wavelets)
 ```
 
 ## Introduction
@@ -191,6 +190,7 @@ knitr::include_graphics("Sunspots_1302_Sep_2011_by_NASA.jpg")
 * So the modified data is now from January 1749 to July 1919
 
 ```{r  fig.height=3.5}
+library(wavelets)
 wt = dwt(sunspots[1:2048])
 plot(idwt(wt),type = "l", main = "No Thresholding", xlab = "Months", ylab = "Monthly sunspot numbers")
 ```
@@ -255,22 +255,40 @@ $$\tilde{\theta} = \theta + \epsilon$$
 $$\lambda_v = \sqrt{2\sigma^2\log(n)}$$
 with $\sigma^2$ being the variance of the errors $\epsilon$
 * The variance is usually not known and needs to be estimated
-* Then $\widehat{\theta} = \eta_S(\tilde{\theta},\lambda_v)$, then their "VisuShrink" is
+* With
+$$\widehat{\theta} = \eta_S(\tilde{\theta},\lambda_v)$$
+* the "VisuShrink" is
 $$\widehat{f}_v = W^{-1} \widehat{\theta}$$
 with $W^{-1}$ being the inverse discrete wavelet transform
 
 ## Wavelet Thresholding
 
-* TODO: general thresholding procedure
-$$\widehat{f} = W^{-1} \nu(Wy,\lambda)$$
+* In general, thresholding procedure: 
+    * decompose the data via discrete wavelet transform
+    * apply some method of thresholding
+    * reconstruct the thresholded using the inverse wavelet tranform
+$$\widehat{f} = W^{-1} \eta(Wy,\lambda)$$
+* The threshold rule can be hard or soft threshold without affecting
+$$\operatorname{E}\left( \frac{1}{n} \sum_{i=1}^n (f(x_i)-\widehat{f}_v(x_i)^2\right)$$
 
 ## Wavelet Thresholding
 
-TODO: Data example with sunspots and Visushrink
+```{r fig.height=3.5,warning=FALSE,message=FALSE}
+library(waveslim)
+y = sunspots[1:2048]
+y.dwt = dwt(sunspots[1:2048])
+y.thresh = universal.thresh(y.dwt)
+y.idwt = idwt(y.thresh)
+plot(y.idwt,type = "l", main = "VisuShrink Hard Thresholding", xlab = "Months", ylab = "Monthly sunspot numbers")
+```
 
-## Wavelet Thresholding
-
-TODO: How to estimate variance (in comments)
+```{r fig.height=3.5}
+y = sunspots[1:2048]
+y.dwt = dwt(sunspots[1:2048])
+y.thresh = universal.thresh(y.dwt,hard = FALSE)
+y.idwt = idwt(y.thresh)
+plot(y.idwt,type = "l", main = "VisuShrink Soft Thresholding", xlab = "Months", ylab = "Monthly sunspot numbers")
+```
 
 ## Other Important Topics
 
