@@ -3,12 +3,12 @@
 ## Future and Potential Lectures
 
 1. Wavelets
-2. Nonparametric Networks: Graph Limits (Graphons)
+2. Nonparametric Networks: Graph Limits
 3. Visual Ranking (Buja)
-4. Why Median in General (from EDA book) and Tukey Depth
+4. Tukey Depth
 5. Nonparametrics on Manifolds
 6. ABC sampling
-7. Wrap-Up (give overview of all topics that we covered) (1 lecture)
+7. Wrap-Up (give overview of all topics that we covered with follow-up courses)
 
 ### Final Project Contents
 
