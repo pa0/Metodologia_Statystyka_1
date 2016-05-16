@@ -1,0 +1,94 @@
+---
+title: "Nonparametric Graphs"
+author: "Christof Seiler"
+date: "Stanford University, Spring 2016, Stats 205"
+output:
+  beamer_presentation:
+    incremental: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+set.seed(1234)
+library(datasets)
+```
+
+## Introduction
+
+* We consider very large graphs (number of nodes $n \to \infty$)
+* Modeling graphs using functions (graph limits)
+* Statistical estimation of graph limits
+* Parametric approximation with stochastic blockmodels
+
+## Random Graphs
+
+TODO: Lovasz (2012), p. 8, Section 1.4
+
+## Graphs in Pictures
+
+```{r out.width="1.0\\linewidth"}
+knitr::include_graphics("PetersenGraph.png")
+```
+
+Source: Lovasz (2012)
+
+## Graphs in Pictures
+
+```{r out.width="1.0\\linewidth"}
+knitr::include_graphics("HalfGraph.png")
+```
+
+Source: Lovasz (2012)
+
+## Graphs in Pictures
+
+```{r out.width="1.0\\linewidth"}
+knitr::include_graphics("RandomGraph.png")
+```
+
+Source: Lovasz (2012)
+
+## Graphs in Pictures
+
+```{r out.width="1.0\\linewidth"}
+knitr::include_graphics("RandomLookingGraph.png")
+```
+
+Source: Lovasz (2012)
+
+## Graphs in Pictures
+
+```{r out.width="1.0\\linewidth"}
+knitr::include_graphics("ContinuousApproximationGraph.png")
+```
+
+Source: Lovasz (2012)
+
+## Graphs in Pictures
+
+```{r out.width="0.8\\linewidth"}
+knitr::include_graphics("RealGraphs.png")
+```
+
+Source: Caron (2015). [Link](http://www.stats.ox.ac.uk/~caron/slides/Caron_sparsenetworks.pdf)
+
+## Generative Model
+
+TODO: Chatterjee (2015), p. 14, section 2.6
+
+## Statistical Estimation
+
+TODO: Chatterjee (2015), p. 14, section 2.6
+
+## Bayesian Estimation
+
+Caron? (bipartite graphs)
+
+Robin? (variational inference for stochastic blockmodels)
+
+## References
+
+* Lovasz (2012). Large Networks and Graph Limits
+* Glasscock (2015). What is a Graphon?
+* Chatterjee (2015). Matrix Estimation by Universal Singular Value Thresholding
+* Rohe, Chatterjee, and Yu (2011). Spectral Clustering And The High-Dimensional Stochastic Blockmodel
