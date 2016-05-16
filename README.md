@@ -7,9 +7,8 @@
 3. Visual Ranking (Buja)
 4. Why Median in General (from EDA book) and Tukey Depth
 5. Nonparametrics on Manifolds
-6. Functionals of Densities (Donoho)
-7. ABC sampling
-8. Wrap-Up (give overview of all topics that we covered) (1 lecture)
+6. . ABC sampling
+7. . Wrap-Up (give overview of all topics that we covered) (1 lecture)
 
 ### Final Project Contents
 
