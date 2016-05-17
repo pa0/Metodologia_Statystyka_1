@@ -2,13 +2,12 @@
 
 ## Future and Potential Lectures
 
-1. Wavelets
-2. Nonparametric Networks: Graph Limits
-3. Visual Ranking (Buja)
-4. Tukey Depth
+1. Graph Limits or Grahpons
+2. Visual Ranking (Buja)
+3. Tukey Depth
+4. ABC Sampling
 5. Nonparametrics on Manifolds
-6. ABC Sampling
-7. Wrap-Up (give overview of all topics that we covered with follow-up courses)
+6. Wrap-Up (give overview of all topics that we covered with follow-up courses)
 
 ### Final Project Contents
 
