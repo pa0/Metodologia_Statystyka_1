@@ -16,20 +16,38 @@ set.seed(1234)
 
 * Exploratory data anlaysis is usually not parametric
 * For instance, in Principle Component Analysis (PCA), we do not assume any parametric model (the data doesn't need to be normally distributed)
-* What is described by PCA is a decomposition of the data in Principle Components (PC) along with the variance is maximized after projecting the data onto the PC
-* As we have seen in this class, it is in general not necessary to assume a parameteric model for inference
+* What is described by PCA is a decomposition of the data into Principle Components (PCs) along which the variance is maximized after projecting the data
+* But, as we have seen in this course, it is in general not necessary to assume a parameteric model for inference
 
 ## Introduction
 
 * We sucessfully used ranks that allowed to remove the normality assumptions in one and two-sample tests
 * We sucessfully used the bootstrap to sample from the empirical distribution and construct confidence intervals
 * We sucessfully used permutation tests for hypothesis testing
-* In all these examples we have found ways to make inference even without even a completely defined underlying model
+* In all these examples we have found ways to make inferences even without even a completely defined underlying model
 * Is this possible for data visualization?
-* That'ts the topic for today
+* That's the topic for today
+
+## Inference for Plots
+
+TODO: Buja
+
+## Bootstrap PCA
+
+TODO: Milan 1995
+
+## Bootstrap PCA
+
+TODO: Josse, Wagner, & Husson 2014
+
+## Compare Plots
+
+TODO: Menjoge & Welsch
 
 ## References
 
 * Buja (1999). Slides of Talk at the Joint Statistics Meetings [pdf](http://stat.wharton.upenn.edu/~buja/PAPERS/visual-inference.pdf)
 * Buja, Cook, Hofmann, Lawrence, Lee, Swayne, and Wickham (2009). Statistical Inference for Exploratory Data Analysis and Model Diagnostics
 * Wickham, Cook, Hofmann, and Buja (2010). Graphical Inference for Infovis
+* Milan and Whittaker (1995). Application of the Parametric Bootstrap to Models that Incorporate a Singular Value Decomposition
+* Josse, Wager, and Husson (2014). Confidence Areas for Fixed-Effects PCA
