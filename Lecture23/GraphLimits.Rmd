@@ -63,14 +63,6 @@ Source: Lovasz (2012)
 ## Graphs in Pictures
 
 ```{r out.width="1.0\\linewidth"}
-knitr::include_graphics("RandomLookingGraph.png")
-```
-
-Source: Lovasz (2012)
-
-## Graphs in Pictures
-
-```{r out.width="1.0\\linewidth"}
 knitr::include_graphics("ContinuousApproximationGraph.png")
 ```
 
@@ -142,13 +134,30 @@ $$
 
 ## Statistical Estimation
 
-* Mention the other two papers as well
+TODO
+
+* Show results of comparison paper by Chan and Airoldi from 2014
+
+## Stochastic Blockmodel
+
+* **Regularity Lemma**: The nodes of every graph can be partitioned into a "small" number of "almost equal" parts in such a way that for "almost all" pairs of partition classes, the bipartite graph between them is "quasirandom".
+
+```{r out.width="1.0\\linewidth"}
+knitr::include_graphics("RandomLookingGraph.png")
+```
+
+Source: Lovasz (2012)
+
+## Stochastic Blockmodel
+
+TODO
+
+* Show Rohe, Chatterjee and Yu from 2011
 
 ## Bayesian Estimation
 
-Caron? (bipartite graphs)
-
-Robin? (variational inference for stochastic blockmodels)
+* Caron (Bayesian nonparametric for bipartite graphs)
+* Robin (variational inference for stochastic blockmodels)
 
 ## References
 
