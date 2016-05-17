@@ -17,12 +17,12 @@ library(datasets)
 
 * We consider very large graphs (number of nodes $n \to \infty$)
 * Modeling graphs using functions (graph limits)
-* Statistical estimation of graph limits / graphons
+* Statistical estimation of graph limits, also called graphons
 * Parametric approximation with stochastic blockmodels
 
 ## Random Graphs
 
-* Simplest random graph model Erd\H{o}s and R\`eni: 
+* Simplest random graph model Erd\H{o}s and Rèni: 
     * Given a positive integer $n$ and a real number $0 \le p \le 1$
     * Generate a random graph by taking node pairs (independent)
     * Connecting them with probability $p$
@@ -79,8 +79,8 @@ Source: Caron (2015). [Link](http://www.stats.ox.ac.uk/~caron/slides/Caron_spars
 ## Generative Model
 
 * A graph limit or graphon is a measurable function $f$ from $[0,1]^2$ into $[0,1]$ that satisfies $f(x,y) = f(y,x)$ for all $x$ and $y$
-* The ordering of a given graphon f(x,y) along the x and y axes has no inherent meaning
-* $f(x,y)$ has a built-in invariance to "rearrangements" of the x and y axes
+* The ordering of a given graphon $f(x,y)$ along the $x$ and $y$ axes has no inherent meaning
+* $f(x,y)$ has a built-in invariance to "rearrangements" of the $x$ and $y$ axes
 * This is similar to statistical shape analysis, where we seek to describe objects in a manner that is invariant to their orientation in Euclidean space
 * Thus $f(x,y)$ represents an equivalence class of all symmetric functions that can be obtained from one another through measure-preserving transformations of $[0,1]$
 
@@ -97,7 +97,7 @@ Source: Caron (2015). [Link](http://www.stats.ox.ac.uk/~caron/slides/Caron_spars
 * Is it possible to estimate the graphon from a single realization of the graph?
 * In other words, is it possible to estimate the numbers 
 $$f(U_i,U_j), \hspace{0.5cm} 1 \le i < j \le n$$
-* Written in matrix $M$ with $(i,j)$th elements that are given by $f(U_i,U_j)$
+* Written as matrix $M$ with $(i,j)$th elements that are given by $f(U_i,U_j)$
 
 ## Statistical Estimation
 
@@ -132,15 +132,56 @@ w_{ij} & -1 \le w_{ij} \le 1 \\
 \end{cases}
 $$
 
-## Statistical Estimation
+## Alternatives to the USVT Estimator
 
-TODO
+* The USVT estimator estimates graphon at observed pairs
+* Or in other words, the estimator is conditioned on the observed pairs
+* USVT tries to find a low-rank approximation of the probability matrix $M$
+* The USVT estimator is a consistent estimator (as the nubmer of node goes to infintiy) of the probability matrix $M$ (Chatterjee 2012)
+* An alternative estiamtor is the the histogram estimator proposed by Chan and Airoldi (2014)
 
-* Show results of comparison paper by Chan and Airoldi from 2014
+## Histogram Estimator
 
-## Stochastic Blockmodel
+* Chan and Airoldi recently introduced the sorting-and-smoothing algorithm
 
-* **Regularity Lemma**: The nodes of every graph can be partitioned into a "small" number of "almost equal" parts in such a way that for "almost all" pairs of partition classes, the bipartite graph between them is "quasirandom".
+```{r out.width="1.0\\linewidth"}
+knitr::include_graphics("SortingSmoothingAlgorithm.png")
+```
+
+Source: Chan and Airoldi (2014)
+
+1. **Sorting**: Rearrange graph so that the empirical degrees (number of incomding and outgoing edges per node) are monotonically increasing
+2. **Smoothing**: Fit a piecewise constant function
+
+## Histogram Estimator (Example)
+
+```{r out.width="0.4\\linewidth"}
+knitr::include_graphics("ca-AstroPh.png")
+```
+Source: Chan and Airoldi (2014)
+
+* Collaboration network of arXiv astro physics (ca-AstroPh) 
+* Ssymmetric binary graph consisting of $1.8 \times 104$ nodes and $3.9 \times 105$ edges
+* The graphon indicates close collaborations among a group of people concentrated around the top left corner of the graphon
+* It also shows a number of small communities along the diagonal
+
+## Histogram Estimator (Example)
+
+```{r out.width="0.4\\linewidth"}
+knitr::include_graphics("who-trusts-whom.png")
+```
+Source: Chan and Airoldi (2014)
+
+* Who-trust-whom online social network of a a general consumer review site Epinions.com
+* Members of the site can decide whether to "trust" each other
+* Unsymmetrical binary graph consisting of $7.5 \times 104$ nodes and $5.1 \times 105$ edges
+* The graphon indicates that there are some influential nodes which consistently interact among themselves
+* These can be seen from the repeated patterns of the graphon
+
+## Other Important Topics
+
+* The regularity lemma says:  
+**Regularity Lemma**: The nodes of every graph can be partitioned into a "small" number of "almost equal" parts in such a way that for "almost all" pairs of partition classes, the bipartite graph between them is "quasirandom".
 
 ```{r out.width="1.0\\linewidth"}
 knitr::include_graphics("RandomLookingGraph.png")
@@ -148,24 +189,45 @@ knitr::include_graphics("RandomLookingGraph.png")
 
 Source: Lovasz (2012)
 
-## Stochastic Blockmodel
+## Other Important Topics
 
-TODO
+* Therefore every graphon can be approximated by a stochastic blockmodel
+* The stochastic blockmodels (with blocks $q = 1,\dots,Q$)
+* The generative model for binary graphs: 
+* Draw edge strength from multinomial distribution
+$$Z_i \sim \operatorname{Multi}(1,\alpha=(\alpha_1,\dots,\alpha_Q))$$ 
+such that $Z_{iq} = 1$ if node $i$ belongs to block $q$
+* Draw edges from Bernoulli distribution
+$$X_{ij} | \{Z_{iq}Z_{jl} = 1\} \sim \operatorname{Bern}(\pi_{ql})$$
+with $\pi$ being a $Q \times Q$ matrix of connection probabilities
+* According to this model, the latent variables $Z_1,\dots,Z_N$ are iid
+* Given this latent structure, all the edges are independent
 
-* Show Rohe, Chatterjee and Yu from 2011
+## Example: arXiv Citation Network
 
+```{r out.width="1.0\\linewidth"}
+knitr::include_graphics("ArxivExampleSBM.png")
+```
+
+Source: Gopalan and Blei (2013). Efficient Discovery of Overlapping Communities in Massive Networks
+
+<!--
 ## Bayesian Estimation
 
 * Caron (Bayesian nonparametric for bipartite graphs)
 * Robin (variational inference for stochastic blockmodels)
+-->
 
 ## References
 
 * Lovasz (2012). Large Networks and Graph Limits
-* Glasscock (2015). What is a Graphon?
 * Chatterjee (2012). Matrix Estimation by Universal Singular Value Thresholding
-* Rohe, Chatterjee, and Yu (2011). Spectral Clustering And The High-Dimensional Stochastic Blockmodel
-* Wolfe and Sofia C. Olhede (2013). Nonparametric Graphon Estimation
-* Rohe, Chatterjee, and Yu (2011). Spectral Clustering And The High-Dimensional Stochastic Blockmodel
-* Yang, Han, and Airoldi (2014). Nonparametric estimation and testing of exchangeable graph models
 * Chan and Airoldi (2014). A Consistent Histogram Estimator for Exchangeable Graph Models
+* Latouche, Birmelé, and Ambroise (2010). Variational Bayesian Inference and Complexity Control for Stochastic Block Models
+* Rohe, Chatterjee, and Yu (2011). Spectral Clustering and the High-Dimensional Stochastic Blockmodel
+
+<!--
+* Wolfe and Sofia C. Olhede (2013). Nonparametric Graphon Estimation
+* Glasscock (2015). What is a Graphon?
+* Yang, Han, and Airoldi (2014). Nonparametric estimation and testing of exchangeable graph models
+-->
