@@ -4,7 +4,7 @@ author: "Christof Seiler"
 date: "Stanford University, Spring 2016, Stats 205"
 output:
   beamer_presentation:
-    incremental: yes
+    incremental: no
 ---
 
 ```{r setup, include=FALSE}
@@ -26,7 +26,7 @@ set.seed(1234)
     * Generate a random graph by taking node pairs (independent)
     * Connecting them with probability $p$
 * Random graph models on a fixed set of nodes fail to reproduce important properties of real-life networks
-* Degree of a node: number of incomding and outgoing edges
+* Degree of a node: number of incoming and outgoing edges
 * For example, the degrees of Erd\H{o}s and Réni random graphs follow a binomial distribution, and so they are asymptotically normal if the edge probability $p$ is a constant
 * The degrees are highly concentrated around the mean, while the degrees of real life networks tend to obey the "Zipf phenomenon", which means that the tail of the distribution decreases according to a power law
 
@@ -126,8 +126,8 @@ $$f(U_i,U_j), \hspace{0.5cm} 1 \le i < j \le n$$
 ## Statistical Estimation
 
 * Use the matrix estimation by Universal Singular Value Thresholding (USVT) by Chaterjee
-1. Subtract $(a+b)/2$ from each entry of $X$ and divide by $(b-a)/2$ to make entires lie $[-1,1]$
-2. For each $y_{i,j}$ (collection of $(y_{i,j})$ is marix Y)
+1. Subtract $(a+b)/2$ from each entry of $X$ and divide by $(b-a)/2$ to make entries lie $[-1,1]$
+2. For each $y_{i,j}$ (collection of $(y_{i,j})$ is matrix Y)
 $$
 y_{ij} = 
 \begin{cases}
@@ -141,7 +141,7 @@ $$Y = \sum_{i=1}^m s_i u_i v_i^T$$
 
 ## Statistical Estimation
 
-5. Chooose small positive number $\nu \in (0,1)$ and let $S$ be the set of "thresholding singular values" define as
+5. Choose small positive number $\nu \in (0,1)$ and let $S$ be the set of "threshold singular values" define as
 $$S := \{ i: s_i \ge (2+\nu)\sqrt{n\hat{p}} \}$$
 with $\nu$ is a predefined, $0.01$ seems to work
 6. Define 
@@ -162,8 +162,8 @@ $$
 * The USVT estimator estimates graphon at observed pairs
 * Or in other words, the estimator is conditioned on the observed pairs
 * USVT tries to find a low-rank approximation of the probability matrix $M$
-* The USVT estimator is a consistent estimator (as the nubmer of nodes goes to infintiy) of the probability matrix $M$ (Chatterjee 2012)
-* An alternative estiamtor is the the histogram estimator proposed by Chan and Airoldi (2014)
+* The USVT estimator is a consistent estimator (as the number of nodes goes to infinity) of the probability matrix $M$ (Chatterjee 2012)
+* An alternative estimator is the the histogram estimator proposed by Chan and Airoldi (2014)
 
 ## Histogram Estimator
 
