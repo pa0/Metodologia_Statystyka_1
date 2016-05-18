@@ -1,0 +1,40 @@
+---
+title: "Homework 6"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Exercise 1
+
+From our textbook (Problem 7, p. 654) [(Stanford link)](http://site.ebrary.com/lib/stanford/reader.action?docID=10799793):  
+
+Use the ``dwt`` command to obtain the wavelet coefficients of the first 512 components of the sunspots data. Use ``n.levels=9``.
+
+Use the ``dwt`` command to obtain the wavelet coefficients of the first 512 components of the sunspots data. Use ``n.levels=9``. 
+
+(a) Use the unlist command on this object to create a single vector of coefficients. Make two histograms: one of the coefficient vector and one of the untransformed data. How do these histogram shapes illustrate the sparsity of the wavelet representation of the data? 
+
+(b) Create a histogram using only the highest level of detail coefficients (use ``[[1]]]`` or ``$d1`` to access these coefficients from the output of ``dwt``). Do these coefficients appear to be symmetric about 0? Normal? 
+
+(c) Threshold the wavelet coefficients for this data using both SureShrink and VisuShrink (Tip: use package ``waveslim``). Describe the differences in the reconstructions.
+
+## Exercise 2
+
+TODO: Ranked Set Sampling
+
+## Exercise 3
+
+2. Analyze the some network [download here](https://snap.stanford.edu/data/) using USVT (easy to implement yourself or rewrite [this](https://github.com/airoldilab/SAS/blob/master/usvt.m) in R, use $\nu = 0.01$)
+3. Plot reconstructed matrix rearranged based on node degree
+4. Try to interpret the results
+
+## Deadline
+
+Please email your solutions in the form of a Rmd file to Nan Bi and Lexi Guan.
+
+This homework is due on Thursday, May 27th at 1:30 pm.
+
+You are encouraged to work through this homework with your peers. But write your own code and explain the results in your own words.
