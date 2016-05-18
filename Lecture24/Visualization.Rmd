@@ -28,7 +28,7 @@ set.seed(1234)
 * Is this possible for data visualization?
 * That's the topic for today
 
-## Maginal Thinking
+## Magical Thinking
 
 * Professional statisticians and other scientists with statistical training were ask "How associated the two variables were"
 
