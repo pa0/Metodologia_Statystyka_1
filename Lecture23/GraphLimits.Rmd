@@ -4,7 +4,7 @@ author: "Christof Seiler"
 date: "Stanford University, Spring 2016, Stats 205"
 output:
   beamer_presentation:
-    incremental: no
+    incremental: yes
 ---
 
 ```{r setup, include=FALSE}
@@ -12,12 +12,12 @@ knitr::opts_chunk$set(echo = FALSE)
 set.seed(1234)
 ```
 
-## Introduction
+## Overview
 
 * We consider very large graphs (number of nodes $n \to \infty$)
 * Modeling graphs using functions (graph limits)
 * Statistical estimation of graph limits, also called graphons
-* Parametric approximation with stochastic blockmodels
+* Approximation with stochastic blockmodels
 
 ## Random Graphs
 
@@ -26,16 +26,20 @@ set.seed(1234)
     * Generate a random graph by taking node pairs (independent)
     * Connecting them with probability $p$
 * Random graph models on a fixed set of nodes fail to reproduce important properties of real-life networks
-* For example, the degrees of Erd\H{o}s and R\`eni random graphs follow a binomial distribu- tion, and so they are asymptotically normal if the edge probability p is a constant
+* Degree of a node: number of incomding and outgoing edges
+* For example, the degrees of Erd\H{o}s and Réni random graphs follow a binomial distribution, and so they are asymptotically normal if the edge probability $p$ is a constant
 * The degrees are highly concentrated around the mean, while the degrees of real life networks tend to obey the "Zipf phenomenon", which means that the tail of the distribution decreases according to a power law
 
 ## Random Graphs
 
-* To address this new random graph models have been created by adding not just new edges but also nodes as the graph grows
+* To address this, new random graph models have been created by adding not just new edges but also nodes as the graph grows
 * These graphs reproduce the “heavy tail” behavior of the degree sequences of real-life graphs
-* In general, this is the idea of graph limits: by making graphs grow we reach a limit that is can be described by an well defined limit object
+* This leads us to the idea of graph limits: by making graphs grow we reach a limit
+* This limit can be described by an well defined limit object: the graphon
 
 ## Graphs in Pictures
+
+* Petersen graph
 
 ```{r out.width="1.0\\linewidth"}
 knitr::include_graphics("PetersenGraph.png")
@@ -45,6 +49,8 @@ Source: Lovasz (2012)
 
 ## Graphs in Pictures
 
+* Half graph
+
 ```{r out.width="1.0\\linewidth"}
 knitr::include_graphics("HalfGraph.png")
 ```
@@ -53,6 +59,11 @@ Source: Lovasz (2012)
 
 ## Graphs in Pictures
 
+* Random graph
+* Random graph limit
+* Chessboard
+* Rearranged chessboard
+
 ```{r out.width="1.0\\linewidth"}
 knitr::include_graphics("RandomGraph.png")
 ```
@@ -60,6 +71,20 @@ knitr::include_graphics("RandomGraph.png")
 Source: Lovasz (2012)
 
 ## Graphs in Pictures
+
+* Half graph limit
+
+```{r out.width="1.0\\linewidth"}
+knitr::include_graphics("HalfGraphLimit.png")
+```
+
+Source: Lovasz (2012)
+
+## Graphs in Pictures
+
+* Starting with a single node (top left)
+* Create a new node 
+* Connect every pair of nonadjacent nodes with probability $1/n$, where $n$ is the current number of nodes
 
 ```{r out.width="1.0\\linewidth"}
 knitr::include_graphics("ContinuousApproximationGraph.png")
@@ -130,13 +155,14 @@ w_{ij} & -1 \le w_{ij} \le 1 \\
 -1 & w_{ij} < -1
 \end{cases}
 $$
+8. Map entries back from $[-1,1]$ to $[0,1]$
 
 ## Alternatives to the USVT Estimator
 
 * The USVT estimator estimates graphon at observed pairs
 * Or in other words, the estimator is conditioned on the observed pairs
 * USVT tries to find a low-rank approximation of the probability matrix $M$
-* The USVT estimator is a consistent estimator (as the nubmer of node goes to infintiy) of the probability matrix $M$ (Chatterjee 2012)
+* The USVT estimator is a consistent estimator (as the nubmer of nodes goes to infintiy) of the probability matrix $M$ (Chatterjee 2012)
 * An alternative estiamtor is the the histogram estimator proposed by Chan and Airoldi (2014)
 
 ## Histogram Estimator
@@ -149,7 +175,7 @@ knitr::include_graphics("SortingSmoothingAlgorithm.png")
 
 Source: Chan and Airoldi (2014)
 
-1. **Sorting**: Rearrange graph so that the empirical degrees (number of incomding and outgoing edges per node) are monotonically increasing
+1. **Sorting**: Rearrange graph so that the empirical degrees are monotonically increasing
 2. **Smoothing**: Fit a piecewise constant function
 
 ## Histogram Estimator (Example)
@@ -160,7 +186,7 @@ knitr::include_graphics("ca-AstroPh.png")
 Source: Chan and Airoldi (2014)
 
 * Collaboration network of arXiv astro physics (ca-AstroPh) 
-* Ssymmetric binary graph consisting of $1.8 \times 104$ nodes and $3.9 \times 105$ edges
+* Symmetric binary graph consisting of $1.8 \times 10^4$ nodes and $3.9 \times 10^5$ edges
 * The graphon indicates close collaborations among a group of people concentrated around the top left corner of the graphon
 * It also shows a number of small communities along the diagonal
 
@@ -171,9 +197,9 @@ knitr::include_graphics("who-trusts-whom.png")
 ```
 Source: Chan and Airoldi (2014)
 
-* Who-trust-whom online social network of a a general consumer review site Epinions.com
+* Who-trust-whom online social network of a general consumer review site Epinions.com
 * Members of the site can decide whether to "trust" each other
-* Unsymmetrical binary graph consisting of $7.5 \times 104$ nodes and $5.1 \times 105$ edges
+* Unsymmetrical binary graph consisting of $7.5 \times 10^4$ nodes and $5.1 \times 10^5$ edges
 * The graphon indicates that there are some influential nodes which consistently interact among themselves
 * These can be seen from the repeated patterns of the graphon
 
@@ -190,7 +216,7 @@ Source: Lovasz (2012)
 
 ## Other Important Topics
 
-* Therefore every graphon can be approximated by a stochastic blockmodel
+* In other words, every graphon can be approximated by a stochastic blockmodel
 * The stochastic blockmodels (with blocks $q = 1,\dots,Q$)
 * The generative model for binary graphs: 
 * Draw edge strength from multinomial distribution
