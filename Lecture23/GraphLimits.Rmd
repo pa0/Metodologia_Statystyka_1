@@ -10,7 +10,6 @@ output:
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
 set.seed(1234)
-library(datasets)
 ```
 
 ## Introduction
