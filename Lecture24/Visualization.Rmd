@@ -28,6 +28,19 @@ set.seed(1234)
 * Is this possible for data visualization?
 * That's the topic for today
 
+## Maginal Thinking
+
+* Professional statisticians and other scientists with statistical training were ask "How associated the two variables were"
+
+```{r out.width="0.8\\linewidth"}
+knitr::include_graphics("Rescaling.png")
+```
+
+Source: Diaconis (2006)
+
+* Most of the subjects judged left plot as more associated than right plot (the same data points)
+* Rescaling can shift the perceived association by 10 to 15%
+
 ## Inference for Plots: The Lineup
 
 ```{r out.width="0.8\\linewidth"}
@@ -118,6 +131,7 @@ TODO: Josse, Wagner, & Husson 2014
 
 ## References
 
+* Diaconis (2006). Theories of Data Analysis: From Magical Thinking Through Classical Statistics
 * Buja, Cook, Hofmann, Lawrence, Lee, Swayne, and Wickham (2009). Statistical Inference for Exploratory Data Analysis and Model Diagnostics
 * Milan and Whittaker (1995). Application of the Parametric Bootstrap to Models that Incorporate a Singular Value Decomposition
 * Josse, Wager, and Husson (2014). Confidence Areas for Fixed-Effects PCA
