@@ -27,9 +27,9 @@ TODO: Ranked Set Sampling
 
 ## Exercise 3
 
-2. Analyze the some network [download here](https://snap.stanford.edu/data/) using USVT (easy to implement yourself or rewrite [this](https://github.com/airoldilab/SAS/blob/master/usvt.m) in R, use $\nu = 0.01$)
-3. Plot reconstructed matrix rearranged based on node degree
-4. Try to interpret the results
+1. Analyze the some network [download here](https://snap.stanford.edu/data/) using USVT (easy to implement yourself or rewrite [this](https://github.com/airoldilab/SAS/blob/master/usvt.m) in R, use $\nu = 0.01$)
+2. Plot reconstructed matrix rearranged based on node degree
+3. Try to interpret the results
 
 ## Deadline
 
