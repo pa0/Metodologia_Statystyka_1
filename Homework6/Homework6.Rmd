@@ -9,7 +9,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Exercise 1
 
-From the textbook Nonparametric Statistical Methods by Hollander, Wolfe, and Chicken [(Stanford link)](http://site.ebrary.com/lib/stanford/reader.action?docID=10799793) textbook (Problem 7, p. 654):  
+From the textbook "Nonparametric Statistical Methods" by Hollander, Wolfe, and Chicken [(Stanford link)](http://site.ebrary.com/lib/stanford/reader.action?docID=10799793) (Problem 7, p. 654):  
 
 Use the ``dwt`` command to obtain the wavelet coefficients of the first 512 components of the sunspots data (you can find the data in package ``datasets``). Use ``n.levels=9``.
 
@@ -19,7 +19,7 @@ Use the ``dwt`` command to obtain the wavelet coefficients of the first 512 comp
 
 (b) Create a histogram using only the highest level of detail coefficients (use ``[[1]]]`` or ``$d1`` to access these coefficients from the output of ``dwt``). Do these coefficients appear to be symmetric about 0? Normal? 
 
-(c) Threshold the wavelet coefficients for this data using both SureShrink and VisuShrink (Tip: use package ``waveslim``). Describe the differences in the reconstructions.
+(c) Threshold the wavelet coefficients for this data using both SureShrink and VisuShrink (Tip: Use package ``waveslim``). Describe the differences in the reconstructions.
 
 ## Exercise 2
 
@@ -27,7 +27,7 @@ Analyze one of the networks from [here](https://snap.stanford.edu/data/) using M
 Value Thresholding (USVT).
 
 (a) Implement USVT. Use $\eta = 0.01$. Hint: You can rewrite [this](https://github.com/airoldilab/SAS/blob/master/usvt.m) Matlab script in R.
-(b) Sort the empirical degrees and rearrange the nodes of the graph. Plot reconstructed matrix with rearranged columns and rows.
+(b) Rearrange nodes according to the empirical degree. Plot reconstructed matrix with rearranged columns and rows.
 (c) Try to interpret the results.
 
 ## Deadline
