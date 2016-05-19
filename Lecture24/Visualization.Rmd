@@ -124,11 +124,27 @@ knitr::include_graphics("Finance.png")
 ## Principal Component Analysis
 
 * Principal Component Analysis (PCA) is a data exporation tool
-* Two views on PCA:
+* Two views on PCA: 
 
 ## Principal Component Analysis (Example)
 
-* From my own stuff?
+```{r out.width="1.0\\linewidth"}
+knitr::include_graphics("MandibleAO.pdf")
+```
+
+Source: www.aofoundation.org
+
+## Principal Component Analysis (Example)
+
+```{r out.width="0.8\\linewidth"}
+knitr::include_graphics("ClusteringI12_corrected.pdf")
+```
+
+## Principal Component Analysis (Example)
+
+Two animations on visualizing mandible "eigenanatomy":
+
+* http://christofseiler.github.io/phd/
 
 ## Bootstrap PCA
 
@@ -141,6 +157,35 @@ TODO: Milan 1995
 * In case of fixed rows and columns $X$, we can use parametric boostrap
 
 TODO: Josse, Wagner, & Husson 2014
+
+## Bootstrap PCA
+
+* In both cases, we need to align the PCA
+* This is usually done using Procrustes analysis
+* Procrustes refers to a bandit from Greek mythology who made his victims fit his bed either by stretching their limbs (or cutting them off)
+* Procrustes anlaysis is used in statistical shape analysis to compare the aligned shapes after removing "nuisance" parameter:
+    * translation in space
+    * rotation in space
+    * scaling of the objects
+
+## Bootstrap PCA
+
+* Shape example: landmarks for the human spine
+
+```{r out.width="1.0\\linewidth"}
+knitr::include_graphics("SpineLandmarks.pdf")
+```
+
+## Bootstrap PCA
+
+* Same idea can be applied to aligned projected observations
+* Here shapes are the projected observations onto a defined lower dimensional subspace spanned by say PC1 and PC2
+
+```{r out.width="0.8\\linewidth"}
+knitr::include_graphics("Procrustes.png")
+```
+
+Source: Josse, Wager, and Husson (2014)
 
 ## References
 
