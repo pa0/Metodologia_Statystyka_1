@@ -64,15 +64,19 @@ $$\theta_i = \langle f,\psi_i \rangle = \int f(x) \psi_i(x) \, dx$$
 * We consider orthonomal wavelet bases
 * A simple wavelet function was first introduced by Haar in 1910
 
-```{r out.width="0.7\\linewidth"}
+```{r out.width="0.6\\linewidth"}
 knitr::include_graphics("HaarBasis.png")
 ```
 
+Source: Hollander, Wolfe, and Chicken (2013)
+
 * More flexible and powerful wavelets were developed by Daubechies in 1992 and many others
 
-```{r out.width="0.7\\linewidth"}
+```{r out.width="0.6\\linewidth"}
 knitr::include_graphics("D2Basis.png")
 ```
+
+Source: Hollander, Wolfe, and Chicken (2013)
 
 ## Multiresolution Analysis
 
