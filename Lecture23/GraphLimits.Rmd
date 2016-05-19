@@ -141,9 +141,9 @@ $$Y = \sum_{i=1}^m s_i u_i v_i^T$$
 
 ## Statistical Estimation
 
-5. Choose small positive number $\nu \in (0,1)$ and let $S$ be the set of "threshold singular values" define as
-$$S := \{ i: s_i \ge (2+\nu)\sqrt{n\hat{p}} \}$$
-with $\nu$ is a predefined, $0.01$ seems to work
+5. Choose small positive number $\eta \in (0,1)$ and let $S$ be the set of "threshold singular values" define as
+$$S := \{ i: s_i \ge (2+\eta)\sqrt{n\hat{p}} \}$$
+with $\eta$ is a predefined, $0.01$ seems to work
 6. Define 
 $$W := \frac{1}{\hat{p}} \sum_{i \in S} s_i u_i v_i^T$$
 7. Define

@@ -124,7 +124,15 @@ knitr::include_graphics("Finance.png")
 ## Principal Component Analysis
 
 * Principal Component Analysis (PCA) is a data exporation tool
-* Two views on PCA: 
+* PCA finds a low-dimensional subspace of that minimizes the distances between projections points and subspace
+* Let $X_{n \times p}$ be a centered data matrix
+* Let $\|A\| = \sqrt{AA^T}$ be the Hilbert-Schmidt norm
+* Then we can write PCA as a minimization problem:
+$$\operatorname{minimize} \left\{ \| X - \hat{X}^{(S)} \|^2 \right\}$$
+* The solution is the Singular Value Decomposition (SVD) of 
+$$\hat{X}^{(S)} = U_{n \times S} \Lambda_{S \times S} V^T_{p \times S}$$
+* The principle components or axes are $V$
+* The projected points are $U_{n \times S} \Lambda_{S \times S}^{1/2}$
 
 ## Principal Component Analysis (Example)
 

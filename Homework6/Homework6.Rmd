@@ -26,7 +26,7 @@ Use the ``dwt`` command to obtain the wavelet coefficients of the first 512 comp
 Analyze one of the networks from [here](https://snap.stanford.edu/data/) using Matrix Estimation by Universal Singular
 Value Thresholding (USVT).
 
-(a) Implement USVT yourself (hint: you can rewrite [this](https://github.com/airoldilab/SAS/blob/master/usvt.m) Matlab script in R (use $\nu = 0.01$).
+(a) Implement USVT. Use $\eta = 0.01$. Hint: You can rewrite [this](https://github.com/airoldilab/SAS/blob/master/usvt.m) Matlab script in R.
 (b) Sort the empirical degrees and rearrange the nodes of the graph. Plot reconstructed matrix with rearranged columns and rows.
 (c) Try to interpret the results.
 
