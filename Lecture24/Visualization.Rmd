@@ -121,11 +121,24 @@ knitr::include_graphics("Finance.png")
     * Thereafter, volatility peters out and stabilizes at a low level
 * **Solution**: In both lineups the real data are shown in plot 3
 
+## Principal Component Analysis
+
+* Principal Component Analysis (PCA) is a data exporation tool
+* Two views on PCA:
+
+## Principal Component Analysis (Example)
+
+* From my own stuff?
+
 ## Bootstrap PCA
+
+* Two ways to bootstrap PCA in case of random rows $X$
 
 TODO: Milan 1995
 
 ## Bootstrap PCA
+
+* In case of fixed rows and columns $X$, we can use parametric boostrap
 
 TODO: Josse, Wagner, & Husson 2014
 

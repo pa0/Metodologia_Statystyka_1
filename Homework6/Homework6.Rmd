@@ -11,11 +11,11 @@ knitr::opts_chunk$set(echo = TRUE)
 
 From our textbook (Problem 7, p. 654) [(Stanford link)](http://site.ebrary.com/lib/stanford/reader.action?docID=10799793):  
 
-Use the ``dwt`` command to obtain the wavelet coefficients of the first 512 components of the sunspots data. Use ``n.levels=9``.
+Use the ``dwt`` command to obtain the wavelet coefficients of the first 512 components of the sunspots data (you can find the data in package ``datasets``). Use ``n.levels=9``.
 
 Use the ``dwt`` command to obtain the wavelet coefficients of the first 512 components of the sunspots data. Use ``n.levels=9``. 
 
-(a) Use the unlist command on this object to create a single vector of coefficients. Make two histograms: one of the coefficient vector and one of the untransformed data. How do these histogram shapes illustrate the sparsity of the wavelet representation of the data? 
+(a) Use the ``unlist`` command on this object to create a single vector of coefficients. Make two histograms: one of the coefficient vector and one of the untransformed data. How do these histogram shapes illustrate the sparsity of the wavelet representation of the data? 
 
 (b) Create a histogram using only the highest level of detail coefficients (use ``[[1]]]`` or ``$d1`` to access these coefficients from the output of ``dwt``). Do these coefficients appear to be symmetric about 0? Normal? 
 
@@ -23,13 +23,12 @@ Use the ``dwt`` command to obtain the wavelet coefficients of the first 512 comp
 
 ## Exercise 2
 
-TODO: Ranked Set Sampling
+Analyze one of the networks from [here](https://snap.stanford.edu/data/) using Matrix Estimation by Universal Singular
+Value Thresholding (USVT) as discussed in class [(slides)](http://christofseiler.github.io/stats205/Lecture23/GraphLimits.pdf).
 
-## Exercise 3
-
-1. Analyze the some network [download here](https://snap.stanford.edu/data/) using USVT (easy to implement yourself or rewrite [this](https://github.com/airoldilab/SAS/blob/master/usvt.m) in R, use $\nu = 0.01$)
-2. Plot reconstructed matrix rearranged based on node degree
-3. Try to interpret the results
+(a) Implement USVT yourself or rewrite it from [this](https://github.com/airoldilab/SAS/blob/master/usvt.m) Matlab script in R (use $\nu = 0.01$).
+(b) Sort the empirical degrees and rearrange the nodes of the graph. Plot reconstructed matrix with rearranged columns and rows.
+(c) Try to interpret the results.
 
 ## Deadline
 
