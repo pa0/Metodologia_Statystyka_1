@@ -68,7 +68,7 @@ Source: Buja et al. (2009)
 * Places Rated data: This example comes from Boyer & Savageau (1984) where cities across the USA were rated in 1984 according to many features
 * The data are also of interest because of two peculiarities: they consist of aggregate numbers for US metropolitan areas, and they form a census, not a random sample
 * In spite of these non-statistical features, it is legitimate to ask whether the variables in this dataset are associated, and it is intuitive to use random pairing of the variable values as a yardstick for the absence of association
-* The variables we consider are ‘Climate-Terrain’ and ‘Housing’. Low values on Climate-Terrain imply uncomfortable temperatures, either hot or cold, and high values mean more moderate temperatures
+* The variables we consider are 'Climate-Terrain' and 'Housing'. Low values on Climate-Terrain imply uncomfortable temperatures, either hot or cold, and high values mean more moderate temperatures
 * High values of Housing indicate a higher cost of owning a single family residence. The obvious expectation is that more comfortable climates call for higher average housing costs
 
 ## Inference for Plots: The Lineup (Example)
@@ -155,8 +155,7 @@ TODO: Milan 1995
 ## Bootstrap PCA
 
 * In case of fixed rows and columns $X$, we can use parametric boostrap
-
-TODO: Josse, Wagner, & Husson 2014
+* See Josse, Wagner, & Husson 2014 for details
 
 ## Bootstrap PCA
 
@@ -186,6 +185,26 @@ knitr::include_graphics("Procrustes.png")
 ```
 
 Source: Josse, Wager, and Husson (2014)
+
+## Bootstrap PCA (Example)
+
+* Consumers describe 10 white wines with 15 sensory attributes
+* Consumers score wines between 1 and 10 for each attribute
+* Averaged across consumers into a $10 \times 15$ data matrix $X$
+
+```{r out.width="0.6\\linewidth"}
+knitr::include_graphics("WinePCA.png")
+```
+Source: Josse et al.
+
+## Bootstrap PCA (Example)
+
+* With boostraped confidence ellipses
+
+```{r out.width="0.7\\linewidth"}
+knitr::include_graphics("WinePCAWithConfidence.png")
+```
+Source: Josse et al.
 
 ## References
 
