@@ -24,7 +24,7 @@ set.seed(1234)
 * We sucessfully used ranks that allowed to remove the normality assumptions in one and two-sample tests
 * We sucessfully used the bootstrap to sample from the empirical distribution and construct confidence intervals
 * We sucessfully used permutation tests for hypothesis testing
-* In all these examples we have found ways to make inferences even without even a completely defined underlying model
+* In all these examples we have found ways to make inference
 * Is this possible for data visualization?
 * That's the topic for today
 
@@ -170,18 +170,13 @@ Two animations on visualizing mandible "eigenanatomy":
 
 ## Bootstrap PCA
 
-* In case of fixed rows and columns $X$, we can use parametric boostrap
-* TODO: See Josse, Wagner, & Husson 2014 for details
-
-## Bootstrap PCA
-
-* In both cases, we need to align the PCA
+* For the total boostrap, need to align PCA's
 * This is usually done using Procrustes analysis
 * Procrustes refers to a bandit from Greek mythology who made his victims fit his bed either by stretching their limbs (or cutting them off)
-* Procrustes anlaysis is used in statistical shape analysis to compare the aligned shapes after removing "nuisance" parameter:
+* Procrustes anlaysis is used in statistical shape analysis to compare aligned shapes after removing "nuisance" parameters:
     * translation in space
     * rotation in space
-    * scaling of the objects
+    * sometimes scaling of the objects
 
 ## Bootstrap PCA
 
@@ -205,15 +200,27 @@ Source: Josse, Wager, and Husson (2014)
 ## Bootstrap PCA
 
 * Collecting $B$ boostrap sampled PCA's by resampling rows of data matrix $X$
-$$(X \hat{v}_1^{*1},X \hat{v}_2^{*1}),\dots,(X \hat{v}_1^{*B},X \hat{v}_2^{*B})$$
+$$\hat{V}_q^{*1},\dots,\hat{V}_q^{*B}$$
 * Align all the projected point set using Procrustes alignment
 * Meaning, we find rotation ($R^T R = I$)
 $$\hat{R}^b = \underset{R}{\operatorname{minimze}} = \left\{ \| X^{*1} \hat{V}_q^{*1} - X^{*b} \hat{V}_q^{*b} R \|^2 \right\}$$
 * and apply rotation to projected data points
-$$\hat{X}^{*b} \hat{R}^b$$
+$$X^{*b} \hat{V}_q^{*b} \hat{R}^{*b}$$
 * Overlay points and draw contours around it
 
-## Bootstrap PCA (Example)
+## Parametric Bootstrap PCA
+
+* In case of fixed rows and columns $X$, we can use parametric boostrap
+* The parametric bootstrap is good alternative when the model is too difficult or before the asymptotics regime
+* In the parametric bootstrap, we go through the following steps
+1. Perform PCA on $X$ to estimate $\hat{V}_p$
+2. Estimate error $\sigma^2$ from residual marix $\epsilon_{n \times p} = X - \hat{V}_q \hat{V}_q^T X$ (assume elementwise iid normal noise)
+2. Boostrap $1,\dots,B$:
+    - Draw $\epsilon_{ij}^{*b}$ from $N(0,\hat{\sigma}^2)$
+    - Generate new matrix $X^{*b} = \hat{V}_q \hat{V}_q^T X + \epsilon^{*b}$
+    - Perform PCA on $X^{*b}$
+
+## Parametric Bootstrap PCA (Example)
 
 * Consumers describe 10 white wines with 15 sensory attributes
 * Consumers score wines between 1 and 10 for each attribute
@@ -224,7 +231,7 @@ knitr::include_graphics("WinePCA.png")
 ```
 Source: Josse et al.
 
-## Bootstrap PCA (Example)
+## Parametric Bootstrap PCA (Example)
 
 * With boostraped confidence ellipses
 
@@ -235,7 +242,7 @@ Source: Josse et al.
 
 ## References
 
-* Diaconis (2006). Theories of Data Analysis: From Magical Thinking Through Classical Statistics
+* Diaconis (1983). Theories of Data Analysis: From Magical Thinking Through Classical Statistics
 * Buja, Cook, Hofmann, Lawrence, Lee, Swayne, and Wickham (2009). Statistical Inference for Exploratory Data Analysis and Model Diagnostics
 * Milan and Whittaker (1995). Application of the Parametric Bootstrap to Models that Incorporate a Singular Value Decomposition
 * Josse, Wager, and Husson (2014). Confidence Areas for Fixed-Effects PCA
