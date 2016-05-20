@@ -171,7 +171,7 @@ Two animations on visualizing mandible "eigenanatomy":
 ## Bootstrap PCA
 
 * In case of fixed rows and columns $X$, we can use parametric boostrap
-* See Josse, Wagner, & Husson 2014 for details
+* TODO: See Josse, Wagner, & Husson 2014 for details
 
 ## Bootstrap PCA
 
