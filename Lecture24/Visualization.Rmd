@@ -125,14 +125,13 @@ knitr::include_graphics("Finance.png")
 
 * Principal Component Analysis (PCA) is a data exporation tool
 * PCA finds a low-dimensional subspace of that minimizes the distances between projections points and subspace
-* Let $X_{n \times p}$ be a centered data matrix
-* Let $\|A\| = \sqrt{AA^T}$ be the Hilbert-Schmidt norm
-* Then we can write PCA as a minimization problem:
-$$\operatorname{minimize} \left\{ \| X - \hat{X}^{(S)} \|^2 \right\}$$
-* The solution is the Singular Value Decomposition (SVD) of 
-$$\hat{X}^{(S)} = U_{n \times S} \Lambda_{S \times S} V^T_{p \times S}$$
-* The principle components or axes are $V$
-* The projected points are $U_{n \times S} \Lambda_{S \times S}^{1/2}$
+* Consider observations $x_1,x_2,\dots,x_n$
+* Centered and combine them in matrix $X$ of dimension $p \times n$
+* PCA solves this minimization problem with $\langle v_1,v_1 \rangle = 1$
+$$\hat{v}_1 = \underset{v_1}{\operatorname{minimize}} \Big\{ \operatorname{Var}(X v_1) \Big\}$$
+* And for $v_2$ with $\langle v_1,v_2 \rangle = 0$ and $\langle v_2,v_2 \rangle = 1$
+$$\hat{v}_2 = \underset{v_2}{\operatorname{minimize}} \Big\{ \operatorname{Var}(X v_2) \Big\}$$
+* Keep going the same way until $\hat{v}_1,\dots,\hat{v}_q$ have been collected and put them in $\hat{V}_q$ of dimensions $p \times q$
 
 ## Principal Component Analysis (Example)
 
@@ -148,6 +147,8 @@ Source: www.aofoundation.org
 knitr::include_graphics("ClusteringI12_corrected.pdf")
 ```
 
+Source: S., Pennec, and Reyes 2012
+
 ## Principal Component Analysis (Example)
 
 Two animations on visualizing mandible "eigenanatomy":
@@ -157,8 +158,15 @@ Two animations on visualizing mandible "eigenanatomy":
 ## Bootstrap PCA
 
 * Two ways to bootstrap PCA in case of random rows $X$
-
-TODO: Milan 1995
+* Parital bootstrap and total bootstrap
+* Parital bootstrap:
+    * Project $B$ replications onto intial subspace
+    * Initial subspace is obtained by PCA on original $X$
+    * Underestimates variation of paramters (Milan 1995)
+* Total bootstrap:
+    * Perform new PCA on each replications
+    * Problem: Need to align PCA's
+    * Nuisance variations: reflections and rotations
 
 ## Bootstrap PCA
 
@@ -194,6 +202,17 @@ knitr::include_graphics("Procrustes.png")
 
 Source: Josse, Wager, and Husson (2014)
 
+## Bootstrap PCA
+
+* Collecting $B$ boostrap sampled PCA's by resampling rows of data matrix $X$
+$$(X \hat{v}_1^{*1},X \hat{v}_2^{*1}),\dots,(X \hat{v}_1^{*B},X \hat{v}_2^{*B})$$
+* Align all the projected point set using Procrustes alignment
+* Meaning, we find rotation ($R^T R = I$)
+$$\hat{R}^b = \underset{R}{\operatorname{minimze}} = \left\{ \| X^{*1} \hat{V}_q^{*1} - X^{*b} \hat{V}_q^{*b} R \|^2 \right\}$$
+* and apply rotation to projected data points
+$$\hat{X}^{*b} \hat{R}^b$$
+* Overlay points and draw contours around it
+
 ## Bootstrap PCA (Example)
 
 * Consumers describe 10 white wines with 15 sensory attributes
@@ -220,3 +239,4 @@ Source: Josse et al.
 * Buja, Cook, Hofmann, Lawrence, Lee, Swayne, and Wickham (2009). Statistical Inference for Exploratory Data Analysis and Model Diagnostics
 * Milan and Whittaker (1995). Application of the Parametric Bootstrap to Models that Incorporate a Singular Value Decomposition
 * Josse, Wager, and Husson (2014). Confidence Areas for Fixed-Effects PCA
+* Seiler, Pennec, and Reyes (2012). Capturing the Multiscale Anatomical Shape Variability with Polyaffine Transformation Trees
