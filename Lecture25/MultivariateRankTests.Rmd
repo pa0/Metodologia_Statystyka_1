@@ -1,0 +1,26 @@
+---
+title: "Multivariate Rank Tests"
+author: "Christof Seiler"
+date: "Stanford University, Spring 2016, Stats 205"
+output:
+  beamer_presentation:
+    incremental: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+set.seed(1234)
+```
+
+## Introduction
+
+* We saw many rank-based hypothesis tests for univariate observations
+* There is a generalizing to the mulitvariate case
+* It is based on **depth functions**
+* One example is the Tukey depth
+
+## References
+
+* Bhattacharya (2015). Power Of Graph-Based Two-Sample Tests
+* Cuesta-Albertos and Nieto-Reyes (2007). The Random Tukey Depth
+* Tukey (1974). Mathematics and the Picturing of Data
