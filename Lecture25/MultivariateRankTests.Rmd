@@ -19,6 +19,20 @@ set.seed(1234)
 * It is based on **depth functions**
 * One example is the Tukey depth
 
+## Some Material
+
+wald-wolfowitz runs test
+
+friedman rafsky test
+
+minimal spanning tree
+
+http://www.inside-r.org/packages/cran/spdep/docs/mstree
+
+http://statweb.stanford.edu/~susan/courses/b494/node2.html
+
+http://statweb.stanford.edu/~susan/courses/b494/node3.html#SECTION00396000000000000000
+
 ## References
 
 * Bhattacharya (2015). Power Of Graph-Based Two-Sample Tests

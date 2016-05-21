@@ -4,7 +4,7 @@ author: "Christof Seiler"
 date: "Stanford University, Spring 2016, Stats 205"
 output:
   beamer_presentation:
-    incremental: yes
+    incremental: no
 ---
 
 ```{r setup, include=FALSE}
@@ -14,16 +14,16 @@ set.seed(1234)
 
 ## Introduction
 
-* Exploratory data anlaysis is usually not parametric
+* Exploratory data analysis is usually not parametric
 * For instance, in Principle Component Analysis (PCA), we do not assume any parametric model (the data doesn't need to be normally distributed)
 * What is described by PCA is a decomposition of the data into Principle Components (PCs) along which the variance is maximized after projecting the data
-* But, as we have seen in this course, it is in general not necessary to assume a parameteric model for inference
+* But, as we have seen in this course, it is in general not necessary to assume a parametric model for inference
 
 ## Introduction
 
-* We sucessfully used ranks that allowed to remove the normality assumptions in one and two-sample tests
-* We sucessfully used the bootstrap to sample from the empirical distribution and construct confidence intervals
-* We sucessfully used permutation tests for hypothesis testing
+* We successfully used ranks that allowed to remove the normality assumptions in one and two-sample tests
+* We successfully used the bootstrap to sample from the empirical distribution and construct confidence intervals
+* We successfully used permutation tests for hypothesis testing
 * In all these examples we have found ways to make inference
 * Is this possible for data visualization?
 * That's the topic for today
@@ -36,7 +36,7 @@ set.seed(1234)
 knitr::include_graphics("Rescaling.png")
 ```
 
-Source: Diaconis (2006)
+Source: Diaconis (1983)
 
 * Most of the subjects judged left plot as more associated than right plot (the same data points)
 * Rescaling can shift the perceived association by 10 to 15%
@@ -52,7 +52,7 @@ Source: Buja et al. (2009)
 ## Inference for Plots: The Lineup
 
 * Generate 19 null plots
-* Arrange all 19 plots and insert the reael data at random location
+* Arrange all 19 plots and insert the real data at random location
 * Ask human viewer to single out the real plot
 * Under the null hypothesis that all plots are the same, there is a one in 20 chance to single out the real one
 * If the viewer chooses the plot of the real data, then the discovery can be assigned a $p$-value of $1/20=0.05$
@@ -162,7 +162,7 @@ pvalue = sum(dbinom(k:K,K,1/8)); pvalue
 
 ## Principal Component Analysis
 
-* Principal Component Analysis (PCA) is a data exporation tool
+* Principal Component Analysis (PCA) is a data exploration tool
 * PCA finds a low-dimensional subspace that minimizes the distances between projections points and subspace
 * Consider observations $x_1,x_2,\dots,x_n$
 * Center and combine them in matrix $X$ of dimension $p \times n$
@@ -197,11 +197,11 @@ Two animations of mandible "eigenanatomy":
 ## Bootstrap PCA
 
 * Two ways to bootstrap PCA in case of random rows $X$
-* Parital bootstrap and total bootstrap
-* Parital bootstrap:
-    * Project $B$ replications onto intial subspace
+* Partial bootstrap and total bootstrap
+* Partial bootstrap:
+    * Project $B$ replications onto initial subspace
     * Initial subspace is obtained by PCA on original $X$
-    * Underestimates variation of paramters (Milan 1995)
+    * Underestimates variation of parameters (Milan 1995)
 * Total bootstrap:
     * Perform new PCA on each replication
     * Problem: Need to align PCA's
@@ -209,10 +209,10 @@ Two animations of mandible "eigenanatomy":
 
 ## Bootstrap PCA
 
-* For the total boostrap, need to align PCA's
+* For the total bootstrap, need to align PCA's
 * This is usually done using Procrustes analysis
 * Procrustes refers to a bandit from Greek mythology who made his victims fit his bed by stretching their limbs (or cutting them off)
-* Procrustes anlaysis is used in statistical shape analysis to compare aligned shapes after removing "nuisance" parameters:
+* Procrustes analysis is used in statistical shape analysis to compare aligned shapes after removing "nuisance" parameters:
     * translation in space
     * rotation in space
     * sometimes scaling of the objects
@@ -238,23 +238,23 @@ Source: Josse, Wager, and Husson (2014)
 
 ## Bootstrap PCA
 
-* Collecting $B$ boostrap sampled PCA's by resampling rows of data matrix $X$
+* Collecting $B$ bootstrap sampled PCA's by resampling rows of data matrix $X$
 $$\hat{V}_q^{*1},\dots,\hat{V}_q^{*B}$$
 * Align all the projected point set using Procrustes alignment
 * Meaning, we find rotation ($R^T R = I$)
-$$\hat{R}^b = \underset{R}{\operatorname{minimze}} = \left\{ \| X^{*1} \hat{V}_q^{*1} - X^{*b} \hat{V}_q^{*b} R \|^2 \right\}$$
+$$\hat{R}^b = \underset{R}{\operatorname{minimize}} = \left\{ \| X^{*1} \hat{V}_q^{*1} - X^{*b} \hat{V}_q^{*b} R \|^2 \right\}$$
 * and apply rotation to projected data points
 $$X^{*b} \hat{V}_q^{*b} \hat{R}^{*b}$$
 * Overlay points and draw contours around it
 
 ## Parametric Bootstrap PCA
 
-* In case of fixed rows and columns $X$, we can use parametric boostrap
+* In case of fixed rows and columns $X$, we can use parametric bootstrap
 * It is good alternative when the model is too difficult or before the asymptotics regime
 * Steps:
 1. Perform PCA on $X$ to estimate $\hat{V}_p$
-2. Estimate error $\sigma^2$ from residual marix $\epsilon_{n \times p} = X - \hat{V}_q \hat{V}_q^T X$ (assume elementwise iid normal noise)
-3. Boostrap $1,\dots,B$:
+2. Estimate error $\sigma^2$ from residual matrix $\epsilon_{n \times p} = X - \hat{V}_q \hat{V}_q^T X$ (assume elementwise iid normal noise)
+3. Bootstrap $1,\dots,B$:
     - Draw $\epsilon_{ij}^{*b}$ from $N(0,\hat{\sigma}^2)$
     - Generate new matrix $X^{*b} = \hat{V}_q \hat{V}_q^T X + \epsilon^{*b}$
     - Perform PCA on $X^{*b}$
@@ -263,7 +263,7 @@ $$X^{*b} \hat{V}_q^{*b} \hat{R}^{*b}$$
 
 * Consumers describe 10 white wines with 15 sensory attributes
 * Consumers score wines between 1 and 10 for each attribute
-* Colllect averages across consumers in $10 \times 15$ matrix $X$
+* Collect averages across consumers in $10 \times 15$ matrix $X$
 
 ```{r out.width="0.6\\linewidth"}
 knitr::include_graphics("WinePCA.png")
