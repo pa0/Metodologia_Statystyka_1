@@ -1,5 +1,5 @@
 ---
-title: "Multivariate Rank Tests"
+title: "Multivariate Nonparametric Tests"
 author: "Christof Seiler"
 date: "Stanford University, Spring 2016, Stats 205"
 output:
@@ -17,26 +17,10 @@ set.seed(1234)
 * So far, we have seen only univariate nonparametric tests
 * Today, we'll cover multivariate generaliztion
 1. Two-Sample tests
-    * Graph-based: Friedman and Rafsky test
     * Data depth-based: Depth function
+    * Graph-based: Friedman and Rafsky test
 2. Associations
     * Mantel test
-
-# Graph-Based Two-Sample Tests
-
-## Wald-Wolfowitz Runs Test
-
-* Is another univariate tests
-* Example: Hot hand in basketball
-
-## Friedman and Rafsky Test
-
-* Generalization of Wald-Wolfowitz runs test to higher dimensions
-* Uses minimal spanning trees
-
-## Minimal Spanning Trees
-
-TODO
 
 # Data Depth-Based Two-Sample Tests
 
@@ -74,18 +58,49 @@ Source: Serfling (2011). [(Slides)](http://www.utdallas.edu/~serfling/Serfling_O
 ## Ranks in $\mathbb{R}^d$
 
 * Let $X_1,\dots,X_{n_1} \sim F$ and $Y_1,\dots,Y_{n_2} \sim G$
+* Null hypothesis $H_0: F = G$
+* Alternative: location shift and/or a scale increase from $F$ to $G$
 * Liu and Singh (1993) test statistic :
-$$Q(F_{n1},G_{n2}) = \frac{1}{n_1 n_2} \sum_{j=1}^{n_2} \sum_{i=1}^{n_1} I(D(X_i,F_{n_1}) \le D(Y_j,F_{n_1}))$$
+$$Q(F_{n1},G_{n2}) = \sum_{j=1}^{n_2} \sum_{i=1}^{n_1} I(D(X_i,F_{n_1}) \le D(Y_j,F_{n_1}))$$
+* The statistic $Q$ gauges the overall "outlyingness" of the $G$ population with respect to the given $F$ population
+* It can detect whether $G$ has a different location and/ or has additional dispersion as compared to $F$
+
+## Ranks in $\mathbb{R}^d$
 
 * Special case: Depth function for the univariate Mann-Whitney test 
 $$T(F_{n1},G_{n2}) = \sum_{j=1}^{n_2} \sum_{i=1}^{n_1} I(X_i < Y_j)$$
 by taking 
 $$D(x,F) = F(x)$$
+* Zuo and He (2006) proved asymptotic normality of the statistic
 
-## Some Computational Aspects
+## Ranks in $\mathbb{R}^d$
 
 * Get increasingly diffuclt to compute in high dimensions
-* Computation time is polynomial in $n$ but exponential in $d$ (exception of Mahalanobis depth)
+* Computation time is polynomial in $n$ but exponential in $d$
+
+TODO: Rousseeuw and Hubert (2015)
+
+# Graph-Based Two-Sample Tests
+
+## Computational Efficiency
+
+* Alternative multivariate nonparametric tests are based on graphs
+* We consider one test based on minimal spanning tress
+* A set of $n$ points in $\mathbb{R}^d$ can be computed in $O(d^{n_2})$ time
+
+## Wald-Wolfowitz Runs Test
+
+* Is another univariate tests
+* Example: Hot hand in basketball
+
+## Friedman and Rafsky Test
+
+* Generalization of Wald-Wolfowitz runs test to higher dimensions
+* Uses minimal spanning trees
+
+## Minimal Spanning Trees
+
+TODO
 
 # Associations
 
@@ -102,3 +117,4 @@ $$D(x,F) = F(x)$$
 * Serfling (2012). Depth [(pdf preprint)](http://www.utdallas.edu/~serfling/papers/Depth_EOE2.pdf)
 * Rousseeuw and Hubert (2015). Statistical Depth Meets Computational Geometry: A Short Survey
 * Liu and Singh (1993). A Quality Index Based on Data-Depth and Multivariate Rank Tests
+* Zuo and He (2006). On the Limiting Distributions of Multivariate Depth-Based Rank Sum Statistics and Related Tests
