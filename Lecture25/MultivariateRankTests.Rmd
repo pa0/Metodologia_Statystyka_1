@@ -22,7 +22,7 @@ set.seed(1234)
 2. Associations
     * Mantel test
 
-# Two-Sample Tests
+# Graph-Based Two-Sample Tests
 
 ## Wald-Wolfowitz Runs Test
 
@@ -37,6 +37,8 @@ set.seed(1234)
 ## Minimal Spanning Trees
 
 TODO
+
+# Data Depth-Based Two-Sample Tests
 
 ## Tukey Depth
 
