@@ -12,14 +12,17 @@ knitr::opts_chunk$set(echo = FALSE)
 set.seed(1234)
 ```
 
-## Introduction
+## Overview
 
-* We saw many rank-based hypothesis tests for univariate observations
-* There are generalizing to the mulitvariate case
-* Today, we will cover:
-    * Friedman and Rafsky test
-    * Tukey depth
+* So far, we have seen only univariate nonparametric tests
+* Today, we'll cover multivariate generaliztion
+1. Two-Sample tests
+    * Graph-based: Friedman and Rafsky test
+    * Data depth-based: Tukey depth
+2. Associations
     * Mantel test
+
+# Two-Sample Tests
 
 ## Wald-Wolfowitz Runs Test
 
@@ -40,6 +43,8 @@ TODO
 * It is based on **depth functions**
 * One example is the Tukey depth
 
+# Associations
+
 ## Mantel Test
 
 * Test for multivariate assocations
@@ -48,6 +53,5 @@ TODO
 ## References
 
 * Bhattacharya (2015). Power of Graph-Based Two-Sample Tests
-* Cuesta-Albertos and Nieto-Reyes (2007). The Random Tukey Depth
 * Tukey (1974). Mathematics and the Picturing of Data
-* Holmes Lecture Notes (1997). [(Link)](http://statweb.stanford.edu/~susan/courses/b494/node3.html#SECTION00390000000000000000)
+* Holmes (1997). Lecture Notes on [Computer Intensive Methods in Statistics](http://statweb.stanford.edu/~susan/courses/b494/node3.html#SECTION00390000000000000000)
