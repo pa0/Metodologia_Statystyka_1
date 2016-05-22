@@ -18,7 +18,7 @@ set.seed(1234)
 * Today, we'll cover multivariate generaliztion
 1. Two-Sample tests
     * Graph-based: Friedman and Rafsky test
-    * Data depth-based: Tukey depth
+    * Data depth-based: Depth function
 2. Associations
     * Mantel test
 
@@ -40,10 +40,52 @@ TODO
 
 # Data Depth-Based Two-Sample Tests
 
-## Tukey Depth
+## Ranks in $\mathbb{R}^d$
 
-* It is based on **depth functions**
-* One example is the Tukey depth
+* In univariate nonparametric analysis, we relied heavily on ranks
+* Ranks are straigh forwared in the univariate case
+* We just use the natural ordering of observations along the real line
+* Moving from univariate to multivariate setting, we need to make some more considerations
+* In $\mathbb{R}^d$ there is no natural ordering
+* Just a straightforward extension of the median to define a center can fail
+* A $\mathbb{R}^d$ coordinate-wise median can lie outside the convex hull of the data
+
+## Ranks in $\mathbb{R}^d$
+
+* Tukey propsed the **depth function** to address this issue
+* Take a distribution $F$ on $\mathbb{R}^d$
+* A depth function $D(x,F)$ 
+* Then, the Half space depth function proposed by Tukey, for $x \in \mathbb{R}^2$ is:
+$$D_H(x,F) = \inf\{ F(H): x \in H \text{ closed halfspace} \}$$
+* The sample halfspace depth of $x$ is the minimum fraction of data points in any closed halfspace containing $x$
+
+## Ranks in $\mathbb{R}^d$
+
+* Example: Uniform distribution on the unit square in $\mathbb{R}^2$
+
+```{r out.width="1.0\\linewidth"}
+knitr::include_graphics("TukeyDepth.pdf")
+```
+
+Source: Serfling (2011). [(Slides)](http://www.utdallas.edu/~serfling/Serfling_Oberwolfach_Talk.pdf)
+
+* In contrast, density function is constant with no contours of equal density
+
+## Ranks in $\mathbb{R}^d$
+
+* Let $X_1,\dots,X_{n_1} \sim F$ and $Y_1,\dots,Y_{n_2} \sim G$
+* Liu and Singh (1993) test statistic :
+$$Q(F_{n1},G_{n2}) = \frac{1}{n_1 n_2} \sum_{j=1}^{n_2} \sum_{i=1}^{n_1} I(D(X_i,F_{n_1}) \le D(Y_j,F_{n_1}))$$
+
+* Special case: Depth function for the univariate Mann-Whitney test 
+$$T(F_{n1},G_{n2}) = \sum_{j=1}^{n_2} \sum_{i=1}^{n_1} I(X_i < Y_j)$$
+by taking 
+$$D(x,F) = F(x)$$
+
+## Some Computational Aspects
+
+* Get increasingly diffuclt to compute in high dimensions
+* Computation time is polynomial in $n$ but exponential in $d$ (exception of Mahalanobis depth)
 
 # Associations
 
@@ -57,3 +99,6 @@ TODO
 * Bhattacharya (2015). Power of Graph-Based Two-Sample Tests
 * Tukey (1974). Mathematics and the Picturing of Data
 * Holmes (1997). Lecture Notes on [Computer Intensive Methods in Statistics](http://statweb.stanford.edu/~susan/courses/b494/node3.html#SECTION00390000000000000000)
+* Serfling (2012). Depth [(pdf preprint)](http://www.utdallas.edu/~serfling/papers/Depth_EOE2.pdf)
+* Rousseeuw and Hubert (2015). Statistical Depth Meets Computational Geometry: A Short Survey
+* Liu and Singh (1993). A Quality Index Based on Data-Depth and Multivariate Rank Tests
