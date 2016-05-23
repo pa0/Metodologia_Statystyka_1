@@ -17,15 +17,16 @@ library(aplpack)
 
 * So far, we have seen only univariate nonparametric tests
 * Today, we'll cover multivariate generaliztions
-1. Two-sample tests
-    * Data depth-based: Depth function
+* Two-sample tests
+    * Data depth-based: Tukey depth function
     * Graph-based: Friedman and Rafsky test
+
+<!--
 2. Associations
     * Mantel test
+-->
 
-# Data Depth-Based Two-Sample Tests
-
-## Ranks in $\mathbb{R}^d$
+## Data Depth-Based Two-Sample Tests
 
 * In univariate nonparametric analysis, we relied heavily on ranks
 * Ranks are straigh forwared in the univariate case
@@ -35,7 +36,7 @@ library(aplpack)
 * Just a straightforward extension of the median to define a center can fail
 * A $\mathbb{R}^d$ coordinate-wise median can lie outside the convex hull of the data
 
-## Ranks in $\mathbb{R}^d$
+## Data Depth-Based Two-Sample Tests
 
 * We ranked $n$ observations in ascending order
 * From that we constructed test statistics
@@ -49,7 +50,7 @@ library(aplpack)
     * Until we end up with the deepest observation, the median
 * This can be exteneded to higher dimensions more easily
 
-## Ranks in $\mathbb{R}^d$
+## Data Depth-Based Two-Sample Tests
 
 * Tukey propsed the **depth function** to address this issue
 * Take a distribution $F$ on $\mathbb{R}^d$
@@ -57,7 +58,7 @@ library(aplpack)
 * Then, the Half space depth function proposed by Tukey, for $x \in \mathbb{R}^2$ is:
 $$D_H(x,F) = \inf\{ F(H): x \in H \text{ closed halfspace} \}$$
 
-## Ranks in $\mathbb{R}^d$
+## Data Depth-Based Two-Sample Tests
 
 * Example: Uniform distribution on the unit square in $\mathbb{R}^2$
 
@@ -69,7 +70,7 @@ Source: Serfling (2011). [(Slides)](http://www.utdallas.edu/~serfling/Serfling_O
 
 * In contrast, density function is constant with no contours of equal density
 
-## Ranks in $\mathbb{R}^d$
+## Data Depth-Based Two-Sample Tests
 
 * The sample halfspace depth of $x$ is the minimum fraction of data points in any closed halfspace containing $\theta$
 $$D_H(\theta,X_1,\dots,X_n) = \underset{\|u\|=1}{\operatorname{minimize}} \sum_{i=1}^n I(u^T X_i \ge u^T \theta) $$
@@ -80,7 +81,7 @@ knitr::include_graphics("TukeyDepthIllustration.png")
 
 Source: Rousseeuw and Struyf (1998)
 
-## Ranks in $\mathbb{R}^d$
+## Data Depth-Based Two-Sample Tests
 
 * The sample halfspace depth of $x$ is the minimum fraction of data points in any closed halfspace containing $\theta$
 $$D_H(\theta,X_1,\dots,X_n) = \underset{\|u\|=1}{\operatorname{minimize}} \sum_{i=1}^n I(u^T X_i \ge u^T \theta) $$
@@ -91,7 +92,7 @@ knitr::include_graphics("SampleTukeyDepth.png")
 
 Source: Rousseeuw and Hubert (2015)
 
-## Ranks in $\mathbb{R}^d$
+## Data Depth-Based Two-Sample Tests
 
 * Let $X_1,\dots,X_{n_1} \sim F$ and $Y_1,\dots,Y_{n_2} \sim G$
 * Null hypothesis $H_0: F = G$
@@ -101,7 +102,7 @@ $$Q(F_{n1},G_{n2}) = \sum_{j=1}^{n_2} \sum_{i=1}^{n_1} I(D(X_i,F_{n_1}) \le D(Y_
 * The statistic $Q$ gauges the overall "outlyingness" of the $G$ population with respect to the given $F$ population
 * It can detect whether $G$ has a different location and/ or has additional dispersion as compared to $F$
 
-## Ranks in $\mathbb{R}^d$
+## Data Depth-Based Two-Sample Tests
 
 * Special case: Depth function for the univariate Mann-Whitney test 
 $$T(F_{n1},G_{n2}) = \sum_{j=1}^{n_2} \sum_{i=1}^{n_1} I(X_i < Y_j)$$
@@ -109,7 +110,7 @@ by taking
 $$D(x,F) = F(x)$$
 * Zuo and He (2006) proved asymptotic normality of this statistic
 
-## Ranks in $\mathbb{R}^d$
+## Data Depth-Based Two-Sample Tests
 
 ```{r fig.height=5,fig.width=6,out.width="0.7\\linewidth"}
 # example of Rousseeuw et al., see R-package rpart
@@ -136,7 +137,7 @@ title("Car Data Chambers/Hastie 1992")
 * Fence: Inflating the "bag" by factor 3 relative to Tukey median
 * Loop: Convex hull containing all points inside the fence
 
-## Ranks in $\mathbb{R}^d$
+## Data Depth-Based Two-Sample Tests
 
 * Get increasingly diffuclt to compute in high dimensions
 * Computation time is polynomial in $n$ but exponential in $d$
@@ -145,7 +146,7 @@ title("Car Data Chambers/Hastie 1992")
 * They compute $m$ random directions out of all directions perpendicular to hyperplanes through $d$ data points
 * This algorithm has time complexity $O(md^3 + mdn)$
 
-## Ranks in $\mathbb{R}^d$
+## Data Depth-Based Two-Sample Tests
 
 * Set current depth to $n$
 * Repeat $m$ times:
@@ -155,9 +156,7 @@ title("Car Data Chambers/Hastie 1992")
     * Compute the univariate depth $k$ of $\theta$ on $L$
     * Set depth to $\min(\text{current depth},k)$
 
-# Graph-Based Two-Sample Tests
-
-## Computational Efficiency
+## Graph-Based Two-Sample Tests
 
 * Alternative multivariate nonparametric tests are based on graphs
 * We consider one test based on minimal spanning tress
@@ -184,7 +183,7 @@ title("Car Data Chambers/Hastie 1992")
 * The players performance can be compared with coin tosses
 -->
 
-## Wald-Wolfowitz Runs Test
+## Graph-Based Two-Sample Tests
 
 * The Wald-Wolfowitz runs test can be used to evaluate sequences of runs
 * It can test the hypothesis that the elements of a sequence are mutually independent
@@ -193,7 +192,7 @@ title("Car Data Chambers/Hastie 1992")
 ```HHH TTT HHH T HHH TTTT```  
 * It has been used to study the hot hand in basketball
 
-## Wald-Wolfowitz Runs Test
+## Graph-Based Two-Sample Tests
 
 * For univariate continuous observations:
     * Pool the observations
@@ -202,9 +201,9 @@ title("Car Data Chambers/Hastie 1992")
 * Run: sequences of observations that are from the same sample and follow each other
 * Test statisitcs is the total number of runs
 
-## Friedman and Rafsky Test
+## Graph-Based Two-Sample Tests
 
-* Generalization of Wald-Wolfowitz runs test to higher dimensions
+* The Friedman and Rafsky test is a generalization of Wald-Wolfowitz runs test to higher dimensions
 * The difficulty is that we need to sort observations
 * Friedman and Rafsky purpose to use minimal spanning trees as a multivariate generalization of the univariate sorted list
 
@@ -212,32 +211,56 @@ title("Car Data Chambers/Hastie 1992")
 knitr::include_graphics("MinimumSpanningTree.pdf")
 ```
 
-## Friedman and Rafsky Test
+## Graph-Based Two-Sample Tests
 
 * For univariate sample, the edges of the MST are defined by adjacent observations in the sorted list
 * The Wald-Wolfowitz runs test can be described in this alternative way:
     1. Construct minimal spanning trees of pooled univariate observations
     2. Remove all edges for which the defining nodes originate from different samples
     3. Define the test statistics as the number of disjoint subtrees that result
+    
+## Graph-Based Two-Sample Tests
+
 * Reject $H_0$ for small number of subtrees (runs)
 * For multivariate samples, just construct minimal spanning tree in step 1 from multivariate observations
 * The null distribution of the test statistics can be computed using permuation tests (fix tree, permuate labels)
 * Good power in finite samples for multivariate data (against generale alternatives: location, spread, and shape)
 
-## Friedman and Rafsky Test
+## Graph-Based Two-Sample Tests
 
 ```{r out.width="1.0\\linewidth"}
 knitr::include_graphics("Algorithm.pdf")
 ```
 
+## Graph-Based Two-Sample Tests
+
+* Has been applied to mapping cell populations in flow cytometry data (Hsiao et al. 2016)
+    * two cell populations
+    * $d$ measurements on each cell
+    * determine whether the expression of a cellular marker is statistically different
+    * suggesting candidates for new cellular phenotypes 
+    * indicate splitting or merging of cell populations
+* Recent develoopment for very high-dimensional data sets (Chen and Friedman 2015)
+
+<!--
 # Associations
 
-## Mantel Test
+## Measures of Association for Matrices
 
 * Test for multivariate assocations
 * Or associations between matrices
+* Many different coefficients and tests have been published as measures of association between two data tables
+    * RV coefficient
+    * Procrustes coefficient
+    * dCov coefficient
+    * Mantel coefficient
+    * Graph based measure
+    * HSIC coefficient
+-->
 
 ## References
+
+\footnotesize
 
 * Tukey (1974). Mathematics and the Picturing of Data
 * Friedman and Rafsky (1979). Multivariate Generalizations of the Wolfowitz and Smirnov Two-Sample Tests
@@ -248,3 +271,6 @@ knitr::include_graphics("Algorithm.pdf")
 * Serfling (2012). Depth [(pdf preprint)](http://www.utdallas.edu/~serfling/papers/Depth_EOE2.pdf)
 * Rousseeuw and Hubert (2015). Statistical Depth Meets Computational Geometry: A Short Survey
 * Bhattacharya (2015). Power of Graph-Based Two-Sample Tests
+* Chen and Friedman (2015). A New Graph-Based Two-Sample Test for Multivariate and Object Data
+* Hsiao, Liu, Stanton, McGee, Qian, Scheuermann (2016). Mapping Cell Populations in Flow Cytometry Data for Cross-Sample Comparison using The Friedman-Rafsky Test Statistic as a Distance Measure
+
