@@ -10,13 +10,14 @@ output:
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
 set.seed(1234)
+library(aplpack)
 ```
 
 ## Overview
 
 * So far, we have seen only univariate nonparametric tests
 * Today, we'll cover multivariate generaliztions
-1. Two-Sample tests
+1. Two-sample tests
     * Data depth-based: Depth function
     * Graph-based: Friedman and Rafsky test
 2. Associations
@@ -73,6 +74,17 @@ Source: Serfling (2011). [(Slides)](http://www.utdallas.edu/~serfling/Serfling_O
 * The sample halfspace depth of $x$ is the minimum fraction of data points in any closed halfspace containing $\theta$
 $$D_H(\theta,X_1,\dots,X_n) = \underset{\|u\|=1}{\operatorname{minimize}} \sum_{i=1}^n I(u^T X_i \ge u^T \theta) $$
 
+```{r out.width="0.5\\linewidth"}
+knitr::include_graphics("TukeyDepthIllustration.png")
+```
+
+Source: Rousseeuw and Struyf (1998)
+
+## Ranks in $\mathbb{R}^d$
+
+* The sample halfspace depth of $x$ is the minimum fraction of data points in any closed halfspace containing $\theta$
+$$D_H(\theta,X_1,\dots,X_n) = \underset{\|u\|=1}{\operatorname{minimize}} \sum_{i=1}^n I(u^T X_i \ge u^T \theta) $$
+
 ```{r out.width="0.7\\linewidth"}
 knitr::include_graphics("SampleTukeyDepth.png")
 ```
@@ -99,10 +111,50 @@ $$D(x,F) = F(x)$$
 
 ## Ranks in $\mathbb{R}^d$
 
+```{r fig.height=5,fig.width=6,out.width="0.7\\linewidth"}
+# example of Rousseeuw et al., see R-package rpart
+cardata <- structure(as.integer( c(2560,2345,1845,2260,2440,
+   2285, 2275, 2350, 2295, 1900, 2390, 2075, 2330, 3320, 2885,
+   3310, 2695, 2170, 2710, 2775, 2840, 2485, 2670, 2640, 2655,
+   3065, 2750, 2920, 2780, 2745, 3110, 2920, 2645, 2575, 2935,
+   2920, 2985, 3265, 2880, 2975, 3450, 3145, 3190, 3610, 2885,
+   3480, 3200, 2765, 3220, 3480, 3325, 3855, 3850, 3195, 3735,
+   3665, 3735, 3415, 3185, 3690, 97, 114, 81, 91, 113, 97, 97,
+   98, 109, 73, 97, 89, 109, 305, 153, 302, 133, 97, 125, 146,
+   107, 109, 121, 151, 133, 181, 141, 132, 133, 122, 181, 146,
+   151, 116, 135, 122, 141, 163, 151, 153, 202, 180, 182, 232,
+   143, 180, 180, 151, 189, 180, 231, 305, 302, 151, 202, 182,
+   181, 143, 146, 146)), .Dim = as.integer(c(60, 2)), 
+   .Dimnames = list(NULL, c("Weight", "Disp.")))
+bagplot(cardata,factor=3,show.baghull=TRUE,show.loophull=TRUE,precision=1,dkmethod=2,
+        col.loophull="white",col.baghull="lightgray")
+title("Car Data Chambers/Hastie 1992")
+```
+
+* The star is the Tukey median
+* Bag: The dark area contains 50%
+* Fence: Inflating the "bag" by factor 3 relative to Tukey median
+* Loop: Convex hull containing all points inside the fence
+
+## Ranks in $\mathbb{R}^d$
+
 * Get increasingly diffuclt to compute in high dimensions
 * Computation time is polynomial in $n$ but exponential in $d$
+* Rousseeuw and Struyf (1998) proposed an approximation
+* Out of all possible directions $n \choose d$ they propose to use a Monte Carlo simulation
+* They compute $m$ random directions out of all directions perpendicular to hyperplanes through $d$ data points
+* This algorithm has time complexity $O(md^3 + mdn)$
 
-TODO: Rousseeuw and Hubert (2015)
+## Ranks in $\mathbb{R}^d$
+
+* Set depth to $n$
+* Repeat $m$ times:
+    * Draw a random sample of size p
+    * Determine a direction u perpendicular to the $d$-subset
+    * Project all data points on the line $L$ through $\theta$ with direction $u$
+    * Compute the univariate depth $k$ of $\theta$ on $L$
+    * Set depth to $\min(\text{current depth},k)$
+* TODO: conclusion
 
 # Graph-Based Two-Sample Tests
 
@@ -110,7 +162,7 @@ TODO: Rousseeuw and Hubert (2015)
 
 * Alternative multivariate nonparametric tests are based on graphs
 * We consider one test based on minimal spanning tress
-* A set of $n$ points in $\mathbb{R}^d$ can be computed in $O(d^{n_2})$ time
+* A set of $n$ points in $\mathbb{R}^d$ can be computed in $O(d n^2)$ time
 
 ## Wald-Wolfowitz Runs Test
 
@@ -142,3 +194,4 @@ TODO
 * Rousseeuw and Hubert (2015). Statistical Depth Meets Computational Geometry: A Short Survey
 * Liu and Singh (1993). A Quality Index Based on Data-Depth and Multivariate Rank Tests
 * Zuo and He (2006). On the Limiting Distributions of Multivariate Depth-Based Rank Sum Statistics and Related Tests
+* Rousseeuw and Struyf (1998). Computing Location Depth and Regression Depth in Higher Dimensions
