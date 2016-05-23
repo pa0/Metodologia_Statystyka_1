@@ -163,6 +163,7 @@ title("Car Data Chambers/Hastie 1992")
 * We consider one test based on minimal spanning tress
 * A set of $n$ points in $\mathbb{R}^d$ can be computed in $O(d n^2)$ time
 
+<!--
 ## Wald-Wolfowitz Runs Test
 
 * Intuition fails us sometimes when we expect to see essential charactaristics of change locallay not only globally
@@ -181,16 +182,53 @@ title("Car Data Chambers/Hastie 1992")
 * Consider a player that makes 50% of his shots
 * So it would be completely normal for him to make 4 or 5 shots in a row
 * The players performance can be compared with coin tosses
-* 
+-->
+
+## Wald-Wolfowitz Runs Test
+
+* The Wald-Wolfowitz runs test can be used to evaluate sequences of runs
+* It can test the hypothesis that the elements of a sequence are mutually independent
+* For example, this sequence of coin tosses has 6 runs  
+```HHHTTTHHHTHHHTTTT```  
+```HHH TTT HHH T HHH TTTT```  
+* It has been used to study the hot hand in basketball
+
+## Wald-Wolfowitz Runs Test
+
+* For univariate continuous observations:
+    * Pool the observations
+    * Rank the obsevations
+    * Count the number of runs
+* Run: sequences of observations that are from the same sample and follow each other
+* Test statisitcs is the total number of runs
 
 ## Friedman and Rafsky Test
 
 * Generalization of Wald-Wolfowitz runs test to higher dimensions
-* Uses minimal spanning trees
+* The difficulty is that we need to sort observations
+* Friedman and Rafsky purpose to use minimal spanning trees as a multivariate generalization of the univariate sorted list
 
-## Minimal Spanning Trees
+```{r out.width="0.6\\linewidth"}
+knitr::include_graphics("MinimumSpanningTree.pdf")
+```
 
-TODO
+## Friedman and Rafsky Test
+
+* For univariate sample, the edges of the MST are defined by adjacent observations in the sorted list
+* The Wald-Wolfowitz runs test can be described in this alternative way:
+    1. Construct minimal spanning trees of pooled univariate observations
+    2. Remove all edges for which the defining nodes originate from different samples
+    3. Define the test statistics as the number of disjoint subtrees that result
+* Reject $H_0$ for small number of subtrees (runs)
+* For multivariate samples, just construct minimal spanning tree in step 1 from multivariate observations
+* The null distribution of the test statistics can be computed using permuation tests (fix tree, permuate labels)
+* Good power in finite samples for multivariate data (against generale alternatives: location, spread, and shape)
+
+## Friedman and Rafsky Test
+
+```{r out.width="1.0\\linewidth"}
+knitr::include_graphics("Algorithm.pdf")
+```
 
 # Associations
 
@@ -201,11 +239,12 @@ TODO
 
 ## References
 
-* Bhattacharya (2015). Power of Graph-Based Two-Sample Tests
 * Tukey (1974). Mathematics and the Picturing of Data
-* Holmes (1997). Lecture Notes on [Computer Intensive Methods in Statistics](http://statweb.stanford.edu/~susan/courses/b494/node3.html#SECTION00390000000000000000)
+* Friedman and Rafsky (1979). Multivariate Generalizations of the Wolfowitz and Smirnov Two-Sample Tests
+* Liu and Singh (1993). A Quality Index Based on Data-Depth and Multivariate Rank Tests
+* Holmes (1997). [Lecture Notes on Computer Intensive Methods in Statistics](http://statweb.stanford.edu/~susan/courses/b494/node3.html#SECTION00390000000000000000)
+* Rousseeuw and Struyf (1998). Computing Location Depth and Regression Depth in Higher Dimensions
+* Zuo and He (2006). On the Limiting Distributions of Multivariate Depth-Based Rank Sum Statistics and Related Tests
 * Serfling (2012). Depth [(pdf preprint)](http://www.utdallas.edu/~serfling/papers/Depth_EOE2.pdf)
 * Rousseeuw and Hubert (2015). Statistical Depth Meets Computational Geometry: A Short Survey
-* Liu and Singh (1993). A Quality Index Based on Data-Depth and Multivariate Rank Tests
-* Zuo and He (2006). On the Limiting Distributions of Multivariate Depth-Based Rank Sum Statistics and Related Tests
-* Rousseeuw and Struyf (1998). Computing Location Depth and Regression Depth in Higher Dimensions
+* Bhattacharya (2015). Power of Graph-Based Two-Sample Tests
