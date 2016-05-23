@@ -147,14 +147,13 @@ title("Car Data Chambers/Hastie 1992")
 
 ## Ranks in $\mathbb{R}^d$
 
-* Set depth to $n$
+* Set current depth to $n$
 * Repeat $m$ times:
-    * Draw a random sample of size p
-    * Determine a direction u perpendicular to the $d$-subset
+    * Draw a random sample of size $d$
+    * Determine a direction $u$ perpendicular to the $d$-subset
     * Project all data points on the line $L$ through $\theta$ with direction $u$
     * Compute the univariate depth $k$ of $\theta$ on $L$
     * Set depth to $\min(\text{current depth},k)$
-* TODO: conclusion
 
 # Graph-Based Two-Sample Tests
 
@@ -166,8 +165,23 @@ title("Car Data Chambers/Hastie 1992")
 
 ## Wald-Wolfowitz Runs Test
 
-* Is another univariate tests
+* Intuition fails us sometimes when we expect to see essential charactaristics of change locallay not only globally
+* For instance, coin tosses should be rougly 50% head and 50% tails even in short runs
+* This is also refereed to as the "belief law of small numbers"
+* This leads to 
+* Gambler's fallacy 
+    * probability of heads is greater after a long sequence of tails than after a long sequence of heads
+* Rejection of randomness of sequences 
+    * that contain the expected number of runs because of 4 head in a row in 20 tosses
+
+## Wald-Wolfowitz Runs Test
+
 * Example: Hot hand in basketball
+* This expression is used to say when a player peforms significantly higher during a particular period than expected on the overall record
+* Consider a player that makes 50% of his shots
+* So it would be completely normal for him to make 4 or 5 shots in a row
+* The players performance can be compared with coin tosses
+* 
 
 ## Friedman and Rafsky Test
 
