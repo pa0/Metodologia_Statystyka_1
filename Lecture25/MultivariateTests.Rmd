@@ -4,7 +4,7 @@ author: "Christof Seiler"
 date: "Stanford University, Spring 2016, Stats 205"
 output:
   beamer_presentation:
-    incremental: yes
+    incremental: no
 ---
 
 ```{r setup, include=FALSE}
@@ -224,9 +224,11 @@ knitr::include_graphics("MinimumSpanningTree.pdf")
 
 ## Graph-Based Two-Sample Tests
 
-```{r out.width="1.0\\linewidth"}
+```{r out.width="0.9\\linewidth"}
 knitr::include_graphics("Algorithm.pdf")
 ```
+
+Source: Friedman and Rafsky (1979)
 
 ## Graph-Based Two-Sample Tests
 
@@ -276,5 +278,4 @@ knitr::include_graphics("Algorithm.pdf")
 * Rousseeuw and Hubert (2015). Statistical Depth Meets Computational Geometry: A Short Survey
 * Bhattacharya (2015). Power of Graph-Based Two-Sample Tests
 * Chen and Friedman (2015). A New Graph-Based Two-Sample Test for Multivariate and Object Data
-* Hsiao, Liu, Stanton, McGee, Qian, Scheuermann (2016). Mapping Cell Populations in Flow Cytometry Data for Cross-Sample Comparison using The Friedman-Rafsky Test Statistic as a Distance Measure
-
+* Hsiao, Liu, Stanton, McGee, Qian, and Scheuermann (2016). Mapping Cell Populations in Flow Cytometry Data for Cross-Sample Comparison using The Friedman-Rafsky Test Statistic as a Distance Measure
