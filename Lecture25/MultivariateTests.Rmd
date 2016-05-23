@@ -191,7 +191,7 @@ title("Car Data Chambers/Hastie 1992")
 * This sequence of coin tosses has 6 runs  
 ```HHH TTT HHH T HHH TTTT```
 * The test statistics is the total number of runs
-* Reject $H_0$ for small number of runs
+* Reject $H_0$ for small and large number of runs
 * This has been used to study the hot hand in basketball
 
 ## Graph-Based Two-Sample Tests
@@ -230,7 +230,7 @@ knitr::include_graphics("Algorithm.pdf")
 
 ## Graph-Based Two-Sample Tests
 
-* Reject $H_0$ for small number of subtrees (runs)
+* Reject $H_0$ for small and large number of subtrees (runs)
 * The null distribution of the test statistics can be computed using permutation tests
     * fix tree
     * permute labels
