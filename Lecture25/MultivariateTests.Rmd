@@ -15,7 +15,7 @@ set.seed(1234)
 ## Overview
 
 * So far, we have seen only univariate nonparametric tests
-* Today, we'll cover multivariate generaliztion
+* Today, we'll cover multivariate generaliztions
 1. Two-Sample tests
     * Data depth-based: Depth function
     * Graph-based: Friedman and Rafsky test
@@ -36,12 +36,25 @@ set.seed(1234)
 
 ## Ranks in $\mathbb{R}^d$
 
+* We ranked $n$ observations in ascending order
+* From that we constructed test statistics
+* For instance, the median is defined as the order statistics of rank $(n+1)/2$ (when $n$ is odd)
+* The median can be computed in $O(n)$ time
+* The problem is that generalizing this to higher dimension is straightforward
+* So we consider a different ranking system
+* We rank observations as assigning 
+    * the most exgtreme observation depth 1,
+    * the second smallest and second largest observations depth 2
+    * Until we end up with the deepest observation, the median
+* This can be exteneded to higher dimensions more easily
+
+## Ranks in $\mathbb{R}^d$
+
 * Tukey propsed the **depth function** to address this issue
 * Take a distribution $F$ on $\mathbb{R}^d$
 * A depth function $D(x,F)$ 
 * Then, the Half space depth function proposed by Tukey, for $x \in \mathbb{R}^2$ is:
 $$D_H(x,F) = \inf\{ F(H): x \in H \text{ closed halfspace} \}$$
-* The sample halfspace depth of $x$ is the minimum fraction of data points in any closed halfspace containing $x$
 
 ## Ranks in $\mathbb{R}^d$
 
@@ -54,6 +67,17 @@ knitr::include_graphics("TukeyDepth.pdf")
 Source: Serfling (2011). [(Slides)](http://www.utdallas.edu/~serfling/Serfling_Oberwolfach_Talk.pdf)
 
 * In contrast, density function is constant with no contours of equal density
+
+## Ranks in $\mathbb{R}^d$
+
+* The sample halfspace depth of $x$ is the minimum fraction of data points in any closed halfspace containing $\theta$
+$$D_H(\theta,X_1,\dots,X_n) = \underset{\|u\|=1}{\operatorname{minimize}} \sum_{i=1}^n I(u^T X_i \ge u^T \theta) $$
+
+```{r out.width="0.7\\linewidth"}
+knitr::include_graphics("SampleTukeyDepth.png")
+```
+
+Source: Rousseeuw and Hubert (2015)
 
 ## Ranks in $\mathbb{R}^d$
 
@@ -71,7 +95,7 @@ $$Q(F_{n1},G_{n2}) = \sum_{j=1}^{n_2} \sum_{i=1}^{n_1} I(D(X_i,F_{n_1}) \le D(Y_
 $$T(F_{n1},G_{n2}) = \sum_{j=1}^{n_2} \sum_{i=1}^{n_1} I(X_i < Y_j)$$
 by taking 
 $$D(x,F) = F(x)$$
-* Zuo and He (2006) proved asymptotic normality of the statistic
+* Zuo and He (2006) proved asymptotic normality of this statistic
 
 ## Ranks in $\mathbb{R}^d$
 
