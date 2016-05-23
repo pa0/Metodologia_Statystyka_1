@@ -224,7 +224,7 @@ knitr::include_graphics("MinimumSpanningTree.pdf")
 
 ## Graph-Based Two-Sample Tests
 
-```{r out.width="0.8\\linewidth"}
+```{r out.width="0.9\\linewidth"}
 knitr::include_graphics("Algorithm.pdf")
 ```
 
