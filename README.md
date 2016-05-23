@@ -3,7 +3,7 @@
 ## Future and Potential Lectures
 
 1. ABC Sampling
-2. Nonparametrics on Manifolds
+2. Bootstrap on Manifolds
 3. Wrap-Up (give overview of all topics that we covered with follow-up courses)
 
 ### Final Project Contents
