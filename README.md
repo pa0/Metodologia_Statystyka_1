@@ -2,12 +2,9 @@
 
 ## Future and Potential Lectures
 
-1. Graph Limits or Grahpons
-2. Visual Ranking (Buja)
-3. Tukey Depth
-4. ABC Sampling
-5. Nonparametrics on Manifolds
-6. Wrap-Up (give overview of all topics that we covered with follow-up courses)
+1. ABC Sampling
+2. Nonparametrics on Manifolds
+3. Wrap-Up (give overview of all topics that we covered with follow-up courses)
 
 ### Final Project Contents
 
