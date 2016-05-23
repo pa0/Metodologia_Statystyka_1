@@ -1,0 +1,21 @@
+---
+title: "ABC Sampling"
+author: "Christof Seiler"
+date: "Stanford University, Spring 2016, Stats 205"
+output:
+  beamer_presentation:
+    incremental: no
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+set.seed(1234)
+```
+
+## Overview
+
+TODO
+
+## References
+
+TODO
