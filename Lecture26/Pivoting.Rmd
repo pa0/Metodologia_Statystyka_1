@@ -20,7 +20,9 @@ set.seed(1234)
     * Parameteric bootstrap (e.g. PCA with fixed rows and columns)
 * Today, we will improve the boostrap using pivoting:
     * Studentized bootstrap
+    * Percentile Bootstrap
     * Bias-corrected bootstrap
+    * Accelerated bias-corrected Bootstrap
 
 ## Introduction
 
@@ -39,16 +41,24 @@ $$\hat{\theta} = \frac{1}{n} \sum_{i=1}^n X_i \hspace{0.5cm} \hat{\sigma}^2 = \f
 
 ## Studentized Bootstrap
 
-* 
+TODO: Chapter 12
 
-## Bias-corrected Bootstrap
+## Percentile Bootstrap
 
-* 
+TODO: Chapter 13
 
-## Edgeworth Expansions
+## Bias-Corrected Bootstrap
+
+TODO: Chapter 14
+
+## Accelerated Bias-Corrected Bootstrap
+
+TODO: Chapter 14
+
+## Asymptotic Argument in Favor of Pivoting
 
 * Take the pivotal statistics 
-$$T = \sqrt{n} (\hat{\theta}-\theta) / \hat{\sigma}$$
+$$S = \sqrt{n} \left( \frac{\hat{\theta}-\theta}{\hat{\sigma}} \right)$$
 with estimate $\hat{\theta}$ asymptotic variance estimate $\hat{\sigma}^2$
 * Then, we can use Edgeworth expansions
 $$P(S \le x) = \Phi(X) + \sqrt{n} q(x) \phi(x) + O(\sqrt{n})$$
@@ -60,9 +70,25 @@ $q$ even polynomials of degree 2
 ## Asymptotic Argument in Favor of Pivoting
 
 * Bootstrap estimates are 
-$$
+$$S = \sqrt{n} \left( \frac{\hat{\theta}^*-\hat{\theta}}{\hat{\sigma}^*} \right)$$
+* Then, we can use Edgeworth expansions
+$$P(S^* \le x | X_1,\dots,X_n) = \Phi(X) + \sqrt{n} \hat{q}(x) \phi(x) + O(\sqrt{n})$$
+* $\hat{q}$ is obtain by replacing unkowns in $q$ with boostrap estimates
+* Asymptotically, we further have
+$$\hat{q}-q = O(\sqrt{n})$$
 
-$$
+## Asymptotic Argument in Favor of Pivoting
+
+* Then, the boostrap approximation to the distribution of $S$ is 
+$$P(S \le x) - P(S^* \le x | X_1,\dots,X_n) = $$
+$$\bigg(\Phi(X) + \sqrt{n} q(x) \phi(x) + O(\sqrt{n})\bigg) - \bigg(\Phi(X) + \sqrt{n} \hat{q}(x) \phi(x) + O(\sqrt{n})\bigg)$$
+$$= O\left( \frac{1}{n} \right)$$
+* Compared to the normal approximation $\sqrt{n}$
+* Which the same as the error when using standard boostrap (can be shown with the same argument)
+
+## Bioequivalence Example
+
+TODO: Chatper 25
 
 ## References
 
