@@ -26,7 +26,8 @@ set.seed(1234)
 
 ## References
 
-* Fisher, Hall, Jing, and Wood (1996). Pivotal Methods for Constructing Confidence Regions With Directional Data
-* Fisher and Peter Hall (1989). Bootstrap Confidence Regions for Directional Data
-* Efron and Tibshirani (1994). An Introduction to the Bootstrap
 * Efron (1987). Better Bootstrap Confidence Intervals
+* Fisher and Hall (1989). Bootstrap Confidence Regions for Directional Data
+* Hall (1992). The Bootstrap and Edgeworth Expansion
+* Efron and Tibshirani (1994). An Introduction to the Bootstrap
+* Fisher, Hall, Jing, and Wood (1996). Pivotal Methods for Constructing Confidence Regions With Directional Data
