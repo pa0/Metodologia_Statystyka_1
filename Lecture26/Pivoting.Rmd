@@ -20,9 +20,13 @@ set.seed(1234)
     * Parameteric bootstrap (e.g. PCA with fixed rows and columns)
 * Today, we will improve the boostrap using pivoting:
     * Studentized bootstrap
-    * Percentile Bootstrap
     * Bias-corrected bootstrap
     * Accelerated bias-corrected Bootstrap
+
+<!--
+already done:
+    * Percentile Bootstrap
+-->
 
 ## Introduction
 
@@ -41,19 +45,47 @@ $$\hat{\theta} = \frac{1}{n} \sum_{i=1}^n X_i \hspace{0.5cm} \hat{\sigma}^2 = \f
 
 ## Studentized Bootstrap
 
-TODO: Chapter 12
+* Consider $X_1,\dots,X_n$ from $F$
+* Let $\hat{\theta}$ be an estimate of some $\theta$
+* Let $\hat{\sigma}^2$ be a standard error for $\hat{\theta}$ estiamted using the boostrap
+* Most of the time as $n$ grows
+$$\frac{\hat{\theta}-\theta}{\hat{\sigma}} \overset{.}{\sim} N(0,1)$$
+* Let $z^{(\alpha)}$ be the $100\cdot\alpha$th percentile of $N(0,1)$
+* Then a standard confidence interval is with coverage probability $1-2\alpha$ is
+$$\hat{\theta} \pm z^{(1-\alpha)} \cdot \hat{\sigma}$$
+* As $n \to \infty$, the bootstrap and standard intervals converge
 
-## Percentile Bootstrap
+## Studentized Bootstrap
 
-TODO: Chapter 13
+* How can we improve the standard confidence interval?
+* The intervals is valid under assumption that
+$$Z = \frac{\hat{\theta}-\theta}{\hat{\sigma}} \overset{.}{\sim} N(0,1)$$
+* But this is only valid as $n \to \infty$
+* And approximate for finite $n$
+* When $\hat{\theta}$ is the sample mean, a better approximation is 
+$$Z = \frac{\hat{\theta}-\theta}{\hat{\sigma}} \overset{.}{\sim} t_{n-1}$$
+and $t_{n-1}$ is the Student's $t$ distribution with $n-1$ degrees of freedom
 
-## Bias-Corrected Bootstrap
+## Studentized Bootstrap
 
-TODO: Chapter 14
+* With this new approximation, we have
+$$\hat{\theta} \pm t_{n-1}^{(1-\alpha)} \cdot \hat{\sigma}$$
+* As $n$ grows the $t$ distriubtion converges to the normal distribution
+* Intuitively, the it widens the interval to account for unknown standard error
+* It does not account for all errors when underlying population when $\hat{\theta}$ is not the sample mean, e.g. for skewness
+* The Studentized bootstrap can adjust for such errors
 
-## Accelerated Bias-Corrected Bootstrap
+## Studentized Bootstrap
 
-TODO: Chapter 14
+* We estimate the distribution of 
+$$Z = \frac{\hat{\theta}-\theta}{\hat{\sigma}} \overset{.}{\sim} \hspace{0.5cm} ?$$
+* by generating $B$ bootstrap samples $X^{*1},X^{*2},\dots,X^{*B}$
+* and computing
+$$Z^*(b) = \frac{\hat{\theta}^*(b)-\hat{\theta}}{\hat{\sigma}^*(b)}$$
+* Then the $\alpha$th percentile of $Z^*(b)$ is estimated by the value $\hat{t}^{(\alpha)}$ such that
+$$\frac{\#\{Z^*(b) \le \hat{t}^{(\alpha)}\}}{B} = \alpha$$
+* Which yields the studentized bootstrap interval
+$$(\theta-\hat{t}^{(1-\alpha)}\cdot\hat{\sigma},\theta-\hat{t}^{(\alpha)}\cdot\hat{\sigma})$$
 
 ## Asymptotic Argument in Favor of Pivoting
 
@@ -85,6 +117,35 @@ $$\bigg(\Phi(X) + \sqrt{n} q(x) \phi(x) + O(\sqrt{n})\bigg) - \bigg(\Phi(X) + \s
 $$= O\left( \frac{1}{n} \right)$$
 * Compared to the normal approximation $\sqrt{n}$
 * Which the same as the error when using standard boostrap (can be shown with the same argument)
+
+## Studentized Bootstrap
+
+* These pivtal intervals are more accurate in large samples than that of standard intervals and $t$ intervals
+* Accuracy comes at the cost of generality
+    * standard normal tables apply to all samples and all samples sizes
+    * t tables apply to all samples of fixed $n$
+    * studentized boostrap tables apply only to given sample
+* The studentized boostrap can be asymmteric
+* It can be used for simple statisics, like mean, median, timmed mean, and sample percentile
+* But not for more general problems, like correlation coefficients:
+    * $B^2$ samples if both paramter and standard error have to be bootstrapped
+    * interval can fall outside of allowable range
+
+<!--
+already done
+
+## Percentile Bootstrap
+
+* One way to improve upon the Studentized bootstrap
+-->
+
+## Bias-Corrected Bootstrap
+
+TODO: Chapter 14
+
+## Accelerated Bias-Corrected Bootstrap
+
+TODO: Chapter 14
 
 ## Bioequivalence Example
 
