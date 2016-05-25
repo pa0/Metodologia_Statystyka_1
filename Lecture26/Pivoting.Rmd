@@ -1,5 +1,5 @@
 ---
-title: "Pivoting"
+title: "Bootstrap (Part 3)"
 author: "Christof Seiler"
 date: "Stanford University, Spring 2016, Stats 205"
 output:
@@ -21,7 +21,6 @@ set.seed(1234)
 * Today, we will improve the boostrap using pivoting:
     * Studentized bootstrap
     * Bias-corrected bootstrap
-    * Accelerated bias-corrected Bootstrap
 
 <!--
 already done:
@@ -131,6 +130,31 @@ $$= O\left( \frac{1}{n} \right)$$
     * Nested samples if both paramter and standard error have to be bootstrapped
     * Interval can fall outside of allowable range
 
+## Studentized Bootstrap
+
+* The Studentized bootstrap works better for variance stabilized parameters
+* Consider a random variable $X$ with mean $\theta$ and standard deviation $s(\theta)$ that varies as a function of $\theta$
+* Using the delta method and solving an ordinary differential equation, we can show that
+$$g(x) = \int^x \frac{1}{s(u)} du$$
+will make the variance of $g(X)$ constant
+* Usually $s(u)$ is unkown
+* So we need to estimate this as well using the bootstrap
+
+## Studentized Bootstrap
+
+1. First bootstrap $\hat{\theta}^*$, second bootstrap $\hat{\sigma}(\hat{\theta}^*)$
+2. Fit curve through points $(\hat{\theta}^*,\hat{\sigma}(\hat{\theta}^*))$
+3. Variance stabilization $g(\hat{\theta})$ by numerical integration
+4. Studentized bootstrap on $\phi = g(\theta)$ with $g(\hat{\theta}^*)-g(\hat{\theta})$  
+(no denominator, since variance is now approximately one)
+5. Map back through transformation $g^{-1}$
+
+```{r out.width="0.8\\linewidth"}
+knitr::include_graphics("VarianceStabilization.png")
+```
+
+Source: Efron and Tibshirani (1994)
+
 <!--
 already done
 
@@ -190,10 +214,6 @@ don't need it, computers are fast enough today
 
 TODO: Chapter 14
 -->
-
-## Example
-
-Gold normal example: p. 183
 
 ## References
 
