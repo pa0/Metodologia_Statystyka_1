@@ -4,7 +4,7 @@ author: "Christof Seiler"
 date: "Stanford University, Spring 2016, Stats 205"
 output:
   beamer_presentation:
-    incremental: no
+    incremental: yes
 ---
 
 ```{r setup, include=FALSE}
@@ -15,10 +15,10 @@ set.seed(1234)
 ## Overview
 
 * So far we used three different bootstraps:
-    * Nonparametric boostrap on the rows (e.g. regression, PCA with random rows and columns)
-    * Nonparameteric bootstrap on the residuals (e.g. regression)
-    * Parameteric bootstrap (e.g. PCA with fixed rows and columns)
-* Today, we will improve the boostrap using pivoting:
+    * Nonparametric bootstrap on the rows (e.g. regression, PCA with random rows and columns)
+    * Nonparametric bootstrap on the residuals (e.g. regression)
+    * Parametric bootstrap (e.g. PCA with fixed rows and columns)
+* Today, we will look at some tricks to improve the bootstrap for confidence intervals:
     * Studentized bootstrap
     * Bias-corrected bootstrap
 
@@ -29,18 +29,19 @@ already done:
 
 ## Introduction
 
-* A statistics is (asymptotically) pivotal if its limiting distribution does not depend on unkown quantities
-* For example, with observations $X_1,\dots,X_n$ from normal distribution with unkown mean and variance, the pivotal is 
-$$g(\theta,X_1,\dots,X_n) = \sqrt{n} \left( \frac{\theta-\hat{\theta}}{\hat{\sigma}} \right)$$
-with unbiased estimate for sample mean and variance 
+* A statistics is (asymptotically) pivotal if its limiting distribution does not depend on unknown quantities
+* For example, with observations $X_1,\dots,X_n$ from a normal distribution with unknown mean and variance, a pivotal quantity is 
+$$T(X_1,\dots,X_n) = \sqrt{n} \left( \frac{\theta-\hat{\theta}}{\hat{\sigma}} \right)$$
+with unbiased estimates for sample mean and variance 
 $$\hat{\theta} = \frac{1}{n} \sum_{i=1}^n X_i \hspace{0.5cm} \hat{\sigma}^2 = \frac{1}{n-1} \sum_{i=1}^n (X_i-\hat{\theta})^2$$
-* Then $g(\theta,X_1,\dots,X_n)$ is a pivot following the Student's t-distribution with $\nu = n-1$ degrees of freedom
-* Because the distribution of $g(\mu,X_1,\dots,X_n)$ does not depend on $\mu$ or $\sigma^2$
+* Then $T(X_1,\dots,X_n)$ is a pivot following the Student's t-distribution with $\nu = n-1$ degrees of freedom
+* Because the distribution of $T(X_1,\dots,X_n)$ does not depend on $\mu$ or $\sigma^2$
 
 ## Introduction
 
-* The boostrap is better at estimating the distribution of a pivtotal statistics than at a nonpivotal statistics
+* The bootstrap is better at estimating the distribution of a pivotal statistics than at a nonpivotal statistics
 * We will see an asymptotic argument using Edgeworth expansions
+* But first, let us look at an example
 
 ## Motivation
 
@@ -48,19 +49,18 @@ $$\hat{\theta} = \frac{1}{n} \sum_{i=1}^n X_i \hspace{0.5cm} \hat{\sigma}^2 = \f
 ```{r eval=FALSE,echo=TRUE}
 x = rexp(20,rate=1/3)
 ```
-* Then generate $B=1000$ bootstrap samples of x, and calculate the mean for each bootstrap sample
+* Generate $B=1000$ bootstrap samples of $x$, and calculate the mean for each bootstrap sample
 ```{r eval=FALSE,echo=TRUE}
 s = numeric(B)
-for (j in 1:B) {
-  boot = sample(n,replace=TRUE)
-  s[j] = mean(x[boot]) }
+for (j in 1:B) {  boot = sample(n,replace=TRUE)
+                  s[j] = mean(x[boot]) }
 ```
-* Form confidence interval from bootstrap samples using quantiles ($\alpha = .05$)
+* Form confidence interval from bootstrap samples using quantiles ($\alpha = .025$)
 ```{r eval=FALSE,echo=TRUE}
 simple.ci = quantile(s,c(.025,.975))
 ```
-* Repeat this process 100 from the start
-* Check how often the intervals actually contain the true mean
+* Repeat this process 100 times
+* Check how often the intervals actually contains the true mean
 
 ## Motivation
 
@@ -99,7 +99,7 @@ abline(v=true.mean,col="blue")
 * Another way is to calculate a pivotal quantity as the bootstrapped statistic
 * Calculate the mean and standard deviation 
 ```{r eval=FALSE,echo=TRUE}
-x = rexp(n,rate=1/true.mean)
+x = rexp(n,rate=1/3)
 mean.x = mean(x)
 sd.x = sd(x)
 ```
@@ -146,21 +146,21 @@ abline(v=true.mean,col="blue")
 
 * Consider $X_1,\dots,X_n$ from $F$
 * Let $\hat{\theta}$ be an estimate of some $\theta$
-* Let $\hat{\sigma}^2$ be a standard error for $\hat{\theta}$ estiamted using the boostrap
+* Let $\hat{\sigma}^2$ be a standard error for $\hat{\theta}$ estimated using the bootstrap
 * Most of the time as $n$ grows
 $$\frac{\hat{\theta}-\theta}{\hat{\sigma}} \overset{.}{\sim} N(0,1)$$
 * Let $z^{(\alpha)}$ be the $100\cdot\alpha$th percentile of $N(0,1)$
-* Then a standard confidence interval is with coverage probability $1-2\alpha$ is
+* Then a standard confidence interval with coverage probability $1-2\alpha$ is
 $$\hat{\theta} \pm z^{(1-\alpha)} \cdot \hat{\sigma}$$
 * As $n \to \infty$, the bootstrap and standard intervals converge
 
 ## Studentized Bootstrap
 
 * How can we improve the standard confidence interval?
-* The intervals is valid under assumption that
+* These intervals are valid under assumption that
 $$Z = \frac{\hat{\theta}-\theta}{\hat{\sigma}} \overset{.}{\sim} N(0,1)$$
 * But this is only valid as $n \to \infty$
-* And approximate for finite $n$
+* And are approximate for finite $n$
 * When $\hat{\theta}$ is the sample mean, a better approximation is 
 $$Z = \frac{\hat{\theta}-\theta}{\hat{\sigma}} \overset{.}{\sim} t_{n-1}$$
 and $t_{n-1}$ is the Student's $t$ distribution with $n-1$ degrees of freedom
@@ -169,9 +169,10 @@ and $t_{n-1}$ is the Student's $t$ distribution with $n-1$ degrees of freedom
 
 * With this new approximation, we have
 $$\hat{\theta} \pm t_{n-1}^{(1-\alpha)} \cdot \hat{\sigma}$$
-* As $n$ grows the $t$ distriubtion converges to the normal distribution
+* As $n$ grows the $t$ distribution converges to the normal distribution
 * Intuitively, it widens the interval to account for unknown standard error
-* It does not account for all errors when underlying population when $\hat{\theta}$ is not the sample mean, e.g. for skewness
+* But, for instance, it does not account for skewness in the underlying population
+* This can happen when $\hat{\theta}$ is not the sample mean
 * The Studentized bootstrap can adjust for such errors
 
 ## Studentized Bootstrap
@@ -184,13 +185,14 @@ $$Z^{*b} = \frac{\hat{\theta}^{*b}-\hat{\theta}}{\hat{\sigma}^{*b}}$$
 * Then the $\alpha$th percentile of $Z^{*b}$ is estimated by the value $\hat{t}^{(\alpha)}$ such that
 $$\frac{\#\{Z^{*b} \le \hat{t}^{(\alpha)}\}}{B} = \alpha$$
 * Which yields the studentized bootstrap interval
-$$(\theta-\hat{t}^{(1-\alpha)}\cdot\hat{\sigma},\theta-\hat{t}^{(\alpha)}\cdot\hat{\sigma})$$
+$$(\hat{\theta}-\hat{t}^{(1-\alpha)}\cdot\hat{\sigma},\hat{\theta}-\hat{t}^{(\alpha)}\cdot\hat{\sigma})$$
 
 ## Asymptotic Argument in Favor of Pivoting
 
+* Consider parameter $\theta$ estimated by $\hat{\theta}$ with variance $\frac{1}{n}\sigma^2$
 * Take the pivotal statistics 
 $$S = \sqrt{n} \left( \frac{\hat{\theta}-\theta}{\hat{\sigma}} \right)$$
-with estimate $\hat{\theta}$ asymptotic variance estimate $\hat{\sigma}^2$
+with estimate $\hat{\theta}$ and asymptotic variance estimate $\hat{\sigma}^2$
 * Then, we can use Edgeworth expansions
 $$P(S \le x) = \Phi(X) + \sqrt{n} q(x) \phi(x) + O(\sqrt{n})$$
 with  
@@ -204,31 +206,31 @@ $q$ even polynomials of degree 2
 $$S = \sqrt{n} \left( \frac{\hat{\theta}^*-\hat{\theta}}{\hat{\sigma}^*} \right)$$
 * Then, we can use Edgeworth expansions
 $$P(S^* \le x | X_1,\dots,X_n) = \Phi(X) + \sqrt{n} \hat{q}(x) \phi(x) + O(\sqrt{n})$$
-* $\hat{q}$ is obtain by replacing unkowns in $q$ with boostrap estimates
+* $\hat{q}$ is obtain by replacing unknowns in $q$ with bootstrap estimates
 * Asymptotically, we further have
 $$\hat{q}-q = O(\sqrt{n})$$
 
 ## Asymptotic Argument in Favor of Pivoting
 
-* Then, the boostrap approximation to the distribution of $S$ is 
+* Then, the bootstrap approximation to the distribution of $S$ is 
 $$P(S \le x) - P(S^* \le x | X_1,\dots,X_n) = $$
 $$\bigg(\Phi(X) + \sqrt{n} q(x) \phi(x) + O(\sqrt{n})\bigg) - \bigg(\Phi(X) + \sqrt{n} \hat{q}(x) \phi(x) + O(\sqrt{n})\bigg)$$
 $$= O\left( \frac{1}{n} \right)$$
 * Compared to the normal approximation $\sqrt{n}$
-* Which the same as the error when using standard boostrap (can be shown with the same argument)
+* Which the same as the error when using standard bootstrap (can be shown with the same argument)
 
 ## Studentized Bootstrap
 
-* These pivtal intervals are more accurate in large samples than that of standard intervals and $t$ intervals
+* These pivotal intervals are more accurate in large samples than that of standard intervals and $t$ intervals
 * Accuracy comes at the cost of generality
     * standard normal tables apply to all samples and all samples sizes
-    * t tables apply to all samples of fixed $n$
-    * studentized boostrap tables apply only to given sample
-* The studentized boostrap can be asymmteric
-* It can be used for simple statisics, like mean, median, timmed mean, and sample percentile
-* But not for more general problems, like correlation coefficients:
-    * Nested samples if both paramter and standard error have to be bootstrapped
+    * $t$ tables apply to all samples of fixed $n$
+    * studentized bootstrap tables apply only to given sample
+* The studentized bootstrap can be asymmetric
+* It can be used for simple statistics, like mean, median, trimmed mean, and sample percentile
+* But for more general statistics like the correlation coefficients, there are some problems:
     * Interval can fall outside of allowable range
+    * Computational issues if both parameter and standard error have to be bootstrapped
 
 ## Studentized Bootstrap
 
@@ -237,15 +239,15 @@ $$= O\left( \frac{1}{n} \right)$$
 * Using the delta method and solving an ordinary differential equation, we can show that
 $$g(x) = \int^x \frac{1}{s(u)} du$$
 will make the variance of $g(X)$ constant
-* Usually $s(u)$ is unkown
-* So we need to estimate this as well using the bootstrap
+* Usually $s(u)$ is unknown
+* So we need to estimate $s(u) = \operatorname{se}(\hat{\theta}|\theta=u)$ using the bootstrap
 
 ## Studentized Bootstrap
 
-1. First bootstrap $\hat{\theta}^*$, second bootstrap $\hat{\sigma}(\hat{\theta}^*)$
-2. Fit curve through points $(\hat{\theta}^*,\hat{\sigma}(\hat{\theta}^*))$
+1. First bootstrap $\hat{\theta}$, second bootstrap $\hat{\operatorname{se}}(\hat{\theta})$ from $\hat{\theta}^*$
+2. Fit curve through points $(\hat{\theta}^{*1},\hat{\operatorname{se}}(\hat{\theta}^{*1})),\dots,(\hat{\theta}^{*B},\hat{\operatorname{se}}(\hat{\theta}^{*B}))$
 3. Variance stabilization $g(\hat{\theta})$ by numerical integration
-4. Studentized bootstrap on $\phi = g(\theta)$ with $g(\hat{\theta}^*)-g(\hat{\theta})$  
+4. Studentized bootstrap using $g(\hat{\theta}^*)-g(\hat{\theta})$  
 (no denominator, since variance is now approximately one)
 5. Map back through transformation $g^{-1}$
 
@@ -284,40 +286,44 @@ already done
 
 ## Bias-Corrected Bootstrap
 
-* The bias-corrected bootstrap is similar to the percentile boostrap
-* Recall the percentile boostrap:
+* The bias-corrected bootstrap is similar to the percentile bootstrap
+* Recall the percentile bootstrap:
 * Take bootstrap samples $$\hat{\theta}^{*1},\dots,\hat{\theta}^{*B}$$
 * Order them $$\hat{\theta}^{(*1)},\dots,\hat{\theta}^{(*B)}$$
 * Define interval as $$(\hat{\theta}^{(*B\alpha)},\hat{\theta}^{(*B(1-\alpha))})$$ (assuming that $B\alpha$ and $B(1-\alpha)$ are integers)
 
 ## Bias-Corrected Bootstrap
 
-* For the bias-corrected version makes two corrects to the percentile version
+* The bias-corrected version makes two additional corrections to the percentile version
 * By redefining lower $\alpha_1$ and upper $\alpha_2$ levels as
 $$\alpha_1 = \Phi\left(\hat{z}_0 + \frac{\hat{z}_0+z^{(\alpha)}}{1-\hat{\alpha}(\hat{z}_0+z^{(\alpha)})}\right)$$
 $$\alpha_2 = \Phi\left(\hat{z}_0 + \frac{\hat{z}_0+z^{(1-\alpha)}}{1-\hat{\alpha}(\hat{z}_0+z^{(1-\alpha)})}\right)$$
-* The nterval is then given by
-$$(\hat{\theta}^{(*B\alpha_1)},\hat{\theta}^{(*B(1-\alpha_2))})$$ (assuming that $B\alpha$ and $B(1-\alpha)$ are integers)
+with $z^{(\alpha)}$ being the 100$\alpha$ percentile of standard normal  
+and $\Phi$ normal CDF
+* The interval is then given by
+$$(\hat{\theta}^{(*B\alpha_1)},\hat{\theta}^{(*B\alpha_2)})$$ (assuming that $B\alpha_1$ and $B\alpha_2$ are integers)
 * When $\hat{a}$ and $\hat{z}_0$ are equal to zero then $\alpha_1=\alpha$ and $\alpha_2=1-\alpha$
 
 ## Bias-Corrected Bootstrap
 
 * $\hat{z}_0$ measures discrepancy between the median of $\hat{\theta}^*$ and $\hat{\theta}$
-* They are estimated with
+* It is estimated with
 $$\hat{z}_0 = \Phi^{-1} \left( \frac{\#\{ \hat{\theta}^{*b} < \hat{\theta} \}}{B} \right)$$
 * We obtain $\hat{z}_0 = 0$ if half of the $\hat{\theta}^{*b}$ values are less than or equal to $\hat{\theta}$
 
 ## Bias-Corrected Bootstrap
 
-* $\hat{a}$ measures the rate of change of teh standard error of $\hat{\theta}$ with repect to the true parameter $\theta$
+* $\hat{a}$ measures the rate of change of the standard error of $\hat{\theta}$ with respect to the true parameter $\theta$
 * It is estimated using the Jackknife
-    * Delete $i$ observation in orignial sample denote by $\hat{\theta}_{(i)}$ and estimate 
+    * Delete $i$th observation in original sample denote new sample by $\hat{\theta}_{(i)}$ and estimate 
 $$\hat{\theta}_{(\cdot)} = \sum_{i=1}^n \frac{\hat{\theta}_{(i)}}{n}$$
 * Then 
 $$\hat{a} = \frac{\sum_{i=1}^n (\hat{\theta}_{(\cdot)}-\hat{\theta}_{(i)})^3}{6\{\sum_{i=1}^n (\hat{\theta}_{(\cdot)}-\hat{\theta}_{(i)})^2\}^{3/2}}$$
-* Same accuracy as the studentized boostrap
+* Same accuracy as the studentized bootstrap
 * Can handle out of range problem as well
+* Efron (1987) for more details
 
+<!--
 ## Bias-Corrected Bootstrap
 
 * The bias-corrected bootstrap is based on this model
@@ -326,6 +332,7 @@ with $\phi$ being uknown monotone increasing transformation of $\theta$
 * Which is a generalization of the usual normal approximation
 $$\frac{\hat{\theta}-\theta}{\sigma} \sim N(0,1)$$
 * Efron (1987) for justification of this model
+-->
 
 ## Bias-Corrected Bootstrap in R
 
@@ -353,7 +360,7 @@ TODO: Chapter 14
 * Efron (1987). Better Bootstrap Confidence Intervals
 * Hall (1992). The Bootstrap and Edgeworth Expansion
 * Efron and Tibshirani (1994). An Introduction to the Bootstrap
-* Love (2010). Bootstrap-t confidence intervals [(Link to blog entry)](http://mike-love.net/r-scripts/bootstrap-t.R)
+* Love (2010). Bootstrap-$t$ Confidence Intervals [(Link to blog entry)](http://mike-love.net/r-scripts/bootstrap-t.R)
 
 <!--
 * Fisher and Hall (1989). Bootstrap Confidence Regions for Directional Data
