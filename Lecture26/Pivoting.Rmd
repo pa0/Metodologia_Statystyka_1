@@ -42,6 +42,106 @@ $$\hat{\theta} = \frac{1}{n} \sum_{i=1}^n X_i \hspace{0.5cm} \hat{\sigma}^2 = \f
 * The boostrap is better at estimating the distribution of a pivtotal statistics than at a nonpivotal statistics
 * We will see an asymptotic argument using Edgeworth expansions
 
+## Motivation
+
+* Take 20 random exponential variables with mean 3
+```{r eval=FALSE,echo=TRUE}
+x = rexp(20,rate=1/3)
+```
+* Then generate $B=1000$ bootstrap samples of x, and calculate the mean for each bootstrap sample
+```{r eval=FALSE,echo=TRUE}
+s = numeric(B)
+for (j in 1:B) {
+  boot = sample(n,replace=TRUE)
+  s[j] = mean(x[boot]) }
+```
+* Form confidence interval from bootstrap samples using quantiles ($\alpha = .05$)
+```{r eval=FALSE,echo=TRUE}
+simple.ci = quantile(s,c(.025,.975))
+```
+* Repeat this process 100 from the start
+* Check how often the intervals actually contain the true mean
+
+## Motivation
+
+```{r}
+n <- 20
+r <- 100
+B <- 1000
+true.mean <- 3
+simple.contains <- numeric(r)
+simple.ci <- matrix(NA,nrow=r,ncol=2)
+for (i in 1:r) {
+  x <- rexp(n,rate=1/true.mean)
+  s <- numeric(B)
+  for (j in 1:B) {
+    boot <- sample(n,replace=TRUE)
+    s[j] <- mean(x[boot])
+  }
+  # this is equivalent to using the 'boot' package:
+  #simple.boot <- boot(x,R=B,function(x,i) mean(x[i]))
+  #s <- simple.boot$t
+  simple.ci[i,] <- quantile(s,c(.025,.975))
+}
+simple.contains <- (true.mean > simple.ci[,1] & true.mean < simple.ci[,2])
+#sum(simple.contains)/r
+#mean(simple.ci[,2] - simple.ci[,1])
+```
+
+```{r fig.width=6,fig.height=6}
+plot(0,0,type="n",xlim=c(0,8),ylim=c(0,r),xlab="",ylab="",main="bootstrap conf intervals")
+segments(simple.ci[,1],1:r,simple.ci[,2],1:r,col=ifelse(simple.contains,"black","red"))
+abline(v=true.mean,col="blue")
+```
+
+## Motivation
+
+* Another way is to calculate a pivotal quantity as the bootstrapped statistic
+* Calculate the mean and standard deviation 
+```{r eval=FALSE,echo=TRUE}
+x = rexp(n,rate=1/true.mean)
+mean.x = mean(x)
+sd.x = sd(x)
+```
+* For each bootstrap sample, calculate 
+```{r eval=FALSE,echo=TRUE}
+z = numeric(B)
+for (j in 1:B) {
+  boot = sample(n,replace=TRUE)
+  z[j] = (mean.x - mean(x[boot]))/sd(x[boot]) }
+```
+* Form a confidence interval like this
+```{r eval=FALSE,echo=TRUE}
+pivot.ci = mean.x + sd.x*quantile(z,c(.025,.975))
+```
+
+## Motivation
+
+```{r}
+pivot.contains <- numeric(r)
+pivot.ci <- matrix(NA,nrow=r,ncol=2)
+for (i in 1:r) {
+  x <- rexp(n,rate=1/true.mean)
+  mean.x <- mean(x)
+  sd.x <- sd(x)
+  z <- numeric(B)
+  for (j in 1:B) {
+    boot <- sample(n,replace=TRUE)
+    z[j] <- (mean.x - mean(x[boot]))/sd(x[boot])
+  }
+  pivot.ci[i,] <- mean.x + sd.x*quantile(z,c(.025,.975))
+}
+pivot.contains <- (true.mean > pivot.ci[,1] & true.mean < pivot.ci[,2])
+#sum(pivot.contains)/r
+#mean(pivot.ci[,2] - pivot.ci[,1])
+```
+
+```{r fig.width=6,fig.height=6}
+plot(0,0,type="n",xlim=c(0,8),ylim=c(0,r),xlab="",ylab="",main="bootstrap conf intervals")
+segments(pivot.ci[,1],1:r,pivot.ci[,2],1:r,col=ifelse(pivot.contains,"black","red"))
+abline(v=true.mean,col="blue")
+```
+
 ## Studentized Bootstrap
 
 * Consider $X_1,\dots,X_n$ from $F$
@@ -70,7 +170,7 @@ and $t_{n-1}$ is the Student's $t$ distribution with $n-1$ degrees of freedom
 * With this new approximation, we have
 $$\hat{\theta} \pm t_{n-1}^{(1-\alpha)} \cdot \hat{\sigma}$$
 * As $n$ grows the $t$ distriubtion converges to the normal distribution
-* Intuitively, the it widens the interval to account for unknown standard error
+* Intuitively, it widens the interval to account for unknown standard error
 * It does not account for all errors when underlying population when $\hat{\theta}$ is not the sample mean, e.g. for skewness
 * The Studentized bootstrap can adjust for such errors
 
@@ -155,6 +255,25 @@ knitr::include_graphics("VarianceStabilization.png")
 
 Source: Efron and Tibshirani (1994)
 
+## Studentized Bootstrap in R
+
+```{r echo=TRUE}
+library(boot)
+mean.fun = function(d, i) { 
+  m = mean(d$hours[i])
+  n = length(i)
+  v = (n-1)*var(d$hours[i])/n^2
+  c(m, v) }
+air.boot <- boot(aircondit, mean.fun, R = 999)
+results = boot.ci(air.boot, type = c("basic", "stud"))
+```
+
+## Studentized Bootstrap in R
+
+```{r echo=TRUE}
+results
+```
+
 <!--
 already done
 
@@ -203,9 +322,23 @@ $$\hat{a} = \frac{\sum_{i=1}^n (\hat{\theta}_{(\cdot)}-\hat{\theta}_{(i)})^3}{6\
 
 * The bias-corrected bootstrap is based on this model
 $$\frac{\hat{\phi}-\phi}{\sigma_{\phi}} \sim N(-z_0,1) \hspace{0.5cm} \text{with} \hspace{0.5cm} \sigma_{\phi} = \sigma_{\phi_0} \cdot \left( 1+a(\phi-\phi_0) \right)$$
+with $\phi$ being uknown monotone increasing transformation of $\theta$
 * Which is a generalization of the usual normal approximation
 $$\frac{\hat{\theta}-\theta}{\sigma} \sim N(0,1)$$
 * Efron (1987) for justification of this model
+
+## Bias-Corrected Bootstrap in R
+
+```{r echo=TRUE}
+library(bootstrap)
+xdata = matrix(rnorm(30),ncol=2); n = 15
+theta = function(x,xdata) { 
+  cor(xdata[x,1],xdata[x,2]) 
+  }
+results = bcanon(1:n,100,theta,xdata,
+                 alpha=c(0.025, 0.975))
+results$confpoints
+```
 
 <!--
 don't need it, computers are fast enough today
@@ -220,6 +353,7 @@ TODO: Chapter 14
 * Efron (1987). Better Bootstrap Confidence Intervals
 * Hall (1992). The Bootstrap and Edgeworth Expansion
 * Efron and Tibshirani (1994). An Introduction to the Bootstrap
+* Love (2010). Bootstrap-t confidence intervals [(Link to blog entry)](http://mike-love.net/r-scripts/bootstrap-t.R)
 
 <!--
 * Fisher and Hall (1989). Bootstrap Confidence Regions for Directional Data
