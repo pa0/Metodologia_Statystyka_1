@@ -81,9 +81,9 @@ $$\hat{\theta} \pm t_{n-1}^{(1-\alpha)} \cdot \hat{\sigma}$$
 $$Z = \frac{\hat{\theta}-\theta}{\hat{\sigma}} \overset{.}{\sim} \hspace{0.5cm} ?$$
 * by generating $B$ bootstrap samples $X^{*1},X^{*2},\dots,X^{*B}$
 * and computing
-$$Z^*(b) = \frac{\hat{\theta}^*(b)-\hat{\theta}}{\hat{\sigma}^*(b)}$$
-* Then the $\alpha$th percentile of $Z^*(b)$ is estimated by the value $\hat{t}^{(\alpha)}$ such that
-$$\frac{\#\{Z^*(b) \le \hat{t}^{(\alpha)}\}}{B} = \alpha$$
+$$Z^{*b} = \frac{\hat{\theta}^{*b}-\hat{\theta}}{\hat{\sigma}^{*b}}$$
+* Then the $\alpha$th percentile of $Z^{*b}$ is estimated by the value $\hat{t}^{(\alpha)}$ such that
+$$\frac{\#\{Z^{*b} \le \hat{t}^{(\alpha)}\}}{B} = \alpha$$
 * Which yields the studentized bootstrap interval
 $$(\theta-\hat{t}^{(1-\alpha)}\cdot\hat{\sigma},\theta-\hat{t}^{(\alpha)}\cdot\hat{\sigma})$$
 
@@ -128,8 +128,8 @@ $$= O\left( \frac{1}{n} \right)$$
 * The studentized boostrap can be asymmteric
 * It can be used for simple statisics, like mean, median, timmed mean, and sample percentile
 * But not for more general problems, like correlation coefficients:
-    * $B^2$ samples if both paramter and standard error have to be bootstrapped
-    * interval can fall outside of allowable range
+    * Nested samples if both paramter and standard error have to be bootstrapped
+    * Interval can fall outside of allowable range
 
 <!--
 already done
@@ -141,15 +141,59 @@ already done
 
 ## Bias-Corrected Bootstrap
 
-TODO: Chapter 14
+* The bias-corrected bootstrap is similar to the percentile boostrap
+* Recall the percentile boostrap:
+* Take bootstrap samples $$\hat{\theta}^{*1},\dots,\hat{\theta}^{*B}$$
+* Order them $$\hat{\theta}^{(*1)},\dots,\hat{\theta}^{(*B)}$$
+* Define interval as $$(\hat{\theta}^{(*B\alpha)},\hat{\theta}^{(*B(1-\alpha))})$$ (assuming that $B\alpha$ and $B(1-\alpha)$ are integers)
+
+## Bias-Corrected Bootstrap
+
+* For the bias-corrected version makes two corrects to the percentile version
+* By redefining lower $\alpha_1$ and upper $\alpha_2$ levels as
+$$\alpha_1 = \Phi\left(\hat{z}_0 + \frac{\hat{z}_0+z^{(\alpha)}}{1-\hat{\alpha}(\hat{z}_0+z^{(\alpha)})}\right)$$
+$$\alpha_2 = \Phi\left(\hat{z}_0 + \frac{\hat{z}_0+z^{(1-\alpha)}}{1-\hat{\alpha}(\hat{z}_0+z^{(1-\alpha)})}\right)$$
+* The nterval is then given by
+$$(\hat{\theta}^{(*B\alpha_1)},\hat{\theta}^{(*B(1-\alpha_2))})$$ (assuming that $B\alpha$ and $B(1-\alpha)$ are integers)
+* When $\hat{a}$ and $\hat{z}_0$ are equal to zero then $\alpha_1=\alpha$ and $\alpha_2=1-\alpha$
+
+## Bias-Corrected Bootstrap
+
+* $\hat{z}_0$ measures discrepancy between the median of $\hat{\theta}^*$ and $\hat{\theta}$
+* They are estimated with
+$$\hat{z}_0 = \Phi^{-1} \left( \frac{\#\{ \hat{\theta}^{*b} < \hat{\theta} \}}{B} \right)$$
+* We obtain $\hat{z}_0 = 0$ if half of the $\hat{\theta}^{*b}$ values are less than or equal to $\hat{\theta}$
+
+## Bias-Corrected Bootstrap
+
+* $\hat{a}$ measures the rate of change of teh standard error of $\hat{\theta}$ with repect to the true parameter $\theta$
+* It is estimated using the Jackknife
+    * Delete $i$ observation in orignial sample denote by $\hat{\theta}_{(i)}$ and estimate 
+$$\hat{\theta}_{(\cdot)} = \sum_{i=1}^n \frac{\hat{\theta}_{(i)}}{n}$$
+* Then 
+$$\hat{a} = \frac{\sum_{i=1}^n (\hat{\theta}_{(\cdot)}-\hat{\theta}_{(i)})^3}{6\{\sum_{i=1}^n (\hat{\theta}_{(\cdot)}-\hat{\theta}_{(i)})^2\}^{3/2}}$$
+* Same accuracy as the studentized boostrap
+* Can handle out of range problem as well
+
+## Bias-Corrected Bootstrap
+
+* The bias-corrected bootstrap is based on this model
+$$\frac{\hat{\phi}-\phi}{\sigma_{\phi}} \sim N(-z_0,1) \hspace{0.5cm} \text{with} \hspace{0.5cm} \sigma_{\phi} = \sigma_{\phi_0} \cdot \left( 1+a(\phi-\phi_0) \right)$$
+* Which is a generalization of the usual normal approximation
+$$\frac{\hat{\theta}-\theta}{\sigma} \sim N(0,1)$$
+* Efron (1987) for justification of this model
+
+<!--
+don't need it, computers are fast enough today
 
 ## Accelerated Bias-Corrected Bootstrap
 
 TODO: Chapter 14
+-->
 
-## Bioequivalence Example
+## Example
 
-TODO: Chatper 25
+Gold normal example: p. 183
 
 ## References
 
