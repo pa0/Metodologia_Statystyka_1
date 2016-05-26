@@ -34,7 +34,7 @@ This is the case when it is hard to esimate the $\hat{\sigma}$ and $\hat{\sigma}
 
 An example could be correlation coefficient or difference of means
 
-Use model to generate data that works fine for BCa and not for Studentize bootstrap
+Use model to generate data that works fine for (BCa) and not for Studentize bootstrap
 
 ## Bias-Corrected Bootstrap
 
@@ -73,14 +73,12 @@ $$\hat{\theta}_{(\cdot)} = \sum_{i=1}^n \frac{\hat{\theta}_{(i)}}{n}$$
 $$\hat{a} = \frac{\sum_{i=1}^n (\hat{\theta}_{(\cdot)}-\hat{\theta}_{(i)})^3}{6\{\sum_{i=1}^n (\hat{\theta}_{(\cdot)}-\hat{\theta}_{(i)})^2\}^{3/2}}$$
 * Same accuracy as the studentized bootstrap
 * Can handle out of range problem as well
-* Efron (1987) for more details
 
 ## Bias-Corrected Bootstrap
 
 * The bias-corrected version makes two additional corrections to the percentile version
 * By redefining lower $\alpha_1$ and upper $\alpha_2$ levels as
-$$\alpha_1 = \Phi\left(\hat{z}_0 + \frac{\hat{z}_0+z^{(\alpha)}}{1-\hat{\alpha}(\hat{z}_0+z^{(\alpha)})}\right)$$
-$$\alpha_2 = \Phi\left(\hat{z}_0 + \frac{\hat{z}_0+z^{(1-\alpha)}}{1-\hat{\alpha}(\hat{z}_0+z^{(1-\alpha)})}\right)$$
+$$\hspace{-1cm} \alpha_1 = \Phi\left(\hat{z}_0 + \frac{\hat{z}_0+z^{(\alpha)}}{1-\hat{\alpha}(\hat{z}_0+z^{(\alpha)})}\right) \hspace{0.5cm} \alpha_2 = \Phi\left(\hat{z}_0 + \frac{\hat{z}_0+z^{(1-\alpha)}}{1-\hat{\alpha}(\hat{z}_0+z^{(1-\alpha)})}\right)$$
 with $z^{(\alpha)}$ being the 100$\alpha$ percentile of standard normal  
 and $\Phi$ normal CDF
 * The interval is then given by
