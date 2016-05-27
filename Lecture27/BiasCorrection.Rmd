@@ -9,7 +9,8 @@ output:
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
-set.seed(1234)
+library(bootstrap)
+library(mvtnorm)
 ```
 
 ## Overview
@@ -20,23 +21,147 @@ set.seed(1234)
     * Parametric bootstrap (e.g. PCA with fixed rows and columns)
     * Studentized bootstrap
 * Today:
-    * Bias-corrected-accelerated BCa bootstrap
+    * Bias-corrected-accelerated (BCa) bootstrap
+    * Confidence intervals for Random Forests
 
 ## Motivation
 
-TODO: 
+* Confidence for correlation coefficient with $\rho = 0.577$
+```{r echo=TRUE}
+sigma = matrix(nrow = 2,ncol = 2)
+diag(sigma) = 1
+rho = 0.577
+sigma[1,2] = sigma[2,1] = rho
+sigma
+```
+* Distribution of sample correlation coefficient ($n = 10$)
+* Compare: Percentile, Studentized, and Bias-Corrected-Accelerated (BCa) bootstrap
 
-Similar example as in previous lecture
+## Motivation
 
-Example shoing when Studentized boostrap fails and BCa bootstrap is better
+```{r fig.width=10,fig.height=6}
+n <- 10
+sim <- 30000
+corhat <- numeric(sim)
+for (j in 1:sim) {
+  xdata <- rmvnorm(n,mean=rep(0,2),sigma=sigma)
+  corhat[j] <- cor(xdata[,1],xdata[,2])
+}
+hist(corhat,breaks=200)
+abline(v = rho,col = "red",lwd = 4)
+abline(v = mean(corhat),col = "blue",lwd = 4)
+```
 
-This is the case when it is hard to esimate the $\hat{\sigma}$ and $\hat{\sigma}^*$
+```{r echo=TRUE}
+bias = rho - mean(corhat); bias
+```
 
-An example could be correlation coefficient or difference of means
+## Motivation
 
-Use model to generate data that works fine for (BCa) and not for Studentize bootstrap
+```{r}
+set.seed(43245)
+r <- 100
+B <- 1000
+simple.contains <- numeric(r)
+simple.ci <- matrix(NA,nrow=r,ncol=2)
+for (i in 1:r) {
+  sigma = matrix(nrow = 2,ncol = 2)
+  diag(sigma) = 1
+  sigma[1,2] = sigma[2,1] = rho
+  xdata <- rmvnorm(n,mean=rep(0,2),sigma=sigma)
+  #xdata <- matrix(rnorm(2*n),ncol=2)
+  theta <- function(x,xdata){ cor(xdata[x,1],xdata[x,2]) }
+  results <- bootstrap(1:n,B,theta,xdata)
+  simple.ci[i,] <- quantile(results$thetastar,c(.025,.975))
+}
+simple.contains <- (rho > simple.ci[,1] & rho < simple.ci[,2])
+#sum(simple.contains)/r
+#mean(simple.ci[,2] - simple.ci[,1])
+```
 
-## Bias-Corrected Bootstrap
+```{r fig.width=6,fig.height=6}
+plot(0,0,type="n",xlim=c(-1,1.5),ylim=c(0,r),xlab="",ylab="",main="Percentile Bootstrap")
+segments(simple.ci[,1],1:r,simple.ci[,2],1:r,col=ifelse(simple.contains,"black","red"))
+abline(v=rho,col="blue")
+```
+
+## Motivation
+
+* Studentized Bootstrap with variance stabilization fails due to numerical problems 
+
+## Motivation
+
+```{r warning=FALSE}
+set.seed(43245)
+pivot.contains <- numeric(r)
+pivot.ci <- matrix(NA,nrow=r,ncol=2)
+for (i in 1:r) {
+  sigma = matrix(nrow = 2,ncol = 2)
+  diag(sigma) = 1
+  sigma[1,2] = sigma[2,1] = rho
+  xdata <- rmvnorm(n,mean=rep(0,2),sigma=sigma)
+  #xdata <- matrix(rnorm(2*n),ncol=2)
+  theta <- function(x,xdata){ cor(xdata[x,1],xdata[x,2]) }
+  results <- boott(1:n,theta,xdata,perc=c(.025,.975),VS=FALSE,nboott=B)
+  pivot.ci[i,] <- c(results$confpoints[1],results$confpoints[2])
+}
+pivot.contains <- (rho > pivot.ci[,1] & rho < pivot.ci[,2])
+#sum(pivot.contains)/r
+#mean(pivot.ci[,2] - pivot.ci[,1])
+```
+
+```{r fig.width=6,fig.height=6}
+plot(0,0,type="n",xlim=c(-1,1.5),ylim=c(0,r),xlab="",ylab="",main="Studentized Bootstrap Without Variance Stabilization")
+segments(pivot.ci[,1],1:r,pivot.ci[,2],1:r,col=ifelse(pivot.contains,"black","red"))
+abline(v=rho,col="blue")
+```
+
+## Motivation
+
+```{r}
+set.seed(43245)
+bca.contains <- numeric(r)
+bca.ci <- matrix(NA,nrow=r,ncol=2)
+for (i in 1:r) {
+  sigma = matrix(nrow = 2,ncol = 2)
+  diag(sigma) = 1
+  sigma[1,2] = sigma[2,1] = rho
+  xdata <- rmvnorm(n,mean=rep(0,2),sigma=sigma)
+  #xdata <- matrix(rnorm(2*n),ncol=2)
+  theta <- function(x,xdata){ cor(xdata[x,1],xdata[x,2]) }
+  results <- bcanon(1:n,B,theta,xdata,alpha=c(.025,.975))
+  bca.ci[i,] <- c(results$confpoints[1,2],results$confpoints[2,2])
+}
+bca.contains <- (rho > bca.ci[,1] & rho < bca.ci[,2])
+#sum(bca.contains)/r
+#mean(bca.ci[,2] - bca.ci[,1])
+```
+
+```{r fig.width=6,fig.height=6}
+plot(0,0,type="n",xlim=c(-1,1.5),ylim=c(0,r),xlab="",ylab="",main="BCa Bootstrap")
+segments(bca.ci[,1],1:r,bca.ci[,2],1:r,col=ifelse(bca.contains,"black","red"))
+abline(v=rho,col="blue")
+```
+
+## Motivation
+
+```{r fig.width=6,fig.height=6}
+par(mfrow=c(3,1))
+
+plot(0,0,type="n",xlim=c(-1,1.5),ylim=c(0,r),xlab="",ylab="",main="Percentile Bootstrap")
+segments(simple.ci[,1],1:r,simple.ci[,2],1:r,col=ifelse(simple.contains,"black","red"))
+abline(v=rho,col="blue")
+
+plot(0,0,type="n",xlim=c(-1,1.5),ylim=c(0,r),xlab="",ylab="",main="Studentized Bootstrap Without Variance Stabilization")
+segments(pivot.ci[,1],1:r,pivot.ci[,2],1:r,col=ifelse(pivot.contains,"black","red"))
+abline(v=rho,col="blue")
+
+plot(0,0,type="n",xlim=c(-1,1.5),ylim=c(0,r),xlab="",ylab="",main="BCa Bootstrap")
+segments(bca.ci[,1],1:r,bca.ci[,2],1:r,col=ifelse(bca.contains,"black","red"))
+abline(v=rho,col="blue")
+```
+
+## BCa Bootstrap
 
 * The bias-corrected bootstrap is similar to the percentile bootstrap
 * Recall the percentile bootstrap:
@@ -44,7 +169,7 @@ Use model to generate data that works fine for (BCa) and not for Studentize boot
 * Order them $$\hat{\theta}^{(*1)},\dots,\hat{\theta}^{(*B)}$$
 * Define interval as $$(\hat{\theta}^{(*B\alpha)},\hat{\theta}^{(*B(1-\alpha))})$$ (assuming that $B\alpha$ and $B(1-\alpha)$ are integers)
 
-## Bias-Corrected Bootstrap
+## BCa Bootstrap
 
 * Assume that there is an increasing transfomration such that 
 $$\phi = g(\theta) \hspace{0.5cm}\text{and}\hspace{0.5cm} \hat{\phi} = g(\hat{\theta})$$
@@ -55,14 +180,14 @@ with $\phi$ being uknown monotone increasing transformation of $\theta$
 $$\frac{\hat{\theta}-\theta}{\sigma} \sim N(0,1)$$
 * Efron (1987) for justification of this model
 
-## Bias-Corrected Bootstrap
+## BCa Bootstrap
 
 * $\hat{z}_0$ measures discrepancy between the median of $\hat{\theta}^*$ and $\hat{\theta}$
 * It is estimated with
 $$\hat{z}_0 = \Phi^{-1} \left( \frac{\#\{ \hat{\theta}^{*b} < \hat{\theta} \}}{B} \right)$$
 * We obtain $\hat{z}_0 = 0$ if half of the $\hat{\theta}^{*b}$ values are less than or equal to $\hat{\theta}$
 
-## Bias-Corrected Bootstrap
+## BCa Bootstrap
 
 * $\hat{a}$ is essentially a skewness estimate
 * $\hat{a}$ measures the rate of change of the standard error of $\hat{\theta}$ with respect to the true parameter $\theta$
@@ -74,7 +199,7 @@ $$\hat{a} = \frac{\sum_{i=1}^n (\hat{\theta}_{(\cdot)}-\hat{\theta}_{(i)})^3}{6\
 * Same accuracy as the studentized bootstrap
 * Can handle out of range problem as well
 
-## Bias-Corrected Bootstrap
+## BCa Bootstrap
 
 * The bias-corrected version makes two additional corrections to the percentile version
 * By redefining lower $\alpha_1$ and upper $\alpha_2$ levels as
@@ -85,7 +210,7 @@ and $\Phi$ normal CDF
 $$(\hat{\theta}^{(*B\alpha_1)},\hat{\theta}^{(*B\alpha_2)})$$ (assuming that $B\alpha_1$ and $B\alpha_2$ are integers)
 * When $\hat{a}$ and $\hat{z}_0$ are equal to zero then $\alpha_1=\alpha$ and $\alpha_2=1-\alpha$
 
-## Bias-Corrected Bootstrap in R
+## BCa Bootstrap in R
 
 ```{r echo=TRUE}
 library(bootstrap)
@@ -134,6 +259,10 @@ knitr::include_graphics("BootstrapGuide.png")
 ```
 
 Source: Carpenter and Bithell (2000)
+
+## Confidence Intervals for Random Forests
+
+TODO: Sketch Stefan's paper
 
 ## References
 

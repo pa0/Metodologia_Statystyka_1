@@ -9,7 +9,6 @@ output:
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
-set.seed(1234)
 ```
 
 ## Overview
@@ -64,6 +63,7 @@ simple.ci = quantile(s,c(.025,.975))
 ## Motivation
 
 ```{r}
+set.seed(342341)
 n <- 20
 r <- 100
 B <- 1000
@@ -117,6 +117,7 @@ pivot.ci = mean.x + sd.x*quantile(z,c(.025,.975))
 ## Motivation
 
 ```{r}
+set.seed(342341)
 pivot.contains <- numeric(r)
 pivot.ci <- matrix(NA,nrow=r,ncol=2)
 for (i in 1:r) {
