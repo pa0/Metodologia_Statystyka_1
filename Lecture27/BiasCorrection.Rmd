@@ -171,11 +171,11 @@ abline(v=rho,col="blue")
 
 ## BCa Bootstrap
 
-* Assume that there is an increasing transfomration such that 
+* Assume that there is an increasing transformation such that 
 $$\phi = g(\theta) \hspace{0.5cm}\text{and}\hspace{0.5cm} \hat{\phi} = g(\hat{\theta})$$
 * The bias-corrected bootstrap is based on this model
 $$\frac{\hat{\phi}-\phi}{\sigma_{\phi}} \sim N(-z_0,1) \hspace{0.5cm} \text{with} \hspace{0.5cm} \sigma_{\phi} = 1+a\phi$$
-with $\phi$ being uknown monotone increasing transformation of $\theta$
+with $\phi$ being unknown monotone increasing transformation of $\theta$
 * Which is a generalization of the usual normal approximation
 $$\frac{\hat{\theta}-\theta}{\sigma} \sim N(0,1)$$
 * Efron (1987) for justification of this model
@@ -265,7 +265,7 @@ Source: Carpenter and Bithell (2000)
 * Using the boostrap for better confidence in model selection Efron (2014)
 * Using the jackknife and the infinitesimal jackknife for confidence intervals in random forests prediction or classification
 
-## Approximate Bayesian computation (ABC)
+## Approximate Bayesian Computation (ABC)
 
 * Goal: We wish to sample from the posterior distribution $p(\theta|D)$ given data $D$
 $$
@@ -275,20 +275,27 @@ $$
     * The likelihood $p(D|\theta)$ is hard to evaluate or expensive to compute  
     (e.g. missing normalizing constant)
     * Easy to sample form likelihood $p(D|\theta)$
-    * Easy to samples from the prior $p(\theta)$
-* ABC sampling:
-    * Define statistics $\mu$
-    * Define tolerance $\epsilon$
+    * Easy to samples from prior $p(\theta)$
+* Examples:
+    * Population genetics
+    * Models based of differential equations (ecology, epidemiology, systems biology)
 
-## Approximate Bayesian computation (ABC)
+## Approximate Bayesian Computation (ABC)
+
+* Sampling algorithm (with data $D = \{y_1,\dots,y_n\}$):
+    1. Sample $\theta_i \sim p(\theta)$
+    2. Sample $x_i \sim p(x|\theta_i)$
+    3. Reject $\theta_i$ if $x_i \ne y$
+* ABC sampling (define statistics $\mu$, distance $\rho$, and tolerance $\epsilon$):
+    1. Sample $\theta_i \sim p(\theta)$
+    2. Sample $x_i \sim p(x|\theta_i)$
+    3. Reject $\theta_i$ if $\rho(\mu(x_i),\mu(y) > \epsilon$
+
+## Approximate Bayesian Computation (ABC)
 
 ```{r out.width="1.2\\linewidth"}
 knitr::include_graphics("Approximate_Bayesian_computation_conceptual_overview.pdf")
 ```
-
-## Approximate Bayesian computation (ABC)
-
-TODO: gives some application examples
 
 ## References
 
@@ -296,7 +303,7 @@ TODO: gives some application examples
 * Hall (1992). The Bootstrap and Edgeworth Expansion
 * Efron and Tibshirani (1994). An Introduction to the Bootstrap
 * Carpenter and Bithell (2000). Bootstrap Conidence Intervals: When, Which, What? A Practical Guide for Medical Statisticians
-* Marin, Pudlo, Robert, and Ryder (2012). Approximate Bayesian computational methods
+* Marin, Pudlo, Robert, and Ryder (2012). Approximate Bayesian Computational Methods
 * Efron (2014). Estimation and Accuracy after Model Selection
 * Wager, Hastie, and Efron (2014). Confidence Intervals for Random Forests: The Jackknife and the Infinitesimal Jackknife
 
