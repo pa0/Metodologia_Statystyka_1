@@ -4,7 +4,7 @@ author: "Christof Seiler"
 date: "Stanford University, Spring 2016, Stats 205"
 output:
   beamer_presentation:
-    incremental: yes
+    incremental: no
 ---
 
 ```{r setup, include=FALSE}
@@ -200,7 +200,7 @@ $$\hat{a} = \frac{\sum_{i=1}^n (\hat{\theta}_{(\cdot)}-\hat{\theta}_{(i)})^3}{6\
 
 * The bias-corrected version makes two additional corrections to the percentile version
 * By redefining lower $\alpha_1$ and upper $\alpha_2$ levels as
-$$\hspace{-1cm} \alpha_1 = \Phi\left(\hat{z}_0 + \frac{\hat{z}_0+z^{(\alpha)}}{1-\hat{\alpha}(\hat{z}_0+z^{(\alpha)})}\right) \hspace{0.5cm} \alpha_2 = \Phi\left(\hat{z}_0 + \frac{\hat{z}_0+z^{(1-\alpha)}}{1-\hat{\alpha}(\hat{z}_0+z^{(1-\alpha)})}\right)$$
+$$\hspace{-1cm} \alpha_1 = \Phi\left(\hat{z}_0 + \frac{\hat{z}_0+z^{(\alpha)}}{1-\hat{a}(\hat{z}_0+z^{(\alpha)})}\right) \hspace{0.5cm} \alpha_2 = \Phi\left(\hat{z}_0 + \frac{\hat{z}_0+z^{(1-\alpha)}}{1-\hat{a}(\hat{z}_0+z^{(1-\alpha)})}\right)$$
 with $z^{(\alpha)}$ being the 100$\alpha$ percentile of standard normal  
 and $\Phi$ normal CDF
 * When $\hat{a}$ and $\hat{z}_0$ are equal to zero then $\alpha_1=\alpha$ and $\alpha_2=1-\alpha$
@@ -278,8 +278,8 @@ p(\theta|D) = \frac{p(D|\theta)p(\theta)}{p(D)}
 $$
 * Setting:
     * The likelihood $p(D|\theta)$ is hard to evaluate or expensive to compute  (e.g. missing normalizing constant)
-    * Easy to sample form likelihood $p(D|\theta)$
-    * Easy to samples from prior $p(\theta)$
+    * Easy to sample from likelihood $p(D|\theta)$
+    * Easy to sample from prior $p(\theta)$
 * Examples:
     * Population genetics (latent variables)
     * Ecology, epidemiology, systems biology (models based on differential equations)
@@ -289,11 +289,11 @@ $$
 * Sampling algorithm (with data $D = \{y_1,\dots,y_n\}$):
     1. Sample $\theta_i \sim p(\theta)$
     2. Sample $x_i \sim p(x|\theta_i)$
-    3. Reject $\theta_i$ if $x_i \ne y$
+    3. Reject $\theta_i$ if $$x_i \ne y_j \hspace{0.1cm} \text{for } j = 1,\dots,n$$
 * ABC sampling (define statistics $\mu$, distance $\rho$, and tolerance $\epsilon$):
     1. Sample $\theta_i \sim p(\theta)$
-    2. Sample $x_i \sim p(x|\theta_i)$
-    3. Reject $\theta_i$ if $\rho(\mu(x_i),\mu(y)) > \epsilon$
+    2. Sample $\hat{D}_i = \{x_1,\dots,x_k\} \sim p(x|\theta_i)$
+    3. Reject $\theta_i$ if $$\rho(\mu(\hat{D}_i),\mu(D)) > \epsilon$$
 
 ----
 
