@@ -1,0 +1,86 @@
+---
+title: "Review and Outlook"
+author: "Christof Seiler"
+date: "Stanford University, Spring 2016, Stats 205"
+output:
+  beamer_presentation:
+    incremental: no
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+----
+
+```{r out.width="1.0\\linewidth"}
+knitr::include_graphics("NonparametricTests.JPG")
+```
+
+Source: Siegel (1988)
+
+## Bootstrap
+
+TODO: Efron's courses
+
+## Wavelets
+
+TODO: Donoho's courses
+
+## Hypothesis Testing
+
+STATS 300C: Theory of Statistics
+
+Decision theory formulation of statistical problems. Minimax, admissible procedures. Complete class theorems ("all" minimax or admissible procedures are "Bayes"), Bayes procedures, conjugate priors, hierarchical models. Bayesian non parametrics: diaichlet, tail free, polya trees, bayesian sieves. Inconsistency of bayes rules.
+
+Maybe start with STATS 300A and B
+
+## Correspondence Analysis
+
+Stat 306a: Discrete data analysis (Art Owen)
+
+but listed as
+
+STATS 306A: Methods for Applied Statistics
+
+Regression modeling extended to categorical data. Logistic regression. Loglinear models. Generalized linear models. Discriminant analysis. Categorical data models from information retrieval and Internet modeling. Prerequisite: 305 or equivalent.
+
+## Bayesian Nonparametrics
+
+STATS 270: Bayesian Statistics I (STATS 370)
+
+This is the first of a two course sequence on modern Bayesian statistics. Topics covered include: real world examples of large scale Bayesian analysis; basic tools (models, conjugate priors and their mixtures); Bayesian estimates, tests and credible intervals; foundations (axioms, exchangeability, likelihood principle); Bayesian computations (Gibbs sampler, data augmentation, etc.); prior specification. Prerequisites: statistics and probability at the level of Stats300A, Stats305, and Stats310.
+
+## Bayesian Nonparametrics
+
+STATS 271: Bayesian Statistics II (STATS 371)
+
+This is the second of a two course sequence on modern Bayesian statistics. Topics covered include: Asymptotic properties of Bayesian procedures and consistency (Doobs theorem, frequentists consistency, counter examples); connections between Bayesian methods and classical methods (the complete class theorem); generalization of exchangeability; general versions of the Bayes theorem in the undominated case; non parametric Bayesian methods (Dirichelet and Polya tree priors). Throughout general theory will be illustrated with classical examples. Prerequisites: Stats 270/370.
+
+## Ranked-Set Sampling
+
+STATS 263: Design of Experiments (STATS 363)
+
+Experiments vs observation. Confounding. Randomization. ANOVA.Blocking. Latin squares. Factorials and fractional factorials. Split plot. Response surfaces. Mixture designs. Optimal design. Central composite. Box-Behnken. Taguchi methods. Computer experiments and space filling designs. Prerequisites: probability at STATS 116 level or higher, and at least one course in linear models.
+
+## Graphons
+
+STATS 300: Advanced Topics in Statistics: Stochastic Block Models and Latent Variable Models
+
+Main topic: statistical inference of latent variable models (including SBM), using EM-like algorithms. The critical step is the determination of the conditional distribution of the latent variables given the observed data, which is doable for mixture models and hidden Markov models. For more complex models such as the stochastic block model (SBM: popular in sociology, physics, biology, etc.) variational approximations can be used to derive a generalized version of EM algorithm. This approach can be extended to Bayesian inference (variational Bayes EM algorithm). If time permits, change-point detection models will be introduced. Topics will be illustrated with examples from genomics.
+
+## Survival Analysis
+
+STATS 331: Survival Analysis
+
+The course introduces basic concepts, theoretical basis and statistical methods associated with survival data. Topics include censoring, Kaplan-Meier estimation, logrank test, proportional hazards regression, accelerated failure time model, multivariate failure time analysis and competing risks. The traditional counting process/martingale methods as well as modern empirical process methods will be covered. Prerequisite: Understanding of basic probability theory and statistical inference methods.
+
+## Processes
+
+STATS 215: Statistical Models in Biology
+
+Poisson and renewal processes, Markov chains in discrete and continuous time, branching processes, diffusion. Applications to models of nucleotide evolution, recombination, the Wright-Fisher process, coalescence, genetic mapping, sequence analysis. Theoretical material approximately the same as in STATS 217, but emphasis is on examples drawn from applications in biology, especially genetics. Prerequisite: 116 or equivalent.
+
+## References
+
+* Siegel (1988). Nonparametric Statistics for the Behavioral Sciences

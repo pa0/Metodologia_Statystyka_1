@@ -4,7 +4,7 @@ author: "Christof Seiler"
 date: "Stanford University, Spring 2016, Stats 205"
 output:
   beamer_presentation:
-    incremental: no
+    incremental: yes
 ---
 
 ```{r setup, include=FALSE}
@@ -21,12 +21,12 @@ library(mvtnorm)
     * Parametric bootstrap (e.g. PCA with fixed rows and columns)
     * Studentized bootstrap
 * Today:
-    * Bias-corrected-accelerated (BCa) bootstrap
+    * Bias-Corrected-accelerated (BCa) bootstrap
     * From BCa to ABC
 
 ## Motivation
 
-* Confidence for correlation coefficient with $\rho = 0.577$
+* Correlation coefficient of bivariate normal with $\rho = 0.577$
 ```{r echo=TRUE}
 sigma = matrix(nrow = 2,ncol = 2)
 diag(sigma) = 1
@@ -48,8 +48,8 @@ for (j in 1:sim) {
   corhat[j] <- cor(xdata[,1],xdata[,2])
 }
 hist(corhat,breaks=200)
-abline(v = rho,col = "red",lwd = 4)
-abline(v = mean(corhat),col = "blue",lwd = 4)
+abline(v = rho,col = "blue",lwd = 4)
+abline(v = mean(corhat),col = "red",lwd = 4)
 ```
 
 ```{r echo=TRUE}
@@ -87,7 +87,7 @@ abline(v=rho,col="blue")
 
 ## Motivation
 
-* Studentized Bootstrap with variance stabilization fails due to numerical problems 
+* Studentized bootstrap with variance stabilization fails due to numerical problems 
 
 ## Motivation
 
@@ -171,17 +171,16 @@ abline(v=rho,col="blue")
 
 ## BCa Bootstrap
 
-* Assume that there is an increasing transformation such that 
+* Assume that there is an monotone increasing transformation $g$ such that 
 $$\phi = g(\theta) \hspace{0.5cm}\text{and}\hspace{0.5cm} \hat{\phi} = g(\hat{\theta})$$
-* The bias-corrected bootstrap is based on this model
+* The BCa bootstrap is based on this model
 $$\frac{\hat{\phi}-\phi}{\sigma_{\phi}} \sim N(-z_0,1) \hspace{0.5cm} \text{with} \hspace{0.5cm} \sigma_{\phi} = 1+a\phi$$
-with $\phi$ being unknown monotone increasing transformation of $\theta$
 * Which is a generalization of the usual normal approximation
 $$\frac{\hat{\theta}-\theta}{\sigma} \sim N(0,1)$$
-* Efron (1987) for justification of this model
 
 ## BCa Bootstrap
 
+* $\hat{z}_0$ is the bias estimate
 * $\hat{z}_0$ measures discrepancy between the median of $\hat{\theta}^*$ and $\hat{\theta}$
 * It is estimated with
 $$\hat{z}_0 = \Phi^{-1} \left( \frac{\#\{ \hat{\theta}^{*b} < \hat{\theta} \}}{B} \right)$$
@@ -189,15 +188,13 @@ $$\hat{z}_0 = \Phi^{-1} \left( \frac{\#\{ \hat{\theta}^{*b} < \hat{\theta} \}}{B
 
 ## BCa Bootstrap
 
-* $\hat{a}$ is essentially a skewness estimate
+* $\hat{a}$ is the skewness estimate
 * $\hat{a}$ measures the rate of change of the standard error of $\hat{\theta}$ with respect to the true parameter $\theta$
 * It is estimated using the Jackknife
     * Delete $i$th observation in original sample denote new sample by $\hat{\theta}_{(i)}$ and estimate 
 $$\hat{\theta}_{(\cdot)} = \sum_{i=1}^n \frac{\hat{\theta}_{(i)}}{n}$$
 * Then 
 $$\hat{a} = \frac{\sum_{i=1}^n (\hat{\theta}_{(\cdot)}-\hat{\theta}_{(i)})^3}{6\{\sum_{i=1}^n (\hat{\theta}_{(\cdot)}-\hat{\theta}_{(i)})^2\}^{3/2}}$$
-* Same accuracy as the studentized bootstrap
-* Can handle out of range problem as well
 
 ## BCa Bootstrap
 
@@ -206,9 +203,15 @@ $$\hat{a} = \frac{\sum_{i=1}^n (\hat{\theta}_{(\cdot)}-\hat{\theta}_{(i)})^3}{6\
 $$\hspace{-1cm} \alpha_1 = \Phi\left(\hat{z}_0 + \frac{\hat{z}_0+z^{(\alpha)}}{1-\hat{\alpha}(\hat{z}_0+z^{(\alpha)})}\right) \hspace{0.5cm} \alpha_2 = \Phi\left(\hat{z}_0 + \frac{\hat{z}_0+z^{(1-\alpha)}}{1-\hat{\alpha}(\hat{z}_0+z^{(1-\alpha)})}\right)$$
 with $z^{(\alpha)}$ being the 100$\alpha$ percentile of standard normal  
 and $\Phi$ normal CDF
+* When $\hat{a}$ and $\hat{z}_0$ are equal to zero then $\alpha_1=\alpha$ and $\alpha_2=1-\alpha$
 * The interval is then given by
 $$(\hat{\theta}^{(*B\alpha_1)},\hat{\theta}^{(*B\alpha_2)})$$ (assuming that $B\alpha_1$ and $B\alpha_2$ are integers)
-* When $\hat{a}$ and $\hat{z}_0$ are equal to zero then $\alpha_1=\alpha$ and $\alpha_2=1-\alpha$
+
+## BCa Bootstrap
+
+* Same asymptotic accuracy as the studentized bootstrap
+* Can handle out of range problem as well
+* Efron (1987) for detailed justification of this model
 
 ## BCa Bootstrap in R
 
@@ -236,19 +239,21 @@ TODO: Chapter 14
 $$
 \small
 \begin{tabular}{l|cccc}
-                                        & Standard      & Percentile    & Studentized & BCa       \\
-\hline                                                                                \\
-Asymptotic Acurracy                     & $O(\sqrt{n})$ & $O(\sqrt{n})$ & $O(1/n)$    & $O(1/n)$  \\
-Range-Preserving                        & No            & Yes           & No          & Yes       \\
-Transformation-Invariant                & No            & Yes           & No          & Yes       \\
-Bias-Correcting                         & No            & No            & No          & Yes       \\
-Skeweness-Correcting                    & No            & Yes           & Yes         & Yes       \\
-$\hat{\sigma},\hat{\sigma}^*$ required  & No            & No            & Yes         & No        \\
+                                        & Standard      & Percentile    & Studentized$^*$ & BCa       \\
+\hline                                                                                                \\
+Asymptotic Acurracy                     & $O(\sqrt{n})$ & $O(\sqrt{n})$ & $O(1/n)$        & $O(1/n)$  \\
+Range-Preserving                        & No            & Yes           & No              & Yes       \\
+Transformation-Invariant                & No            & Yes           & No              & Yes       \\
+Bias-Correcting                         & No            & No            & No              & Yes       \\
+Skeweness-Correcting                    & No            & Yes           & Yes             & Yes       \\
+$\hat{\sigma},\hat{\sigma}^*$ required  & No            & No            & Yes             & No        \\
 Analytic constant or\\
 variance stabilizing\\ 
-tranformation required                  & No            & No            & Yes         & Yes       \\
+tranformation required                  & No            & No            & Yes             & Yes       \\
 \end{tabular}
 $$
+
+$^*$ with variance stabilization
 
 ## Properties of Different Boostrap Methods
 
@@ -262,8 +267,8 @@ Source: Carpenter and Bithell (2000)
 
 ## Many More Topics
 
-* Using the boostrap for better confidence in model selection Efron (2014)
-* Using the jackknife and the infinitesimal jackknife for confidence intervals in random forests prediction or classification
+* Using the boostrap for better confidence in model selection (Efron 2014)
+* Using the jackknife and the infinitesimal jackknife for confidence intervals in random forests prediction or classification (Wager, Hastie, and Efron 2014)
 
 ## Approximate Bayesian Computation (ABC)
 
@@ -272,13 +277,12 @@ $$
 p(\theta|D) = \frac{p(D|\theta)p(\theta)}{p(D)}
 $$
 * Setting:
-    * The likelihood $p(D|\theta)$ is hard to evaluate or expensive to compute  
-    (e.g. missing normalizing constant)
+    * The likelihood $p(D|\theta)$ is hard to evaluate or expensive to compute  (e.g. missing normalizing constant)
     * Easy to sample form likelihood $p(D|\theta)$
     * Easy to samples from prior $p(\theta)$
 * Examples:
-    * Population genetics
-    * Models based of differential equations (ecology, epidemiology, systems biology)
+    * Population genetics (latent variables)
+    * Ecology, epidemiology, systems biology (models based on differential equations)
 
 ## Approximate Bayesian Computation (ABC)
 
@@ -289,11 +293,11 @@ $$
 * ABC sampling (define statistics $\mu$, distance $\rho$, and tolerance $\epsilon$):
     1. Sample $\theta_i \sim p(\theta)$
     2. Sample $x_i \sim p(x|\theta_i)$
-    3. Reject $\theta_i$ if $\rho(\mu(x_i),\mu(y) > \epsilon$
+    3. Reject $\theta_i$ if $\rho(\mu(x_i),\mu(y)) > \epsilon$
 
-## Approximate Bayesian Computation (ABC)
+----
 
-```{r out.width="1.2\\linewidth"}
+```{r out.width="1\\linewidth"}
 knitr::include_graphics("Approximate_Bayesian_computation_conceptual_overview.pdf")
 ```
 
