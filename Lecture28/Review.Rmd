@@ -21,7 +21,9 @@ Source: Siegel (1988)
 
 ## Bootstrap
 
-TODO: Efron's courses
+STATS 208: Introduction to the Bootstrap
+
+The bootstrap is a computer-based method for assigning measures of accuracy to statistical estimates. By substituting computation in place of mathematical formulas, it permits the statistical analysis of complicated estimators. Topics: nonparametric assessment of standard errors, biases, and confidence intervals; related resampling methods including the jackknife, cross-validation, and permutation tests. Theory and applications. Prerequisite: course in statistics or probability.
 
 ## Wavelets
 
