@@ -11,7 +11,37 @@ output:
 knitr::opts_chunk$set(echo = FALSE)
 ```
 
+----
+
+```{r out.width="1.0\\linewidth"}
+knitr::include_graphics("NonparametricTests.JPG")
+```
+
 Source: Siegel (1988)
+
+## When Is Something Nonparametric?
+
+* Two settings: 
+1. distribution-free (NOT assumption-free)
+2. unlimited model complexity (model can grow in complexity as $n \to \infty$)
+
+## Distribution-Free
+
+TODO
+
+* Use when sample size is small
+
+## Unlimited Model Complexity
+
+TODO
+
+* Use when sample size is large
+
+## Why Are Categorical Data Nonparametric?
+
+For example goodness-of-fit tests: 
+
+http://stats.stackexchange.com/questions/91975/is-the-pearson-goodness-of-fit-test-parametric-or-non-parametric
 
 ## Learning Goals
 
@@ -19,12 +49,6 @@ Source: Siegel (1988)
 2. The students will learn to apply methods and explain the statistical assumptions of **rank-based methods** for parameter estimation, confidence intervals, and hypothesis testing.
 3. The students will learn to apply methods and explain the statistical assumptions of **permutation tests for hypothesis testing**.
 4. The students will learn to apply methods and explain the statistical assumptions of the **bootstrap for confidence intervals**.
-
-----
-
-```{r out.width="1.0\\linewidth"}
-knitr::include_graphics("NonparametricTests.JPG")
-```
 
 ## Learning Goals (Advanced)
 
@@ -89,6 +113,10 @@ knitr::include_graphics("NonparametricTests.JPG")
 
 * PHIL 166: Probability: Ten Great Ideas About Chance (PHIL 266, STATS 167, STATS 267)
     * Foundational approaches to thinking about chance in matters such as gambling, the law, and everyday affairs. Topics include: chance and decisions; the mathematics of chance; frequencies, symmetry, and chance; Bayes great idea; chance and psychology; misuses of chance; and harnessing chance. Emphasis is on the philosophical underpinnings and problems. Prerequisite: exposure to probability or a first course in statistics at the level of STATS 60 or 116.
+
+## Research Topics in Nonparametric Statistics
+
+TODO
 
 ## References
 
