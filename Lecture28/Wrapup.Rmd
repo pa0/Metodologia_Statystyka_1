@@ -11,44 +11,117 @@ output:
 knitr::opts_chunk$set(echo = FALSE)
 ```
 
-----
+## Format Final Project
 
-```{r out.width="1.0\\linewidth"}
+* You can write your final paper in the format you like: word, latex, R markdown document
+* Number of pages: 12
+* Included in the 12 pages are:
+    * Use a lot of images, plots, and diagrams to explain concepts
+* Excluded in the 12 pages are:
+    * You should do your statistical analysis using R markdown and attach it to your paper
+    * References
+
+## Course Evaluations Now Open
+
+* Axess is now open to complete end-term course evaluations
+* You may complete the evaluations until 08:00 AM on Mon, Jun 13
+* Online evaluations on **Stanford Axess in Course and Section Evaluations on the Student tab**
+* You can view previous quarter evaluation results on the Reports tab
+* Motivation: 
+    * If you complete all of your evaluations you will see your grades as soon as they have been submitted by the faculty
+    * Otherwise, grades in Axess until June 14
+
+## When Is Something Nonparametric?
+
+* Two settings: 
+1. Distribution-free (NOT assumption-free)
+    * Sign test, Mann–Whitney U test, and Kruskal–Wallis test
+    * Boostrap
+    * Permutation tests
+    * $\chi^2$ tests
+    * Rank-Based linear regression
+    * Median polish
+    * Kaplan estimator
+2. Nonparametric models (number of parameters can grow with $n \to \infty$)
+    * Nonparametric regression
+    * Bayesian nonparametric
+    * Wavelets
+    * Graphons
+
+## Distribution-Free
+
+* Sample $X_1,\dots,X_n$ from $F$
+* Statistic $T(X_1,\dots,X_n)$
+* $T$ is distribution-free if 
+* $T$ has **same distribution** for any $F$ with some restrictions specific to the test, for example:
+* Sign test: $F$ any continuous distribution
+* Signed-Rank Test: $F$ any symmetric continuous distribution
+
+## When to Use Nonparametic Tests?
+
+* When the right representation of the "center" is the median
+* Very small sample size
+* With ordinal data and ranked data
+* Data with outliers that cannot easily be removed
+* In all other cases use parametric test becaue they are more powerful
+
+## When to Use Nonparametric Models?
+
+* Very sample size is large
+* Low dimensional setting otherwise course of dimensionality
+* Complex relationship between predictor and response
+
+<!--
+## Why Is Categorical Data Nonparametric?
+
+TODO
+-->
+
+## Learning Goals
+
+1. The students will learn to apply methods and explain the statistical assumptions of **Monte Carlo simulations** for analytically intractable problems.
+
+* We used Monte Carlo in most topics
+    * permutation tests
+    * bootstrap
+    * rank-based
+* As an alternative to asymptotics and exhaustive tests
+
+## Learning Goals
+
+2. The students will learn to apply methods and explain the statistical assumptions of **rank-based methods** for parameter estimation, confidence intervals, and hypothesis testing.
+
+```{r out.width="0.7\\linewidth"}
 knitr::include_graphics("NonparametricTests.JPG")
 ```
 
 Source: Siegel (1988)
 
-## When Is Something Nonparametric?
+## Learning Goals
 
-* Two settings: 
-1. distribution-free (NOT assumption-free)
-2. unlimited model complexity (model can grow in complexity as $n \to \infty$)
+3. The students will learn to apply methods and explain the statistical assumptions of **permutation tests for hypothesis testing**.
 
-## Distribution-Free
-
-TODO
-
-* Use when sample size is small
-
-## Unlimited Model Complexity
-
-TODO
-
-* Use when sample size is large
-
-## Why Are Categorical Data Nonparametric?
-
-For example goodness-of-fit tests: 
-
-http://stats.stackexchange.com/questions/91975/is-the-pearson-goodness-of-fit-test-parametric-or-non-parametric
+```{r out.width="0.35\\linewidth"}
+knitr::include_graphics("BibleExampleText2.png")
+```
+Source: Witztum et al. (1994)
 
 ## Learning Goals
 
-1. The students will learn to apply methods and explain the statistical assumptions of **Monte Carlo simulations** for analytically intractable problems.
-2. The students will learn to apply methods and explain the statistical assumptions of **rank-based methods** for parameter estimation, confidence intervals, and hypothesis testing.
-3. The students will learn to apply methods and explain the statistical assumptions of **permutation tests for hypothesis testing**.
 4. The students will learn to apply methods and explain the statistical assumptions of the **bootstrap for confidence intervals**.
+
+```{r out.width="0.4\\linewidth"}
+knitr::include_graphics("RussianDoll.PNG")
+```
+Source: Hall (1992)
+
+<!--
+## Bootstrap vs. Permutation Tests
+
+* Permutations test hypotheses concerning distributions; bootstraps test hypotheses concerning parameters. As a result, the bootstrap entails less-stringent assumptions.
+* Bootstrap tests are not exact
+* Permutation tests are exact
+-->
 
 ## Learning Goals (Advanced)
 
@@ -73,7 +146,7 @@ http://stats.stackexchange.com/questions/91975/is-the-pearson-goodness-of-fit-te
 
 ## Correspondence Analysis
 
-* STATS 306A: Discrete data analysis (Art Owen) but listed as
+* STATS 306A: Discrete Data Analysis (Art Owen) but listed as
 * STATS 306A: Methods for Applied Statistics
     * Regression modeling extended to categorical data. Logistic regression. Loglinear models. Generalized linear models. Discriminant analysis. Categorical data models from information retrieval and Internet modeling. Prerequisite: 305 or equivalent.
 
@@ -114,10 +187,12 @@ http://stats.stackexchange.com/questions/91975/is-the-pearson-goodness-of-fit-te
 * PHIL 166: Probability: Ten Great Ideas About Chance (PHIL 266, STATS 167, STATS 267)
     * Foundational approaches to thinking about chance in matters such as gambling, the law, and everyday affairs. Topics include: chance and decisions; the mathematics of chance; frequencies, symmetry, and chance; Bayes great idea; chance and psychology; misuses of chance; and harnessing chance. Emphasis is on the philosophical underpinnings and problems. Prerequisite: exposure to probability or a first course in statistics at the level of STATS 60 or 116.
 
-## Research Topics in Nonparametric Statistics
-
-TODO
-
 ## References
 
+* Hall (1992). The Bootstrap and Edgeworth Expansion
+* Witztum, Rips, and Rosenberg (1994). Equidistant Letter Sequences in the Book of Genesis
 * Siegel (1988). Nonparametric Statistics for the Behavioral Sciences
+
+<!--
+* Good (2005). Permutations, Parametric, and Boostrap Test of Hypothesis
+-->
