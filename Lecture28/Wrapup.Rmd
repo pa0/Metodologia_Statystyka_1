@@ -165,8 +165,11 @@ Source: Hall (1992)
 
 * STATS 331: Survival Analysis
     * The course introduces basic concepts, theoretical basis and statistical methods associated with survival data. Topics include censoring, Kaplan-Meier estimation, logrank test, proportional hazards regression, accelerated failure time model, multivariate failure time analysis and competing risks. The traditional counting process/martingale methods as well as modern empirical process methods will be covered. Prerequisite: Understanding of basic probability theory and statistical inference methods.
+
+<!--
 * STATS 215: Statistical Models in Biology
     * Poisson and renewal processes, Markov chains in discrete and continuous time, branching processes, diffusion. Applications to models of nucleotide evolution, recombination, the Wright-Fisher process, coalescence, genetic mapping, sequence analysis. Theoretical material approximately the same as in STATS 217, but emphasis is on examples drawn from applications in biology, especially genetics. Prerequisite: 116 or equivalent.
+-->
 
 ## Wavelets
 
@@ -187,6 +190,11 @@ Source: Hall (1992)
 
 * PHIL 166: Probability: Ten Great Ideas About Chance (PHIL 266, STATS 167, STATS 267)
     * Foundational approaches to thinking about chance in matters such as gambling, the law, and everyday affairs. Topics include: chance and decisions; the mathematics of chance; frequencies, symmetry, and chance; Bayes great idea; chance and psychology; misuses of chance; and harnessing chance. Emphasis is on the philosophical underpinnings and problems. Prerequisite: exposure to probability or a first course in statistics at the level of STATS 60 or 116.
+
+## Biostatistics Seminar
+
+* STATS 260C: Workshop in Biostatistics (HRP 260C)
+* Applications of statistical techniques to current problems in medical science. To receive credit for one or two units, a student must attend every workshop. To receive two units, in addition to attending every workshop, the student is required to write an acceptable one page summary of two of the workshops, with choices made by the student.
 
 ## References
 
