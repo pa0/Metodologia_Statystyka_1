@@ -24,40 +24,24 @@ knitr::opts_chunk$set(echo = FALSE)
 ## Course Evaluations Now Open
 
 * Axess is now open to complete end-term course evaluations
-* You may complete the evaluations until 08:00 AM on Mon, Jun 13
+* You may complete the evaluations until 08:00 AM on Monday, June 13
 * Online evaluations on **Stanford Axess in Course and Section Evaluations on the Student tab**
 * You can view previous quarter evaluation results on the Reports tab
 * Motivation: 
-    * If you complete all of your evaluations you will see your grades as soon as they have been submitted by the faculty
+    * If you complete all of your evaluations you will see your grades as soon as they have been submitted by the faculty (at the latest June 9)
     * Otherwise, grades in Axess until June 14
 
 ## When Is Something Nonparametric?
 
-* Two settings: 
 1. Distribution-free (NOT assumption-free)
-    * Sign test, Mann–Whitney U test, and Kruskal–Wallis test
-    * Boostrap
-    * Permutation tests
-    * $\chi^2$ tests
-    * Rank-Based linear regression
-    * Median polish
-    * Kaplan estimator
-2. Nonparametric models (number of parameters can grow with $n \to \infty$)
-    * Nonparametric regression
-    * Bayesian nonparametric
-    * Wavelets
-    * Graphons
-
-## Distribution-Free
-
 * Sample $X_1,\dots,X_n$ from $F$
 * Statistic $T(X_1,\dots,X_n)$
 * $T$ is distribution-free if 
 * $T$ has **same distribution** for any $F$ with some restrictions specific to the test, for example:
 * Sign test: $F$ any continuous distribution
-* Signed-Rank Test: $F$ any symmetric continuous distribution
+* Signed-Rank test: $F$ any symmetric continuous distribution
 
-## When to Use Nonparametic Tests?
+## When Is Something Nonparametric?
 
 * When the right representation of the "center" is the median
 * Very small sample size
@@ -65,11 +49,24 @@ knitr::opts_chunk$set(echo = FALSE)
 * Data with outliers that cannot easily be removed
 * In all other cases use parametric test becaue they are more powerful
 
+## When to Use Nonparametic Tests?
+
+2. Nonparametric models (number of parameters can grow with $n \to \infty$)
+    * Nonparametric regression
+    * Bayesian nonparametric
+    * Wavelets
+    * Graphons
+
 ## When to Use Nonparametric Models?
 
 * Very sample size is large
 * Low dimensional setting otherwise course of dimensionality
 * Complex relationship between predictor and response
+
+## Regression Fits in Both Categories
+
+* Rank-Based linear regression (distribution-free)
+* Nonlinear regression (nonparametric model)
 
 <!--
 ## Why Is Categorical Data Nonparametric?
@@ -141,8 +138,7 @@ Source: Hall (1992)
 ## Hypothesis Testing
 
 * STATS 300C: Theory of Statistics
-    * Decision theory formulation of statistical problems. Minimax, admissible procedures. Complete class theorems ("all" minimax or admissible procedures are "Bayes"), Bayes procedures, conjugate priors, hierarchical models. Bayesian non parametrics: diaichlet, tail free, polya trees, bayesian sieves. Inconsistency of bayes rules.
-* Maybe start with STATS 300A and B
+    * The main goal of this course is to expose students to modern ideas in statistical theory. Whereas classical theory is concerned with the behavior of statistical estimates when the number of variables is fixed and the sample size increases, our emphasis is on statistical inference in high-dimensional settings where there may be as many, or more, variables than observations. Our focus is motivated by always newer technologies, which now produce extremely large datasets, often with huge numbers of measurements on each of a comparatively small number of experimental units.
 
 ## Correspondence Analysis
 
