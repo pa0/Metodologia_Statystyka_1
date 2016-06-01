@@ -4,7 +4,7 @@ author: "Christof Seiler"
 date: "Stanford University, Spring 2016, Stats 205"
 output:
   beamer_presentation:
-    incremental: no
+    incremental: yes
 ---
 
 ```{r setup, include=FALSE}
@@ -31,34 +31,38 @@ with password ``Stats205``
 
 * Axess is now open to complete end-term course evaluations
 * You may complete the evaluations until 08:00 AM on Monday, June 13
-* Online evaluations on **Stanford Axess in Course and Section Evaluations on the Student tab**
+* You can find it on 
+      * **Stanford Axess** 
+      * **in Course and Section Evaluations**
+      * **on the Student tab**
 * Motivation: 
     * If you complete all of your evaluations you will see your grades as soon as they have been submitted by the faculty (at the latest June 9)
     * Otherwise, grades will appear in Axess until June 14
 
 ## When Is Something Nonparametric?
 
+* Two categories
 1. Distribution-free (NOT assumption-free)
 * Sample $X_1,\dots,X_n$ from $F$
 * Statistic $T(X_1,\dots,X_n)$
 * $T$ is distribution-free if 
-* $T$ has **same distribution** for any $F$ with $F$ having some restrictions specific to the test, for example:
+* $T$ has **same distribution** for any $F$ with some restrictions, for example:
     * Sign test: $F$ any continuous distribution
     * Signed-rank test: $F$ any symmetric continuous distribution
 
 ## When to Use Distribution-Free Tests?
 
-* When the right representation of the "center" is the median
-* Very small sample size
-* With ordinal data and ranked data
-* Data with outliers that cannot easily be removed
+* When the "right" representation of the "center" is the median
+* "Right" can mean data with outliers that cannot easily be removed
+* Very small sample size (in large samples things become normal)
+* With ordinal data (e.g. salary ranges) and ranked data (e.g. sports team ranking)
 * In all other cases use parametric test becaue they are more powerful
 
 ## When Is Something Nonparametric?
 
 2. Nonparametric models (number of parameters can grow with $n \to \infty$)
     * Nonparametric regression
-    * Bayesian nonparametric
+    * Bayesian nonparametrics
     * Wavelets
     * Graphons
 
@@ -86,7 +90,7 @@ TODO
 * We used Monte Carlo in most topics
     * permutation tests
     * bootstrap
-    * rank-based
+    * rank-based methods
 * As an alternative to asymptotics and complete enumerations
 
 ## Learning Goals
@@ -127,8 +131,17 @@ Source: Hall (1992)
 
 ## Learning Goals (Advanced)
 
-5. The students will build-up an **advanced toolbox of methods** that they can use in practical data analysis problems. Tools include: Nonlinear regression, Bayesian nonparametrics, and wavelets.
-6. The students will learn to apply various **data visualization tools for data exploration in nonparametric settings**, such as: association plots, mosaic plots, correspondence analysis, median polish, and Tukey additivity plot.
+5. The students will build-up an **advanced toolbox of methods** that they can use in practical data analysis problems. Tools include: 
+    * Nonlinear regression,
+    * Bayesian nonparametrics,
+    * wavelets, and 
+    * graphons
+6. The students will learn to apply various **data visualization tools for data exploration in nonparametric settings**, such as: 
+    * association plots, 
+    * mosaic plots, 
+    * correspondence analysis, 
+    * median polish, and 
+    * Tukey additivity plot
 
 ## Bootstrap
 
