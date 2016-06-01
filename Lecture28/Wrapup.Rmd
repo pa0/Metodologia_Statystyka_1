@@ -42,7 +42,7 @@ with password ``Stats205``
 * Sample $X_1,\dots,X_n$ from $F$
 * Statistic $T(X_1,\dots,X_n)$
 * $T$ is distribution-free if 
-* $T$ has **same distribution** for any $F$ with some restrictions specific to the test, for example:
+* $T$ has **same distribution** for any $F$ with $F$ having some restrictions specific to the test, for example:
     * Sign test: $F$ any continuous distribution
     * Signed-rank test: $F$ any symmetric continuous distribution
 
