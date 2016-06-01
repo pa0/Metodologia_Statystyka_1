@@ -13,15 +13,16 @@ knitr::opts_chunk$set(echo = FALSE)
 
 ## Format Final Project
 
-* You can write your final paper in the format you like: word, latex, R markdown document
-* Number of pages: 12
+* You can write your final paper in the format you like:  
+word, latex, R markdown document, etc.
+* Number of pages: **12**
 * Included in the 12 pages are:
-    * Use a lot of images, plots, and diagrams to explain concepts
+    * Images, plots, tables, code snippets, pseudocode, diagrams, and proofs
 * Excluded in the 12 pages are:
     * You should do your statistical analysis using R markdown and attach it to your paper
     * References
-* Deadline: Please hand in all your material by midnight
-* Zip all your files and rename it ``YourFirstNameYourLastName``
+* Deadline: **June 3 at midnight**
+* Zip all your files and rename it ``YourFirstNameYourLastName`` (for group projects add both names to filename)
 * Upload your single zip file here:  
 https://dropitto.me/Stats205  
 with password ``Stats205``  
@@ -31,10 +32,9 @@ with password ``Stats205``
 * Axess is now open to complete end-term course evaluations
 * You may complete the evaluations until 08:00 AM on Monday, June 13
 * Online evaluations on **Stanford Axess in Course and Section Evaluations on the Student tab**
-* You can view previous quarter evaluation results on the Reports tab
 * Motivation: 
     * If you complete all of your evaluations you will see your grades as soon as they have been submitted by the faculty (at the latest June 9)
-    * Otherwise, grades in Axess until June 14
+    * Otherwise, grades will appear in Axess until June 14
 
 ## When Is Something Nonparametric?
 
@@ -43,10 +43,10 @@ with password ``Stats205``
 * Statistic $T(X_1,\dots,X_n)$
 * $T$ is distribution-free if 
 * $T$ has **same distribution** for any $F$ with some restrictions specific to the test, for example:
-* Sign test: $F$ any continuous distribution
-* Signed-Rank test: $F$ any symmetric continuous distribution
+    * Sign test: $F$ any continuous distribution
+    * Signed-rank test: $F$ any symmetric continuous distribution
 
-## When Is Something Nonparametric?
+## When to Use Distribution-Free Tests?
 
 * When the right representation of the "center" is the median
 * Very small sample size
@@ -54,7 +54,7 @@ with password ``Stats205``
 * Data with outliers that cannot easily be removed
 * In all other cases use parametric test becaue they are more powerful
 
-## When to Use Nonparametic Tests?
+## When Is Something Nonparametric?
 
 2. Nonparametric models (number of parameters can grow with $n \to \infty$)
     * Nonparametric regression
@@ -64,13 +64,13 @@ with password ``Stats205``
 
 ## When to Use Nonparametric Models?
 
-* Very sample size is large
+* Very large sample size
 * Low dimensional setting otherwise course of dimensionality
 * Complex relationship between predictor and response
 
 ## Regression Fits in Both Categories
 
-* Rank-Based linear regression (distribution-free)
+* Rank-based linear regression (distribution-free)
 * Nonlinear regression (nonparametric model)
 
 <!--
@@ -87,7 +87,7 @@ TODO
     * permutation tests
     * bootstrap
     * rank-based
-* As an alternative to asymptotics and exhaustive tests
+* As an alternative to asymptotics and complete enumerations
 
 ## Learning Goals
 
@@ -135,11 +135,6 @@ Source: Hall (1992)
 * STATS 208: Introduction to the Bootstrap
     * The bootstrap is a computer-based method for assigning measures of accuracy to statistical estimates. By substituting computation in place of mathematical formulas, it permits the statistical analysis of complicated estimators. Topics: nonparametric assessment of standard errors, biases, and confidence intervals; related resampling methods including the jackknife, cross-validation, and permutation tests. Theory and applications. Prerequisite: course in statistics or probability.
 
-## Wavelets
-
-* STATS 322: Function Estimation in White Noise
-    * Gaussian white noise model sequence space form. Hyperrectangles, quadratic convexity, and Pinsker's theorem. Minimax estimation on Lp balls and Besov spaces. Role of wavelets and unconditional bases. Linear and threshold estimators. Oracle inequalities. Optimal recovery and universal thresholding. Stein's unbiased risk estimator and threshold choice. Complexity penalized model selection. Connecting fast wavelet algorithms and theory. Beyond orthogonal bases.
-
 ## Hypothesis Testing
 
 * STATS 300C: Theory of Statistics
@@ -154,7 +149,7 @@ Source: Hall (1992)
 ## Bayesian Nonparametrics
 
 * STATS 270: Bayesian Statistics I (STATS 370)
-    * This is the first of a two course sequence on modern Bayesian statistics. Topics covered include: real world examples of large scale Bayesian analysis; basic tools (models, conjugate priors and their mixtures); Bayesian estimates, tests and credible intervals; foundations (axioms, exchangeability, likelihood principle); Bayesian computations (Gibbs sampler, data augmentation, etc.); prior specification. Prerequisites: statistics and probability at the level of Stats300A, Stats305, and Stats310.
+    * This is the first of a two course sequence on modern Bayesian statistics. Topics covered include: real world examples of large scale Bayesian analysis; basic tools (models, conjugate priors and their mixtures); Bayesian estimates, tests and credible intervals; foundations (axioms, exchangeability, likelihood principle); Bayesian computations (Gibbs sampler, data augmentation, etc.); prior specification. Prerequisites: statistics and probability at the level of Stats 300A, Stats 305, and Stats 310.
 
 ## Bayesian Nonparametrics
 
@@ -164,7 +159,7 @@ Source: Hall (1992)
 ## ANOVA
 
 * STATS 203: Introduction to Regression Models and Analysis of Variance
-* Modeling and interpretation of observational and experimental data using linear and nonlinear regression methods. Model building and selection methods. Multivariable analysis. Fixed and random effects models. Experimental design. Pre- or corequisite: 200.
+* Modeling and interpretation of observational and experimental data using linear and nonlinear regression methods. Model building and selection methods. Multivariable analysis. Fixed and random effects models. Experimental design. Prerequisites: 200.
 
 ## Survival Analysis
 
@@ -173,10 +168,15 @@ Source: Hall (1992)
 * STATS 215: Statistical Models in Biology
     * Poisson and renewal processes, Markov chains in discrete and continuous time, branching processes, diffusion. Applications to models of nucleotide evolution, recombination, the Wright-Fisher process, coalescence, genetic mapping, sequence analysis. Theoretical material approximately the same as in STATS 217, but emphasis is on examples drawn from applications in biology, especially genetics. Prerequisite: 116 or equivalent.
 
+## Wavelets
+
+* STATS 322: Function Estimation in White Noise
+    * Gaussian white noise model sequence space form. Hyperrectangles, quadratic convexity, and Pinsker's theorem. Minimax estimation on Lp balls and Besov spaces. Role of wavelets and unconditional bases. Linear and threshold estimators. Oracle inequalities. Optimal recovery and universal thresholding. Stein's unbiased risk estimator and threshold choice. Complexity penalized model selection. Connecting fast wavelet algorithms and theory. Beyond orthogonal bases.
+
 ## Ranked-Set Sampling
 
 * STATS 263: Design of Experiments (STATS 363)
-    * Experiments vs observation. Confounding. Randomization. ANOVA.Blocking. Latin squares. Factorials and fractional factorials. Split plot. Response surfaces. Mixture designs. Optimal design. Central composite. Box-Behnken. Taguchi methods. Computer experiments and space filling designs. Prerequisites: probability at STATS 116 level or higher, and at least one course in linear models.
+    * Experiments vs observation. Confounding. Randomization. ANOVA. Blocking. Latin squares. Factorials and fractional factorials. Split plot. Response surfaces. Mixture designs. Optimal design. Central composite. Box-Behnken. Taguchi methods. Computer experiments and space filling designs. Prerequisites: probability at STATS 116 level or higher, and at least one course in linear models.
 
 ## Graphons
 
