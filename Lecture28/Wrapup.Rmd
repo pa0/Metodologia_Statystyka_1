@@ -4,7 +4,7 @@ author: "Christof Seiler"
 date: "Stanford University, Spring 2016, Stats 205"
 output:
   beamer_presentation:
-    incremental: yes
+    incremental: no
 ---
 
 ```{r setup, include=FALSE}
@@ -21,7 +21,7 @@ word, latex, R markdown document, etc.
 * Excluded in the 12 pages are:
     * You should do your statistical analysis using R markdown and attach it to your paper
     * References
-* Deadline: **June 3 at midnight**
+* Deadline: **June 3 by 11:59 PM**
 * Zip all your files and rename it ``YourFirstNameYourLastName`` (for group projects add both names to filename)
 * Upload your single zip file here:  
 https://dropitto.me/Stats205  
@@ -56,7 +56,7 @@ with password ``Stats205``
 * "Right" can mean data with outliers that cannot easily be removed
 * Very small sample size (in large samples things become normal)
 * With ordinal data (e.g. salary ranges) and ranked data (e.g. sports team ranking)
-* In all other cases use parametric test becaue they are more powerful
+* In all other cases use parametric test because they are more powerful
 
 ## When Is Something Nonparametric?
 
@@ -69,7 +69,7 @@ with password ``Stats205``
 ## When to Use Nonparametric Models?
 
 * Very large sample size
-* Low dimensional setting otherwise course of dimensionality
+* Low dimensional setting otherwise curse of dimensionality
 * Complex relationship between predictor and response
 
 ## Regression Fits in Both Categories
