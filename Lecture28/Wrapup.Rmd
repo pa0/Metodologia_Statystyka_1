@@ -20,6 +20,11 @@ knitr::opts_chunk$set(echo = FALSE)
 * Excluded in the 12 pages are:
     * You should do your statistical analysis using R markdown and attach it to your paper
     * References
+* Deadline: Please hand in all your material by midnight
+* Zip all your files and rename it ``YourFirstNameYourLastName``
+* Upload your single zip file here:  
+https://dropitto.me/Stats205  
+with password ``Stats205``  
 
 ## Course Evaluations Now Open
 
