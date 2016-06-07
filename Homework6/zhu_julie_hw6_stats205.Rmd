@@ -1,0 +1,490 @@
+---
+title: "STATS 205 Homework 6"
+author: "Julie Zhu"
+date: "May 26, 2016"
+output: html_document
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+```
+
+We will first load in the libraries for this homework assignment. There are 
+quite a few packages I used for small conversions this week. 
+
+```{r}
+# Libraries
+library(datasets)
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+library(readr)
+library(purrr)
+library(waveslim)
+library(reshape2)
+```
+
+## Exercise 1
+
+In this problem, we want to understand wavelets and function estimation using
+the sunspots data. The sunspots data stores monthly mean relative sunspot
+numbers from 1749 to 1983. The data were collected in Zurich, Switzerland until
+1960 and then in Tokyo, Japan from then onward.
+
+For some data background, sunspots are temporary phenomena on the photosphere of 
+the sun that appear visibly as dark spots compared to surrounding regions. 
+The measurements in the data correspond to concentrations of magnetic field flux 
+that inhibit convection and result in reduced surface temperature compared to 
+the surrounding regions. 
+
+We first use the `dwt` command to obtain the wavelet coefficients of the first 
+512 components of the sunspots data. We will use $n.levels = 9$. The `dwt` 
+command determines the wavelet coefficients at each resolution level (in this
+case, we have 9 resolution levels).
+
+```{r}
+sun_comps <- sunspots[1:512]
+# Wavelet Decomposition
+sun_dwt <- dwt(sun_comps, n.levels = 9)
+```
+
+### Part A
+
+In this part of the problem, we explore the sparsity of the data representation.
+We use the `unlist` command on the output of the `dwt` command to create 
+a single vector of coefficients from all resolution levels (from the highest
+to the lowest). 
+
+```{r}
+sun_coefs <- sun_dwt %>% unlist()
+```
+
+Next, we make two histograms: one of the coefficient vector from the `unlist`
+function and one of the untransformed sunspots data (first 512 components). 
+
+How do these histogram shapes illustrate the sparsity of the wavelet 
+representation of the data?
+
+We first create a data frame that binds the two sets of values that we want and
+create the two histograms. We see that the left panel is a histogram of the
+coefficients obtained from `dwt` and the right panel is a histogram of the
+original sunspots data. 
+
+We limited the values to see the distribution a little more clearly and for
+easier comparison between the two distributions. At a first glance, we see that
+the untransformed sunspots data is right-skewed and all positive whereas the
+distribution of the coefficients seem to be concentrated around 0.
+
+```{r, fig.width = 10, fig.height = 5}
+sun_hist <- data_frame(Untransformed = sun_comps, Coefficients = sun_coefs)
+
+# Plot histograms side-by-side
+sun_hist %>%
+  gather(set, value, Untransformed:Coefficients) %>%
+  ggplot() +
+  geom_histogram(mapping = aes(x = value), binwidth = 15) +
+  facet_wrap( ~ set, scales = "free_y") +
+  coord_cartesian(x = c(-110, 180)) + 
+  labs(x = "Values", y = "Count")
+```
+
+Taking a closer look at the coefficient histogram by itself without limiting
+the axes, we see that there are a lot of coefficients centered on or around 0.
+There are a few select coefficients that are significantly negative and a few
+coefficients that are overwhelmingly positive.
+
+```{r, fig.width = 5, fig.height = 5}
+data_frame(sun_coefs = sun_coefs) %>%
+  ggplot() +
+  geom_histogram(mapping = aes(x = sun_coefs), binwidth = 15) +
+  labs(x = "Wavelet Coefficients", y = "Count")
+```
+
+Looking at the untransformed sunspots data, we see that the data is heavily
+right-skewed (as shown before). There are few "extreme" values and a lot of the
+data seem to be around the 0 to 100 range. 
+
+```{r, fig.width = 5, fig.height = 5}
+data_frame(sun_comps = sun_comps) %>%
+  ggplot() +
+  geom_histogram(mapping = aes(x = sun_comps)) +
+  labs(x = "Untransformed Sunspot Data", y = "Count")
+```
+
+Since most of our coefficients are near 0 or 0, we see that these coefficients 
+weight our data such that a lot of them are regularized towards 0. This means
+that a lot of our data becomes small and trivial. Some of the data is more 
+heavily weighted since we have a few really large coefficients.
+
+### Part B
+
+In this problem, we want to create a histogram using only the highest level of 
+detail coefficients. Do these coefficients appear to be symmetric about 0? 
+Normal? 
+
+We see that the highest level of detail coefficients are indeed centered around
+0. However, we don't see the distribution as being completely normal because
+there seems to be a slight skew to the right. 
+
+```{r, fig.width = 5, fig.height = 5}
+data_frame(high_coef = sun_dwt$d1) %>%
+  ggplot() +
+  geom_histogram(mapping = aes(x = high_coef), binwidth = 7) +
+  labs(x = "Highest Level of Detail Coefficients", y = "Count")
+```
+
+### Part C
+
+In this part of the problem, we want to compare the two thresholding measures
+SureShrink and VisuShrink (hard and soft thresholds). We will use the package 
+`waveslim` and then go through the differences in the reconstructions. 
+
+$\text_bf{SureShrink}$
+
+From the referenced book, we will use the `hybrid.thresh` function with the
+default settings of `max.level = 4`. This thresholds the wavelet coefficients 
+in the four detail resolution levels. We then use the inverse function to 
+obtain the original points for the function estimation. 
+
+```{r}
+sure_thresh <- hybrid.thresh(sun_dwt) 
+sure_idwt <- idwt(sure_thresh)
+```
+
+We overlay the SureShrink fit onto the original data. The original data is
+the black line while the SureShrink fit is noted in red. The SureShrink fit 
+gives a pretty smooth fit of the original data. Note that SureShrink only
+uses soft thresholding.
+
+```{r, fig.width = 10, fig.height = 5}
+ggplot() + 
+  geom_line(mapping = aes(x = 1:length(sun_comps), y = sun_comps)) + 
+  geom_line(mapping = aes(x = 1:length(sun_comps), y = sure_idwt), 
+            color = "red",
+            size = 1) + 
+  labs(x = "", y = "Monthly Mean Relative Sunspot Numbers", 
+       title = "SureShrink Estimation") 
+```
+
+$\text_bf{VisuShrink}$
+
+Then, we use `universal.thresh` to perform VisuShrink with the default settings 
+of `max.level = 4`. We then use the inverse function to obtain the original 
+points for the function estimation. 
+
+We will first go through the $\text_bf{hard threshold}$ for VisuShrink.
+
+```{r}
+visu_thresh <- universal.thresh(sun_dwt, hard = TRUE) 
+visu_idwt <- idwt(visu_thresh)
+```
+
+We overlay the hard VisuShrink fit onto the original data. The original data is
+the black line while the hard VisuShrink fit is noted in red. The VisuShrink fit 
+gives a pretty good fit of the original data, but is more variable than the
+SureShrink fit.
+
+```{r, fig.width = 10, fig.height = 5}
+ggplot() + 
+  geom_line(mapping = aes(x = 1:length(sun_comps), y = sun_comps)) + 
+  geom_line(mapping = aes(x = 1:length(sun_comps), y = visu_idwt),
+            size = 0.8,
+            color = "red") + 
+  labs(x = "", y = "Monthly Mean Relative Sunspot Numbers",
+       title = "VisuShrink Hard Estimation") 
+```
+
+We also do the $\text_bf{soft thresholding}$ method for VisuShrink.
+
+```{r}
+visu_thresh_soft <- universal.thresh(sun_dwt, hard = FALSE) 
+visu_idwt_soft <- idwt(visu_thresh_soft)
+```
+
+We overlay the soft VisuShrink fit onto the original data. The original data is
+the black line while the soft VisuShrink fit is noted in red. The VisuShrink fit 
+gives a pretty good fit of the original data and is very similar to the wavelet
+obtained using the hard thresholding method. It is also more similar to the 
+SureShrink fit, which makes sense since SureShrink uses soft thresholding. 
+
+```{r, fig.width = 10, fig.height = 5}
+ggplot() + 
+  geom_line(mapping = aes(x = 1:length(sun_comps), y = sun_comps)) + 
+  geom_line(mapping = aes(x = 1:length(sun_comps), y = visu_idwt_soft),
+            color = "red",
+            size = 0.8) + 
+  labs(x = "", y = "Monthly Mean Relative Sunspot Numbers",
+       title = "VisuShrink Soft Estimation") 
+```
+
+Looking at the two reconstructions, we see that the SureShrink 
+estimation is smoother and has less jumps in its plot. This shows that since 
+SureShrink reduces the non-zero coefficients to zero, it'll have a smoother and
+less jumpy estimated wavelet. The smoothness of the SureShrink estimation makes 
+the fit more robust against noisy data as it doesn't fit to the data as much as 
+VisuShrink, in this case.
+
+$\text_bf{Differences in Reconstruction}$
+
+The VisuShrink method gives a universal threshold on the wavelet coefficients
+for each level of resolution when we are estimating the function.  
+Note that the VisuShrink method provides an optimal reconstruction of the 
+matrix only in the case of normally distributed errors. 
+
+The SureShrink method has different thresholds for each level of resolution 
+where the VisuShrink has only one threshold for all the levels. When implementing 
+SureShrink, we might notice that some wavelet coefficients might be too sparse 
+at certain resolution levels (perhaps due to lack of information), thus we can't 
+determine a threshold level. In this case, the SureShrink method will use 
+VisuShrink (hence the hybrid method of SureShrink). 
+
+## Exercise 2
+
+We will analyze the a network from SNAP using Universal Singular Value 
+Thresholding (USVT). The network we obtained from the SNAP website is the Arxiv 
+GR-QC (General Relativity and Quantum Cosmology) collaboration network. It 
+covers scientific collaborations between authors papers submitted to the 
+General Relativity category. 
+
+The SNAP website gives the following description of the edge list.
+
+"If an author i co-authored a paper with author j, the graph contains a 
+undirected edge from i to j. If the paper is co-authored by k authors this 
+generates a completely connected graph on k nodes."
+
+```{r}
+relativity <- read_delim(file = "general_relativity.txt", 
+                         col_names = TRUE, skip = 3, delim = "\t") %>%
+  rename(from_node = `# FromNodeId`, to_node = ToNodeId)
+```
+
+We have a total of 5242 unique nodes and 14,496 edges total after reading in
+the data.
+
+### Part A
+
+We will implement the USVT algorithm using $\eta = 0.01$. We will follow the
+algorithm in the slides from the lecture `Graph Limits or Graphons`. 
+
+We will assume that all of our entries in our adjacency matrix is observed and 
+we do not know what is not observed. Thus, we will have no 0 values in our 
+Y matrix and our p_hat value will be set to a default of 0.25 (as assumed in 
+the MATLAB code and suggested by the TAs). 
+
+```{r}
+usvt_implement <- function(X, eta = 0.01) {
+  # Define the maximum and minimum of the adjacency graph
+  max_X <- max(X)
+  min_X <- min(X)
+  # Obtain the number of nodes and the proportion of observed
+  n <- nrow(X)
+  # According to the TA, we should assuming that all of our graph is observed
+  # Use a fixed p_hat value
+  p_hat <- 0.25
+  # Normalize the values of our adjacency matrix to the range [-1, 1]
+  norm_X <- (X - (max_X + min_X)/2)/((max_X - min(X))/2)
+  Y <- norm_X
+  #Y[X == 0] <- 0 
+  # Perform SVD
+  singular_decomp <- svd(Y)
+  U <- singular_decomp$u
+  V <- singular_decomp$v
+  S <- singular_decomp$d
+  # Use the Singular Value Threshold
+  singular_index <- (S < (2 + eta)*sqrt(n*p_hat))
+  S1 <- S;
+  S1[singular_index] <- 0;
+  # Perform SVD with only the singular values
+  W <- U %*% diag(S1) %*% t(V)
+  W <- W/p_hat
+  # Construct estimation matrix
+  M <- W
+  M[W > 1] <- 1
+  M[W < -1] <- -1
+  # Re-map the estimations to the original range [0, 1]
+  M <- (M*((max_X - min(X))/2)) + ((max_X + min_X)/2)
+  return (M)
+}
+```
+
+### Part B
+
+We now rearrange the nodes according to the empirical degree. Then, we plot the
+reconstructed matrix with the rearranged columns and rows and without the 
+rearranged columns and rows. We obtain the reconstructed matrix using our 
+USVT implementation above. 
+
+To avoid the graph from becoming too sparse, we will use the nodes with the
+highest empirical degrees (the nodes connected to the most number of other 
+nodes). We see that otherwise we get more than the specified number because of
+overlapping degrees.
+
+```{r}
+val_num <- 200
+```
+
+We first pick out the top `r val_num` node names that have the highest empirical 
+degrees out of the entire data set. To run it on the full data set, just set
+`val_num` equal to the count of all the nodes.
+
+```{r}
+# Create a character vector containing every node name
+deg_rank <- relativity %>%
+  count(from_node) %>%
+  top_n(val_num) %>%
+  arrange(-n) %>% 
+  .$from_node %>%
+  unique()
+```
+
+We then create the new edge list for filtering for nodes that appear in the set
+that we created earlier. We also order the nodes by their empirical degree.
+We reverse the empirical degree ordering for the from node so that the nodes
+with the highest empirical degrees are concentrated in the upper left corner.
+
+```{r}
+# Not all of the nodes in the ranking will be present in the new data set
+sorted_relativity <- relativity %>%
+  filter(from_node %in% deg_rank,
+         to_node %in% deg_rank) %>%
+  mutate(to_node = factor(to_node, levels = deg_rank),
+        from_node = factor(from_node, levels = rev(deg_rank)))
+```
+
+Now we take all of the top nodes and make an adjacency matrix. Note that when
+we construct the adjacency matrix, we have the nodes with the highest empirical
+degree on the upper left hand corner. This is because when we are getting the
+indices for our adjacency matrix according to the ordering of the nodes.
+
+```{r}
+size <- unique(sorted_relativity$to_node) %>% length()
+table_adj <- matrix(0, nrow = size, ncol = size)
+
+# Get a new internal ranking of empirical degree since we are only including
+# `from_node` and `to_node`s that are in the top 200
+new_rank <- sorted_relativity %>%
+  count(from_node) %>%
+  arrange(-n) %>%
+  .$from_node %>%
+  unique()
+
+# Create adjacency matrix with ordered rows and columns
+for (i in seq_len(nrow(sorted_relativity))) {
+  x <- as.factor(sorted_relativity[i, 1] %>% unlist())
+  y <- as.factor(sorted_relativity[i, 2] %>% unlist())
+  index_i <- which(new_rank == x) 
+  index_j <- which(new_rank == y) 
+  table_adj[index_i, index_j] <- 1
+}
+```
+
+We see that there are a total of `r sum(table_adj)` edges/connections in our 
+vetted data. 
+
+```{r}
+sum(table_adj)
+```
+
+Now, we use the USVT implementation from Part A to obtain our estimated matrix.
+
+```{r}
+results <- usvt_implement(table_adj)
+```
+
+We name the columns and rows so that we can plot them and understand which 
+nodes we are looking at. 
+
+```{r}
+colnames(results) <- new_rank
+rownames(results) <- new_rank
+```
+
+We melt our data so that we can have an edge list to plot with. This is
+sorted, so our graph hopefully will have some definite shape.
+
+```{r}
+ordered <- results %>% 
+  melt() %>%
+  as_data_frame() %>% 
+  tbl_df() %>%
+  # We want to order the edges by their empirical degree now that we
+  # have an edgelist, not a matrix
+  mutate(to_node = factor(Var1, levels = new_rank),
+        from_node = factor(Var2, levels = rev(new_rank))) %>%
+  select(-Var1, -Var2)
+```
+
+Looking at the reconstructed plot, we see that most nodes are connected with 
+itself. This makes sense as each researcher is its own coauthor, thus there will 
+be a edge from each node to itself. However, we don't see this being the
+case in our actual data. 
+
+```{r, fig.width = 5, fig.height = 5}
+# Plot Breaks
+deg_breaks <- new_rank[seq(1, length(new_rank), by = 15)]
+  
+# Plot Reconstructed Matrix from USVT
+ordered %>%
+  ggplot() + 
+  geom_raster(mapping = aes(x = to_node, y = from_node, fill = value)) +
+  theme_bw() +
+  theme(aspect.ratio = 1,
+        legend.position = "none",
+        axis.ticks = element_blank()) +
+  scale_y_discrete(breaks = deg_breaks) +
+  scale_x_discrete(breaks = deg_breaks) +
+  scale_fill_gradientn(colours = c("white", "grey50", "black")) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) + 
+  labs(x = "To Node", y = "From Node", title = "USVT Reconstruction")
+```
+
+We now compare it to the original sorted adjacency matrix for our data. Note 
+that along the diagonal, not a lot of authors have a link connected to himself
+or herself. It's a lot less filled in than our reconstructed matrix, but the 
+overall shape of the large square, medium square, and small square exist.
+
+```{r, fig.width = 5, fig.height = 5}
+#Plot Original Sorted Adjacency Matrix
+sorted_relativity %>%
+  filter(from_node %in% new_rank,
+         to_node %in% new_rank) %>%
+  mutate(to_node = factor(to_node, levels = new_rank),
+        from_node = factor(from_node, levels = rev(new_rank))) %>%
+  ggplot() +
+  geom_raster(mapping = aes(x = to_node, y = from_node)) +
+  theme_bw() +
+  theme(aspect.ratio = 1,
+        legend.position = "none",
+        axis.ticks = element_blank()) + 
+  scale_y_discrete(breaks = deg_breaks) +
+  scale_x_discrete(breaks = deg_breaks) +
+  scale_fill_gradientn(colours = c("white", "black")) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank()) +
+  labs(x = "To Node", y = "From Node", title = "Original Matrix")
+```
+
+### Part C
+
+In this section, we want to evaluate our results from the previous two steps.
+In our plotted matrices, we see that the reconstructed matrix actually captures
+the activity in the upper left-hand corner pretty well (even the black framing
+around node 2338). However, as we venture out to the lesser degree nodes, we see
+the matrix reconstruction makes some generalizations. We see a more scattered
+region of the original matrix plot in the bottom left and bottom right corners.
+However, the reconstructed plot makes the value of that area about the same
+and somewhat non-existent. 
+
+Something striking is that, as mentioned earlier, the diagonal is colored in 
+for the reconstruction. This matrix says that authors who worked with many
+other prolific authors probably worked with themselves too. 
+
+We can probably interpret the middle few boxes as small clusters of authors who 
+collaborate frequently with each other. They're probably researchers in the
+same subfield of general relativity so their work is very similar. 
+
+But the authors with the highest empirical degree actually have a network 
+outside of their immediate box (we see that they also have collaborated
+with the authors who have the smaller degree in the data set), but it since
+it is so sparse, our reconstruction did not pick it up. 
