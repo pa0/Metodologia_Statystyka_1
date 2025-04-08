@@ -67,14 +67,14 @@ Podać jakiś przykład
 
 ## Matriały 
 
-| Lecture | Topic(s)                                                                                    | Background Material | Video               |
+| Wykład | Tematyka                                                                                    | Literatura | Video               |
 | :------ | :------------------------------------------------------------------------------------------ | :------------------ | :------------------ |
 | 1       | [Wprowadzenie](https://pa0.github.io/Metodologia_i_Statystyka_1/Lecture1/Introduction.html) | **KM** Chapter 1    | film na CLassroomie |
 
 
 ## Prace domowe
 
-| Assignment | Deadline | Solution |
+| Zadanie | Termin | Rozwiązanie |
 | --- | --- | --- |
 | [Homework 1](https://pa0.github.io/Metodologia_i_Statystyka_1/Homework1/Homework1.html) | październik 7 o 1:30 pm | [Solution 1](https://pa0.github.io/Metodologia_i_Statystyka_1/Homework1/Solution1.html) |
 
